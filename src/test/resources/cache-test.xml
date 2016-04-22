@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <!--  -->
+    <cache:annotation-driven cache-manager="cacheManager" key-generator="gpKeyGenerator"/>
+    
+    <!-- -->
+    <bean id="gpKeyGenerator" class="com.gp.cache.GpKeyGenerator"></bean>
+        
+    <!-- spring -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <ref bean="guavaCache1" />
+                <!-- ref bean="redisCache1" /-->
+            </set>
+        </property>
+    </bean>
+    
+    <bean id="guavaCache1" class="com.gp.cache.GuavaCacheFactoryBean">
+          <property name="name" value="guavaCache60seconds"/>
+          <property name="maximumSize" value="1000"/>
+          <property name="expireAfterAccessInSeconds" value="60"/>
+          <property name="expireAfterWriteInSeconds" value="60"/>
+    </bean>
+        
+	<!-- comment 
+    < bean id="redisCache1" class="com.gp.cache.RedisCacheFactoryBean">
+		 <property name="name" value="redisCache60seconds"/>
+		 <property name="liveTime" value="60"/>
+    	 <property name="redisTemplate" ref="redisTemplate" />
+    </bean>
+
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxWaitMillis" value="${redis.maxWait}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+		<property name="testOnReturn" value="${redis.testOnReturn}" />
+	</bean>
+	
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1" value="${redis.master.hostname}" />
+		<constructor-arg index="2" value="${redis.master.port}" />
+	</bean>
+	
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+     p:host-name="${redis.master.hostname}" 
+     p:port="${redis.master.port}" 
+     p:pool-config-ref="jedisPoolConfig" />
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+    	<property name="connectionFactory" ref="connectionFactory" />
+    </bean>
+  	comment end -->
+</beans>

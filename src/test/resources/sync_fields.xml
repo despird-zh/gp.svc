@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sync-fields>
+	<sync-data name="sync_summary">
+		<sync-field name="itemcount" db-field="" type="int" />
+	</sync-data>
+	<sync-data name="add_user_info">
+		<sync-field name="entityid" db-field="entity_id" type="string" />
+		<sync-field name="nodeid" db-field="node_id" type="string" />
+		<sync-field name="userid" db-field="user_id" type="string" />
+		<sync-field name="account" db-field="account" type="string" />
+		<sync-field name="orgid" db-field="org_id" type="string" />
+		<sync-field name="globalid" db-field="global_id" type="string" />
+		<sync-field name="title" db-field="title" type="string" />
+		<sync-field name="creator" db-field="creator" type="string" />
+		<sync-field name="createdate" db-field="create_date" type="date" />
+		<sync-field name="modifier" db-field="modifier" type="string" />
+		<sync-field name="modifydate" db-field="modify_date" type="date" />
+	</sync-data>
+	<sync-data name="upd_user_info">
+		<sync-field name="entityid" db-field="entity_id" type="string" />
+		<sync-field name="nodeid" db-field="node_id" type="string" />
+		<sync-field name="userid" db-field="user_id" type="string" />
+		<sync-field name="account" db-field="account" type="string" />
+		<sync-field name="orgid" db-field="org_id" type="string" />
+		<sync-field name="globalid" db-field="global_id" type="string" />
+		<sync-field name="title" db-field="title" type="string" />
+		<sync-field name="modifier" db-field="modifier" type="string" />
+		<sync-field name="modifydate" db-field="modify_date" type="date" />
+	</sync-data>
+	<sync-data name="del_user_info">
+		<sync-field name="entityid" db-field="entity_id" type="string" />
+		<sync-field name="nodeid" db-field="node_id" type="string" />
+		<sync-field name="userid" db-field="user_id" type="string" />
+		<sync-field name="account" db-field="account" type="string" />
+		<sync-field name="globalid" db-field="global_id" type="string" />
+	</sync-data>
+</sync-fields>

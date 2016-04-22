@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.2.xsd" >
+
+    <!-- we can use annotations, ignore for component-scan setting
+    <context:annotation-config/>
+    -->
+    <!-- package to look for annotated classes -->
+    <context:component-scan base-package="com.gp.svc.impl"/>
+	<context:component-scan base-package="com.gp.dao.impl"/>
+	
+    <!-- we will manage transactions with annotations -->
+    <tx:annotation-driven/>
+
+	<bean class="com.gp.common.SpringContextUtil" />
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- BoneCP configuration -->
+	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+	   <property name="driverClass" value="com.mysql.jdbc.Driver" />
+	   <property name="jdbcUrl" value="jdbc:mysql://localhost/gpress?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false" />
+	   <property name="username" value="gpadmin"/>
+	   <property name="password" value="gpress"/>
+	   <property name="idleConnectionTestPeriodInMinutes" value="30"/>
+	   <property name="idleMaxAgeInMinutes" value="240"/>
+	   <property name="maxConnectionsPerPartition" value="30"/>
+	   <property name="minConnectionsPerPartition" value="10"/>
+	   <property name="partitionCount" value="3"/>
+	   <property name="acquireIncrement" value="5"/>
+	   <property name="statementsCacheSize" value="100"/>
+	   <property name="releaseHelperThreads" value="3"/>
+	</bean>  
+
+</beans>
