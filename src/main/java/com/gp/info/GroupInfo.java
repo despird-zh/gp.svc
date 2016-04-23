@@ -1,11 +1,19 @@
 package com.gp.info;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class GroupInfo extends TraceableInfo<Long>{
 
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
+	@Min(value=1)
 	private Long workgroupId;
 	
+	@NotNull
+	@Size(min=1, max=16)
 	private String groupName;
 	
 	private String description;

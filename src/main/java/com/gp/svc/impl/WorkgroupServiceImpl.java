@@ -389,27 +389,22 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional
 	@Override
-	public boolean addWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account, String role)
+	public boolean addWorkgroupMember(ServiceContext<?> svcctx, WorkgroupUserInfo wminfo)
 			throws ServiceException {
 		try{
 			
-			WorkgroupUserInfo wuinfo = workgroupuserdao.queryByAccount(wkey.getId(), account);			
+			WorkgroupUserInfo wuinfo = workgroupuserdao.queryByAccount(wminfo.getWorkgroupId(), wminfo.getAccount());			
 			if(null != wuinfo){
-				
-				wuinfo.setRole(role);
-				svcctx.setTraceInfo(wuinfo);
+				// member already existed, update 
+				svcctx.setTraceInfo(wuinfo);				
 				workgroupuserdao.update(wuinfo);
 			}else{
+				// not exist, then create new record
+				svcctx.setTraceInfo(wminfo);				
 				// prepare new record
 				InfoId<Long> rid = idService.generateId( IdKey.WORKGROUP_USER, Long.class);
-				
-				wuinfo = new WorkgroupUserInfo();
-				wuinfo.setInfoId(rid);
-				wuinfo.setAccount(account);
-				wuinfo.setRole(role);
-				wuinfo.setWorkgroupId(wkey.getId());		
-				svcctx.setTraceInfo(wuinfo);					
-				workgroupuserdao.create( wuinfo);
+				wminfo.setInfoId(rid);				
+				workgroupuserdao.create( wminfo);
 			}
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail add members", dae);
@@ -592,14 +587,27 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean addWorkgroupGroup(ServiceContext<?> svcctx, GroupInfo ginfo)
 			throws ServiceException {
 		
-		svcctx.setTraceInfo(ginfo);
+		int cnt = 0;
 		
-		try{
-			groupdao.create(ginfo);
+		try{			
+			GroupInfo orig = groupdao.queryByName(ginfo.getWorkgroupId(), ginfo.getGroupName());
+			if(null != orig){
+				
+				orig.setGroupName(ginfo.getGroupName());
+				orig.setDescription(ginfo.getDescription());
+				svcctx.setTraceInfo(orig);
+				
+				cnt = groupdao.update(orig);
+			}else{
+				
+				svcctx.setTraceInfo(ginfo);
+				cnt = groupdao.create(ginfo);
+			}
+			
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail create group", dae);
 		}
-		return true;
+		return cnt > 0;
 	}
 
 	@Transactional

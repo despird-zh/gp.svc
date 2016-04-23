@@ -11,6 +11,7 @@ import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.info.WorkgroupUserExInfo;
+import com.gp.info.WorkgroupUserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 
@@ -34,7 +35,7 @@ public interface WorkgroupService {
 	
 	public WorkgroupExInfo getWorkgroupEx(ServiceContext<?> svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public boolean addWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account, String role) throws ServiceException;
+	public boolean addWorkgroupMember(ServiceContext<?> svcctx, WorkgroupUserInfo wminfo) throws ServiceException;
 
 	public boolean removeWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account) throws ServiceException;
 	
