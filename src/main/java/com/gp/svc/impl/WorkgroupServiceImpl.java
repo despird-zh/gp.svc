@@ -396,6 +396,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			WorkgroupUserInfo wuinfo = workgroupuserdao.queryByAccount(wminfo.getWorkgroupId(), wminfo.getAccount());			
 			if(null != wuinfo){
 				// member already existed, update 
+				wuinfo.setRole(wminfo.getRole());
 				svcctx.setTraceInfo(wuinfo);				
 				workgroupuserdao.update(wuinfo);
 			}else{

@@ -2,9 +2,11 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -179,7 +181,8 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : "+ SQL.toString() + "/ PARAMS : " + ArrayUtils.toString(params));
-		GroupInfo ainfo = jtemplate.queryForObject(SQL, params, GroupMapper);
-		return ainfo;
+		List<GroupInfo> infos = jtemplate.query(SQL, params, GroupMapper);
+		
+		return CollectionUtils.isEmpty(infos) ? null : infos.get(0);
 	}
 }
