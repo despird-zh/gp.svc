@@ -3,7 +3,6 @@ package com.gp.svc.impl;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,6 @@ import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.OrgUserInfo;
 import com.gp.info.UserInfo;
-import com.gp.pagination.PageQuery;
-import com.gp.pagination.PageWrapper;
-import com.gp.pagination.PaginationHelper;
-import com.gp.pagination.PaginationInfo;
 import com.gp.svc.IdService;
 import com.gp.svc.OrgHierService;
 
@@ -220,7 +215,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 	}
 
 	@Override
-	public PageWrapper<UserInfo> getOrgHierMembers(ServiceContext<?> svcctx, InfoId<Long> orgid, PageQuery pquery)
+	public List<UserInfo> getOrgHierMembers(ServiceContext<?> svcctx, InfoId<Long> orgid)
 			throws ServiceException {
 		
 		List<UserInfo> rtv = null;
@@ -233,30 +228,17 @@ public class OrgHierServiceImpl implements OrgHierService{
 		Object[] params = new Object[]{orginfo.getInfoId().getId()};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<UserInfo> pwrapper = new PageWrapper<UserInfo>();
-		// get count sql scripts.
-		String countsql = StringUtils.replace(SQL.toString(), "SELECT b.* FROM", "SELECT count(b.user_id) FROM");
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pquery.getPageNumber(), 
-				pquery.getPageSize(), 5).getPaginationInfo();
-		pwrapper.setPagination(pagination);
-		
-		// get page query sql
-		String pagesql = pseudodao.getPageQuerySql(SQL.toString(), pquery);
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + SQL.toString() + " / PARAMS : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(pagesql, params, userdao.getRowMapper());	
+			rtv = jtemplate.query(SQL.toString(), params, userdao.getRowMapper());	
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail query org members", dae);
 		}
-		pwrapper.setRows(rtv);
-		
-		return pwrapper;
+
+		return rtv;
 
 	}
 }

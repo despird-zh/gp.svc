@@ -7,8 +7,6 @@ import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.UserInfo;
-import com.gp.pagination.PageQuery;
-import com.gp.pagination.PageWrapper;
 
 public interface OrgHierService {
 
@@ -26,6 +24,6 @@ public interface OrgHierService {
 	
 	public void removeOrgHierMember(ServiceContext<?> svcctx, InfoId<Long> orgid, String ... accounts) throws ServiceException;
 	
-	public PageWrapper<UserInfo> getOrgHierMembers(ServiceContext<?> svcctx, InfoId<Long> orgid, PageQuery pquery) throws ServiceException;
+	public List<UserInfo> getOrgHierMembers(ServiceContext<?> svcctx, InfoId<Long> orgid) throws ServiceException;
 
 }
