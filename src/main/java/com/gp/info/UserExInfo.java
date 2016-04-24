@@ -10,6 +10,8 @@ public class UserExInfo extends UserInfo{
 	
 	private String abbr;
 
+	private String storageName;
+	
 	public String getInstanceName() {
 		return instanceName;
 	}
@@ -32,5 +34,13 @@ public class UserExInfo extends UserInfo{
 
 	public void setAbbr(String abbr) {
 		this.abbr = abbr;
+	}
+
+	public String getStorageName() {
+		return storageName;
+	}
+
+	public void setStorageName(String storageName) {
+		this.storageName = storageName;
 	}	
 }

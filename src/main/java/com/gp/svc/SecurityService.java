@@ -30,8 +30,10 @@ public interface SecurityService {
 	
 	public boolean newAccountExt(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException;
 	
-	public UserInfo getAccount(ServiceContext<?> svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
-	
+	public UserInfo getAccountLite(ServiceContext<?> svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
+		
+	public UserExInfo getAccountFull(ServiceContext<?> svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
+		
 	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type,String[] state) throws ServiceException;
 	
 	public PageWrapper<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;

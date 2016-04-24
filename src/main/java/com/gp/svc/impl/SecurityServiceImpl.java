@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -69,8 +70,6 @@ public class SecurityServiceImpl implements SecurityService{
 	@Override
 	public boolean newAccount(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
 			
-		InfoId<Long> ukey = null;
-
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
 		// allocate an key for public cabinet
@@ -176,8 +175,6 @@ public class SecurityServiceImpl implements SecurityService{
 	@Transactional
 	@Override
 	public boolean newAccountExt(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
-			
-		InfoId<Long> ukey = null;
 
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
@@ -194,7 +191,7 @@ public class SecurityServiceImpl implements SecurityService{
 	}
 	
 	@Override
-	public UserInfo getAccount(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
+	public UserInfo getAccountLite(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
 		
 		UserInfo uinfo = null;
 		try{
@@ -290,13 +287,63 @@ public class SecurityServiceImpl implements SecurityService{
 		return exist;
 	}
 
+
+	@Override
+	public UserExInfo getAccountFull(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type)
+			throws ServiceException {
+
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
+				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
+				.append("ON a.storage_id = c.storage_id ")
+				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
+				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
+		Map<String,Object> params = new HashMap<String,Object>();
+		// account or name condition
+		if(StringUtils.isNotBlank(account)){
+			
+			SQL_FROM.append(" AND a.account = :account ");
+			params.put("account", StringUtils.trim(account));
+		}
+		// entity condition
+		if(null != userId && InfoId.isValid(userId)){
+			
+			SQL_FROM.append(" AND a.user_id = :userid ");
+			params.put("userid", userId.getId());
+		}
+		// user type condition
+		if(StringUtils.isNotBlank(type)){
+			SQL_FROM.append(" AND a.type = :type"); 
+			params.put("type", StringUtils.trim(type));
+		}
+		
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		String querysql = SQL_COLS.append(SQL_FROM).toString();
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
+		}
+		List<UserExInfo> users = null;
+		try{
+			
+			users = jtemplate.query(querysql, params, userdao.getUserExRowMapper());
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail query accounts", dae);
+		}
+
+		return CollectionUtils.isEmpty(users)? null : users.get(0);
+	}	
+	
 	@Override
 	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
 		
 		List<UserExInfo> rtv = null;
-		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.* ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
+				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
+				.append("ON a.storage_id = c.storage_id ")
 				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
 				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -475,6 +522,6 @@ public class SecurityServiceImpl implements SecurityService{
 			throw new ServiceException("Fail update account state", dae);
 		}
 		return cnt > 0;
-	}	
+	}
 	
 }

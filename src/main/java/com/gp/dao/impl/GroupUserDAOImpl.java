@@ -146,7 +146,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public int deleteByAccount(Long groupId, String account) {
+	public int deleteByAccount(InfoId<Long> groupId, String account) {
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("delete from gp_group_user ")
@@ -154,7 +154,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-			groupId, account
+			groupId.getId(), account
 		};
 		if(LOGGER.isDebugEnabled()){
 			
@@ -165,12 +165,12 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public boolean existByAccount(Long groupId, String account) {
+	public boolean existByAccount(InfoId<Long> groupId, String account) {
 		String SQL = "select count(1) from gp_group_user "
 				+ "where group_id = ? and account = ?";
 		
 		Object[] params = new Object[]{				
-				groupId,
+				groupId.getId(),
 				account
 			};
 		if(LOGGER.isDebugEnabled()){
@@ -183,14 +183,14 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public int deleteByGroup(Long groupId) {
+	public int deleteByGroup(InfoId<Long> groupId) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("delete from gp_group_user ")
 		.append("where group_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-			groupId
+			groupId.getId()
 		};
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));

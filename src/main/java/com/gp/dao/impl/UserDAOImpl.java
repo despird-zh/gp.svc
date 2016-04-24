@@ -317,7 +317,9 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			info.setPrivateCabinet(rs.getLong("private_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
-			
+			if(hasColumnInResultSet(rs, "storage_name")){
+				info.setStorageName(rs.getString("storage_name"));
+			}
 			info.setAbbr(rs.getString("abbr"));
 			info.setShortName(rs.getString("short_name"));
 			info.setInstanceName(rs.getString("instance_name"));

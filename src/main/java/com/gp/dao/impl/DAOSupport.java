@@ -1,12 +1,16 @@
 package com.gp.dao.impl;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -271,4 +275,21 @@ public abstract class DAOSupport{
 		}
 	}
 
+	/**
+	 * Check if result has specified column 
+	 * @param rs The result set object
+	 * @param columnName the target column name to be checked
+	 * 
+	 * @return boolean exist return true, otherwise return false
+	 **/
+	public static boolean hasColumnInResultSet(ResultSet resultset, String columnName) throws SQLException {
+	    ResultSetMetaData rs_metadata = resultset.getMetaData();
+	    int columns = rs_metadata.getColumnCount();
+	    for (int x = 1; x <= columns; x++) {
+	        if (StringUtils.equalsIgnoreCase(columnName, rs_metadata.getColumnName(x))) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 }

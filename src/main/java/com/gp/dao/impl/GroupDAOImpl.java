@@ -151,14 +151,14 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public int deleteByName(Long workgroupId, String group) {
+	public int deleteByName(InfoId<Long> workgroupId, String group) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("DELETE FROM gp_groups ")
 			.append("WHERE workgroup_id = ? AND group_name = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-				workgroupId,
+				workgroupId.getId(),
 				group
 		};
 		if(LOGGER.isDebugEnabled())
@@ -168,14 +168,14 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public GroupInfo queryByName(Long workgroupId, String group) {
+	public GroupInfo queryByName(InfoId<Long> workgroupId, String group) {
 		
 		String SQL = "SELECT * FROM gp_groups "
 				+ "WHERE group_name = ? AND workgroup_id = ?";
 		
 		Object[] params = new Object[]{				
 				group,
-				workgroupId,
+				workgroupId.getId(),
 			};
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);

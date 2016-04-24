@@ -418,7 +418,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean removeWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
 		
-		StringBuffer DelSQL = new StringBuffer("delete from gp_workgroup_user where workgroup_id = ? and account = ? ");
+		String DelSQL = "delete from gp_workgroup_user where workgroup_id = ? and account = ? ";
+		String DelGroupSQL = "delete from gp_group_user where workgroup_id = ? and account = ? ";
 		
 		Object[] params = new Object[]{
 				wkey.getId(),
@@ -426,13 +427,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		};
 		
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		if(LOGGER.isDebugEnabled()){
-			
-			LOGGER.debug("SQL : " + DelSQL.toString() + " / params : " + ArrayUtils.toString(params));
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + DelSQL + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + DelGroupSQL + " / params : " + ArrayUtils.toString(params));
 		}
 		// remote old records.
 		try{
-			return jtemplate.update(DelSQL.toString(), params)>0;
+			
+			jtemplate.update(DelGroupSQL, params);
+			return jtemplate.update(DelSQL, params)>0;
+			
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail remove members", dae);
 		}
@@ -590,8 +594,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		int cnt = 0;
 		
-		try{			
-			GroupInfo orig = groupdao.queryByName(ginfo.getWorkgroupId(), ginfo.getGroupName());
+		try{		
+			InfoId<Long> wgoupId = IdKey.WORKGROUP.getInfoId(ginfo.getWorkgroupId());
+			GroupInfo orig = groupdao.queryByName(wgoupId, ginfo.getGroupName());
 			if(null != orig){
 				
 				orig.setGroupName(ginfo.getGroupName());
@@ -617,7 +622,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			throws ServiceException {
 		
 		try{
-			return groupdao.deleteByName(wkey.getId(), gname) > 0;
+			// locate the id of group name.
+			GroupInfo ginfo = groupdao.queryByName(wkey, gname);
+			groupuserdao.deleteByGroup(ginfo.getInfoId());
+			return groupdao.deleteByName(wkey, gname) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail delte group", dae);
 		}
@@ -628,7 +636,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean removeWorkgroupGroup(ServiceContext<?> svcctx, InfoId<Long> groupid)
 			throws ServiceException {
 		try{
-			groupuserdao.deleteByGroup(groupid.getId());
+			groupuserdao.deleteByGroup(groupid);
 			return groupdao.delete(groupid) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail delete group", dae);
@@ -645,6 +653,11 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			Long wgroupid = ginfo.getWorkgroupId();
 			for(String account : accounts){
 				
+				boolean exist = groupuserdao.existByAccount(groupid, account);
+				if(exist) {
+					LOGGER.debug("User : {} already exist in group : {}", account, groupid.toString());
+					continue;
+				}
 				GroupUserInfo guinfo = new GroupUserInfo();
 				InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
 				guinfo.setInfoId(guid);
@@ -695,7 +708,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		try{
 			for(String account : accounts){				
-				groupuserdao.deleteByAccount(groupid.getId(), account);
+				groupuserdao.deleteByAccount(groupid, account);
 			}
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail remove members", dae);

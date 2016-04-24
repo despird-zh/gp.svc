@@ -5,9 +5,9 @@ import com.gp.info.InfoId;
 
 public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 
-	public int deleteByAccount(Long groupId, String account);
+	public int deleteByAccount(InfoId<Long> groupId, String account);
 	
-	public boolean existByAccount(Long groupId, String account);
+	public boolean existByAccount(InfoId<Long> groupId, String account);
 	
-	public int deleteByGroup(Long groupId);
+	public int deleteByGroup(InfoId<Long> groupId);
 }

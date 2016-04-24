@@ -166,8 +166,8 @@ public class OrgHierServiceImpl implements OrgHierService{
 				throw new ServiceException("The org's group not valid");
 			
 			for(String account: accounts){
-				
-				if(groupuserdao.existByAccount(orginfo.getGroupId(), account)){
+				InfoId<Long> gid = IdKey.GROUP.getInfoId(orginfo.getGroupId());
+				if(groupuserdao.existByAccount(gid, account)){
 					continue;
 				}
 				GroupUserInfo  guinfo = new GroupUserInfo();
@@ -209,8 +209,8 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 			for(String account: accounts){
 				
-				orguserdao.deleteByAccount(orgid.getId(), account);
-				groupuserdao.deleteByAccount(groupId.getId(), account);
+				orguserdao.deleteByAccount(orgid.getId(), account);				
+				groupuserdao.deleteByAccount(groupId, account);
 			}
 			
 		}catch(DataAccessException dae){
