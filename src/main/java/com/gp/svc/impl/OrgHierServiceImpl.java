@@ -135,20 +135,27 @@ public class OrgHierServiceImpl implements OrgHierService{
 			throw new ServiceException("fail query organization node", dae);
 		}
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean removeOrgHierNode(ServiceContext<?> svcctx, InfoId<Long> orgid) throws ServiceException {
 
 		try{
-
+			OrgHierInfo orginfo = orghierdao.query(orgid);
+			InfoId<Long> org_grpid = IdKey.GROUP.getInfoId(orginfo.getGroupId());
+			groupuserdao.deleteByGroup(org_grpid);// remove group users
+			groupdao.delete(org_grpid);// remove group
+			orguserdao.deleteByOrgHier(orgid); // remove org-node users
+			
 			return orghierdao.delete(orgid) >0;
-		
+			
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("fail query organization node", dae);
 		}
 	}
 
+	@Transactional
 	@Override
 	public void addOrgHierMember(ServiceContext<?> svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -191,6 +198,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
+	@Transactional
 	@Override
 	public void removeOrgHierMember(ServiceContext<?> svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -204,7 +212,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 			for(String account: accounts){
 				
-				orguserdao.deleteByAccount(orgid.getId(), account);				
+				orguserdao.deleteByAccount(orgid, account);				
 				groupuserdao.deleteByAccount(groupId, account);
 			}
 			

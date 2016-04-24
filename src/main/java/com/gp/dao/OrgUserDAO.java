@@ -5,5 +5,11 @@ import com.gp.info.OrgUserInfo;
 
 public interface OrgUserDAO extends BaseDAO<OrgUserInfo>{
 
-	public int deleteByAccount(Long orgId, String account);
+	/**
+	 * delete user under organization node by account
+	 **/
+	public int deleteByAccount(InfoId<Long> orgId, String account);
+	
+	
+	public int deleteByOrgHier(InfoId<Long> orgId);
 }

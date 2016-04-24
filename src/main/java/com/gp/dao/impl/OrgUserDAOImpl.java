@@ -21,7 +21,7 @@ import com.gp.info.OrgUserInfo;
 @Component("orgUserDAO")
 public class OrgUserDAOImpl extends DAOSupport implements OrgUserDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(InstanceDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(OrgUserDAOImpl.class);
 	
 	@Autowired
 	public OrgUserDAOImpl(DataSource dataSource) {
@@ -149,17 +149,37 @@ public class OrgUserDAOImpl extends DAOSupport implements OrgUserDAO{
 	}
 
 	@Override
-	public int deleteByAccount(Long orgId, String account) {
+	public int deleteByAccount(InfoId<Long> orgId, String account) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("delete from gp_org_user ")
 			.append("where org_id = ? and account = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-			orgId,
+			orgId.getId(),
 			account
 		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
+	}
+
+	@Override
+	public int deleteByOrgHier(InfoId<Long> orgId) {
 		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_org_user ")
+			.append("where org_id = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			orgId.getId()
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
 		int rtv = jtemplate.update(SQL.toString(), params);
 		return rtv;
 	}
