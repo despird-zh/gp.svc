@@ -156,7 +156,7 @@ public class InstanceServiceImpl implements InstanceService{
 	}
 
 	@Override
-	public boolean changeInstanceState(ServiceContext<?> svcctx, Integer instanceId, State state) throws ServiceException {
+	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
 
 		try{
 			

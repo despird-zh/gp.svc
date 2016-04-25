@@ -2,7 +2,6 @@ package com.gp.dao;
 
 import java.util.List;
 
-import com.gp.info.InfoId;
 import com.gp.info.TagInfo;
 
 public interface TagDAO extends BaseDAO<TagInfo>{

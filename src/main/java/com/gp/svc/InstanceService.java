@@ -45,5 +45,5 @@ public interface InstanceService {
 	/**
 	 * Change the state of instance 
 	 **/
-	public boolean changeInstanceState(ServiceContext<?> svcctx, Integer instanceId, State state) throws ServiceException;
+	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException;
 }

@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.common.GeneralConstants;
-import com.gp.common.IdKey;
 import com.gp.common.Users;
 import com.gp.dao.IdSettingDAO;
 import com.gp.exception.ServiceException;

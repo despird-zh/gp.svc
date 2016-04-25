@@ -178,14 +178,14 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	}
 
 	@Override
-	public int updateState(Integer instanceId, String state) {
+	public int updateState(InfoId<Integer> instanceId, String state) {
 		
 		String SQL = "UPDATE gp_instances SET state = ? "
 				+ "WHERE instance_id = ?";
 		
 		Object[] params = new Object[]{				
 				state,
-				instanceId
+				instanceId.getId()
 			};
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
