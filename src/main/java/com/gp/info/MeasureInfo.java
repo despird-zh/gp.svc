@@ -52,7 +52,7 @@ public class MeasureInfo extends TraceableInfo<Long>{
 		return flatColMap.get(col);
 	}
 	
-	public void setColValue(FlatColLocator col, String value){
+	public void putColValue(FlatColLocator col, String value){
 		flatColMap.put(col, value);
 	}
 }

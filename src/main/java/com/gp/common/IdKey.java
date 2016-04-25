@@ -48,7 +48,8 @@ public enum IdKey implements Identifier{
 	TASK_ROUTE("gp_task_route", Long.class),
 	MESSAGE("gp_messages", Long.class),
 	MESSAGE_DISPATCH("gp_message_dispatch", Long.class),
-	IMAGE("gp_images", Long.class);
+	IMAGE("gp_images", Long.class),
+	MEASURE("gp_measures", Long.class),;
 
 	private static Set<Identifier> IdSet = new HashSet<Identifier>();
 	
