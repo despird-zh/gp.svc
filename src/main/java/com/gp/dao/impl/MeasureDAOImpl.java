@@ -2,11 +2,11 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlParameterValue;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
@@ -31,9 +30,9 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(MeasureDAOImpl.class);
 	
-	SimpleDateFormat DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	//SimpleDateFormat DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
-	String MYSQL_DT_FMT = "%Y-%m-%d %H:%i:%s";
+	//String MYSQL_DT_FMT = "%Y-%m-%d %H:%i:%s";
 	
 	@Autowired
 	public MeasureDAOImpl(DataSource dataSource) {
@@ -178,6 +177,121 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 		return minfos;
 	}
 
+	@Override
+	public int create(MeasureInfo info) {
+		
+		StringBuffer SQL = new StringBuffer("INSERT into gp_measures (measure_id, measure_time, measure_type, trace_src_id,");
+		StringBuffer COLS = new StringBuffer();
+		StringBuffer VALS = new StringBuffer(")VALUES(?,?,?,?,");
+		
+		ArrayList<Object> params = new ArrayList<Object>();
+		// prepare 4 params
+		params.add(info.getInfoId().getId());
+		params.add(info.getMeasureTime());
+		params.add(info.getMeasureType());
+		params.add(info.getTraceSourceId());
+		
+		for(Map.Entry<FlatColLocator, String> entry : info.getFlatColMap().entrySet()){
+			
+			COLS.append(entry.getKey().getColumn()).append(",");
+			VALS.append("?,");
+			params.add(entry.getValue());
+		}
+		
+		SQL.append(COLS)
+			.append("modifier, last_modified )")
+			.append(VALS)
+			.append("?,? )");
+		
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		
+		Object[] paramary = params.toArray();
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(paramary));
+		}
+		
+		int cnt  = jtemplate.update(SQL.toString(), paramary);
+		return cnt;
+	}
+
+	@Override
+	public int delete(InfoId<?> id) {
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_measures ")
+			.append("where measure_id = ? ");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			id.getId()
+		};
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
+	}
+
+	@Override
+	public int update(MeasureInfo info) {
+		
+		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET measure_time = ?, measure_type = ?, trace_src_id = ?,");
+
+		
+		ArrayList<Object> params = new ArrayList<Object>();
+		// prepare 3 params
+		params.add(info.getMeasureTime());
+		params.add(info.getMeasureType());
+		params.add(info.getTraceSourceId());
+		
+		for(Map.Entry<FlatColLocator, String> entry : info.getFlatColMap().entrySet()){
+			
+			SQL.append(entry.getKey().getColumn()).append(" = ?,");
+			params.add(entry.getValue());
+		}
+		
+		SQL.append("modifier = ?, last_modified = ? WHERE measure_id= ?");
+		
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+		
+		Object[] paramary = params.toArray();
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(paramary));
+		}
+		
+		int cnt  = jtemplate.update(SQL.toString(), paramary);
+		return cnt;
+	}
+
+	@Override
+	public MeasureInfo query(InfoId<?> id) {
+		
+		String SQL = "SELECT * FROM gp_measures WHERE measure_id = ?";
+		
+		Object[] params = new Object[]{id.getId()};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(params));
+		}
+		RowMapper<MeasureInfo> rowmapper = getRowMapper();
+		
+		List<MeasureInfo> minfos = jtemplate.query(SQL.toString(),params, rowmapper);
+		
+		return CollectionUtils.isEmpty(minfos) ? null : minfos.get(0);
+	}
+
+	@Override
+	public RowMapper<MeasureInfo> getRowMapper() {
+		
+		return getRowMapper(new FlatColLocator[0]);
+	}
+	
 	public RowMapper<MeasureInfo> getRowMapper(final FlatColLocator... columns) {
 		
 		return new RowMapper<MeasureInfo>(){
@@ -205,4 +319,5 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			
 		};
 	}
+	
 }

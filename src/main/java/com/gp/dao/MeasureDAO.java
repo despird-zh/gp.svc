@@ -7,7 +7,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.MeasureInfo;
 
-public interface MeasureDAO {
+public interface MeasureDAO extends BaseDAO<MeasureInfo>{
 	
 	/**
 	 * Query the measure information by trace id and measure type 
@@ -33,5 +33,6 @@ public interface MeasureDAO {
 	 * Query the measure information list by trace id and measure type 
 	 **/
 	public List<MeasureInfo> queryListRange(InfoId<?> traceid,String measureType,Date before, Date after, FlatColLocator ... columns);
+	
 	
 }
