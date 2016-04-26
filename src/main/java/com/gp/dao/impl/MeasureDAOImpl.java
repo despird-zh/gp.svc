@@ -113,7 +113,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 		SQL.append("WHERE trace_src_id = ? AND measure_type = ? AND measure_time < ? ");
 		
 		Object[] params = new Object[]{
-				traceid.getId(),measureType, new java.sql.Timestamp(before.getTime())		
+				traceid.getId(),measureType, before		
 		};
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
@@ -136,10 +136,10 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			}
 		}
 		SQL.append("modifier,last_modified FROM gp_measures ");
-		SQL.append("WHERE trace_src_id = ? AND measure_type = ? AND measure_time > STR_TO_DATE( ? ,'").append(MYSQL_DT_FMT).append("' )");
+		SQL.append("WHERE trace_src_id = ? AND measure_type = ? AND measure_time > ?");
 		
 		Object[] params = new Object[]{
-				traceid.getId(),measureType, DATE_FMT.format(after)	
+				traceid.getId(),measureType, after
 		};
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
@@ -165,7 +165,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 		SQL.append("WHERE trace_src_id = ? AND measure_type = ? AND measure_time > ? AND measure_time <= ?");
 		
 		Object[] params = new Object[]{
-				traceid.getId(),measureType, new java.sql.Timestamp(after.getTime()), new java.sql.Timestamp(before.getTime())		
+				traceid.getId(),measureType, after, before	
 		};
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			

@@ -35,7 +35,7 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void test() throws Exception{
-
+		System.out.println("Test not after");
 		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
 		FlatColLocator[] columns = new FlatColLocator[]{Measures.WORKGROUP_KPI1,Measures.WORKGROUP_KPI2,Measures.WORKGROUP_KPI3};
 		
@@ -45,7 +45,7 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		if(CollectionUtils.isNotEmpty(minfos)){
 			for(MeasureInfo minfo : minfos)
-				System.out.println("--- : " + minfo.getInfoId());
+				System.out.println("--- id : " + minfo.getInfoId());
 		}else{
 			System.out.println("Not Found any rows");
 		}
@@ -53,6 +53,19 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	
 	@Test
 	public void test1() throws Exception{
+		System.out.println("Test not before");
+		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
+		FlatColLocator[] columns = new FlatColLocator[]{Measures.WORKGROUP_KPI1,Measures.WORKGROUP_KPI2,Measures.WORKGROUP_KPI3};
 		
+		Date before = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-25 18:12:35");
+		
+		List<MeasureInfo> minfos = measuredao.queryListBefore(trcid, "T", before, columns);
+		
+		if(CollectionUtils.isNotEmpty(minfos)){
+			for(MeasureInfo minfo : minfos)
+				System.out.println("--- id : " + minfo.getInfoId());
+		}else{
+			System.out.println("Not Found any rows");
+		}
 	}
 }
