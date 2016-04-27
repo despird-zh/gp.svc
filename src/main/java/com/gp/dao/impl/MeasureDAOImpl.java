@@ -238,7 +238,6 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	public int update(MeasureInfo info) {
 		
 		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET measure_time = ?, measure_type = ?, trace_src_id = ?,");
-
 		
 		ArrayList<Object> params = new ArrayList<Object>();
 		// prepare 3 params
@@ -318,6 +317,59 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			}
 			
 		};
+	}
+
+	@Override
+	public int updateByTraceId(InfoId<?> traceid, String measureType, FlatColLocator flatcol, String value) {
+		
+		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET ");
+		
+		ArrayList<Object> params = new ArrayList<Object>();
+
+		SQL.append(flatcol.getColumn()).append(" = ?");
+		params.add(value);
+		
+		SQL.append("WHERE trace_src_id = ? AND measure_type = ? ");
+		
+		params.add(traceid.getId());
+		params.add(measureType);
+
+		Object[] paramary = params.toArray();
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(paramary));
+		}
+		
+		int cnt  = jtemplate.update(SQL.toString(), paramary);
+		return cnt;
+	}
+
+	@Override
+	public int updateByTraceId(InfoId<?> traceid, String measureType, Map<FlatColLocator, String> colmap) {
+		
+		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET ");
+		
+		ArrayList<Object> params = new ArrayList<Object>();
+
+		for(Map.Entry<FlatColLocator, String> entry : colmap.entrySet()){
+			
+			SQL.append(entry.getKey().getColumn()).append(" = ?,");
+			params.add(entry.getValue());
+		}
+		
+		SQL.append("WHERE trace_src_id = ? AND measure_type = ? ");
+		
+		params.add(traceid.getId());
+		params.add(measureType);
+
+		Object[] paramary = params.toArray();
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(paramary));
+		}
+		
+		int cnt  = jtemplate.update(SQL.toString(), paramary);
+		return cnt;
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.gp.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -34,5 +35,14 @@ public interface MeasureDAO extends BaseDAO<MeasureInfo>{
 	 **/
 	public List<MeasureInfo> queryListRange(InfoId<?> traceid,String measureType,Date before, Date after, FlatColLocator ... columns);
 	
+	/**
+	 * Update measure information on specified column
+	 **/
+	public int updateByTraceId(InfoId<?> traceid,String measureType, FlatColLocator flatcol, String value);
+	
+	/**
+	 * Update measure information on specified column
+	 **/
+	public int updateByTraceId(InfoId<?> traceid,String measureType, Map<FlatColLocator, String> colmap);
 	
 }
