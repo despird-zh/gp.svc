@@ -37,5 +37,11 @@ public class RolePageInfo extends TraceableInfo<Integer> {
 		this.permMap = permMap;
 	}
 
+	public Boolean getColValue(FlatColLocator col){
+		return permMap.get(col);
+	}
 	
+	public void putColValue(FlatColLocator col, Boolean value){
+		permMap.put(col, value);
+	}
 }

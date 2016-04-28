@@ -57,7 +57,6 @@ public class PageInfo extends TraceableInfo<Integer>{
 		this.actionMap = actionMap;
 	}
 	
-	
 	public String getColValue(FlatColLocator col){
 		return actionMap.get(col);
 	}

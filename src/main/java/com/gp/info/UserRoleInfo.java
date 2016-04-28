@@ -27,5 +27,11 @@ public class UserRoleInfo extends TraceableInfo<Long>{
 		this.userId = userId;
 	}
 
+	public Integer getColValue(FlatColLocator col){
+		return roleMap.get(col);
+	}
 	
+	public void putColValue(FlatColLocator col, Integer value){
+		roleMap.put(col, value);
+	}
 }

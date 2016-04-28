@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +23,6 @@ import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
-import com.gp.info.MeasureInfo;
 import com.gp.info.PageInfo;
 
 @Component("pagedao")
