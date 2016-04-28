@@ -19,13 +19,13 @@ public enum Measures implements FlatColLocator {
 	}
 	
 	@Override
-	public int getColumnIndex() {
+	public int getColIndex() {
 		
 		return colIndex;
 	}
 
 	@Override
-	public String getColumnPrefix() {
+	public String getColPrefix() {
 		
 		return colPrefix;
 	}

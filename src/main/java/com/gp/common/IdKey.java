@@ -49,7 +49,11 @@ public enum IdKey implements Identifier{
 	MESSAGE("gp_messages", Long.class),
 	MESSAGE_DISPATCH("gp_message_dispatch", Long.class),
 	IMAGE("gp_images", Long.class),
-	MEASURE("gp_measures", Long.class),;
+	MEASURE("gp_measures", Long.class),
+	PAGE("gp_pages", Integer.class),
+	ROLE("gp_roles", Integer.class),
+	ROLE_PAGE("gp_role_page", Integer.class),
+	USER_ROLE("gp_user_role", Long.class);
 
 	private static Set<Identifier> IdSet = new HashSet<Identifier>();
 	
