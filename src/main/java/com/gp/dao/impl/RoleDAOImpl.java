@@ -141,4 +141,19 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	@Override
+	public List<RoleInfo> queryAll() {
+		
+		String SQL = "select * from gp_roles ";
+	
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : {}" + SQL );
+		}
+		
+		List<RoleInfo> rinfos = jtemplate.query(SQL, ROLE_Mapper);
+		
+		return rinfos;
+	}
+
 }

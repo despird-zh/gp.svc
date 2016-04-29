@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -256,7 +256,7 @@ public abstract class DAOSupport{
      * 
      * @param idkey indicate the table  
      **/
-	public static String getInClause(List<String> list){
+	public static String getInClause(Collection<String> list){
 		
 		if(!CollectionUtils.isEmpty(list)){
 			

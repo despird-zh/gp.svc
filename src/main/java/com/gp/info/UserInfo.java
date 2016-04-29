@@ -60,9 +60,9 @@ public class UserInfo extends TraceableInfo<Long>{
 	@NotNull
 	private String timeZone;
 	
-	private Long publicCabinet;
+	private Long publishCabinet;
 	
-	private Long privateCabinet;
+	private Long netdiskCabinet;
 	
 	public String getAccount() {
 		return account;
@@ -184,20 +184,20 @@ public class UserInfo extends TraceableInfo<Long>{
 		this.globalAccount = glocalAccount;
 	}
 
-	public Long getPublicCabinet() {
-		return publicCabinet;
+	public Long getPublishCabinet() {
+		return publishCabinet;
 	}
 
-	public void setPublicCabinet(Long publicCabinet) {
-		this.publicCabinet = publicCabinet;
+	public void setPublishCabinet(Long publishCabinet) {
+		this.publishCabinet = publishCabinet;
 	}
 
-	public Long getPrivateCabinet() {
-		return privateCabinet;
+	public Long getNetdiskCabinet() {
+		return netdiskCabinet;
 	}
 
-	public void setPrivateCabinet(Long privateCabinet) {
-		this.privateCabinet = privateCabinet;
+	public void setNetdiskCabinet(Long netdiskCabinet) {
+		this.netdiskCabinet = netdiskCabinet;
 	}
 
 	public Integer getStorageId() {

@@ -42,7 +42,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			.append("type,mobile,phone,full_name,")
 			.append("email, password, state, create_time,")
 			.append("extra_info, retry_times, last_logon,")
-			.append("language, timezone, public_cabinet_id, private_cabinet_id,")
+			.append("language, timezone, publish_cabinet_id, netdisk_cabinet_id,")
 			.append("storage_id,modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
@@ -58,7 +58,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
 				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),
-				info.getLanguage(), info.getTimeZone(),info.getPublicCabinet(),info.getPrivateCabinet(),
+				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
 				info.getStorageId(),info.getModifier(),info.getModifyDate()
 		};
 		if(LOGGER.isDebugEnabled()){
@@ -103,7 +103,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		.append("type = ?,mobile = ?,phone = ?,full_name = ?,")
 		.append("email = ?, password = ?, state = ?, create_time = ?,")
 		.append("extra_info = ?, retry_times = ?, last_logon = ?,")
-		.append("language = ?, timezone = ?, public_cabinet_id = ?, private_cabinet_id = ?,")
+		.append("language = ?, timezone = ?, publish_cabinet_id = ?, netdisk_cabinet_id = ?,")
 		.append("storage_id = ?,modifier = ?,last_modified = ? ")
 		.append("where user_id = ? ");
 
@@ -112,7 +112,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
 				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),
-				info.getLanguage(), info.getTimeZone(),info.getPublicCabinet(),info.getPrivateCabinet(),
+				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
 				info.getStorageId(),info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
 		};
@@ -176,8 +176,8 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			info.setLastLogonDate(rs.getDate("last_logon"));
 			info.setLanguage(rs.getString("language"));
 			info.setTimeZone(rs.getString("timezone"));
-			info.setPublicCabinet(rs.getLong("public_cabinet_id"));
-			info.setPrivateCabinet(rs.getLong("private_cabinet_id"));
+			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
 			
@@ -313,8 +313,8 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			info.setLastLogonDate(rs.getDate("last_logon"));
 			info.setLanguage(rs.getString("language"));
 			info.setTimeZone(rs.getString("timezone"));
-			info.setPublicCabinet(rs.getLong("public_cabinet_id"));
-			info.setPrivateCabinet(rs.getLong("private_cabinet_id"));
+			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
 			if(hasColumnInResultSet(rs, "storage_name")){

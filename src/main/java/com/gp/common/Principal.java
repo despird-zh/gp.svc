@@ -20,8 +20,8 @@
 package com.gp.common;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -57,10 +57,10 @@ public class Principal implements Serializable{
 	private String password;
 	
 	/** the group array */
-	private List<String> groups;
+	private Set<String> groups;
 	
 	/** the role array */
-	private List<String> roles;
+	private Set<String> roles;
 	
 	/** the time zone */
 	private DateTimeZone timeZone;
@@ -178,19 +178,19 @@ public class Principal implements Serializable{
 		this.timeZone = timeZone;
 	}
 
-	public List<String> getRoles() {
+	public Set<String> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(Set<String> roles) {
 		this.roles = roles;
 	}
 
-	public List<String> getGroups() {
+	public Set<String> getGroups() {
 		return groups;
 	}
 
-	public void setGroups(List<String> groups) {
+	public void setGroups(Set<String> groups) {
 		this.groups = groups;
 	}
 
