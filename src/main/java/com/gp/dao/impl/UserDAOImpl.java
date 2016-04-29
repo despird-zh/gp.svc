@@ -41,14 +41,14 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			.append("source_id,user_id,account,global_account,")
 			.append("type,mobile,phone,full_name,")
 			.append("email, password, state, create_time,")
-			.append("extra_info, retry_times, last_logon,")
+			.append("extra_info, retry_times, last_logon,classification,")
 			.append("language, timezone, publish_cabinet_id, netdisk_cabinet_id,")
 			.append("storage_id,modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,?,")
+			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?)");
 		
@@ -57,7 +57,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getSourceId(),key.getId(),info.getAccount(),info.getGlobalAccount(),
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
-				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),
+				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),info.getClassification(),
 				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
 				info.getStorageId(),info.getModifier(),info.getModifyDate()
 		};
@@ -102,7 +102,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		.append("account = ?,global_account = ?,source_id = ? ,")
 		.append("type = ?,mobile = ?,phone = ?,full_name = ?,")
 		.append("email = ?, password = ?, state = ?, create_time = ?,")
-		.append("extra_info = ?, retry_times = ?, last_logon = ?,")
+		.append("extra_info = ?, retry_times = ?, last_logon = ?,classsification=?,")
 		.append("language = ?, timezone = ?, publish_cabinet_id = ?, netdisk_cabinet_id = ?,")
 		.append("storage_id = ?,modifier = ?,last_modified = ? ")
 		.append("where user_id = ? ");
@@ -111,7 +111,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getAccount(),info.getGlobalAccount(),info.getSourceId(),
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
-				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),
+				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),info.getClassification(),
 				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
 				info.getStorageId(),info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
@@ -180,6 +180,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
+			info.setClassification(rs.getString("classification"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
