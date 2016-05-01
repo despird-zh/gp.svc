@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -47,6 +48,7 @@ import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
+import com.gp.info.WorkgroupLiteInfo;
 import com.gp.info.WorkgroupUserExInfo;
 import com.gp.info.WorkgroupUserInfo;
 import com.gp.pagination.PageQuery;
@@ -816,4 +818,105 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
 	}
+
+	@Override
+	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname,List<String> tags, PageQuery pagequery)
+			throws ServiceException {
+		
+		Map<String,Object> params = new HashMap<String,Object>();
+		
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.full_name ");
+		
+		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.workgroup_id) ");
+		
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ");		
+		SQL_FROM.append(" LEFT JOIN (select image_id, image_format, image_name, image_ext, touch_time from gp_images) b")
+				.append("    ON a.avatar_id = b.image_id ")
+				.append(" LEFT JOIN (SELECT account, full_name FROM gp_users WHERE source_id = -9999) c")
+				.append("    ON c.account = a.admin")
+				.append(" WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE)
+				.append("  AND (a.workgroup_name LIKE :wgname OR a.descr LIKE :wgname) ");		
+		params.put("wgname", gname+"%");
+		
+		if(CollectionUtils.isNotEmpty(tags)){			
+			SQL_FROM.append(" AND EXISTS ( SELECT tag_name from gp_tag_rel ");
+			SQL_FROM.append("            WHERE resource_type = 'WG' ");
+			SQL_FROM.append("               AND workgroup_id = a.workgroup_id");
+			SQL_FROM.append("               AND tag_name in( :tags)) ");
+			params.put("tags", tags);
+		}
+		SQL_FROM.append(" ORDER BY a.workgroup_id DESC");
+		
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		
+		PageWrapper<WorkgroupLiteInfo> pwrapper = new PageWrapper<WorkgroupLiteInfo>();
+		// get count sql scripts.
+		String countsql = SQL_COUNT.append(SQL_FROM).toString();
+		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+		// calculate pagination information, the page menu number is 5
+		PaginationInfo pagination = new PaginationHelper(totalrow, 
+				pagequery.getPageNumber(), 
+				pagequery.getPageSize(), 5).getPaginationInfo();
+		
+		pwrapper.setPagination(pagination);
+		
+		// get page query sql
+		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL_FROM).toString(), pagequery);
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + pagesql + " / params : " + params.toString());
+		}
+		List<WorkgroupLiteInfo> result = null;
+		try{
+			result = jtemplate.query(pagesql, params, WorkgroupLiteMapper);
+			pwrapper.setRows(result);
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail query workgroup lite info", dae);
+		}
+
+		return pwrapper;
+	}
+	
+	public static RowMapper<WorkgroupLiteInfo> WorkgroupLiteMapper = new RowMapper<WorkgroupLiteInfo>(){
+
+		@Override
+		public WorkgroupLiteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			
+			WorkgroupLiteInfo info = new WorkgroupLiteInfo();
+			
+			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			info.setInfoId(id);			
+			info.setSourceId(rs.getInt("source_id"));			
+			info.setWorkgroupName(rs.getString("workgroup_name"));
+			info.setDescription(rs.getString("descr"));
+			info.setState(rs.getString("state"));
+			info.setAdmin(rs.getString("admin"));
+			info.setCreator(rs.getString("creator"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setStorageId(rs.getInt("storage_id"));
+			info.setPublishCabinet(rs.getLong("publish_cab_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
+			info.setOrgId(rs.getLong("org_id"));
+			info.setHashCode(rs.getString("hash_code"));
+			info.setOwm(rs.getLong("owm"));
+			info.setShareEnable(rs.getBoolean("share_enable"));
+			info.setLinkEnable(rs.getBoolean("link_enable"));
+			info.setPostEnable(rs.getBoolean("post_enable"));
+			info.setNetdiskEnable(rs.getBoolean("netdisk_enable"));
+			info.setPublishEnable(rs.getBoolean("publish_enable"));
+			info.setTaskEnable(rs.getBoolean("task_enable"));
+			info.setAvatarId(rs.getLong("avatar_id"));
+			
+			info.setAdminName(rs.getString("full_name"));
+			info.setImageExt(rs.getString("image_ext"));
+			info.setImageFormat(rs.getString("image_format"));
+			info.setImageTouch(rs.getTimestamp("touch_time"));
+			
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
+			
+			return info;
+		}
+	};
 }

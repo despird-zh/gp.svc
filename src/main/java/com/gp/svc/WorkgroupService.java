@@ -1,6 +1,7 @@
 package com.gp.svc;
 
 import java.util.List;
+import java.util.Set;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
@@ -10,6 +11,7 @@ import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
+import com.gp.info.WorkgroupLiteInfo;
 import com.gp.info.WorkgroupUserExInfo;
 import com.gp.info.WorkgroupUserInfo;
 import com.gp.pagination.PageQuery;
@@ -71,6 +73,8 @@ public interface WorkgroupService {
 	public boolean removeWorkgroupGroupMember(ServiceContext<?> svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
 	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
+	
+	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
 	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
 }
