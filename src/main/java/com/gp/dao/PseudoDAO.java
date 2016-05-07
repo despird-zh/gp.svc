@@ -5,6 +5,8 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import com.gp.info.FlatColLocator;
+import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 
 /**
@@ -54,4 +56,11 @@ public interface PseudoDAO {
 	 * @param params the parameter objects array
 	 **/
 	public Integer queryRowCount(JdbcTemplate template, String sql, Object[] params);
+
+
+	public Integer update(InfoId<?> id, Map<FlatColLocator, Object> fields);
+	
+	public Integer update(InfoId<?> id, FlatColLocator col, Object val);
+	
+	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val);
 }

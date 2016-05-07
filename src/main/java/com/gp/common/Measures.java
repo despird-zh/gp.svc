@@ -19,7 +19,7 @@ public enum Measures implements FlatColLocator {
 	}
 	
 	@Override
-	public int getColIndex() {
+	public Integer getColIndex() {
 		
 		return colIndex;
 	}
