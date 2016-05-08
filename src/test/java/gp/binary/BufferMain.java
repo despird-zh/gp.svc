@@ -60,6 +60,7 @@ public class BufferMain {
 			int buffersize = BufferManager.instance().recommendBufferSize(this.filesize);
 			int amt = ChunkBuffer.chunkAmount(filesize, buffersize);
 			try( ChunkBuffer buffer = BufferManager.instance().borrowChunkBuffer(filesize, buffersize, 0)){
+				
 				for(int i = 0;i < buffer.bufferCapacity(); i++  )
 					buffer.getByteBuffer().put((byte)1);
 				
