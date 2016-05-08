@@ -27,7 +27,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 	
 	public void test() throws Exception{
 		
-		String bpath = StorageUtils.toURIStr(IdKey.STORAGE.getInfoId(3l), 21l,null, "txt");
+		String bpath = StorageUtils.toURIStr(IdKey.STORAGE.getInfoId(3), 21l,null, "txt");
 		
 		File tgt = new File("d:\\temp.txt");
 		
@@ -41,7 +41,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		File f = new File("D:\\n.repo\\80\\00\\00\\16.22.zip");
 		File f1 = new File("D:\\16.22.zip");
 		long filesize = f.length();
-		String bpath = StorageUtils.toURIStr(IdKey.STORAGE.getInfoId(3l), 22l,null, "zip");
+		String bpath = StorageUtils.toURIStr(IdKey.STORAGE.getInfoId(3), 22l,null, "zip");
 		System.out.println("bpath : " + bpath);
 		int prefersize = BufferManager.instance().recommendBufferSize(filesize);
 		System.out.println("buf size : " + CommonUtils.humanReadableByteCount(prefersize));
