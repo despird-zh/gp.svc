@@ -87,7 +87,7 @@ public class BufferManager {
 		
 		ByteBuffer buffer = null;
 		try {
-			buffer = bufferpool.borrowItem(buffersize);
+			buffer = bufferpool.acquire(buffersize);
 			
 			chkbuffer.setByteBuffer(buffer);
 		} catch (PoolException e) {
@@ -107,7 +107,7 @@ public class BufferManager {
 	 **/
 	public void returnChunkBuffer(ChunkBuffer buffer){
 		
-		bufferpool.returnItem(buffer.getByteBuffer());
+		bufferpool.release(buffer.getByteBuffer());
 		// reset the byte buffer
 		buffer.setByteBuffer(null);
 	}
