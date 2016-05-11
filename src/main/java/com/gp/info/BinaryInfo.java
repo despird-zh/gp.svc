@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class BinaryInfo extends TraceableInfo<Long>{
 	
-
 	private static final long serialVersionUID = 1L;
 
 	private String hashCode;
@@ -87,6 +86,5 @@ public class BinaryInfo extends TraceableInfo<Long>{
 	public void setSourceId(int sourceId) {
 		this.sourceId = sourceId;
 	}
-	
-	
+		
 }
