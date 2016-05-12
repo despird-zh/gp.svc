@@ -4,6 +4,9 @@ import java.util.Map;
 
 import com.gp.common.Storages;
 
+/**
+ * The setting of certain storage 
+ **/
 public class StorageSetting {
 
 	private Map<String, Object> setting = null;

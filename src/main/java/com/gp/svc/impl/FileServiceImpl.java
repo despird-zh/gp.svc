@@ -2,8 +2,13 @@ package com.gp.svc.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.gp.acl.Ace;
@@ -12,10 +17,13 @@ import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.dao.CabFileDAO;
 import com.gp.dao.CabVersionDAO;
+import com.gp.dao.PseudoDAO;
+import com.gp.dao.StorageDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
 import com.gp.info.InfoId;
+import com.gp.info.StorageInfo;
 import com.gp.svc.FileService;
 import com.gp.svc.IdService;
 import com.gp.util.DateTimeUtils;
@@ -23,12 +31,20 @@ import com.gp.util.DateTimeUtils;
 @Service("fileService")
 public class FileServiceImpl implements FileService{
 
+	static Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);
+	
 	@Autowired
 	CabVersionDAO cabversiondao;
 	
 	@Autowired
 	CabFileDAO cabfiledao;
-		
+	
+	@Autowired
+	StorageDAO storagedao;
+	
+	@Autowired
+	PseudoDAO pseudodao;
+	
 	@Autowired
 	private IdService idservice;
 	
@@ -160,6 +176,35 @@ public class FileServiceImpl implements FileService{
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, Acl acl) throws ServiceException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException {
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("SELECT a.*");
+		SQL.append("FROM gp_storages a, gp_cabinets b, gp_cab_files c ");
+		SQL.append("  WHERE a.storage_id = b.storage_id ");
+		SQL.append("     AND b.cabinet_id = c.cabinet_id ");
+		SQL.append("     AND c.file_id = ? ");
+		
+		Object[] params  = new Object[]{
+				fileid.getId()
+		};
+		
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, ArrayUtils.toString(params));
+		}
+		try{
+		List<StorageInfo> storages = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());
+		
+		return CollectionUtils.isEmpty(storages)? null : storages.get(0);
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("Fail to query the storage of cabinet file.",dae);
+		}
 	}
 
 }

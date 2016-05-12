@@ -9,6 +9,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
 import com.gp.info.InfoId;
+import com.gp.info.StorageInfo;
 
 public interface FileService {
 
@@ -57,4 +58,9 @@ public interface FileService {
 	 * @param acl the acl of source file
 	 **/
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, Acl acl )throws ServiceException;
+	
+	/**
+	 * get the storage information of a cabinet file 
+	 **/
+	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException;
 }

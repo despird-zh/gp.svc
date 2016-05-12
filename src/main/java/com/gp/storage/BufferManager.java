@@ -78,7 +78,7 @@ public class BufferManager {
 	 * @param chunkindex the index of chunk
 	 * 
 	 **/
-	public ChunkBuffer borrowChunkBuffer(long filesize, int chunksize, int chunkindex) throws StorageException{
+	public ChunkBuffer acquireChunkBuffer(long filesize, int chunksize, int chunkindex) throws StorageException{
 
 		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, chunksize);
 		chkbuffer.setChunkIndex(chunkindex);
@@ -105,7 +105,7 @@ public class BufferManager {
 	 * @param buffer the chunk buffer.
 	 * 
 	 **/
-	public void returnChunkBuffer(ChunkBuffer buffer){
+	public void releaseChunkBuffer(ChunkBuffer buffer){
 		
 		bufferpool.release(buffer.getByteBuffer());
 		// reset the byte buffer

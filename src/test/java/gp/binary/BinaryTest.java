@@ -52,7 +52,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().borrowChunkBuffer(filesize, prefersize, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, prefersize, i)){
 				BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
 				System.out.println("limit : " + cbuffer.getByteBuffer().limit() +"/pos : " + cbuffer.getByteBuffer().position());
 				
@@ -79,7 +79,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().borrowChunkBuffer(filesize, prefersize, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, prefersize, i)){
 				
 				BufferOutputStream bos = new BufferOutputStream(cbuffer.getByteBuffer());
 				long count = bos.writeFromStream(fi);

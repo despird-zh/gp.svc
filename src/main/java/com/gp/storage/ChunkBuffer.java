@@ -103,7 +103,7 @@ public class ChunkBuffer implements AutoCloseable{
 	@Override
 	public void close() {
 		
-		BufferManager.instance().returnChunkBuffer(this);
+		BufferManager.instance().releaseChunkBuffer(this);
 	}
 	
 	/**
