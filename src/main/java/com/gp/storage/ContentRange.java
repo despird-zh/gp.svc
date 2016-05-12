@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * The content range derive from the HTTP Content-Range information. <br>
  * Content-Range : bytes 21010-47021/47022 
+ * 
  * @author gary diao
  * @version 0.1 2015-12-12
  * 
