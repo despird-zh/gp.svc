@@ -43,16 +43,14 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		long filesize = f.length();
 		String bpath = StorageUtils.toURIStr(IdKey.STORAGE.getInfoId(3), 22l,null, "zip");
 		System.out.println("bpath : " + bpath);
-		int prefersize = BufferManager.instance().recommendBufferSize(filesize);
-		System.out.println("buf size : " + CommonUtils.humanReadableByteCount(prefersize));
-		
+
 		FileOutputStream fo = new FileOutputStream(f1);
-		int chunks = ChunkBuffer.chunkAmount(filesize, prefersize);
+		int chunks = ChunkBuffer.chunkAmount(filesize, BufferManager.BUFFER_SIZE);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, prefersize, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, BufferManager.BUFFER_SIZE, i)){
 				BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
 				System.out.println("limit : " + cbuffer.getByteBuffer().limit() +"/pos : " + cbuffer.getByteBuffer().position());
 				
@@ -71,15 +69,13 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		File f1 = new File("D:\\16.22.zip");
 		long filesize = f1.length();
 
-		int prefersize = BufferManager.instance().recommendBufferSize(filesize);
-		System.out.println("buf size : " + CommonUtils.humanReadableByteCount(prefersize));
 		FileInputStream fi = new FileInputStream(f1);
-		int chunks = ChunkBuffer.chunkAmount(filesize, prefersize);
+		int chunks = ChunkBuffer.chunkAmount(filesize, BufferManager.BUFFER_SIZE);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, prefersize, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, BufferManager.BUFFER_SIZE, i)){
 				
 				BufferOutputStream bos = new BufferOutputStream(cbuffer.getByteBuffer());
 				long count = bos.writeFromStream(fi);

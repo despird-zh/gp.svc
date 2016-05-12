@@ -30,12 +30,7 @@ public class BufferMain {
 	            break;
 	        }
 	        if (inText.equals("s")){
-	        	System.out.println("Get statistics...");
-	        	
-	            int[][] stats = BufferManager.instance().getPoolStatistics();
-	            for(int[] ary : stats){
-	            	System.out.println("BS : "+ CommonUtils.humanReadableByteCount((long)ary[0]) + " / " + "SZ : " + ary[1]);
-	            }
+	   
 	            continue;
 	        }
 	        
@@ -57,9 +52,8 @@ public class BufferMain {
 		@Override
 		public void run() {
 			
-			int buffersize = BufferManager.instance().recommendBufferSize(this.filesize);
-			int amt = ChunkBuffer.chunkAmount(filesize, buffersize);
-			try( ChunkBuffer buffer = BufferManager.instance().acquireChunkBuffer(filesize, buffersize, 0)){
+			int amt = ChunkBuffer.chunkAmount(filesize,  BufferManager.BUFFER_SIZE);
+			try( ChunkBuffer buffer = BufferManager.instance().acquireChunkBuffer(filesize,  BufferManager.BUFFER_SIZE, 0)){
 				
 				for(int i = 0;i < buffer.bufferCapacity(); i++  )
 					buffer.getByteBuffer().put((byte)1);

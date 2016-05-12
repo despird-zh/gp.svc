@@ -21,32 +21,19 @@ import com.gp.pool.ByteBufferPool;
 public class BufferManager {
 
 	static Logger LOGGER = LoggerFactory.getLogger(BufferManager.class);
+
+	public static int BUFFER_SIZE = 1 * 1024 * 1024;	// size 1m
+
+	private ByteBufferBuilder bufferbuilder = new ByteBufferBuilder(BUFFER_SIZE);
 	
-	public static final int SIZE_128K = 128 * 1024;	
-	public static final int SIZE_512K = 512 * 1024;	
-	public static final int SIZE_1M = 1 * 1024 * 1024;	
-	public static final int SIZE_2M = 2 * SIZE_1M;	
-	public static final int SIZE_4M = 2 * SIZE_2M;
-	
-	public static final int DEFAULT_CHUNKS = 10;
-	
-	private ByteBufferBuilder bufferbuilder = new ByteBufferBuilder(SIZE_128K);
 	private ByteBufferPool bufferpool = null;
 	
-	/** default pool setting {buffer size, min idle, max idle}*/
-	private int[][] bufferSettingArray = new int[][]{
-		{SIZE_128K,2,4},
-		{SIZE_512K,2,4},
-		{SIZE_1M,1,4},
-		{SIZE_2M,1,2},
-		{SIZE_4M,1,2}};
-		
 	/**
 	 * hidden default constructor 
 	 **/
 	private BufferManager(){
 		
-		bufferpool = new ByteBufferPool(bufferbuilder, bufferSettingArray, 500l);
+		bufferpool = new ByteBufferPool(bufferbuilder, 2, 6, 500l);
 	}
 	
 	/**
@@ -82,12 +69,10 @@ public class BufferManager {
 
 		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, chunksize);
 		chkbuffer.setChunkIndex(chunkindex);
-		// find nearest size buffer
-		int buffersize = nearestBufferSize((int)chkbuffer.chunkLength());
-		
+
 		ByteBuffer buffer = null;
 		try {
-			buffer = bufferpool.acquire(buffersize);
+			buffer = bufferpool.acquire();
 			
 			chkbuffer.setByteBuffer(buffer);
 		} catch (PoolException e) {
@@ -112,67 +97,4 @@ public class BufferManager {
 		buffer.setByteBuffer(null);
 	}
 	
-	/**
-	 * find a nearest buffer size
-	 * 
-	 * @param actuallength the length of actual data length 
-	 * 
-	 **/
-	public int nearestBufferSize(int actuallength){		
-		int[] sizearray = bufferpool.getBufferSizes();
-		
-		Arrays.sort(sizearray);
-		
-		for(int i = 0; i < sizearray.length; i++){
-			
-			if(actuallength <= sizearray[i])
-				return sizearray[i];
-		}
-		
-		return sizearray[sizearray.length-1];
-		
-	}
-	
-	/**
-	 * find a recommend buffer size as per the file size 
-	 * 
-	 * @param filesize the size of file
-	 **/
-	public int recommendBufferSize(long filesize){
-		
-		int chunksize = (int)(filesize / DEFAULT_CHUNKS);		
-		int[] sizearray = bufferpool.getBufferSizes();
-		
-		Arrays.sort(sizearray);
-		
-		for(int i = 0; i < sizearray.length; i++){
-			
-			if(chunksize <= sizearray[i])
-				return sizearray[i];
-		}
-		
-		return sizearray[sizearray.length-1];
-	}
-	
-	/**
-	 * Get the available buffer size array 
-	 **/
-	public int[] getBufferSizeArray(){
-		
-		return bufferpool.getBufferSizes();
-	}
-	
-	/**
-	 * get the statistics of the buffer pool<br>
-	 * <pre>
-	 * {
-	 *    {[buffer size], [cache size]}
-	 *    ...
-	 * } 
-	 * </pre>
-	 **/
-	public int[][] getPoolStatistics(){
-		
-		return bufferpool.getStatistics();
-	}
 }
