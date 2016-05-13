@@ -15,17 +15,15 @@ public class ChunkBuffer implements AutoCloseable{
 	/**
 	 * constructor with file size and chunk size 
 	 **/
-	public ChunkBuffer(Long fileSize, int chunkSize){
+	public ChunkBuffer(Long fileSize, Long chunkOffset, int chunkLength){
 		
 		this.fileSize = fileSize;
-		this.chunkSize = chunkSize;
-		calculate();
+		this.chunkOffset = chunkOffset;
+		this.chunkLength = chunkLength;
 	}
 	
 	private long fileSize = -1l; // size of file	
-	private long chunkAmount = -1l; // amount of total chunks
-	private int chunkIndex = 0; // index of expected chunk
-	private int chunkSize = -1; // average size of chunk
+	private Long chunkOffset = 0l; // index of expected chunk
 	private ByteBuffer chunkData = null; // data
 	private int chunkLength = -1; // length of expected chunk data
 	
@@ -34,7 +32,7 @@ public class ChunkBuffer implements AutoCloseable{
 	 **/
 	public long chunkOffset(){
 		
-		return chunkIndex * chunkSize;
+		return chunkOffset;
 	}
 	
 	/**
@@ -48,17 +46,8 @@ public class ChunkBuffer implements AutoCloseable{
 	/**
 	 * set the index of chunk, this trigger re-calculation 
 	 **/
-	public void setChunkIndex(int index){
-		this.chunkIndex = index;
-		calculate();
-	}
-	
-	/**
-	 * get the count of chunks  
-	 **/
-	public long chunkAmount(){
-		
-		return chunkAmount;
+	public void setChunkOffset(long chunkOffset){
+		this.chunkOffset = chunkOffset;
 	}
 	
 	/**
@@ -75,26 +64,6 @@ public class ChunkBuffer implements AutoCloseable{
 	public ByteBuffer getByteBuffer(){
 		
 		return this.chunkData;
-	}
-	
-	private void calculate(){
-		// index set 
-		if(chunkIndex >= 0){
-			long bytesRemaining = fileSize - chunkIndex * chunkSize;
-			// re-calculate the current chunk length
-			if(bytesRemaining <= 0 ) {
-				this.chunkLength = 0;
-				
-			}else{			
-				this.chunkLength = (bytesRemaining > (long)chunkSize) ? 
-						chunkSize : (int)bytesRemaining;
-			}
-		}
-		// re-calculate the chunks amount
-		chunkAmount = (int) (fileSize / chunkSize);
-		if (fileSize % chunkSize > 0) {
-			chunkAmount++;
-		}
 	}
 
 	/**
@@ -121,12 +90,59 @@ public class ChunkBuffer implements AutoCloseable{
 	 * @param chunkSize
 	 * @return the amount of chunks
 	 **/
-	public static int chunkAmount(long filesize, int chunkSize){
+	public static int calculateAmount(long filesize, int chunkSize){
 		// re-calculate the chunks amount
 		int chunkAmount = (int) (filesize / chunkSize);
 		if (filesize % chunkSize > 0) {
 			chunkAmount++;
 		}
 		return chunkAmount;
+	}
+	
+	/**
+	 * static method to calculate the offset position 
+	 * @param fileSize the size of file
+	 * @param chunkIndex the index of file chunks
+	 * @param chunkSize the size of file chunk
+	 *  
+	 **/
+	public static long calculateOffset(Long fileSize, int chunkIndex, int chunkSize){
+		// index set 
+		if(chunkIndex >= 0){
+			long bytesRemaining = fileSize - chunkIndex * chunkSize;
+			// re-calculate the current chunk length
+			if(bytesRemaining <= 0 ) {
+				return 0l;
+				
+			}else{			
+				return (bytesRemaining > (long)chunkSize) ? chunkSize : bytesRemaining;
+			}
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * static method to calculate the offset position 
+	 * @param fileSize the size of file
+	 * @param chunkIndex the index of file chunks
+	 * @param chunkSize the size of file chunk
+	 *  
+	 **/
+	public static long calculateLength(Long fileSize, int chunkIndex, int chunkSize){
+		// index set 
+		if(chunkIndex > 0){
+			long bytesRemaining = fileSize - chunkIndex * chunkSize;
+			// re-calculate the current chunk length
+			if(bytesRemaining <= 0 ) {
+				return fileSize - (chunkIndex - 1) * chunkSize;
+				
+			}else{			
+				return bytesRemaining;
+			}
+		}else{
+			return Math.min(fileSize, chunkSize);
+		}
+
 	}
 }

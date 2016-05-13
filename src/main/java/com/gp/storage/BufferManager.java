@@ -20,7 +20,7 @@ public class BufferManager {
 
 	static Logger LOGGER = LoggerFactory.getLogger(BufferManager.class);
 
-	public static int BUFFER_SIZE = 1* 1024;	// size 1m
+	public static int BUFFER_SIZE = 1* 1024 * 1024;	// size 1m
 
 	private ByteBufferBuilder bufferbuilder = new ByteBufferBuilder(BUFFER_SIZE);
 	
@@ -65,8 +65,8 @@ public class BufferManager {
 	 **/
 	public ChunkBuffer acquireChunkBuffer(long filesize, int chunkindex) throws StorageException{
 
+		long offset = ChunkBuffer.
 		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, BUFFER_SIZE);
-		chkbuffer.setChunkIndex(chunkindex);
 
 		ByteBuffer buffer = null;
 		try {
