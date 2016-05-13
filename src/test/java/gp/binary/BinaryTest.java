@@ -42,7 +42,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("bpath : " + bpath);
 
 		FileOutputStream fo = new FileOutputStream(f1);
-		int chunks = ChunkBuffer.chunkAmount(filesize, BufferManager.BUFFER_SIZE);
+		int chunks = ChunkBuffer.calculateAmount(filesize, BufferManager.BUFFER_SIZE);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
@@ -67,7 +67,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		long filesize = f1.length();
 
 		FileInputStream fi = new FileInputStream(f1);
-		int chunks = ChunkBuffer.chunkAmount(filesize, BufferManager.BUFFER_SIZE);
+		int chunks = ChunkBuffer.calculateAmount(filesize, BufferManager.BUFFER_SIZE);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){

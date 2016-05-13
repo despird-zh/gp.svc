@@ -54,7 +54,7 @@ public class BufferMain {
 		@Override
 		public void run() {
 			
-			int amt = ChunkBuffer.chunkAmount(filesize,  BufferManager.BUFFER_SIZE);
+			int amt = ChunkBuffer.calculateAmount(filesize,  BufferManager.BUFFER_SIZE);
 				
 			for(int i = 0 ; i<amt; i++){
 				useChunk(filesize,i);

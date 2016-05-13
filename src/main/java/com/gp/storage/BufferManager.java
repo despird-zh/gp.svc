@@ -63,10 +63,39 @@ public class BufferManager {
 	 * @param chunkindex the index of chunk
 	 * 
 	 **/
+	public ChunkBuffer acquireChunkBuffer(long filesize,long offset, int chunkLength) throws StorageException{
+		
+		if(chunkLength > BUFFER_SIZE)
+			throw new StorageException("chunk length greater than buffer capacity. ");
+		
+		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, offset, chunkLength);
+
+		ByteBuffer buffer = null;
+		try {
+			buffer = bufferpool.acquire();
+			
+			chkbuffer.setByteBuffer(buffer);
+		} catch (PoolException e) {
+			throw new StorageException("Error borrow buffer from pool", e);
+		} catch (InterruptedException e) {
+			throw new StorageException("Error borrow buffer from pool", e);
+		}
+		
+		return chkbuffer;
+	}
+	
+	/**
+	 * borrow chunk buffer from buffer pool, the chunk buffer is auto closable.
+	 *
+	 * @param filesize the size of file
+	 * @param chunksize the size of chunk
+	 * @param chunkindex the index of chunk
+	 * 
+	 **/
 	public ChunkBuffer acquireChunkBuffer(long filesize, int chunkindex) throws StorageException{
 
-		long offset = ChunkBuffer.
-		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, BUFFER_SIZE);
+		long offset = ChunkBuffer.calculateOffset(filesize, chunkindex, BUFFER_SIZE);
+		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, offset, BUFFER_SIZE);
 
 		ByteBuffer buffer = null;
 		try {

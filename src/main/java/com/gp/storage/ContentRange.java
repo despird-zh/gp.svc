@@ -51,6 +51,10 @@ public class ContentRange {
 		this.fileSize = fileSize;
 	}
 	
+	public int getRangeLength(){
+		return (int)(this.endPos - this.startPos) + 1;
+	}
+	
     /**
      * content range : bytes 21010-47021/47022 
      **/
