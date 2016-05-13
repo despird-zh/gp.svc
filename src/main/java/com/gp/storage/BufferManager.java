@@ -1,8 +1,6 @@
 package com.gp.storage;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +20,7 @@ public class BufferManager {
 
 	static Logger LOGGER = LoggerFactory.getLogger(BufferManager.class);
 
-	public static int BUFFER_SIZE = 1 * 1024 * 1024;	// size 1m
+	public static int BUFFER_SIZE = 1* 1024;	// size 1m
 
 	private ByteBufferBuilder bufferbuilder = new ByteBufferBuilder(BUFFER_SIZE);
 	
@@ -65,9 +63,9 @@ public class BufferManager {
 	 * @param chunkindex the index of chunk
 	 * 
 	 **/
-	public ChunkBuffer acquireChunkBuffer(long filesize, int chunksize, int chunkindex) throws StorageException{
+	public ChunkBuffer acquireChunkBuffer(long filesize, int chunkindex) throws StorageException{
 
-		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, chunksize);
+		ChunkBuffer chkbuffer = new ChunkBuffer(filesize, BUFFER_SIZE);
 		chkbuffer.setChunkIndex(chunkindex);
 
 		ByteBuffer buffer = null;
@@ -93,7 +91,7 @@ public class BufferManager {
 	public void releaseChunkBuffer(ChunkBuffer buffer){
 		
 		bufferpool.release(buffer.getByteBuffer());
-		// reset the byte buffer
+		// reset the byte buffer reference.
 		buffer.setByteBuffer(null);
 	}
 	

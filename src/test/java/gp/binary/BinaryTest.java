@@ -2,7 +2,6 @@ package gp.binary;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -18,8 +17,6 @@ import com.gp.storage.BufferManager;
 import com.gp.storage.ChunkBuffer;
 import com.gp.util.BufferInputStream;
 import com.gp.util.BufferOutputStream;
-import com.gp.util.ByteUtils;
-import com.gp.util.CommonUtils;
 import com.gp.util.StorageUtils;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
@@ -50,12 +47,12 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, BufferManager.BUFFER_SIZE, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, i)){
 				BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
 				System.out.println("limit : " + cbuffer.getByteBuffer().limit() +"/pos : " + cbuffer.getByteBuffer().position());
 				
 				BufferInputStream bis = new BufferInputStream(cbuffer.getByteBuffer());
-				int count = bis.readToStream(fo);
+				long count = bis.readToStream(fo);
 				System.out.println("count : " + count);
 			}
 		}
@@ -75,7 +72,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, BufferManager.BUFFER_SIZE, i)){
+			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize,  i)){
 				
 				BufferOutputStream bos = new BufferOutputStream(cbuffer.getByteBuffer());
 				long count = bos.writeFromStream(fi);
