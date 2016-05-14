@@ -106,7 +106,5 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
 		}
-
 	}
-
 }
