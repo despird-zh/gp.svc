@@ -121,46 +121,6 @@ public class BinaryManager {
 	}
 	
 	/**
-	 * dump certain chunk data of binary resource out to the chunk buffer
-	 * 
-	 * @param binaryKey the key of binary record
-	 * @param chunkdata the chunk data holder
-	 *   
-	 **/
-	public void dumpBinaryChunk(InfoId<Long> binaryKey, ChunkBuffer chunkdata)throws StorageException{
-		BinaryInfo binfo = binarydao.query(binaryKey);
-		String binaryURI = binfo.getStoreLocation();
-		dumpBinaryChunk(binaryURI, chunkdata);
-	}
-	
-	/**
-	 * dump certain chunk data of binary resource out to the chunk buffer
-	 * 
-	 * @param binaryURI the uri string of source binary
-	 * @param chunkdata the chunk data holder
-	 *   
-	 **/
-	public void dumpBinaryChunk(String binaryURI, ChunkBuffer chunkdata)throws StorageException{
-		
-		BinUriMeta meta = new BinUriMeta(binaryURI);	
-		BinaryAccessor binaccessor = null;
-		
-		StorageInfo sinfo = storagedao.query(meta.StorageId);
-		StorageSetting storagesetting = new StorageSetting(sinfo.getSettingJson());
-		String rootpath = meta.BinPath;
-		
-		if(Storages.StorageType.DISK.name().equalsIgnoreCase(sinfo.getStorageType())){
-			
-			binaccessor = this.diskaccessor;
-		}
-		// clear the buffer
-		chunkdata.getByteBuffer().clear();
-		binaccessor.dumpBinaryChunk(meta.BinaryId, storagesetting, rootpath, chunkdata);
-		if(chunkdata.getByteBuffer().position() != 0)
-			chunkdata.getByteBuffer().flip();
-	}
-	
-	/**
 	 * fill the binary with the specified stream
 	 * 
 	 * @param binaryKey the key of binary record
@@ -198,16 +158,57 @@ public class BinaryManager {
 	}
 	
 	/**
+	 * dump certain chunk data of binary resource out to the chunk buffer
+	 * 
+	 * @param binaryKey the key of binary record
+	 * @param chunkdata the chunk data holder
+	 *   
+	 **/
+	public void dumpBinaryChunk(InfoId<Long> binaryKey, ChunkBuffer chunkdata)throws StorageException{
+		BinaryInfo binfo = binarydao.query(binaryKey);
+		String binaryURI = binfo.getStoreLocation();
+		dumpBinaryChunk(binaryURI, chunkdata);
+	}
+	
+	/**
+	 * dump certain chunk data of binary resource out to the chunk buffer
+	 * 
+	 * @param binaryURI the uri string of source binary
+	 * @param chunkdata the chunk data holder
+	 *   
+	 **/
+	public void dumpBinaryChunk(String binaryURI, ChunkBuffer chunkdata)throws StorageException{
+		
+		BinUriMeta meta = new BinUriMeta(binaryURI);	
+		BinaryAccessor binaccessor = null;
+		
+		StorageInfo sinfo = storagedao.query(meta.StorageId);
+		StorageSetting storagesetting = new StorageSetting(sinfo.getSettingJson());
+		String rootpath = meta.BinPath;
+		
+		if(Storages.StorageType.DISK.name().equalsIgnoreCase(sinfo.getStorageType())){
+			
+			binaccessor = this.diskaccessor;
+		}
+		// clear the buffer
+		chunkdata.getByteBuffer().clear();
+		binaccessor.dumpBinaryChunk(meta.BinaryId, storagesetting, rootpath, chunkdata);
+		
+		if(chunkdata.getByteBuffer().position() != 0)
+			chunkdata.getByteBuffer().flip();
+	}
+	
+	/**
 	 * dump the binary to the specified stream
 	 * 
 	 * @param binaryKey the key of binary record
 	 * @param target the output stream
 	 *   
 	 **/
-	public void dumpBinary(InfoId<Long> binaryKey, OutputStream source)throws StorageException{
+	public void dumpBinary(InfoId<Long> binaryKey, OutputStream target)throws StorageException{
 		BinaryInfo binfo = binarydao.query(binaryKey);
 		String binaryURI = binfo.getStoreLocation();
-		dumpBinary(binaryURI, source);
+		dumpBinary(binaryURI, target);
 	}
 	
 	/**

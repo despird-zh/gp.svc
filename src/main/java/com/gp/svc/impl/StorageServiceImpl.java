@@ -46,14 +46,12 @@ public class StorageServiceImpl implements StorageService{
 	@Override
 	public boolean newBinary(ServiceContext<?> svcctx, BinaryInfo binary) throws ServiceException {
 
-		try{
-			
+		try{			
 			return binarydao.create(binary) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("",dae);
+			throw new ServiceException("fail create binary record",dae);
 		}
-
 	}
 
 	@Override
@@ -64,8 +62,12 @@ public class StorageServiceImpl implements StorageService{
 
 	@Override
 	public BinaryInfo getBinary(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		try{			
+			return binarydao.query(id);
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("fail query binary record",dae);
+		}
 	}
 
 	@Override

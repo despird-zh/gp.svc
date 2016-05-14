@@ -23,14 +23,14 @@ public class ChunkBuffer implements AutoCloseable{
 	}
 	
 	private long fileSize = -1l; // size of file	
-	private Long chunkOffset = 0l; // index of expected chunk
+	private long chunkOffset = 0l; // index of expected chunk
 	private ByteBuffer chunkData = null; // data
-	private int chunkLength = -1; // length of expected chunk data
+	private long chunkLength = -1; // length of expected chunk data
 	
 	/**
 	 * get the offset of current chunk 
 	 **/
-	public long chunkOffset(){
+	public long getChunkOffset(){
 		
 		return chunkOffset;
 	}
@@ -38,7 +38,7 @@ public class ChunkBuffer implements AutoCloseable{
 	/**
 	 * get the bytes array length of current chunk 
 	 **/
-	public long chunkLength(){
+	public long getChunkLength(){
 		
 		return chunkLength;
 	}

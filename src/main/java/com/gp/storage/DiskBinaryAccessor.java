@@ -49,7 +49,7 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 			
 			// skip offset length 
 			FileChannel ch = fos.getChannel();
-		    ch.position(chunkdata.chunkOffset());
+		    ch.position(chunkdata.getChunkOffset());
 		    ch.write(chunkdata.getByteBuffer());
 		       
 		} catch (IOException e) {
@@ -66,7 +66,7 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 			FileInputStream fis = new FileInputStream(srcbinary);
 			) {		
 			// skip offset length 
-			fis.skip(chunkdata.chunkOffset());
+			fis.skip(chunkdata.getChunkOffset());
 			// copy from file
 			outputstream.writeFromStream(fis);
 			

@@ -81,4 +81,9 @@ public enum Operations {
 	FIND_IMAGES,
 	UPDATE_DICT,
 	FIND_DICTS,
+	/** binary */
+	FETCH_BIN_CHUNK,
+	FETCH_BIN,
+	STORE_BIN_CHUNK,
+	STORE_BIN,
 }

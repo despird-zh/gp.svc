@@ -63,7 +63,7 @@ public class BufferManager {
 	 * @param chunkindex the index of chunk
 	 * 
 	 **/
-	public ChunkBuffer acquireChunkBuffer(long filesize,long offset, int chunkLength) throws StorageException{
+	public ChunkBuffer acquireChunkBuffer(long filesize, long offset, int chunkLength) throws StorageException{
 		
 		if(chunkLength > BUFFER_SIZE)
 			throw new StorageException("chunk length greater than buffer capacity. ");
