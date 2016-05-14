@@ -11,12 +11,12 @@ public class GuavaCache implements Cache{
 	}
 	
 	/**
-	 * 缓存的具体实现
+	 * The cache implementation
 	 */
 	private final com.google.common.cache.Cache<Object, Object> cache;
 
 	/**
-	 * 缓存名称
+	 * The cache name
 	 */
 	private final String name;
 
