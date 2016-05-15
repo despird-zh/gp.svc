@@ -9,13 +9,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import com.gp.cache.CacheFactory;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -56,6 +56,8 @@ public class SystemServiceImpl implements SystemService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
+	@Autowired
+	@Qualifier("sysSettingCache")
 	Cache cache = null;
 
 	/**
@@ -63,7 +65,6 @@ public class SystemServiceImpl implements SystemService{
 	 **/
 	public SystemServiceImpl(){
 		
-		cache = CacheFactory.getCache();
 		ConfigSettingUtils.setSystemService(this);
 	}
 	

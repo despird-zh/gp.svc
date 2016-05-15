@@ -1,5 +1,7 @@
 package com.gp.storage;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -10,7 +12,9 @@ import org.apache.commons.lang.StringUtils;
  * @version 0.1 2015-12-12
  * 
  **/
-public class ContentRange {
+public class ContentRange implements Serializable{
+
+	private static final long serialVersionUID = -6256137381319909065L;
 
 	private Long startPos = 0l;
 	
