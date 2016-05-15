@@ -11,8 +11,8 @@ import java.nio.channels.FileChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
 import com.gp.common.Storages;
 import com.gp.dao.BinaryDAO;
 import com.gp.dao.StorageDAO;
@@ -82,13 +82,13 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		File tgtbinary = new File(rootpath + path);
 
 		try {
-			InputSupplier<InputStream> sourcestream = new InputSupplier<InputStream>() {
+			ByteSource bsource = new ByteSource() {
 			      @Override
-			      public InputStream getInput() throws IOException {
+			      public InputStream openStream() throws IOException {
 			        return source;
 			      }
 			    };
-			Files.copy( sourcestream, tgtbinary);
+			bsource.copyTo(new FileOutputStream(tgtbinary));
 			
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
