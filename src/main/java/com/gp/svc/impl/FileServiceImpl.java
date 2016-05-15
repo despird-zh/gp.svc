@@ -73,7 +73,7 @@ public class FileServiceImpl implements FileService{
 				fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
 				file.setInfoId(fkey);
 			}
-			
+			svcctx.setTraceInfo(file);
 			cabfiledao.create(file);			
 			
 		}catch(DataAccessException dae){

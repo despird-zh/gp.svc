@@ -46,7 +46,8 @@ public class StorageServiceImpl implements StorageService{
 	@Override
 	public boolean newBinary(ServiceContext<?> svcctx, BinaryInfo binary) throws ServiceException {
 
-		try{			
+		try{
+			svcctx.setTraceInfo(binary);
 			return binarydao.create(binary) > 0;
 		}catch(DataAccessException dae){
 			

@@ -20,6 +20,7 @@ public class Cabinets {
 	
 	public static enum FileState{
 		
+		BLANK,
 		READY,
 		COPY,
 		MOVE,

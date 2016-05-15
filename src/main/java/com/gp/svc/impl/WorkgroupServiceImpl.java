@@ -135,6 +135,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		pubinfo.setModifier(svcctx.getPrincipal().getAccount());
 		pubinfo.setModifyDate(DateTimeUtils.now());
 		pubinfo.setStorageId(winfo.getStorageId());
+		pubinfo.setSourceId(winfo.getSourceId());
 		pubinfo.setVersionable(versionable);
 		Long capacity = null;
 		capacity = svcctx.getContextData(CTX_KEY_PUBCAPACITY, Long.class);
@@ -162,6 +163,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		priinfo.setModifyDate(DateTimeUtils.now());
 		priinfo.setStorageId(winfo.getStorageId());
 		priinfo.setVersionable(versionable);
+		priinfo.setSourceId(winfo.getSourceId());
 		Long pcapacity = null;
 		pcapacity = svcctx.getContextData(CTX_KEY_PRICAPACITY, Long.class);
 		if(null == pcapacity){

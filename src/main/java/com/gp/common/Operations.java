@@ -86,4 +86,6 @@ public enum Operations {
 	FETCH_BIN,
 	STORE_BIN_CHUNK,
 	STORE_BIN,
+	NEW_BIN,
+	REMOVE_BIN,
 }
