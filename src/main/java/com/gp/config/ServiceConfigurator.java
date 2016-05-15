@@ -11,7 +11,7 @@ import com.gp.common.SpringContextUtil;
 		"com.gp.svc.impl",
 		"com.gp.dao.impl" 
 		})
-public class ServiceConfigurer {
+public class ServiceConfigurator {
 	
 	@Bean public SpringContextUtil springContextUtil() { 
 		
