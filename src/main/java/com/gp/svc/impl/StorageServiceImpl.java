@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.dao.BinaryDAO;
 import com.gp.dao.PseudoDAO;
@@ -28,6 +29,7 @@ import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.StorageService;
+import com.gp.util.StorageUtils;
 
 @Service("storageService")
 public class StorageServiceImpl implements StorageService{
@@ -47,6 +49,9 @@ public class StorageServiceImpl implements StorageService{
 	public boolean newBinary(ServiceContext<?> svcctx, BinaryInfo binary) throws ServiceException {
 
 		try{
+			InfoId<Integer> storageId = IdKey.STORAGE.getInfoId(binary.getStorageId());
+			String storeLoc = StorageUtils.toURIStr(storageId, binary.getInfoId().getId(), binary.getFormat());
+			binary.setStoreLocation(storeLoc);
 			svcctx.setTraceInfo(binary);
 			return binarydao.create(binary) > 0;
 		}catch(DataAccessException dae){

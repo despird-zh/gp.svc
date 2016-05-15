@@ -10,6 +10,8 @@ public class BinaryInfo extends TraceableInfo<Long>{
 	
 	private int sourceId;
 	
+	private int storageId;
+	
 	private String storeLocation;
 	
 	private Long size;
@@ -85,6 +87,14 @@ public class BinaryInfo extends TraceableInfo<Long>{
 
 	public void setSourceId(int sourceId) {
 		this.sourceId = sourceId;
+	}
+
+	public int getStorageId() {
+		return storageId;
+	}
+
+	public void setStorageId(int storageId) {
+		this.storageId = storageId;
 	}
 		
 }

@@ -34,19 +34,19 @@ public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_binaries (")
-			.append("source_id,binary_id,size,")
+			.append("source_id,binary_id,size,storage_id,")
 			.append("hash_code,store_location,state,")
 			.append("format,creator,create_time,")
 			.append("modifier,last_modified")
 			.append(")values(")
-			.append("?,?,?,")
+			.append("?,?,?,?,")
 			.append("?,?,?,")
 			.append("?,?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getSourceId(),key.getId(),info.getSize(),
+				info.getSourceId(),key.getId(),info.getSize(),info.getStorageId(),
 				info.getHashCode(),info.getStoreLocation(),info.getState(),
 				info.getFormat(),info.getCreator(),info.getCreateDate(),
 				info.getModifier(),info.getModifyDate()
@@ -82,14 +82,14 @@ public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 	public int update(BinaryInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_binaries set ")
-		.append("size = ?,source_id = ? ,")
+		.append("size = ?,source_id = ? ,storage_id = ?,")
 		.append("hash_code = ?,store_location = ?,state = ?,")
 		.append("format = ?, creator = ?,create_time = ?,")
 		.append("modifier = ?,last_modified = ? ")
 		.append("where binary_id = ?  ");
 		
 		Object[] params = new Object[]{
-				info.getSize(),info.getSourceId(),
+				info.getSize(),info.getSourceId(),info.getStorageId(),
 				info.getHashCode(),info.getStoreLocation(),info.getState(),
 				info.getFormat(), info.getCreator(),info.getCreateDate(),
 				info.getModifier(),info.getModifyDate(),
@@ -137,6 +137,7 @@ public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 			
 			info.setSourceId(rs.getInt("source_id"));
 			info.setSize(rs.getLong("size"));
+			info.setStorageId(rs.getInt("storage_id"));
 			info.setHashCode(rs.getString("hash_code"));
 			info.setStoreLocation(rs.getString("store_location"));
 			info.setState(rs.getString("state"));
