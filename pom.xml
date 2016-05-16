@@ -27,13 +27,6 @@
 			<version>0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>jdk.tools</groupId>
-			<artifactId>jdk.tools</artifactId>
-			<version>${jdk.version}</version>
-			<scope>system</scope>
-			<systemPath>${jdk.home}/lib/tools.jar</systemPath>
-		</dependency>
-		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>${comm.config}</version>
