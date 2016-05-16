@@ -286,11 +286,11 @@ public class BinaryManager {
 		String BinPath;
 	}
 	
-	public static void main(String[] args) throws StorageException{
+/*	public static void main(String[] args) throws StorageException{
 		
-		BinUriMeta bum = new BinUriMeta("gbin://source.23:68/80/00/00/19.25.xlsx");
+		BinUriMeta bum = new BinUriMeta("gbin://storage:68/80/00/00/19.25.xlsx");
 		System.out.println("port : " + bum.StorageId);
 		BinUriMeta bum1 = new BinUriMeta("http://www.java2s.com:8080/80/00/00/19.25.xlsx");
 		System.out.println("port : " + bum1.StorageId);
-	}
+	}*/
 }
