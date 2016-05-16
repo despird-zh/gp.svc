@@ -81,9 +81,9 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		
 		File tgtbinary = new File(rootpath + path);
 		
-		if(!tgtbinary.exists()){
+		if(!tgtbinary.getParentFile().exists()){
 			
-			tgtbinary.mkdirs();
+			tgtbinary.getParentFile().mkdirs();
 		}
 		
 		try {
