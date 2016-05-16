@@ -80,7 +80,12 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
 		
 		File tgtbinary = new File(rootpath + path);
-
+		
+		if(!tgtbinary.exists()){
+			
+			tgtbinary.mkdirs();
+		}
+		
 		try {
 			ByteSource bsource = new ByteSource() {
 			      @Override
