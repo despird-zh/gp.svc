@@ -50,8 +50,9 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 			// skip offset length 
 			FileChannel ch = fos.getChannel();
 		    ch.position(chunkdata.getChunkOffset());
-		    ch.write(chunkdata.getByteBuffer());
-		       
+		    LOGGER.debug("-- chunk pos : {} / len : {}", chunkdata.getByteBuffer().position(),chunkdata.getByteBuffer().limit());
+		    int dlen = ch.write(chunkdata.getByteBuffer());
+		    LOGGER.debug("-- written pos : {} / len : {}",chunkdata.getChunkOffset(), dlen);
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
 		}
@@ -87,6 +88,7 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		}
 		
 		try {
+			
 			ByteSource bsource = new ByteSource() {
 			      @Override
 			      public InputStream openStream() throws IOException {
