@@ -17,7 +17,7 @@ public class ChunkBuffer implements AutoCloseable{
 	 **/
 	public ChunkBuffer(Long fileSize, Long chunkOffset, int chunkLength){
 		
-		this.fileSize = fileSize;
+		this.setFileSize(fileSize);
 		this.chunkOffset = chunkOffset;
 		this.chunkLength = chunkLength;
 	}
@@ -50,6 +50,14 @@ public class ChunkBuffer implements AutoCloseable{
 		this.chunkOffset = chunkOffset;
 	}
 	
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+	
 	/**
 	 * set the byte buffer
 	 **/
@@ -71,7 +79,6 @@ public class ChunkBuffer implements AutoCloseable{
 	 **/
 	@Override
 	public void close() {
-		
 		BufferManager.instance().releaseChunkBuffer(this);
 	}
 	
@@ -107,19 +114,8 @@ public class ChunkBuffer implements AutoCloseable{
 	 *  
 	 **/
 	public static long calculateOffset(Long fileSize, int chunkIndex, int chunkSize){
-		// index set 
-		if(chunkIndex >= 0){
-			long bytesRemaining = fileSize - chunkIndex * chunkSize;
-			// re-calculate the current chunk length
-			if(bytesRemaining <= 0 ) {
-				return 0l;
-				
-			}else{			
-				return (bytesRemaining > (long)chunkSize) ? chunkSize : bytesRemaining;
-			}
-		}
-		
-		return -1;
+
+		return Math.min(fileSize, chunkIndex * chunkSize);
 	}
 	
 	/**
@@ -138,11 +134,12 @@ public class ChunkBuffer implements AutoCloseable{
 				return fileSize - (chunkIndex - 1) * chunkSize;
 				
 			}else{			
-				return bytesRemaining;
+				return Math.min(bytesRemaining, chunkSize);
 			}
 		}else{
 			return Math.min(fileSize, chunkSize);
 		}
 
 	}
+
 }
