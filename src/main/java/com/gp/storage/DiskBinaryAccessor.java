@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +47,11 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 			tgtbinary.getParentFile().mkdirs();				
 		}
 		
-		try (FileOutputStream fos = new FileOutputStream(tgtbinary);){
-			
-			// skip offset length 
-			FileChannel ch = fos.getChannel();
-		    ch.position(chunkdata.getChunkOffset());
-		    LOGGER.debug("-- chunk pos : {} / len : {}", chunkdata.getByteBuffer().position(),chunkdata.getByteBuffer().limit());
-		    int dlen = ch.write(chunkdata.getByteBuffer());
+		try (FileChannel ch = FileChannel.open(Paths.get(rootpath + path), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)){
+		    LOGGER.debug("-- chunk pos : {} / limit : {}", chunkdata.getByteBuffer().position(),chunkdata.getByteBuffer().limit());
+		    int dlen = ch.write(chunkdata.getByteBuffer(),chunkdata.getChunkOffset());
 		    LOGGER.debug("-- written pos : {} / len : {}",chunkdata.getChunkOffset(), dlen);
+		    ch.force(true);
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
 		}
