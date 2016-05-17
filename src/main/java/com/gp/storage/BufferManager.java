@@ -86,9 +86,9 @@ public class BufferManager {
 	
 	/**
 	 * borrow chunk buffer from buffer pool, the chunk buffer is auto closable.
-	 *
+	 * the default chunk size is BUFFER_SIZE
+	 * 
 	 * @param filesize the size of file
-	 * @param chunksize the size of chunk
 	 * @param chunkindex the index of chunk
 	 * 
 	 **/

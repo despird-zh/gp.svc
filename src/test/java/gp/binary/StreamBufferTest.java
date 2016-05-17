@@ -27,18 +27,18 @@ public class StreamBufferTest {
 	}
 	
 	public void testCopyChunk() throws IOException, StorageException{
-		String src = "/jdev/blogs.pdf";
-		String dst = "/jdev/blogs-new.pdf";
+		String src = "d:/2.chunk.zip";
+		String dst = "d:/2.chunk.new.zip";
 		
 		File srcfile = new File(src);
-		int chunkamt = ChunkBuffer.calculateAmount(srcfile.length(), BufferManager.BUFFER_SIZE);
+		int chunkamt = ChunkBuffer.calculateAmount(srcfile.length(), 500 * 1024);
 		
 		RandomAccessFile raf = new RandomAccessFile(src, "r");
         long numSplits = chunkamt; //from user input, extract it from args
 
         for(int destIx=0; destIx < numSplits; destIx++) {
             BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream(src+"."+destIx));
-            long numBytes = ChunkBuffer.calculateLength(srcfile.length(), destIx, BufferManager.BUFFER_SIZE);
+            long numBytes = ChunkBuffer.calculateLength(srcfile.length(), destIx, 500 * 1024);
             
             readWrite( raf,  bw,  numBytes);
             bw.close();
@@ -57,14 +57,15 @@ public class StreamBufferTest {
 	}
 	
 	public void testCopyChunk(long filesize, int destIx, FileOutputStream fos, InputStream in) throws StorageException, IOException{
-		long numBytes = ChunkBuffer.calculateLength(filesize, destIx, BufferManager.BUFFER_SIZE);
-       
-		ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, destIx);
+		int numBytes = (int)ChunkBuffer.calculateLength(filesize, destIx, 500 * 1024);
+		long offset = ChunkBuffer.calculateOffset(filesize, destIx, 500 * 1024);
+		
+		ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, offset, numBytes);
 		BufferOutputStream bos = new BufferOutputStream(cbuffer.getByteBuffer());
 		bos.writeFromStream(in);
 		bos.close();
 		cbuffer.getByteBuffer().flip();
-		System.out.println("chunk offset : " + cbuffer.getChunkOffset());
+		System.out.println("chunk["+destIx+"]'s offset : " + cbuffer.getChunkOffset());
 		// skip offset length 
 		FileChannel ch = fos.getChannel();
 		ch.position(cbuffer.getChunkOffset());
@@ -75,8 +76,8 @@ public class StreamBufferTest {
 	
 	// the file must be less than BufferManager.BUFFER_SIZE; 1 MiB
 	public void testCopyWhole() throws StorageException, IOException{
-		String src = "/jdev/tomp2p.pdf";
-		String dst = "/jdev/topp2p-new.pdf";
+		String src = "d:/1.whole.docx";
+		String dst = "d:/1.whole.new.docx";
 		
 		File srcfile = new File(src);
 		ContentRange range = new ContentRange();
