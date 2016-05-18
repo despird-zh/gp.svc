@@ -40,17 +40,19 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 	public void fillBinaryChunk(InfoId<Long> binaryId, StorageSetting setting, String path, ChunkBuffer chunkdata) throws StorageException{
 		
 		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
-		
-		File tgtbinary = new File(rootpath + path);
+		String storelocation = rootpath + path;
+		File tgtbinary = new File(storelocation);
 		if(!tgtbinary.getParentFile().exists()){
 			
-			tgtbinary.getParentFile().mkdirs();				
+			boolean success = tgtbinary.getParentFile().mkdirs();
+			if(!success)
+				throw new StorageException("fail prepare store location : {}", storelocation);
 		}
 		
 		try (FileChannel ch = FileChannel.open(Paths.get(rootpath + path), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)){
-		    LOGGER.debug("-- chunk pos : {} / limit : {}", chunkdata.getByteBuffer().position(),chunkdata.getByteBuffer().limit());
+		   
 		    int dlen = ch.write(chunkdata.getByteBuffer(),chunkdata.getChunkOffset());
-		    LOGGER.debug("-- written pos : {} / len : {}",chunkdata.getChunkOffset(), dlen);
+		    LOGGER.debug("-- write pos : {} / len : {} to storeage : {}",chunkdata.getChunkOffset(), dlen, storelocation);
 		    ch.force(true);
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
@@ -64,7 +66,7 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		File srcbinary = new File(rootpath + path);
 		try(BufferOutputStream outputstream = new BufferOutputStream(chunkdata.getByteBuffer());
 			FileInputStream fis = new FileInputStream(srcbinary);
-			) {		
+			) {
 			// skip offset length 
 			fis.skip(chunkdata.getChunkOffset());
 			// copy from file
