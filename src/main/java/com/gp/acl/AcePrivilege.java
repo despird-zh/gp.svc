@@ -34,7 +34,9 @@ public enum AcePrivilege {
 	
 	public static String toString(int privilege){
 		StringBuffer buffer = new StringBuffer();
-		if((privilege & READ.value) > 0)
+		if((privilege & BROWSE.value)>0)
+			buffer.append(BROWSE).append(GeneralConstants.VALUES_SEPARATOR);
+		else if((privilege & READ.value) > 0)
 			buffer.append(READ).append(GeneralConstants.VALUES_SEPARATOR);
 		else if((privilege & WRITE.value)>0)
 			buffer.append(WRITE).append(GeneralConstants.VALUES_SEPARATOR);
@@ -45,6 +47,7 @@ public enum AcePrivilege {
 		else
 			buffer.append(GeneralConstants.VALUES_SEPARATOR);
 		
-		return buffer.deleteCharAt(buffer.length()).toString();
+		// need to remove the last VALUES_SEPARATOR
+		return buffer.deleteCharAt(buffer.length() - 1).toString();
 	}
 }

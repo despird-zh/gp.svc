@@ -1,5 +1,15 @@
 package com.gp.common;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
@@ -12,7 +22,11 @@ import com.gp.info.InfoId;
  * @version 0.1 2015-12-2
  **/
 public class Cabinets {
-
+	
+	static Logger LOGGER = LoggerFactory.getLogger(Cabinets.class);
+	
+	static ObjectMapper JSON_MAPPER = new ObjectMapper();
+	
 	/**
 	 * enums of cabinet type 
 	 **/
@@ -61,5 +75,34 @@ public class Cabinets {
 		Ace owner = new Ace(AceType.OWNER, null, AcePrivilege.DELETE);
 		acl.addAce(owner, true);
 		return acl;
+	}
+	
+	/**
+	 * Convert a permission set into a Json String 
+	 **/
+	public static String toPermString(Set<String> perms){
+		if(null == perms)
+			return "[]";
+		try {
+			return JSON_MAPPER.writeValueAsString(perms);
+		} catch (JsonProcessingException e) {
+			LOGGER.error("Fail convert Set<String> perm to String");
+			
+		}
+		return StringUtils.EMPTY;
+	}
+	
+	/**
+	 * Convert a Json array String into Permission Set 
+	 **/
+	public static Set<String> toPermSet(String perms){
+		
+		try {
+			return JSON_MAPPER.readValue(perms, Set.class);
+		} catch ( IOException e) {
+			LOGGER.error("Fail convert Set<String> perm to String");
+			
+		}
+		return new HashSet<String>();
 	}
 }

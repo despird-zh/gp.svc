@@ -1,12 +1,17 @@
 package com.gp.dao.impl;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.common.IdKey;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
@@ -22,7 +29,7 @@ import com.gp.info.InfoId;
 @Component("cabAceDAO")
 public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(CabAceDAOImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(CabAceDAOImpl.class);
 	
 	@Autowired
 	public CabAceDAOImpl(DataSource dataSource) {
@@ -160,7 +167,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		List<CabAceInfo> ainfo = jtemplate.query(qbuf.toString(), params, CabAceMapper);
-		return ainfo.size() == 0 ? null: ainfo.get(0);
+		return CollectionUtils.isEmpty(ainfo) ? null: ainfo.get(0);
 	}
 
 	@Override
@@ -202,4 +209,5 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 		int cnt = jtemplate.update(rbuf.toString(), params, CabAceMapper);
 		return cnt;
 	}
+
 }

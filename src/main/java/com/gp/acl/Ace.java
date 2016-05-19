@@ -53,7 +53,7 @@ public class Ace implements Comparable<Ace> {
 	/** the entry type */
 	private AceType type;	
 	/** the permission set */
-	private Set<String> permissions;
+	private Set<String> permissions = new HashSet<String>();;
 	
 	/**
 	 * Constructor for user ACE item. default privilege is AcePrivilege.WRITE
@@ -130,9 +130,7 @@ public class Ace implements Comparable<Ace> {
 		this.privilege = AcePrivilege.WRITE.value;
 		if(perms == null || perms.length ==0)
 			return;
-		else
-			permissions = new HashSet<String>();
-		
+
 		for(String permission:permissions){
 			
 			permissions.add(permission);
@@ -308,7 +306,7 @@ public class Ace implements Comparable<Ace> {
 		sbuf.append("type").append(GeneralConstants.KEYVAL_SEPARATOR)
 			.append(this.type).append(GeneralConstants.KVPAIRS_SEPARATOR);
 		
-		sbuf.append("privilete").append(GeneralConstants.KEYVAL_SEPARATOR)
+		sbuf.append("privilege").append(GeneralConstants.KEYVAL_SEPARATOR)
 			.append(AcePrivilege.toString(privilege)).append(GeneralConstants.KVPAIRS_SEPARATOR);
 		
 		if(null != permissions){

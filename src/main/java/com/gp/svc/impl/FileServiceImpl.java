@@ -1,7 +1,6 @@
 package com.gp.svc.impl;
 
 import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -10,16 +9,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
+import com.gp.common.Cabinets;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.dao.CabAceDAO;
+import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
 import com.gp.dao.CabVersionDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.StorageDAO;
 import com.gp.exception.ServiceException;
+import com.gp.info.CabAceInfo;
+import com.gp.info.CabAclInfo;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
 import com.gp.info.InfoId;
@@ -45,6 +51,12 @@ public class FileServiceImpl implements FileService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
+	@Autowired 
+	CabAclDAO acldao;
+	
+	@Autowired 
+	CabAceDAO acedao;
+	
 	@Autowired
 	private IdService idservice;
 	
@@ -63,6 +75,7 @@ public class FileServiceImpl implements FileService{
 		return versions;
 	}
 
+	@Transactional
 	@Override
 	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
@@ -83,6 +96,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
+	@Transactional
 	@Override
 	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -104,6 +118,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
+	@Transactional
 	@Override
 	public void moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -124,6 +139,7 @@ public class FileServiceImpl implements FileService{
 
 	}
 
+	@Transactional
 	@Override
 	public InfoId<Long> newVersion(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
 
@@ -166,16 +182,66 @@ public class FileServiceImpl implements FileService{
 		return vkey;
 	}
 
+	@Transactional
 	@Override
-	public void addAce(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, Ace ace) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
+		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
+		Long aclid = fileinfo.getAclId();
+		// find available ace entry 
+		CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
+		if(aceinfo == null){
+			// ace not exist yet
+			aceinfo = new CabAceInfo();
+			aceinfo.setInfoId(ace.getAceId());
+			aceinfo.setAclId(aclid);
+			aceinfo.setSubjectType(ace.getType().value);
+			aceinfo.setSubject(ace.getSubject());
+			aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+			svcctx.setTraceInfo(aceinfo);
+			acedao.create(aceinfo);
+			
+		}else{
+			
+			aceinfo.setSubjectType(ace.getType().value);
+			aceinfo.setSubject(ace.getSubject());
+			aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+			svcctx.setTraceInfo(aceinfo);
+			
+			acedao.update(aceinfo);
+		}
 	}
 
 	@Override
-	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, Acl acl) throws ServiceException {
-		// TODO Auto-generated method stub
+	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
+		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
+		Long aclid = fileinfo.getAclId();
+		acedao.deleteBySubject(aclid, type, subject);
+	}
+	
+	@Transactional
+	@Override
+	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
+		
+		CabAclInfo aclinfo = new CabAclInfo();
+		aclinfo.setInfoId(acl.getAclId());
+		svcctx.setTraceInfo(aclinfo);
+		
+		if(acldao.create(aclinfo) > 0){
+			for(Ace ace : acl.getAllAces()){
+				
+				CabAceInfo aceinfo = new CabAceInfo();
+				aceinfo.setInfoId(ace.getAceId());
+				aceinfo.setAclId(acl.getAclId().getId());
+				aceinfo.setSubjectType(ace.getType().value);
+				aceinfo.setSubject(ace.getSubject());
+				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+				svcctx.setTraceInfo(aceinfo);
+				acedao.create(aceinfo);
+				
+			}
+		}
 	}
 
 	@Override
@@ -198,13 +264,14 @@ public class FileServiceImpl implements FileService{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, ArrayUtils.toString(params));
 		}
 		try{
-		List<StorageInfo> storages = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());
+			List<StorageInfo> storages = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());
 		
-		return CollectionUtils.isEmpty(storages)? null : storages.get(0);
+			return CollectionUtils.isEmpty(storages)? null : storages.get(0);
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("Fail to query the storage of cabinet file.",dae);
 		}
 	}
+
 
 }

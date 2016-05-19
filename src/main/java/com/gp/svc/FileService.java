@@ -53,6 +53,13 @@ public interface FileService {
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, Ace ace )throws ServiceException;
 	
 	/**
+	 * remove ace information 
+	 * @param srcfilekey the key of source file
+	 * @param ace the ace item of source file
+	 **/
+	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, String type, String subject )throws ServiceException;
+	
+	/**
 	 * add acl information 
 	 * @param srcfilekey the key of source file
 	 * @param acl the acl of source file
