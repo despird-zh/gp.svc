@@ -19,6 +19,7 @@ package com.gp.acl;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -167,14 +168,17 @@ public class Ace implements Comparable<Ace> {
 	 **/
 	public void setSubject(String subject){
 		
-		if(type == AceType.OWNER)
+		if(type == AceType.OWNER){
 			this.subject = GeneralConstants.OWNER_SUBJECT;
-		
-		else if(type == AceType.EVERYONE)
+		}
+		else if(type == AceType.EVERYONE){
 			this.subject = GeneralConstants.EVERYONE_SUBJECT;		
-		
-		else
+		}
+		else if(StringUtils.isBlank(subject)){
+			throw new IllegalArgumentException("the ace subject can not be null");
+		}else{
 			this.subject = subject;
+		}
 	}
 	
 	/**

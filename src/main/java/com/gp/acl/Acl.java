@@ -76,7 +76,7 @@ public class Acl {
 	}
 
 	/**
-	 * Add EntryAce to Acl
+	 * Add Ace to Acl
 	 * 
 	 * @param ace the access control entry
 	 * @param merge true:merge;false override.
@@ -145,7 +145,7 @@ public class Acl {
 		return gaces;
 	}
 
-	public Ace getEntryAce(AceType type, String subject){
+	public Ace getAce(AceType type, String subject){
 		
 		String mapkey = type.value + GeneralConstants.KEYS_SEPARATOR + subject;		
 		return aclmap.get(mapkey);
