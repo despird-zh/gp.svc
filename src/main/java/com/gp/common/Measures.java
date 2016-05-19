@@ -18,13 +18,11 @@ public enum Measures implements FlatColLocator {
 		this.colIndex = colIndex;
 	}
 	
-	@Override
 	public Integer getColIndex() {
 		
 		return colIndex;
 	}
 
-	@Override
 	public String getColPrefix() {
 		
 		return colPrefix;

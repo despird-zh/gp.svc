@@ -23,7 +23,7 @@ public interface FileService {
 	 * create new file 
 	 * @param file the cabinet file information
 	 **/
-	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file) throws ServiceException;
+	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException;
 	
 	/**
 	 * copy the file to target path 

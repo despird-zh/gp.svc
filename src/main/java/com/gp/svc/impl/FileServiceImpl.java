@@ -64,7 +64,7 @@ public class FileServiceImpl implements FileService{
 	}
 
 	@Override
-	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file) throws ServiceException {
+	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
 		InfoId<Long> fkey = file.getInfoId();
 		try{
