@@ -98,7 +98,7 @@ public class Cabinets {
 	public static Set<String> toPermSet(String perms){
 		
 		try {
-			return JSON_MAPPER.readValue(perms, Set.class);
+			return JSON_MAPPER.readValue(perms, HashSet.class);
 		} catch ( IOException e) {
 			LOGGER.error("Fail convert Set<String> perm to String");
 			
