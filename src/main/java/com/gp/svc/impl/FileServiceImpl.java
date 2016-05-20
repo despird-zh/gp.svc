@@ -87,10 +87,11 @@ public class FileServiceImpl implements FileService{
 				file.setInfoId(fkey);
 			}
 			
-			addAcl(svcctx, file.getInfoId(), acl);
+			// create file entry
 			svcctx.setTraceInfo(file);
-			cabfiledao.create(file);			
+			cabfiledao.create(file);
 			
+			addAcl(svcctx, file.getInfoId(), acl);
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("fail to query", dae);
@@ -245,7 +246,8 @@ public class FileServiceImpl implements FileService{
 			}
 		}
 		// update the cabinet file entry's acl_id
-		pseudodao.update(cabfileId, Cabinets.COL_ACL_ID, acl.getAclId().getId());
+		InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
+		pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 	}
 
 	@Override

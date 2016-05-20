@@ -59,10 +59,10 @@ public enum IdKey implements Identifier{
 	
 	private final String schema;
 	private final Class<?> clazz;
-	private final String idCol;
+	private final String idColumn;
 	
-	private <T> IdKey(String schema,String idCol, Class<T> clazz){
-		this.idCol = idCol;
+	private <T> IdKey(String schema,String idColumn, Class<T> clazz){
+		this.idColumn = idColumn;
 		this.schema = schema;
 		this.clazz = clazz;
 	}
@@ -85,7 +85,7 @@ public enum IdKey implements Identifier{
 		if(sequence == null || !this.clazz.equals(sequence.getClass()))
 			throw new UnsupportedOperationException("Sequence type is not supported");
 		
-		return new InfoId<T>(this.getSchema(), this.idCol, sequence);
+		return new InfoId<T>(this.getSchema(), this.idColumn, sequence);
 	}
 	
 	/** 
