@@ -59,7 +59,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		
 		StringBuffer SQL = new StringBuffer("UPDATE ");
 		Object[] params = new Object[fields.size() + 2]; // append one last_modified and id column
-		SQL.append(id.getIdKey()).append("SET ");
+		SQL.append(id.getIdKey()).append(" SET ");
 		int pos = 0;
 		for(FlatColLocator col: fields.keySet()){
 			SQL.append(col.getColumn()).append(" = ?,");
@@ -86,7 +86,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		
 		StringBuffer SQL = new StringBuffer("UPDATE ");
 		Object[] params = new Object[3]; // append one last_modified and id column
-		SQL.append(id.getIdKey()).append("SET ");
+		SQL.append(id.getIdKey()).append(" SET ");
 
 		SQL.append(col.getColumn()).append(" = ?,");
 		params[0] = val;
@@ -113,7 +113,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		
 		StringBuffer SQL = new StringBuffer("UPDATE ");
 		Object[] params = new Object[cols.length + 2]; // append one last_modified and id column
-		SQL.append(id.getIdKey()).append("SET ");
+		SQL.append(id.getIdKey()).append(" SET ");
 		int pos = 0;
 		for(FlatColLocator col: cols){
 			SQL.append(col.getColumn()).append(" = ?,");
