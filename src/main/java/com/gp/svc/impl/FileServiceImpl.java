@@ -244,7 +244,8 @@ public class FileServiceImpl implements FileService{
 				
 			}
 		}
-		
+		// update the cabinet file entry's acl_id
+		pseudodao.update(cabfileId, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 	}
 
 	@Override

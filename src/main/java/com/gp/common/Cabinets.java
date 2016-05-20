@@ -14,6 +14,7 @@ import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.acl.Acl;
+import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 /**
  * Define the constant variables related with Cabinet's operation.
@@ -26,6 +27,8 @@ public class Cabinets {
 	static Logger LOGGER = LoggerFactory.getLogger(Cabinets.class);
 	
 	static ObjectMapper JSON_MAPPER = new ObjectMapper();
+	
+	public static FlatColumn COL_ACL_ID = new FlatColumn("acl_id");
 	
 	/**
 	 * enums of cabinet type 
