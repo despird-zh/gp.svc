@@ -12,12 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
 import com.gp.dao.ActLogDAO;
 import com.gp.info.ActLogInfo;
 import com.gp.info.InfoId;
-
+@Component("activitylogDAO")
 public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(ActLogDAOImpl.class);
