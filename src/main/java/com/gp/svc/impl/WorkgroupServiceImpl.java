@@ -99,9 +99,6 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	SystemService systemservice;
 	
 	@Autowired
-	ActLogDAO actlogdao;
-	
-	@Autowired
 	ImageDAO imagedao;
 	
 	/**
@@ -926,15 +923,4 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 	};
 
-	@Override
-	public List<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid)
-			throws ServiceException {
-		try{
-			
-			return actlogdao.queryByWorkgroup(wid);
-			
-		}catch(DataAccessException dae){
-			throw new ServiceException("Fail delete group", dae);
-		}
-	}
 }

@@ -3,7 +3,6 @@ package com.gp.svc;
 import java.util.List;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.ActLogInfo;
 import com.gp.info.GroupInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserExInfo;
@@ -80,5 +79,4 @@ public interface WorkgroupService {
 	
 	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
 
-	public List<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid) throws ServiceException;
 }
