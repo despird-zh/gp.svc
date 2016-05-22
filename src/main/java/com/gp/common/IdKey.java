@@ -68,7 +68,8 @@ public enum IdKey implements Identifier{
 	PAGE("gp_pages","page_id", Integer.class),
 	ROLE("gp_roles","role_id", Integer.class),
 	ROLE_PAGE("gp_role_page","rel_id", Integer.class),
-	USER_ROLE("gp_user_role","rel_id", Long.class);
+	USER_ROLE("gp_user_role","rel_id", Long.class),
+	ACT_LOG("gp_activity_log","log_id", Long.class);
 
 	/**
 	 * the custom Identifier set 

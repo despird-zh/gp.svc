@@ -346,7 +346,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				.append("  ON b.account = a.account ")
 				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
 				.append("  ON a.source_id = c.instance_id ")
-				.append("WHERE b.workgroup_id = :wgroup_id ");
+				.append("WHERE b.workgroup_id = :wgroup_id ")
+				.append("ORDER BY b.rel_id");
 		
 		params.put("wgroup_id", wkey.getId());
 		
