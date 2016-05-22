@@ -1,10 +1,9 @@
 package com.gp.svc;
 
 import java.util.List;
-import java.util.Set;
-
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
+import com.gp.info.ActLogInfo;
 import com.gp.info.GroupInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserExInfo;
@@ -28,6 +27,9 @@ public interface WorkgroupService {
 	 **/
 	public boolean newWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException;
 	
+	/**
+	 * Update the work group information 
+	 **/
 	public boolean updateWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException;
 	
 	/**
@@ -77,4 +79,6 @@ public interface WorkgroupService {
 	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
 	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
+
+	public List<ActLogInfo> getWorkgroupActivityLog(ServiceContext<?> svcctx, InfoId<Long> wid) throws ServiceException;
 }

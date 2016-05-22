@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gp.dao.AuditDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.RoleDAO;
 import com.gp.dao.RolePageDAO;

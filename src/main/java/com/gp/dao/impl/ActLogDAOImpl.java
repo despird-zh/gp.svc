@@ -158,4 +158,49 @@ public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	@Override
+	public List<ActLogInfo> queryByAccount(String account) {
+		String SQL = "SELECT * FROM aq_actibity_log WHERE account = ? ORDER BY log_id desc";
+		Object[] params = new Object[]{				
+				account
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		List<ActLogInfo> infos = jtemplate.query(SQL, params, ROW_MAPPER);
+		return infos;
+	}
+
+	@Override
+	public List<ActLogInfo> queryByWorkgroup(InfoId<Long> wid) {
+		String SQL = "SELECT * FROM aq_actibity_log WHERE account = ? ORDER BY log_id desc";
+		Object[] params = new Object[]{				
+				wid.getId()
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		List<ActLogInfo> infos = jtemplate.query(SQL, params, ROW_MAPPER);
+		return infos;
+	}
+
+	@Override
+	public List<ActLogInfo> queryByObject(InfoId<Long> objectid) {
+		String SQL = "SELECT * FROM aq_actibity_log WHERE object_id = ? ORDER BY log_id desc";
+		Object[] params = new Object[]{				
+				objectid.toString()
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		List<ActLogInfo> infos = jtemplate.query(SQL, params, ROW_MAPPER);
+		return infos;
+	}
+
 }

@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -29,6 +27,7 @@ import com.gp.common.IdKey;
 import com.gp.common.Images;
 import com.gp.common.SystemOptions;
 import com.gp.common.ServiceContext;
+import com.gp.dao.ActLogDAO;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
@@ -38,6 +37,7 @@ import com.gp.dao.UserDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.dao.WorkgroupUserDAO;
 import com.gp.exception.ServiceException;
+import com.gp.info.ActLogInfo;
 import com.gp.info.CabinetInfo;
 import com.gp.info.GroupInfo;
 import com.gp.info.GroupUserInfo;
@@ -97,6 +97,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Autowired 
 	SystemService systemservice;
+	
+	@Autowired
+	ActLogDAO actlogdao;
 	
 	@Autowired
 	ImageDAO imagedao;
@@ -922,4 +925,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			return info;
 		}
 	};
+
+	@Override
+	public List<ActLogInfo> getWorkgroupActivityLog(ServiceContext<?> svcctx, InfoId<Long> wid)
+			throws ServiceException {
+		try{
+			
+			return actlogdao.queryByWorkgroup(wid);
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail delete group", dae);
+		}
+	}
 }
