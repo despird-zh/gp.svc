@@ -103,4 +103,6 @@ public enum Operations {
 	STORE_BIN,
 	NEW_BIN,
 	REMOVE_BIN,
+	/** activity log */
+	FIND_ACT_LOGS
 }

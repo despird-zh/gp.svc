@@ -80,5 +80,5 @@ public interface WorkgroupService {
 	
 	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
 
-	public List<ActLogInfo> getWorkgroupActivityLog(ServiceContext<?> svcctx, InfoId<Long> wid) throws ServiceException;
+	public List<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid) throws ServiceException;
 }

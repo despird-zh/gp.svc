@@ -927,7 +927,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	};
 
 	@Override
-	public List<ActLogInfo> getWorkgroupActivityLog(ServiceContext<?> svcctx, InfoId<Long> wid)
+	public List<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid)
 			throws ServiceException {
 		try{
 			
