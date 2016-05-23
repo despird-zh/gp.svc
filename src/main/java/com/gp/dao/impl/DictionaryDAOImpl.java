@@ -9,11 +9,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
 import com.gp.info.InfoId;
@@ -24,7 +26,7 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);
 	
 	@Autowired
-	public DictionaryDAOImpl(DataSource dataSource) {
+	public DictionaryDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

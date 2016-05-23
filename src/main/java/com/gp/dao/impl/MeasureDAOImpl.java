@@ -46,7 +46,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public MeasureInfo queryObjectByTraceId(InfoId<?> traceid, String measureType, FlatColLocator... columns) {
+	public MeasureInfo queryLatest(InfoId<?> traceid, String measureType, FlatColLocator... columns) {
 		
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
 		if(!ArrayUtils.isEmpty(columns)){
@@ -73,7 +73,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public List<MeasureInfo> queryListByTraceId(InfoId<?> traceid, String measureType, FlatColLocator... columns) {
+	public List<MeasureInfo> query(InfoId<?> traceid, String measureType, FlatColLocator... columns) {
 		
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
 		if(!ArrayUtils.isEmpty(columns)){
@@ -99,7 +99,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public List<MeasureInfo> queryListBefore(InfoId<?> traceid, String measureType, Date before,
+	public List<MeasureInfo> queryBefore(InfoId<?> traceid, String measureType, Date before,
 			FlatColLocator... columns) {
 		
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
@@ -126,7 +126,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public List<MeasureInfo> queryListAfter(InfoId<?> traceid, String measureType, Date after,
+	public List<MeasureInfo> queryAfter(InfoId<?> traceid, String measureType, Date after,
 			FlatColLocator... columns) {
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
 		if(!ArrayUtils.isEmpty(columns)){
@@ -152,7 +152,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public List<MeasureInfo> queryListRange(InfoId<?> traceid, String measureType, Date before, Date after,
+	public List<MeasureInfo> queryRange(InfoId<?> traceid, String measureType, Date before, Date after,
 			FlatColLocator... columns) {
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
 		if(!ArrayUtils.isEmpty(columns)){

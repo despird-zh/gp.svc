@@ -13,11 +13,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.UserDAO;
 import com.gp.info.InfoId;
 import com.gp.info.UserExInfo;
@@ -29,7 +31,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 	Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);
 	
 	@Autowired
-	public UserDAOImpl(DataSource dataSource) {
+	public UserDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 		

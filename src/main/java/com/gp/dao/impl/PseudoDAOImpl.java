@@ -9,10 +9,12 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PseudoDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -25,7 +27,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 	NamedParameterJdbcTemplate nameJdbcTemplate = null;
 	
 	@Autowired
-	public PseudoDAOImpl(DataSource dataSource) {
+	public PseudoDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

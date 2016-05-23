@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.ImageDAO;
 import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
@@ -42,7 +44,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(ImageDAOImpl.class);
 	
 	@Autowired
-	public ImageDAOImpl(DataSource dataSource) {
+	public ImageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

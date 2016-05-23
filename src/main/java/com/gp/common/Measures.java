@@ -19,12 +19,15 @@ import com.gp.info.FlatColLocator;
 
 public enum Measures implements FlatColLocator {
 	
-	WORKGROUP_KPI1(1),
-	WORKGROUP_KPI2(2),
-	WORKGROUP_KPI3(3),
-	WORKGROUP_KPI4(4)
+	WG_MEAS_DOC(1),
+	WG_MEAS_TOPIC(2),
+	WG_MEAS_MEMBER(3),
+	WG_MEAS_EXT_MBR(4),
+	WG_MEAS_SUB_GRP(5)
 	;
-
+	// measure type of work group summary
+	public static String MEAS_TYPE_WG_SUM = "wg_summary";
+	
 	private static String colPrefix = "measure_data_";
 	
 	private int colIndex;

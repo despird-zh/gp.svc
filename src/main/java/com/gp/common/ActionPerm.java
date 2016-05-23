@@ -23,7 +23,7 @@ import java.io.Serializable;
  * @author gary diao 
  * @version 0.1 2015-10-11
  **/
-public class ActionPermission implements Serializable{
+public class ActionPerm implements Serializable{
 
 	private static final long serialVersionUID = -7722023132744828488L;
 
@@ -33,7 +33,7 @@ public class ActionPermission implements Serializable{
 	
 	private Boolean enable = true;
 
-	public ActionPermission(String pageAbbr, String actionAbbr){
+	public ActionPerm(String pageAbbr, String actionAbbr){
 		this.pageAbbr = pageAbbr;
 		this.actionAbbr = actionAbbr;
 	}

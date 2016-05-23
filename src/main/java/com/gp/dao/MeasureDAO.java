@@ -13,27 +13,27 @@ public interface MeasureDAO extends BaseDAO<MeasureInfo>{
 	/**
 	 * Query the measure information by trace id and measure type 
 	 **/
-	public MeasureInfo queryObjectByTraceId(InfoId<?> traceid,String measureType, FlatColLocator ... columns);
+	public MeasureInfo queryLatest(InfoId<?> traceid,String measureType, FlatColLocator ... columns);
 	
 	/**
 	 * Query the measure information list by trace id and measure type 
 	 **/
-	public List<MeasureInfo> queryListByTraceId(InfoId<?> traceid,String measureType, FlatColLocator ... columns);
+	public List<MeasureInfo> query(InfoId<?> traceid,String measureType, FlatColLocator ... columns);
 	
 	/**
 	 * Query the measure information list by trace id and measure type 
 	 **/
-	public List<MeasureInfo> queryListBefore(InfoId<?> traceid,String measureType,Date before, FlatColLocator ... columns);
+	public List<MeasureInfo> queryBefore(InfoId<?> traceid,String measureType,Date before, FlatColLocator ... columns);
 	
 	/**
 	 * Query the measure information list by trace id and measure type 
 	 **/
-	public List<MeasureInfo> queryListAfter(InfoId<?> traceid,String measureType,Date after, FlatColLocator ... columns);
+	public List<MeasureInfo> queryAfter(InfoId<?> traceid,String measureType,Date after, FlatColLocator ... columns);
 	
 	/**
 	 * Query the measure information list by trace id and measure type 
 	 **/
-	public List<MeasureInfo> queryListRange(InfoId<?> traceid,String measureType,Date before, Date after, FlatColLocator ... columns);
+	public List<MeasureInfo> queryRange(InfoId<?> traceid,String measureType,Date before, Date after, FlatColLocator ... columns);
 	
 	/**
 	 * Update measure information on specified column

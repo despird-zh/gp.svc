@@ -13,11 +13,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.UserRoleDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
@@ -30,7 +32,7 @@ public class UserRoleDAOImple extends DAOSupport implements UserRoleDAO{
 	Logger LOGGER = LoggerFactory.getLogger(UserRoleDAOImple.class);
 	
 	@Autowired
-	public UserRoleDAOImple(DataSource dataSource) {
+	public UserRoleDAOImple(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

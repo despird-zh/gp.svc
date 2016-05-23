@@ -10,11 +10,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
 import com.gp.info.InfoId;
@@ -25,7 +27,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(CabAceDAOImpl.class);
 	
 	@Autowired
-	public CabAceDAOImpl(DataSource dataSource) {
+	public CabAceDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

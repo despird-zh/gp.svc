@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.ActLogDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -32,6 +34,7 @@ public class ActLogServiceImpl implements ActLogService{
 	@Autowired
 	ActLogDAO actlogdao;
 	
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid,
 			PageQuery pagequery) throws ServiceException {
@@ -73,6 +76,7 @@ public class ActLogServiceImpl implements ActLogService{
 		return pwrapper;
 	}
 
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<ActLogInfo> getAccountActivityLogs(ServiceContext<?> svcctx, String account, PageQuery pagequery)
 			throws ServiceException {
@@ -114,6 +118,7 @@ public class ActLogServiceImpl implements ActLogService{
 		return pwrapper;
 	}
 
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<ActLogInfo> getObjectActivityLogs(ServiceContext<?> svcctx, InfoId<?> objectId,
 			PageQuery pagequery) throws ServiceException {

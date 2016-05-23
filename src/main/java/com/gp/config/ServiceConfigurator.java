@@ -21,6 +21,10 @@ import com.gp.common.SpringContextUtil;
 	})
 public class ServiceConfigurator {
 	
+	public static final String TRNS_MGR = "gpTxManager";
+	
+	public static final String DATA_SRC = "gpDataSource";
+	
 	public static String TRANSFER_CACHE = "fileTransferCache";
 	
 	public static String SYSSETTING_CACHE = "sysSettingCache";

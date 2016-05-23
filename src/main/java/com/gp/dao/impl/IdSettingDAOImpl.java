@@ -9,10 +9,12 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.IdSettingDAO;
 import com.gp.info.IdSettingInfo;
 import com.gp.info.Identifier;
@@ -22,7 +24,7 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(IdSettingDAOImpl.class);
 	@Autowired
-	public IdSettingDAOImpl(DataSource dataSource) {
+	public IdSettingDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

@@ -9,11 +9,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.InfoId;
 import com.gp.info.PropertyInfo;
@@ -26,7 +28,7 @@ public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 	
 	
 	@Autowired
-	public PropertyDAOImpl(DataSource dataSource) {
+	public PropertyDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

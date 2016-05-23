@@ -10,11 +10,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.AttachDAO;
 import com.gp.info.AttachInfo;
 import com.gp.info.InfoId;
@@ -25,7 +27,7 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 	Logger LOGGER = LoggerFactory.getLogger(AttachDAOImpl.class);
 	
 	@Autowired
-	public AttachDAOImpl(DataSource dataSource) {
+	public AttachDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

@@ -14,11 +14,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
@@ -31,7 +33,7 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 	Logger LOGGER = LoggerFactory.getLogger(PageDAOImpl.class);
 	
 	@Autowired
-	public PageDAOImpl(DataSource dataSource) {
+	public PageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

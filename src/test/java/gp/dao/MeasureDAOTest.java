@@ -37,11 +37,11 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	public void test() throws Exception{
 		System.out.println("Test not after");
 		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
-		FlatColLocator[] columns = new FlatColLocator[]{Measures.WORKGROUP_KPI1,Measures.WORKGROUP_KPI2,Measures.WORKGROUP_KPI3};
+		FlatColLocator[] columns = new FlatColLocator[]{Measures.WG_MEAS_DOC,Measures.WG_MEAS_EXT_MBR,Measures.WG_MEAS_SUB_GRP};
 		
 		Date after = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-25 22:06:25");
 		
-		List<MeasureInfo> minfos = measuredao.queryListAfter(trcid, "T", after, columns);
+		List<MeasureInfo> minfos = measuredao.queryAfter(trcid, "T", after, columns);
 		
 		if(CollectionUtils.isNotEmpty(minfos)){
 			for(MeasureInfo minfo : minfos)
@@ -55,11 +55,11 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	public void test1() throws Exception{
 		System.out.println("Test not before");
 		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
-		FlatColLocator[] columns = new FlatColLocator[]{Measures.WORKGROUP_KPI1,Measures.WORKGROUP_KPI2,Measures.WORKGROUP_KPI3};
+		FlatColLocator[] columns = new FlatColLocator[]{Measures.WG_MEAS_DOC,Measures.WG_MEAS_EXT_MBR,Measures.WG_MEAS_SUB_GRP};
 		
 		Date before = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-25 18:12:35");
 		
-		List<MeasureInfo> minfos = measuredao.queryListBefore(trcid, "T", before, columns);
+		List<MeasureInfo> minfos = measuredao.queryBefore(trcid, "T", before, columns);
 		
 		if(CollectionUtils.isNotEmpty(minfos)){
 			for(MeasureInfo minfo : minfos)

@@ -12,11 +12,13 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.TagDAO;
 import com.gp.info.InfoId;
 import com.gp.info.TagInfo;
@@ -27,7 +29,7 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(TagDAOImpl.class);
 	
 	@Autowired
-	public TagDAOImpl(DataSource dataSource) {
+	public TagDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

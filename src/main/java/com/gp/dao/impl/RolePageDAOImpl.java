@@ -13,11 +13,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PageDAO;
 import com.gp.dao.RolePageDAO;
 import com.gp.info.FlatColLocator;
@@ -31,7 +33,7 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 	Logger LOGGER = LoggerFactory.getLogger(RolePageDAOImpl.class);
 	
 	@Autowired
-	public RolePageDAOImpl(DataSource dataSource) {
+	public RolePageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
