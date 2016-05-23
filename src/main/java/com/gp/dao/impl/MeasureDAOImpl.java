@@ -15,11 +15,13 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.MeasureDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -35,7 +37,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	//String MYSQL_DT_FMT = "%Y-%m-%d %H:%i:%s";
 	
 	@Autowired
-	public MeasureDAOImpl(DataSource dataSource) {
+	public MeasureDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
@@ -48,6 +50,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	@Override
 	public MeasureInfo queryLatest(InfoId<?> traceid, String measureType, FlatColLocator... columns) {
 		
+		String SQL_LATEST_ID = "SELECT max(measure_id) FROM gp_measures WHERE trace_src_id = ? AND measure_type = ?";
 		StringBuffer SQL = new StringBuffer("SELECT measure_id, trace_src_id, measure_time, measure_type,");
 		if(!ArrayUtils.isEmpty(columns)){
 			for(FlatColLocator fcl:columns){
@@ -55,18 +58,29 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			}
 		}
 		SQL.append("modifier,last_modified FROM gp_measures ");
-		SQL.append("WHERE trace_src_id = ? AND measure_type = ?");
+		SQL.append("WHERE measure_id = ?");
 		
 		Object[] params = new Object[]{
 				traceid.getId(),measureType				
 		};
-		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		if(LOGGER.isDebugEnabled()){			
-			LOGGER.debug("SQL : " + SQL + " / PARAMS : " + ArrayUtils.toString(params));
-		}
-		RowMapper<MeasureInfo> rowmapper = getRowMapper(columns);
 		
-		List<MeasureInfo> minfos = jtemplate.query(SQL.toString(),params, rowmapper);
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL_LATEST_ID + " / PARAMS : " + ArrayUtils.toString(params));
+		}
+		List<Long> ids = jtemplate.queryForList(SQL_LATEST_ID,params, Long.class);
+		if(CollectionUtils.isEmpty(ids)){
+			// no record return directly
+			return null;
+		}
+		
+		RowMapper<MeasureInfo> rowmapper = getRowMapper(columns);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / PARAMS : " + ids.get(0));
+		}
+		// search according the id
+		List<MeasureInfo> minfos = jtemplate.query(SQL.toString(),new Object[]{ids.get(0)}, rowmapper);
 		
 		return CollectionUtils.isEmpty(minfos)? null : minfos.get(0);
 
