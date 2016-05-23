@@ -31,11 +31,7 @@ import com.gp.info.MeasureInfo;
 public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(MeasureDAOImpl.class);
-	
-	//SimpleDateFormat DATE_FMT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	
-	//String MYSQL_DT_FMT = "%Y-%m-%d %H:%i:%s";
-	
+
 	@Autowired
 	public MeasureDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
