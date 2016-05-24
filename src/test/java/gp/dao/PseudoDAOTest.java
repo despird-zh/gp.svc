@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.dao.PseudoDAO;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
@@ -27,7 +27,7 @@ public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
     private PseudoDAO pseudodao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() {

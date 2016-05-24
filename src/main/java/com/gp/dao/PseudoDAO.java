@@ -57,10 +57,35 @@ public interface PseudoDAO {
 	 **/
 	public Integer queryRowCount(JdbcTemplate template, String sql, Object[] params);
 
-
+	/**
+	 * Update the table in flat column mode
+	 * 
+	 * @param id the id of record
+	 * @param fields the field map which holds the column-value pairs
+	 * 
+	 * @return Integer the row count updated 
+	 **/
 	public Integer update(InfoId<?> id, Map<FlatColLocator, Object> fields);
 	
+	/**
+	 * Update the table in flat column mode
+	 * 
+	 * @param id the id of record
+	 * @param col the column to be updated
+	 * @param val the value of column
+	 * 
+	 * @return Integer the row count updated 
+	 **/
 	public Integer update(InfoId<?> id, FlatColLocator col, Object val);
 	
+	/**
+	 * Update the table in flat column mode
+	 * 
+	 * @param id the id of record
+	 * @param col the column array to be updated
+	 * @param val the values of column array
+	 * 
+	 * @return Integer the row count updated 
+	 **/
 	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val);
 }

@@ -37,7 +37,7 @@ import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.SystemService;
 import com.gp.util.DateTimeUtils;
@@ -61,7 +61,7 @@ public class SecurityServiceImpl implements SecurityService{
 	private CabinetDAO cabinetdao;
 	
 	@Autowired
-	IdService idService;
+	CommonService idService;
 	
 	@Autowired 
 	SystemService systemservice;

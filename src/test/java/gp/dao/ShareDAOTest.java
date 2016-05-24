@@ -14,7 +14,7 @@ import com.gp.common.Users;
 import com.gp.dao.ShareDAO;
 import com.gp.info.InfoId;
 import com.gp.info.ShareInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class ShareDAOTest extends AbstractJUnit4SpringContextTests{
@@ -25,7 +25,7 @@ public class ShareDAOTest extends AbstractJUnit4SpringContextTests{
     private ShareDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

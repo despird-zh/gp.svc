@@ -55,7 +55,7 @@ import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.SystemService;
 import com.gp.svc.WorkgroupService;
 import com.gp.util.DateTimeUtils;
@@ -93,7 +93,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	WorkgroupUserDAO workgroupuserdao;
 	
 	@Autowired
-	IdService idService;
+	CommonService idService;
 	
 	@Autowired 
 	SystemService systemservice;

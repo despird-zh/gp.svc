@@ -24,7 +24,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.info.TagInfo;
 import com.gp.info.TagRelInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.TagService;
 
 @Service("tagService")
@@ -42,7 +42,7 @@ public class TagServiceImpl implements TagService{
 	PseudoDAO pseudodao;
 	
 	@Autowired
-	IdService idservice;
+	CommonService idservice;
 	
 	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override

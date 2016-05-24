@@ -33,7 +33,7 @@ import com.gp.info.CabFolderInfo;
 import com.gp.info.CabinetInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.FolderService;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @Service("folderService")
 public class FolderServiceImpl implements FolderService{
@@ -61,7 +61,7 @@ public class FolderServiceImpl implements FolderService{
 	CabinetDAO cabinetdao;
 	
 	@Autowired
-	private IdService idservice;
+	private CommonService idservice;
 
 	@Transactional
 	@Override

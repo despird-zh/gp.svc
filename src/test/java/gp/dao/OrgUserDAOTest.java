@@ -16,7 +16,7 @@ import com.gp.dao.OrgUserDAO;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.OrgUserInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class OrgUserDAOTest extends AbstractJUnit4SpringContextTests{
@@ -27,7 +27,7 @@ public class OrgUserDAOTest extends AbstractJUnit4SpringContextTests{
     private OrgUserDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

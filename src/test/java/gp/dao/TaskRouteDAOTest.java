@@ -16,7 +16,7 @@ import com.gp.dao.TaskRouteDAO;
 import com.gp.info.InfoId;
 import com.gp.info.TaskInfo;
 import com.gp.info.TaskRouteInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class TaskRouteDAOTest extends AbstractJUnit4SpringContextTests{
@@ -27,7 +27,7 @@ public class TaskRouteDAOTest extends AbstractJUnit4SpringContextTests{
     private TaskRouteDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

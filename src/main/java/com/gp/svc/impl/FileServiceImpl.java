@@ -30,7 +30,7 @@ import com.gp.info.CabVersionInfo;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
 import com.gp.svc.FileService;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.util.DateTimeUtils;
 
 @Service("fileService")
@@ -57,7 +57,7 @@ public class FileServiceImpl implements FileService{
 	CabAceDAO acedao;
 	
 	@Autowired
-	private IdService idservice;
+	private CommonService idservice;
 	
 	@Override
 	public List<CabVersionInfo> getVersions(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {

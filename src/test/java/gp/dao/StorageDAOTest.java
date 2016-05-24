@@ -18,7 +18,7 @@ import com.gp.info.InfoId;
 import com.gp.info.ShareInfo;
 import com.gp.info.ShareToInfo;
 import com.gp.info.StorageInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class StorageDAOTest extends AbstractJUnit4SpringContextTests{
@@ -29,7 +29,7 @@ public class StorageDAOTest extends AbstractJUnit4SpringContextTests{
     private StorageDAO storagedao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

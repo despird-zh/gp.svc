@@ -22,7 +22,7 @@ import com.gp.info.TaskInfo;
 import com.gp.info.TaskRouteInfo;
 import com.gp.info.VoteInfo;
 import com.gp.info.WorkgroupUserInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class WorkgroupUserDAOTest extends AbstractJUnit4SpringContextTests{
@@ -33,7 +33,7 @@ public class WorkgroupUserDAOTest extends AbstractJUnit4SpringContextTests{
     private WorkgroupUserDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

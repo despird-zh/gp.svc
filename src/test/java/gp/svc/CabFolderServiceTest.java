@@ -27,7 +27,7 @@ import com.gp.pagination.PageWrapper;
 import com.gp.svc.AclService;
 import com.gp.svc.CabinetService;
 import com.gp.svc.FolderService;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
@@ -37,7 +37,7 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	ServiceContext<?> svcctx ;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Autowired
     private FolderService folderService;

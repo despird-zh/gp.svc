@@ -27,7 +27,7 @@ import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.OrgUserInfo;
 import com.gp.info.UserInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
 
 @Service("orghierService")
@@ -54,7 +54,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 	private UserDAO userdao;
 	
 	@Autowired
-	private IdService idservice;
+	private CommonService idservice;
 
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext<?> svcctx, Long parentNodeId)

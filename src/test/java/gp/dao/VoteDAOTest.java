@@ -17,7 +17,7 @@ import com.gp.info.InfoId;
 import com.gp.info.TaskInfo;
 import com.gp.info.TaskRouteInfo;
 import com.gp.info.VoteInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class VoteDAOTest extends AbstractJUnit4SpringContextTests{
@@ -28,7 +28,7 @@ public class VoteDAOTest extends AbstractJUnit4SpringContextTests{
     private VoteDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

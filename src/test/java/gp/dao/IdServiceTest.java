@@ -11,7 +11,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.Users;
 import com.gp.info.InfoId;
 
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class IdServiceTest extends AbstractJUnit4SpringContextTests{
@@ -19,7 +19,7 @@ public class IdServiceTest extends AbstractJUnit4SpringContextTests{
 	Principal principal = Users.PESUOD_USER;
 	ServiceContext svcctx ;
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void testBusiestTask() throws Exception {

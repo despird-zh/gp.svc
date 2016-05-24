@@ -16,7 +16,7 @@ import com.gp.common.Users;
 import com.gp.dao.AttachDAO;
 import com.gp.info.AttachInfo;
 import com.gp.info.InfoId;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class AttachDAOTest extends AbstractJUnit4SpringContextTests{
@@ -28,7 +28,7 @@ public class AttachDAOTest extends AbstractJUnit4SpringContextTests{
     private AttachDAO attachdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

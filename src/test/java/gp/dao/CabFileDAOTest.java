@@ -14,7 +14,7 @@ import com.gp.common.Users;
 import com.gp.dao.CabFileDAO;
 import com.gp.info.CabFileInfo;
 import com.gp.info.InfoId;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class CabFileDAOTest extends AbstractJUnit4SpringContextTests{
@@ -25,7 +25,7 @@ public class CabFileDAOTest extends AbstractJUnit4SpringContextTests{
     private CabFileDAO filedao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

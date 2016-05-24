@@ -21,7 +21,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.MeasureInfo;
 import com.gp.info.MessageInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
@@ -31,7 +31,7 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
     private MeasureDAO measuredao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

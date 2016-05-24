@@ -13,7 +13,7 @@ import com.gp.common.ServiceContext;
 import com.gp.dao.TaskDAO;
 import com.gp.info.InfoId;
 import com.gp.info.TaskInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class TaskDAOTest extends AbstractJUnit4SpringContextTests{
@@ -24,7 +24,7 @@ public class TaskDAOTest extends AbstractJUnit4SpringContextTests{
     private TaskDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

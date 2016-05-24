@@ -25,7 +25,7 @@ import com.gp.info.CabAceInfo;
 import com.gp.info.CabAclInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.AclService;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @Service("aclService")
 public class AclServiceImpl implements AclService{
@@ -44,7 +44,7 @@ public class AclServiceImpl implements AclService{
 	CabAclDAO cabacldao;
 	
 	@Autowired
-	IdService idService;
+	CommonService idService;
 	
 	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override

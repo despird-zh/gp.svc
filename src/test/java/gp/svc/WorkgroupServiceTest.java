@@ -14,7 +14,7 @@ import com.gp.common.Users;
 import com.gp.info.InfoId;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.WorkgroupService;
 
@@ -25,7 +25,7 @@ public class WorkgroupServiceTest extends AbstractJUnit4SpringContextTests{
 	ServiceContext svcctx ;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Autowired
     private WorkgroupService wrokgroupService;

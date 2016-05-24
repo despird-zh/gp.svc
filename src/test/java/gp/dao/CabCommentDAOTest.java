@@ -14,7 +14,7 @@ import com.gp.common.Users;
 import com.gp.dao.CabCommentDAO;
 import com.gp.info.CabCommentInfo;
 import com.gp.info.InfoId;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class CabCommentDAOTest extends AbstractJUnit4SpringContextTests{
@@ -25,7 +25,7 @@ public class CabCommentDAOTest extends AbstractJUnit4SpringContextTests{
     private CabCommentDAO commentdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

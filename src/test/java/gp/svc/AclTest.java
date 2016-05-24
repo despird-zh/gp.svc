@@ -20,7 +20,7 @@ import com.gp.info.CabAceInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserInfo;
 import com.gp.svc.AclService;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
@@ -30,7 +30,7 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 	ServiceContext svcctx ;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Autowired
     private AclService aclService;

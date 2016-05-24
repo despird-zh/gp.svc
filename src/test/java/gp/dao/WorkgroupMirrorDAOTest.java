@@ -21,7 +21,7 @@ import com.gp.info.TaskRouteInfo;
 import com.gp.info.VoteInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.info.WorkgroupMirrorInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class WorkgroupMirrorDAOTest extends AbstractJUnit4SpringContextTests{
@@ -32,7 +32,7 @@ public class WorkgroupMirrorDAOTest extends AbstractJUnit4SpringContextTests{
     private WorkgroupMirrorDAO orgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{

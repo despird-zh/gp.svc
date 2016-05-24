@@ -25,7 +25,7 @@ import com.gp.info.TaskInfo;
 import com.gp.info.TaskRouteInfo;
 import com.gp.info.VoteInfo;
 import com.gp.info.WorkgroupInfo;
-import com.gp.svc.IdService;
+import com.gp.svc.CommonService;
 
 @ContextConfiguration(locations = "/mysql-test.xml")
 public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
@@ -36,7 +36,7 @@ public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
     private ImageDAO imgdao;
 	
 	@Autowired
-    private IdService idService;
+    private CommonService idService;
 	
 	@Test
 	public void test() throws Exception{
