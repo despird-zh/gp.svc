@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class Storages {
 	
 	static ObjectMapper OBJ_MAPPER = new ObjectMapper();
+	
 	static Logger LOGGER = LoggerFactory.getLogger(Storages.class);
 	
 	public static enum StorageType{		
