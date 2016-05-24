@@ -38,7 +38,7 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_tags (")
-			.append("tag_id,tag_name,")
+			.append("tag_id,tag_name,tag_color,")
 			.append("category,tag_type,")
 			.append("modifier, last_modified")
 			.append(")values(")
@@ -48,7 +48,7 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				key.getId(),info.getTagName(),
+				key.getId(),info.getTagName(),info.getTagColor(),
 				info.getCategory(),info.getTagType(),
 				info.getModifier(),info.getModifyDate()
 		};
@@ -82,13 +82,13 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 	public int update( TagInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_tags set ")
-			.append("tag_name = ?,")
+			.append("tag_name = ?,tag_color,")
 			.append("category = ?,tag_type = ? , ")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where tag_id = ? ");
 		
 		Object[] params = new Object[]{
-				info.getTagName(),
+				info.getTagName(),info.getTagColor(),
 				info.getCategory(),info.getTagType(),
 				info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
@@ -135,7 +135,7 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 			info.setTagName(rs.getString("tag_name"));
 			info.setCategory(rs.getString("category"));
 			info.setTagType(rs.getString("tag_type"));
-			
+			info.setTagColor(rs.getString("tag_color"));
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			return info;

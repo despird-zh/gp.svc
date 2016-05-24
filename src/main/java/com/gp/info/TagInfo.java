@@ -8,6 +8,8 @@ public class TagInfo extends TraceableInfo<Long>{
 	
 	private String tagType;
 	
+	private String tagColor;
+	
 	private String category;
 
 	public String getTagName() {
@@ -32,6 +34,14 @@ public class TagInfo extends TraceableInfo<Long>{
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getTagColor() {
+		return tagColor;
+	}
+
+	public void setTagColor(String tagColor) {
+		this.tagColor = tagColor;
 	}
 
 	
