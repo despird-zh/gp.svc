@@ -12,53 +12,18 @@ public interface TagService {
 	/**
 	 * Get the post tag list 
 	 **/
-	public List<TagInfo> getPostTags(ServiceContext<?> svcctx) throws ServiceException;
-
-	/**
-	 * Get the folder tag list 
-	 **/
-	public List<TagInfo> getFolderTags(ServiceContext<?> svcctx) throws ServiceException;
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType) throws ServiceException;
 
 	/**
 	 * Get the file tag list 
 	 **/
-	public List<TagInfo> getFileTags(ServiceContext<?> svcctx) throws ServiceException;
-
-	/**
-	 * Get the task tag list 
-	 **/
-	public List<TagInfo> getTaskTags(ServiceContext<?> svcctx) throws ServiceException;
-
-	/**
-	 * Get the cabinet tag list 
-	 **/
-	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx) throws ServiceException;
-
-	/**
-	 * Get the post tag list 
-	 **/
-	public List<TagInfo> getPostTags(ServiceContext<?> svcctx, String category) throws ServiceException;
-
-	/**
-	 * Get the task tag list 
-	 **/
-	public List<TagInfo> getTaskTags(ServiceContext<?> svcctx, String category) throws ServiceException;
-
-	/**
-	 * Get the cabinet tag list 
-	 **/
-	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx, String category) throws ServiceException;
-
-	/**
-	 * Get the folder tag list 
-	 **/
-	public List<TagInfo> getFolderTags(ServiceContext<?> svcctx, String category) throws ServiceException;
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category) throws ServiceException;
 
 	/**
 	 * Get the file tag list 
 	 **/
-	public List<TagInfo> getFileTags(ServiceContext<?> svcctx, String category) throws ServiceException;
-
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category, InfoId<?> objectId) throws ServiceException;
+	
 	/**
 	 * create new tag record
 	 **/

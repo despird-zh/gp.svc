@@ -1,18 +1,21 @@
 package com.gp.svc.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
-import com.gp.common.Tags;
 import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.TagDAO;
@@ -43,11 +46,11 @@ public class TagServiceImpl implements TagService{
 	
 	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getPostTags(ServiceContext<?> svcctx) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType) throws ServiceException {
 		
 		List<TagInfo> result;
 		try{
-			result = tagdao.queryTags(Tags.TagType.POST.name(), null, "");
+			result = tagdao.queryTags(tagType, null, "");
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail query tags",dae);
 		}
@@ -56,108 +59,48 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getFolderTags(ServiceContext<?> svcctx) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category) throws ServiceException {
+		List<TagInfo> result;
+		try{
+			result = tagdao.queryTags(tagType, category, "");
+		}catch(DataAccessException dae){
+			throw new ServiceException("fail query tags",dae);
+		}
+		return result;
+	}
+
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Override
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category, InfoId<?> objectId) throws ServiceException {
 		
 		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.FOLDER.name(), null, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
+		Map<String, Object> paramap = new HashMap<String, Object>();
+		StringBuffer SQL = new StringBuffer();
+		
+		SQL.append("SELECT rel.rel_id, ");
+		SQL.append("rel.tag_type,  ");
+		SQL.append("rel.category,  ");
+		SQL.append("tag.tag_color,  ");
+		SQL.append("rel.modifier,  ");
+		SQL.append("rel.last_modified ");
+		SQL.append("FROM gp_tag_rel rel ");
+		SQL.append("LEFT JOIN gp_tags tag on (rel.tag_type = tag.tag_type and rel.tag_name = tag.tag_name) ");
+		SQL.append("WHERE rel.tag_type = :type ");
+		paramap.put("type", tagType);
+		if(StringUtils.isNotBlank(category)){
+			SQL.append("AND rel.category = :category ");
+			paramap.put("category", category);
 		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getFileTags(ServiceContext<?> svcctx) throws ServiceException {
-	
-		List<TagInfo> result;
+		SQL.append("AND resource_id = :objectId");
+		paramap.put("objectId", objectId.getId());
+		
 		try{
-			result = tagdao.queryTags(Tags.TagType.FILE.name(), null, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getTaskTags(ServiceContext<?> svcctx) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.TASK.name(), null, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.WORKGROUP.name(), null, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getPostTags(ServiceContext<?> svcctx, String category) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.POST.name(), category, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getTaskTags(ServiceContext<?> svcctx, String category) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.TASK.name(), category, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx, String category) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.WORKGROUP.name(), category, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getFolderTags(ServiceContext<?> svcctx, String category) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.FOLDER.name(), category, "");
-		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
-		}
-		return result;
-	}
-
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
-	@Override
-	public List<TagInfo> getFileTags(ServiceContext<?> svcctx, String category) throws ServiceException {
-		List<TagInfo> result;
-		try{
-			result = tagdao.queryTags(Tags.TagType.FILE.name(), category, "");
+			NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+			if(LOGGER.isDebugEnabled()){
+				LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramap.toString());
+			}
+			result = jtemplate.query(SQL.toString(), paramap, tagdao.getRowMapper());
+			
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail query tags",dae);
 		}
@@ -220,7 +163,7 @@ public class TagServiceImpl implements TagService{
 			InfoId<Long> rid = idservice.generateId(IdKey.TAG_REL, Long.class);
 			rel.setInfoId(rid);
 			rel.setResourceId((long)objectId.getId());
-			rel.setResourceType(tagType);
+			rel.setTagType(tagType);
 			rel.setTagName(tagName);
 			svcctx.setTraceInfo(rel);
 			tagreldao.create(rel);

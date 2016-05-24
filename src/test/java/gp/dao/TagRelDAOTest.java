@@ -39,7 +39,7 @@ public class TagRelDAOTest extends AbstractJUnit4SpringContextTests{
 
 		info.setResourceId(323l);
 		info.setTagName("thhh");
-		info.setResourceType("ttt");
+		info.setTagType("ttt");
 		info.setCategory("ppp");
 		
 		info.setModifier("modifer001");
@@ -71,7 +71,7 @@ public class TagRelDAOTest extends AbstractJUnit4SpringContextTests{
 
 			info.setResourceId(323l);
 			info.setTagName("thhh");
-			info.setResourceType("ttt");
+			info.setTagType("ttt");
 			info.setCategory("ppp");
 			
 			info.setModifier("modifer001");
