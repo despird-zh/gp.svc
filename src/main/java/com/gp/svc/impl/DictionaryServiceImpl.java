@@ -7,8 +7,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.DictionaryDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -25,6 +27,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx) throws ServiceException {
 
@@ -43,6 +46,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}		
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx, String dictGroup) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
@@ -65,6 +69,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean updateDictEntry(ServiceContext<?> svcctx, DictionaryInfo dictinfo) throws ServiceException {
 
@@ -76,6 +81,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, InfoId<Long> dictId)throws ServiceException 
 	{
@@ -86,6 +92,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 	
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, String dictKey) throws ServiceException {
 		

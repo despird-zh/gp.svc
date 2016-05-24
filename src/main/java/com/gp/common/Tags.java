@@ -19,11 +19,11 @@ public class Tags {
 	
 	public static enum TagType{
 		
-		FOLDER,
-		FILE,
-		POST,
-		TASK,
-		CABINET
+		FOLDER, // folder tag
+		FILE, // file tag
+		POST, // post tag
+		TASK, // task tag
+		WORKGROUP // workgroup tag
 	}
 	
 	public static enum TagColor{

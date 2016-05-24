@@ -4,8 +4,6 @@ public class TagRelInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = 1L;
 
-	private Long workgroupId;
-	
 	private Long resourceId;
 	
 	private String resourceType;
@@ -13,14 +11,6 @@ public class TagRelInfo extends TraceableInfo<Long>{
 	private String tagName;
 	
 	private String category;
-
-	public Long getWorkgroupId() {
-		return workgroupId;
-	}
-
-	public void setWorkgroupId(Long workgroupId) {
-		this.workgroupId = workgroupId;
-	}
 
 	public Long getResourceId() {
 		return resourceId;

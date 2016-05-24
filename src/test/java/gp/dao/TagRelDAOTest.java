@@ -36,8 +36,7 @@ public class TagRelDAOTest extends AbstractJUnit4SpringContextTests{
 			
 		TagRelInfo info = new TagRelInfo();
 		info.setInfoId(id);
-		
-		info.setWorkgroupId(223l);
+
 		info.setResourceId(323l);
 		info.setTagName("thhh");
 		info.setResourceType("ttt");
@@ -69,8 +68,7 @@ public class TagRelDAOTest extends AbstractJUnit4SpringContextTests{
 				
 			TagRelInfo info = new TagRelInfo();
 			info.setInfoId(id);
-						
-			info.setWorkgroupId(223l);
+
 			info.setResourceId(323l);
 			info.setTagName("thhh");
 			info.setResourceType("ttt");

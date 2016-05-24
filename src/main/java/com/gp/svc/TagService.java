@@ -32,7 +32,7 @@ public interface TagService {
 	/**
 	 * Get the cabinet tag list 
 	 **/
-	public List<TagInfo> getCabinetTags(ServiceContext<?> svcctx) throws ServiceException;
+	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx) throws ServiceException;
 
 	/**
 	 * Get the post tag list 
@@ -47,7 +47,7 @@ public interface TagService {
 	/**
 	 * Get the cabinet tag list 
 	 **/
-	public List<TagInfo> getCabinetTags(ServiceContext<?> svcctx, String category) throws ServiceException;
+	public List<TagInfo> getWorkgroupTags(ServiceContext<?> svcctx, String category) throws ServiceException;
 
 	/**
 	 * Get the folder tag list 
@@ -73,4 +73,11 @@ public interface TagService {
 	 * remove the tag
 	 **/
 	public void removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey)throws ServiceException;
+	
+	
+	/**
+	 * attach the tag 
+	 **/
+	public void attachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String tagType, String tag) throws ServiceException;
+	
 }

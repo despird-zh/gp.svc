@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.AuditDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -32,6 +34,7 @@ public class AuditServiceImpl implements AuditService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<AuditInfo> getAudits(ServiceContext<?> svcctx, String subject, String object, String operation) throws ServiceException {
 		List<Object> parmlist = new ArrayList<Object>();
@@ -71,6 +74,7 @@ public class AuditServiceImpl implements AuditService{
 		return result;
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean deleteAudit(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
 
@@ -78,12 +82,14 @@ public class AuditServiceImpl implements AuditService{
 		return cnt > 0;
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean addAudit(ServiceContext<?> svcctx, AuditInfo ainfo) throws ServiceException {
 		
 		return auditdao.create( ainfo)>0;
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean purgeAudits(ServiceContext<?> svcctx, String subject, String objectType, Date reservedate)
 			throws ServiceException {
