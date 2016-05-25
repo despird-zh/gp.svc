@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Users;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.IdSettingDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -33,7 +34,7 @@ public class CommonServiceImpl implements CommonService{
 	private PseudoDAO pseudodao;
 	
 	@SuppressWarnings("unchecked")
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(value=ServiceConfigurator.TRNS_MGR,propagation = Propagation.REQUIRES_NEW)
 	@Override
 	public <T> InfoId<T> generateId(String modifier, Identifier idkey, Class<T> type) throws ServiceException{
 		InfoId<?> newId = null;
@@ -76,6 +77,7 @@ public class CommonServiceImpl implements CommonService{
 		return generateId(Users.PESUOD_USER.getAccount(),idkey, type);
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, Map<FlatColLocator, Object> fields) throws ServiceException{
 		
@@ -87,6 +89,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, FlatColLocator col, Object val) throws ServiceException{
 		try{
@@ -97,6 +100,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val) throws ServiceException{
 		try{

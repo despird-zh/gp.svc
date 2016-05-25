@@ -8,6 +8,7 @@ import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
+import com.gp.info.CabinetInfo;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
 
@@ -70,4 +71,16 @@ public interface FileService {
 	 * get the storage information of a cabinet file 
 	 **/
 	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException;
+	
+	/**
+	 * find cabinet information by file id 
+	 * @param fileid the id of file which reside in target cabinet
+	 **/
+	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> fileid)throws ServiceException;
+	
+	/**
+	 * find the file information 
+	 * @param fileid the id of file 
+	 **/
+	public CabFileInfo getFile(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException;
 }

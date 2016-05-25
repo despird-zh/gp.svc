@@ -40,6 +40,13 @@ public interface FolderService {
 
 	/**
 	 * find cabinet information by folder id 
+	 * @param folderid the id of folder which reside in target cabinet
 	 **/
-	public CabinetInfo getCabinetInfo(Long folderid)throws ServiceException;
+	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> folderid)throws ServiceException;
+	
+	/**
+	 * Find the folder information 
+	 * @param folderid the id of folder
+	 **/
+	public CabFolderInfo getFolder(ServiceContext<?> svcctx, InfoId<Long> folderid) throws ServiceException;
 }

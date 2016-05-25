@@ -16,10 +16,12 @@ import com.gp.acl.Acl;
 import com.gp.common.Cabinets;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
 import com.gp.dao.CabVersionDAO;
+import com.gp.dao.CabinetDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.StorageDAO;
 import com.gp.exception.ServiceException;
@@ -27,6 +29,7 @@ import com.gp.info.CabAceInfo;
 import com.gp.info.CabAclInfo;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
+import com.gp.info.CabinetInfo;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
 import com.gp.svc.FileService;
@@ -57,8 +60,12 @@ public class FileServiceImpl implements FileService{
 	CabAceDAO acedao;
 	
 	@Autowired
+	CabinetDAO cabinetdao;
+	
+	@Autowired
 	private CommonService idservice;
 	
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
 	public List<CabVersionInfo> getVersions(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
 		
@@ -74,7 +81,7 @@ public class FileServiceImpl implements FileService{
 		return versions;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
@@ -98,7 +105,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -120,7 +127,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -141,7 +148,7 @@ public class FileServiceImpl implements FileService{
 
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public InfoId<Long> newVersion(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
 
@@ -184,7 +191,7 @@ public class FileServiceImpl implements FileService{
 		return vkey;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
@@ -214,6 +221,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
@@ -222,7 +230,7 @@ public class FileServiceImpl implements FileService{
 		acedao.deleteBySubject(aclid, type, subject);
 	}
 	
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
 		
@@ -249,6 +257,7 @@ public class FileServiceImpl implements FileService{
 		pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 	}
 
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
 	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException {
 		
@@ -275,6 +284,40 @@ public class FileServiceImpl implements FileService{
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("Fail to query the storage of cabinet file.",dae);
+		}
+	}
+
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Override
+	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
+		CabinetInfo rtv = null;
+		StringBuffer qbuf = new StringBuffer("Select a.* from gp_cabinets a, gp_cab_files b ");
+		qbuf.append("Where b.cabinet_id = a.cabinet_id and b.file_id = ?");
+		
+		Object[] params = new Object[]{
+				fileid.getId()
+		};
+		
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : {} / params : {}", qbuf.toString(), ArrayUtils.toString(params));
+		}
+		try{
+			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail get cabinet info", dae);
+		}
+		return rtv;
+	}
+
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Override
+	public CabFileInfo getFile(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
+		try{
+			return cabfiledao.query(fileid);
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail get folder info", dae);
 		}
 	}
 

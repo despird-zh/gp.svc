@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Instances.State;
+import com.gp.config.ServiceConfigurator;
 import com.gp.common.ServiceContext;
 import com.gp.dao.InstanceDAO;
 import com.gp.dao.PseudoDAO;
@@ -37,6 +39,7 @@ public class InstanceServiceImpl implements InstanceService{
 	@Autowired
 	private PseudoDAO pseudodao;
 	
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public InstanceInfo getInstnaceInfo(ServiceContext<?> svcctx, InfoId<Integer> id) throws ServiceException {
 		
@@ -49,6 +52,7 @@ public class InstanceServiceImpl implements InstanceService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public InstanceInfo getInstnace(ServiceContext<?> svcctx, String entity, String node) throws ServiceException {
 		
@@ -61,6 +65,7 @@ public class InstanceServiceImpl implements InstanceService{
 		}
 	}
 	
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean saveInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException {
 
@@ -73,6 +78,7 @@ public class InstanceServiceImpl implements InstanceService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename)
 			throws ServiceException {
@@ -107,6 +113,7 @@ public class InstanceServiceImpl implements InstanceService{
 		return rtv;
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename, PageQuery pagequery)
 			throws ServiceException {
@@ -155,6 +162,7 @@ public class InstanceServiceImpl implements InstanceService{
 		return pwrapper;
 	}
 
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
 
@@ -168,6 +176,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	}
 
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean addExtInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException {
 		try{

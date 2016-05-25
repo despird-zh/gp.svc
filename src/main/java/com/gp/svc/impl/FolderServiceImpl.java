@@ -19,6 +19,7 @@ import com.gp.acl.Acl;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
@@ -63,7 +64,7 @@ public class FolderServiceImpl implements FolderService{
 	@Autowired
 	private CommonService idservice;
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file)
 			throws ServiceException {
@@ -91,7 +92,7 @@ public class FolderServiceImpl implements FolderService{
 		return fkey;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -130,7 +131,7 @@ public class FolderServiceImpl implements FolderService{
 		return folderkey;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -148,6 +149,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> folderkey, Ace ... aces)
 			throws ServiceException {
@@ -189,6 +191,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> folderkey, Acl acl)
 			throws ServiceException {
@@ -251,8 +254,9 @@ public class FolderServiceImpl implements FolderService{
 		return permstr;
 	}
 
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
 	@Override
-	public CabinetInfo getCabinetInfo(Long folderid) throws ServiceException {
+	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> folderid)throws ServiceException{
 	
 		CabinetInfo rtv = null;
 		StringBuffer qbuf = new StringBuffer("Select a.* from gp_cabinets a, gp_cab_folders b ");
@@ -267,8 +271,23 @@ public class FolderServiceImpl implements FolderService{
 			
 			LOGGER.debug("SQL : {} / params : {}", qbuf.toString(), ArrayUtils.toString(params));
 		}
-		rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
-		
+		try{
+			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail get cabinet info", dae);
+		}
 		return rtv;
+	}
+
+	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Override
+	public CabFolderInfo getFolder(ServiceContext<?> svcctx, InfoId<Long> folderid) throws ServiceException {
+		
+		try{
+			return cabfolderdao.query(folderid);
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail get folder info", dae);
+		}
+
 	}
 }
