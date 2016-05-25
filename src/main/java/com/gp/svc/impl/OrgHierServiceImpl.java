@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.OrgHierDAO;
@@ -56,6 +57,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 	@Autowired
 	private CommonService idservice;
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext<?> svcctx, Long parentNodeId)
 			throws ServiceException {
@@ -81,7 +83,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		return orglist;
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean newOrgHierNode(ServiceContext<?> svcctx, OrgHierInfo orginfo) throws ServiceException {
 		
@@ -110,7 +112,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean saveOrgHierNode(ServiceContext<?> svcctx, OrgHierInfo orginfo) throws ServiceException {
 		try{
@@ -124,6 +126,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public OrgHierInfo getOrgHierNode(ServiceContext<?> svcctx, InfoId<Long> orgid) throws ServiceException {
 		try{
@@ -136,7 +139,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 	
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean removeOrgHierNode(ServiceContext<?> svcctx, InfoId<Long> orgid) throws ServiceException {
 
@@ -155,7 +158,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void addOrgHierMember(ServiceContext<?> svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -198,7 +201,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
-	@Transactional
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public void removeOrgHierMember(ServiceContext<?> svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -222,6 +225,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<UserInfo> getOrgHierMembers(ServiceContext<?> svcctx, InfoId<Long> orgid)
 			throws ServiceException {

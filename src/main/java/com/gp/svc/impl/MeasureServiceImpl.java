@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Measures;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.MeasureDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -25,6 +27,7 @@ public class MeasureServiceImpl implements MeasureService{
 	@Autowired 
 	PseudoDAO pseudodao;
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public MeasureInfo getWorkgroupLatestSummary(InfoId<Long> wid) throws ServiceException{
 		

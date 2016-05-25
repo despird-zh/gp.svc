@@ -15,10 +15,12 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurator;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.SysOptionDAO;
 import com.gp.dao.UserDAO;
@@ -68,6 +70,7 @@ public class SystemServiceImpl implements SystemService{
 		ConfigSettingUtils.setSystemService(this);
 	}
 	
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx) throws ServiceException {
 		try{
@@ -77,6 +80,7 @@ public class SystemServiceImpl implements SystemService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sys_options ");
@@ -99,6 +103,7 @@ public class SystemServiceImpl implements SystemService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey, PageQuery pagequery) throws ServiceException {
 		
@@ -143,6 +148,7 @@ public class SystemServiceImpl implements SystemService{
 		return pwrapper;
 	}
 	
+	@Transactional(ServiceConfigurator.TRNS_MGR)
 	@Override
 	public boolean updateOption(ServiceContext<?> svcctx, String optKey, String value) throws ServiceException {
 		
