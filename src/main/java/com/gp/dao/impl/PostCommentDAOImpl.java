@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostCommentDAO;
 import com.gp.info.InfoId;
 import com.gp.info.PostCommentInfo;
@@ -27,7 +27,7 @@ public class PostCommentDAOImpl extends DAOSupport implements PostCommentDAO{
 	Logger LOGGER = LoggerFactory.getLogger(PostCommentDAOImpl.class);
 	
 	@Autowired
-	public PostCommentDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public PostCommentDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

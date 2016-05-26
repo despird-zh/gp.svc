@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RoleDAO;
 import com.gp.info.InfoId;
 import com.gp.info.RoleInfo;
@@ -28,7 +28,7 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(TagDAOImpl.class);
 	
 	@Autowired
-	public RoleDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public RoleDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

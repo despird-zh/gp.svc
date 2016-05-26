@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
@@ -26,7 +26,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	Logger LOGGER = LoggerFactory.getLogger(GroupUserDAOImpl.class);
 	
 	@Autowired
-	public GroupUserDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public GroupUserDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

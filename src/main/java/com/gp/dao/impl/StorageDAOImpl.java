@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.StorageDAO;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
@@ -26,7 +26,7 @@ public class StorageDAOImpl extends DAOSupport implements StorageDAO{
 	public static Logger LOGGER = LoggerFactory.getLogger(StorageDAOImpl.class);
 	
 	@Autowired
-	public StorageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public StorageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

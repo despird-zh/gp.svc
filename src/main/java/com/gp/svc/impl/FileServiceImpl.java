@@ -16,7 +16,7 @@ import com.gp.acl.Acl;
 import com.gp.common.Cabinets;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
@@ -65,7 +65,7 @@ public class FileServiceImpl implements FileService{
 	@Autowired
 	private CommonService idservice;
 	
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public List<CabVersionInfo> getVersions(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
 		
@@ -81,7 +81,7 @@ public class FileServiceImpl implements FileService{
 		return versions;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
@@ -105,7 +105,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -127,7 +127,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -148,7 +148,7 @@ public class FileServiceImpl implements FileService{
 
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> newVersion(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
 
@@ -191,7 +191,7 @@ public class FileServiceImpl implements FileService{
 		return vkey;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
@@ -221,7 +221,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
@@ -230,7 +230,7 @@ public class FileServiceImpl implements FileService{
 		acedao.deleteBySubject(aclid, type, subject);
 	}
 	
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
 		
@@ -257,7 +257,7 @@ public class FileServiceImpl implements FileService{
 		pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 	}
 
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException {
 		
@@ -287,7 +287,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
 		CabinetInfo rtv = null;
@@ -311,7 +311,7 @@ public class FileServiceImpl implements FileService{
 		return rtv;
 	}
 
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public CabFileInfo getFile(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
 		try{

@@ -19,7 +19,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
 import com.gp.dao.RolePageDAO;
 import com.gp.info.FlatColLocator;
@@ -33,7 +33,7 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 	Logger LOGGER = LoggerFactory.getLogger(RolePageDAOImpl.class);
 	
 	@Autowired
-	public RolePageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public RolePageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

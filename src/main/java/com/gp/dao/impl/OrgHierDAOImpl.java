@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OrgHierDAO;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
@@ -27,7 +27,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 	Logger LOGGER = LoggerFactory.getLogger(OrgHierDAOImpl.class);
 		
 	@Autowired
-	public OrgHierDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public OrgHierDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

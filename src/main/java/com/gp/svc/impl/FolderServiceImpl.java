@@ -19,7 +19,7 @@ import com.gp.acl.Acl;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
@@ -64,7 +64,7 @@ public class FolderServiceImpl implements FolderService{
 	@Autowired
 	private CommonService idservice;
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file)
 			throws ServiceException {
@@ -92,7 +92,7 @@ public class FolderServiceImpl implements FolderService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -131,7 +131,7 @@ public class FolderServiceImpl implements FolderService{
 		return folderkey;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
 			throws ServiceException {
@@ -149,7 +149,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> folderkey, Ace ... aces)
 			throws ServiceException {
@@ -191,7 +191,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> folderkey, Acl acl)
 			throws ServiceException {
@@ -254,7 +254,7 @@ public class FolderServiceImpl implements FolderService{
 		return permstr;
 	}
 
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> folderid)throws ServiceException{
 	
@@ -279,7 +279,7 @@ public class FolderServiceImpl implements FolderService{
 		return rtv;
 	}
 
-	@Transactional(value=ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public CabFolderInfo getFolder(ServiceContext<?> svcctx, InfoId<Long> folderid) throws ServiceException {
 		

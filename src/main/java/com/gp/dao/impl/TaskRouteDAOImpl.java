@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TaskRouteDAO;
 import com.gp.info.InfoId;
 import com.gp.info.TaskRouteInfo;
@@ -26,7 +26,7 @@ public class TaskRouteDAOImpl extends DAOSupport implements TaskRouteDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(TaskRouteDAOImpl.class);
 	
 	@Autowired
-	public TaskRouteDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public TaskRouteDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabFileDAO;
 import com.gp.info.CabFileInfo;
 import com.gp.info.InfoId;
@@ -27,7 +27,7 @@ public class CabFileDAOImpl extends DAOSupport implements CabFileDAO{
 	Logger LOGGER = LoggerFactory.getLogger(CabFileDAOImpl.class);
 	
 	@Autowired
-	public CabFileDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public CabFileDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

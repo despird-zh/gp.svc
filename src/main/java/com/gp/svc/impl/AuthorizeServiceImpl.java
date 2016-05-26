@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.RoleDAO;
 import com.gp.dao.RolePageDAO;
@@ -34,14 +34,14 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<RoleInfo> getAllRoles() throws ServiceException {
 		
 		return roledao.queryAll();
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<RolePageInfo> getRolePages(InfoId<Integer> roleId) throws ServiceException {
 		
@@ -50,7 +50,7 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 		return null;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public boolean setPagePerms(InfoId<Integer> roleId, InfoId<Integer> pageId, Map<FlatColLocator, Boolean> perms)
 			throws ServiceException {

@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachRelDAO;
 import com.gp.info.AttachRelInfo;
 import com.gp.info.InfoId;
@@ -26,7 +26,7 @@ public class AttachRelDAOImpl extends DAOSupport implements AttachRelDAO{
 	Logger LOGGER = LoggerFactory.getLogger(AttachRelDAOImpl.class);
 	
 	@Autowired
-	public AttachRelDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public AttachRelDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

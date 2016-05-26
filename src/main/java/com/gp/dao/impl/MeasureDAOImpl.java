@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MeasureDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -33,7 +33,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(MeasureDAOImpl.class);
 
 	@Autowired
-	public MeasureDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public MeasureDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

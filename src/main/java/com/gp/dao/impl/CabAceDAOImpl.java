@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
 import com.gp.info.InfoId;
@@ -27,7 +27,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(CabAceDAOImpl.class);
 	
 	@Autowired
-	public CabAceDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public CabAceDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

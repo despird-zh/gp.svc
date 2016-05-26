@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.info.InfoId;
 import com.gp.info.WorkgroupExInfo;
@@ -29,7 +29,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	Logger LOGGER = LoggerFactory.getLogger(WorkgroupDAOImpl.class);
 	
 	@Autowired
-	public WorkgroupDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public WorkgroupDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

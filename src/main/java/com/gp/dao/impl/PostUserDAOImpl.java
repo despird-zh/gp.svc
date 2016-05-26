@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostUserDAO;
 import com.gp.info.InfoId;
 import com.gp.info.PostUserInfo;
@@ -27,7 +27,7 @@ public class PostUserDAOImpl extends DAOSupport implements PostUserDAO{
 	Logger LOGGER = LoggerFactory.getLogger(PostUserDAOImpl.class);
 	
 	@Autowired
-	public PostUserDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public PostUserDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

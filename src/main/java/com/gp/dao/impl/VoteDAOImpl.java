@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.VoteDAO;
 import com.gp.info.InfoId;
 import com.gp.info.VoteInfo;
@@ -26,7 +26,7 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(VoteDAOImpl.class);
 	
 	@Autowired
-	public VoteDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public VoteDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

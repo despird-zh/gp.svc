@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.TagDAO;
 import com.gp.dao.TagRelDAO;
@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService{
 	@Autowired
 	CommonService idservice;
 	
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType) throws ServiceException {
 		
@@ -57,7 +57,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category) throws ServiceException {
 		List<TagInfo> result;
@@ -69,7 +69,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category, InfoId<?> objectId) throws ServiceException {
 		
@@ -107,7 +107,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean newTag(ServiceContext<?> svcctx, TagInfo taginfo) throws ServiceException {
 		
@@ -121,7 +121,7 @@ public class TagServiceImpl implements TagService{
 
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void removeTag(ServiceContext<?> svcctx, String tagType, String tagName) throws ServiceException {
 		
@@ -132,7 +132,7 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey) throws ServiceException {
 		
@@ -143,7 +143,7 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String tagType, String tagName)
 			throws ServiceException {

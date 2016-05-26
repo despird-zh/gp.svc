@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.info.CabinetInfo;
 import com.gp.info.InfoId;
@@ -27,7 +27,7 @@ public class CabinetDAOImpl extends DAOSupport implements CabinetDAO{
 	Logger LOGGER = LoggerFactory.getLogger(CabinetDAOImpl.class);
 	
 	@Autowired
-	public CabinetDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public CabinetDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

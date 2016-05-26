@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
 import com.gp.info.InfoId;
@@ -26,7 +26,7 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);
 	
 	@Autowired
-	public DictionaryDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public DictionaryDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

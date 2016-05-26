@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ActLogDAO;
 import com.gp.info.ActLogInfo;
 import com.gp.info.InfoId;
@@ -26,7 +26,7 @@ public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 	Logger LOGGER = LoggerFactory.getLogger(ActLogDAOImpl.class);
 	
 	@Autowired
-	public ActLogDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public ActLogDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

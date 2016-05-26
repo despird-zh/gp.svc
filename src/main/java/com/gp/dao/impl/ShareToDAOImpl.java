@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareToDAO;
 import com.gp.info.InfoId;
 import com.gp.info.ShareToInfo;
@@ -23,7 +23,7 @@ import com.gp.info.ShareToInfo;
 public class ShareToDAOImpl extends DAOSupport implements ShareToDAO{
 
 	@Autowired
-	public ShareToDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public ShareToDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

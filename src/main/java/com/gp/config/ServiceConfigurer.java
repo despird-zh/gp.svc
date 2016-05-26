@@ -19,7 +19,7 @@ import com.gp.common.SpringContextUtil;
 		"com.gp.svc.impl",
 		"com.gp.dao.impl" 
 	})
-public class ServiceConfigurator {
+public class ServiceConfigurer {
 	
 	public static final String TRNS_MGR = "gpTxManager";
 	

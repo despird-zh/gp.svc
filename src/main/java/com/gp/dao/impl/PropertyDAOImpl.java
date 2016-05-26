@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.InfoId;
 import com.gp.info.PropertyInfo;
@@ -28,7 +28,7 @@ public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 	
 	
 	@Autowired
-	public PropertyDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public PropertyDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

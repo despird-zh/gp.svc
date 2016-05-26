@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
@@ -44,7 +44,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(ImageDAOImpl.class);
 	
 	@Autowired
-	public ImageDAOImpl(@Qualifier(ServiceConfigurator.DATA_SRC)DataSource dataSource) {
+	public ImageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

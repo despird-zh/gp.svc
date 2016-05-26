@@ -24,7 +24,7 @@ import com.gp.common.IdKey;
 import com.gp.common.SystemOptions;
 import com.gp.common.ServiceContext;
 import com.gp.common.Users.UserState;
-import com.gp.config.ServiceConfigurator;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
@@ -67,7 +67,7 @@ public class SecurityServiceImpl implements SecurityService{
 	@Autowired 
 	SystemService systemservice;
 	
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean newAccount(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
 			
@@ -134,7 +134,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public int updateAccount(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
 
@@ -173,7 +173,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	}
 	
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean newAccountExt(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
 
@@ -191,7 +191,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 	
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public UserInfo getAccountLite(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
 		
@@ -220,7 +220,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public Set<String> getAccountRoles(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
@@ -228,7 +228,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return null;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public Set<String> getAccountGroups(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
@@ -236,7 +236,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return null;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean removeAccount(ServiceContext<?> svcctx, InfoId<Long> userId, String account) throws ServiceException {
 		
@@ -271,7 +271,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;		
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean changePassword(ServiceContext<?> svcctx, String account, String password) throws ServiceException {
 		int cnt = -1;
@@ -284,7 +284,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public boolean existAccount(ServiceContext<?> svcctx, String account) throws ServiceException {
 		
@@ -293,7 +293,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return exist;
 	}
 
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public UserExInfo getAccountFull(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type)
 			throws ServiceException {
@@ -341,7 +341,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return CollectionUtils.isEmpty(users)? null : users.get(0);
 	}	
 	
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
@@ -393,7 +393,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return rtv;
 	}
 	
-	@Transactional(value = ServiceConfigurator.TRNS_MGR, readOnly=true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
 			throws ServiceException {
@@ -453,7 +453,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return pwrapper;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean updateLogonTrace(ServiceContext<?> svcctx ,InfoId<Long> userkey, boolean resetRetry) throws ServiceException {
 		
@@ -485,7 +485,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 
-	@Transactional(ServiceConfigurator.TRNS_MGR)
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean changeAccountState(ServiceContext<?> svcctx, InfoId<Long> userkey, UserState state) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
