@@ -22,7 +22,7 @@ public class CabEntryInfo extends TraceableInfo<Long>{
 
 	private String owner;
 		
-	private Long owm;
+	private Long owm = 0l;
 		
 	private String description;
 	
