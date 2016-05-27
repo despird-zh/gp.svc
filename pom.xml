@@ -11,14 +11,14 @@
 		<comm.config>1.10</comm.config>
 		<comm.coll>3.2.1</comm.coll>
 		<comm.io>2.4</comm.io>
-		<hib.val>5.2.2.Final</hib.val>
+		<hib.val>5.2.4.Final</hib.val>
 		<disruptor.version>3.3.2</disruptor.version>
 		<mysql.version>5.1.37</mysql.version>
 		<httpclient.version>4.5.1</httpclient.version>
 		<protobuf.version>2.6.1</protobuf.version>
 		<jackson.version>2.6.2</jackson.version>
 		<bcp.version>0.8.0.RELEASE</bcp.version>
-		<spring.version>4.2.3.RELEASE</spring.version>
+		<spring.version>4.2.6.RELEASE</spring.version>
 	</properties>
 	<dependencies>
 		<dependency>
