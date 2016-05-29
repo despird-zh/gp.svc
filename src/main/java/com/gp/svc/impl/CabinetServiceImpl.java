@@ -2,7 +2,10 @@ package com.gp.svc.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -12,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.acl.AcePrivilege;
+import com.gp.acl.AceType;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -69,61 +74,54 @@ public class CabinetServiceImpl implements CabinetService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey)
-			throws ServiceException {
-		
-		return getCabFolders(svcctx, ckey, folderkey,null);
-	}
-
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
-	@Override
 	public List<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername) throws ServiceException {
 
-		StringBuffer filterbuf = new StringBuffer();
+		StringBuffer SQL = new StringBuffer();
 		
-		filterbuf.append("SELECT distinct a.folder_id ")
-				.append("FROM gp_cab_folders a LEFT JOIN gp_cab_ace b ON a.acl_id = b.acl_id ")
-				.append("WHERE ")
-				.append("( ");
-		/** ( ... OR ... OR ... OR ... OR ...) AND () */
-		/** set owner filter condition */
-		filterbuf.append("  ( a.owner = ? AND b.subject_type = 'o' AND ")
-					      .append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" ) OR ");
-		/** set group filter condition*/
-		if(!CollectionUtils.isEmpty(svcctx.getPrincipal().getGroups())){
-			filterbuf.append("  ( b.subject_type = 'g' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-						.append(" AND b.subject IN ( ").append(DAOSupport.getInClause(svcctx.getPrincipal().getGroups())).append(" )) OR ");
-		}
-		/** set everyone filter condition */
-		filterbuf.append("  ( b.subject_type = 'e' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" )  OR ");
-		/** set user filter condition */
-		filterbuf.append("  ( b.subject_type = 'u' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-					.append(" AND b.subject = ? ))");		
-		filterbuf.append(" AND a.folder_pid = ? "); // folder id
-		filterbuf.append(" AND a.cabinet_id = ? "); // cabinet id
-		filterbuf.append(" AND a.folder_name like ? "); // folder name
+		SQL.append("SELECT");
+		SQL.append(" folders.*");
+		SQL.append(" FROM");
+		SQL.append(" gp_cab_folders folders");
+		SQL.append(" WHERE folders.cabinet_id = :cabinet_id");
+		SQL.append(" AND folders.folder_pid = :folder_pid");
+		SQL.append(" AND folders.folder_name like :folder_name");
+		SQL.append(" AND EXISTS(");
+		SQL.append(" SELECT ace.ace_id");
+		SQL.append(" FROM gp_cab_ace ace");
+		SQL.append(" WHERE 	(");
+		SQL.append(" (");
+		SQL.append("	folders.OWNER = :subject");
+		SQL.append("	AND ace.subject_type = '").append(AceType.OWNER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.USER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append("	AND ace.subject = :subject");
+		SQL.append(" )");
+		SQL.append(" )");
+		SQL.append(" AND ace.acl_id = folders.acl_id");
+		SQL.append(")");
 		
-		StringBuffer folderbuf = new StringBuffer("SELECT f0.* FROM gp_cab_folders f0,");
-			folderbuf.append("(").append(filterbuf).append(") f1 ")
-			.append("WHERE f0.folder_id = f1.folder_id ");
-		
-		Object[] params = new Object[]{
-			svcctx.getPrincipal().getAccount(),
-			svcctx.getPrincipal().getAccount(),
-			folderkey.getId(),
-			ckey.getId(),
-			StringUtils.isBlank(foldername)? "%": StringUtils.trim(foldername) + "%"
-		};
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("subject", svcctx.getPrincipal().getAccount());
+		params.put("cabinet_id", ckey.getId());
+		params.put("folder_pid", folderkey.getId());
+		params.put("folder_name", StringUtils.isBlank(foldername)? "%": StringUtils.trim(foldername) + "%");
 
-		JdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		NamedParameterJdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		List<CabFolderInfo> result = null;
 		try{
 			if(LOGGER.isDebugEnabled())
-				LOGGER.debug("SQL : {} / Params : {}",folderbuf.toString(), ArrayUtils.toString(params) );
+				LOGGER.debug("SQL : {} / Params : {}",SQL.toString(),params.toString() );
 			
-			result = jdbctemplate.query(folderbuf.toString(), params, cabfolderdao.getRowMapper());
+			result = jdbctemplate.query(SQL.toString(), params, cabfolderdao.getRowMapper());
 			
 		}catch(DataAccessException dae){
 			
@@ -138,47 +136,48 @@ public class CabinetServiceImpl implements CabinetService{
 	public PageWrapper<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername, PageQuery pagequery) throws ServiceException {
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT distinct a.folder_id ");
-		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(distinct a.folder_id) ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT folders.* ");
+		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(folders.folder_id) ");
 		
-		StringBuffer filterbuf = new StringBuffer();
+		StringBuffer SQL = new StringBuffer();
+		SQL.append(" FROM");
+		SQL.append(" gp_cab_folders folders");
+		SQL.append(" WHERE folders.cabinet_id = :cabinet_id");
+		SQL.append(" AND folders.folder_pid = :folder_pid");
+		SQL.append(" AND folders.folder_name like :folder_name");
+		SQL.append(" AND EXISTS(");
+		SQL.append(" SELECT ace.ace_id");
+		SQL.append(" FROM gp_cab_ace ace");
+		SQL.append(" WHERE 	(");
+		SQL.append(" (");
+		SQL.append("	folders.OWNER = :subject");
+		SQL.append("	AND ace.subject_type = '").append(AceType.OWNER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.USER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append("	AND ace.subject = :subject");
+		SQL.append(" )");
+		SQL.append(" )");
+		SQL.append(" AND ace.acl_id = folders.acl_id");
+		SQL.append(")");
 		
-		filterbuf.append("FROM gp_cab_folders a LEFT JOIN gp_cab_ace b ON a.acl_id = b.acl_id ")
-					.append("WHERE ")
-					.append("( ");
-		/** ( ... OR ... OR ... OR ... OR ...) AND () */
-		/** set owner filter condition */
-		filterbuf.append("  ( a.owner = ? AND b.subject_type = 'o' AND ")
-					      .append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" ) OR ");
-		/** set group filter condition*/
-		if(!CollectionUtils.isEmpty(svcctx.getPrincipal().getGroups())){
-			filterbuf.append("  ( b.subject_type = 'g' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-						.append(" AND b.subject IN ( ").append(DAOSupport.getInClause(svcctx.getPrincipal().getGroups())).append(" )) OR ");
-		}
-		/** set everyone filter condition */
-		filterbuf.append("  ( b.subject_type = 'e' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" )  OR ");
-		/** set user filter condition */
-		filterbuf.append("  ( b.subject_type = 'u' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-					.append(" AND b.subject = ? ))");		
-		filterbuf.append(" AND a.folder_pid = ? "); // folder id
-		filterbuf.append(" AND a.cabinet_id = ? "); // cabinet id
-		filterbuf.append(" AND a.folder_name like ? "); // folder name
-		// find all records
-		SQL_COLS.append(filterbuf);
-
-		Object[] params = new Object[]{
-			svcctx.getPrincipal().getAccount(),
-			svcctx.getPrincipal().getAccount(),
-			folderkey.getId(),
-			ckey.getId(),
-			StringUtils.isBlank(foldername)? "%": StringUtils.trim(foldername) + "%"
-		};
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("subject", svcctx.getPrincipal().getAccount());
+		params.put("cabinet_id", ckey.getId());
+		params.put("folder_pid", folderkey.getId());
+		params.put("folder_name", StringUtils.isBlank(foldername)? "%": StringUtils.trim(foldername) + "%");
 		
-		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<CabFolderInfo> pwrapper = new PageWrapper<CabFolderInfo>();
 		
-		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(filterbuf).toString(), params);
+		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
 		// calculate pagination information, the page menu number is 5
 		PaginationInfo pagination = new PaginationHelper(totalrow, 
 				pagequery.getPageNumber(), 
@@ -187,21 +186,17 @@ public class CabinetServiceImpl implements CabinetService{
 		pwrapper.setPagination(pagination);
 		
 		// get page query sql
-		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.toString(), pagequery);
+		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
 
-		StringBuffer folderbuf = new StringBuffer("SELECT f0.* FROM gp_cab_folders f0,");
-		folderbuf.append("(").append(pagesql).append(") f1 ")
-				.append("WHERE f0.folder_id = f1.folder_id ");
-	
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : " + folderbuf + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + pagesql.toString() + " / params : " + params.toString());
 		}
 		
 		List<CabFolderInfo> result = null;
 		try{
 			
-			result = jtemplate.query(folderbuf.toString(), params, cabfolderdao.getRowMapper());
+			result = jtemplate.query(pagesql, params, cabfolderdao.getRowMapper());
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query folders in cabinet", dae);
@@ -214,61 +209,55 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey)
-			throws ServiceException {
-		
-		return getCabFiles(svcctx, ckey, folderkey, null);
-	}
-	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
-	@Override
 	public List<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String filename) throws ServiceException {
 
-		StringBuffer filterbuf = new StringBuffer();
+		StringBuffer SQL = new StringBuffer();
 		
-		filterbuf.append("SELECT distinct a.file_id ")
-				.append("FROM gp_cab_files a LEFT JOIN gp_cab_ace b ON a.acl_id = b.acl_id ")
-				.append("WHERE ")
-				.append("( ");
-		/** ( ... OR ... OR ... OR ... OR ...) AND () */
-		/** set owner filter condition */
-		filterbuf.append("  ( a.owner = ? AND b.subject_type = 'o' AND ")
-					      .append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" ) OR ");
-		/** set group filter condition*/
-		if(!CollectionUtils.isEmpty(svcctx.getPrincipal().getGroups())){
-			filterbuf.append("  ( b.subject_type = 'g' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-						.append(" AND b.subject IN ( ").append(DAOSupport.getInClause(svcctx.getPrincipal().getGroups())).append(" )) OR ");
-		}
-		/** set everyone filter condition */
-		filterbuf.append("  ( b.subject_type = 'e' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" )  OR ");
-		/** set user filter condition */
-		filterbuf.append("  ( b.subject_type = 'u' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-					.append(" AND b.subject = ? ))");		
-		filterbuf.append(" AND a.folder_id = ? "); // folder id
-		filterbuf.append(" AND a.cabinet_id = ? "); // cabinet id
-		filterbuf.append(" AND a.file_name like ? "); // folder name
+		SQL.append("SELECT");
+		SQL.append(" files.*");
+		SQL.append(" FROM");
+		SQL.append(" gp_cab_files files");
+		SQL.append(" WHERE files.cabinet_id = :cabinet_id");
+		SQL.append(" AND files.folder_id = :folder_id");
+		SQL.append(" AND files.file_name like :file_name");
+		SQL.append(" AND EXISTS(");
+		SQL.append(" SELECT ace.ace_id");
+		SQL.append(" FROM gp_cab_ace ace");
+		SQL.append(" WHERE 	(");
+		SQL.append(" (");
+		SQL.append("	files.OWNER = :subject");
+		SQL.append("	AND ace.subject_type = '").append(AceType.OWNER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.USER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append("	AND ace.subject = :subject");
+		SQL.append(" )");
+		SQL.append(" )");
+		SQL.append(" AND ace.acl_id = files.acl_id");
+		SQL.append(")");
 		
-		StringBuffer folderbuf = new StringBuffer("SELECT f0.* FROM gp_cab_files f0,");
-			folderbuf.append("(").append(filterbuf).append(") f1 ")
-			.append("WHERE f0.file_id = f1.file_id ");
 		
-		Object[] params = new Object[]{
-			svcctx.getPrincipal().getAccount(),
-			svcctx.getPrincipal().getAccount(),
-			folderkey.getId(),
-			ckey.getId(),
-			StringUtils.isBlank(filename)? "%": StringUtils.trim(filename) + "%"
-		};
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("subject", svcctx.getPrincipal().getAccount());
+		params.put("cabinet_id", ckey.getId());
+		params.put("folder_id", folderkey.getId());
+		params.put("file_name", StringUtils.isBlank(filename)? "%": StringUtils.trim(filename) + "%");
 
-		JdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		NamedParameterJdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		List<CabFileInfo> result = null;
 		try{
 			if(LOGGER.isDebugEnabled())
-				LOGGER.debug("SQL : {} / Params : {}",folderbuf.toString(), ArrayUtils.toString(params) );
+				LOGGER.debug("SQL : {} / Params : {}",SQL.toString(), params.toString() );
 			
-			result = jdbctemplate.query(folderbuf.toString(), params, cabfiledao.getRowMapper());
+			result = jdbctemplate.query(SQL.toString(), params, cabfiledao.getRowMapper());
 			
 		}catch(DataAccessException dae){
 			
@@ -286,47 +275,48 @@ public class CabinetServiceImpl implements CabinetService{
 			String filename, 
 			PageQuery pagequery) throws ServiceException {
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT distinct a.file_id ");
-		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(distinct a.file_id) ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT files.file_id ");
+		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(files.file_id) ");
 		
-		StringBuffer filterbuf = new StringBuffer();
+		StringBuffer SQL = new StringBuffer();
+		SQL.append(" FROM");
+		SQL.append(" gp_cab_files files");
+		SQL.append(" WHERE files.cabinet_id = :cabinet_id");
+		SQL.append(" AND files.folder_id = :folder_id");
+		SQL.append(" AND files.file_name like :file_name");
+		SQL.append(" AND EXISTS(");
+		SQL.append(" SELECT ace.ace_id");
+		SQL.append(" FROM gp_cab_ace ace");
+		SQL.append(" WHERE 	(");
+		SQL.append(" (");
+		SQL.append("	files.OWNER = :subject");
+		SQL.append("	AND ace.subject_type = '").append(AceType.OWNER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.USER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append("	AND ace.subject = :subject");
+		SQL.append(" )");
+		SQL.append(" )");
+		SQL.append(" AND ace.acl_id = files.acl_id");
+		SQL.append(")");
 		
-		filterbuf.append("FROM gp_cab_files a LEFT JOIN gp_cab_ace b ON a.acl_id = b.acl_id ")
-					.append("WHERE ")
-					.append("( ");
-		/** ( ... OR ... OR ... OR ... OR ...) AND () */
-		/** set owner filter condition */
-		filterbuf.append("  ( a.owner = ? AND b.subject_type = 'o' AND ")
-					      .append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" ) OR ");
-		/** set group filter condition*/
-		if(!CollectionUtils.isEmpty(svcctx.getPrincipal().getGroups())){
-			filterbuf.append("  ( b.subject_type = 'g' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-						.append(" AND b.subject IN ( ").append(DAOSupport.getInClause(svcctx.getPrincipal().getGroups())).append(" )) OR ");
-		}
-		/** set everyone filter condition */
-		filterbuf.append("  ( b.subject_type = 'e' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" )  OR ");
-		/** set user filter condition */
-		filterbuf.append("  ( b.subject_type = 'u' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-					.append(" AND b.subject = ? ))");		
-		filterbuf.append(" AND a.folder_id = ? "); // folder id
-		filterbuf.append(" AND a.cabinet_id = ? "); // cabinet id
-		filterbuf.append(" AND a.file_name like ? "); // folder name
-		// find all records
-		SQL_COLS.append(filterbuf);
-
-		Object[] params = new Object[]{
-			svcctx.getPrincipal().getAccount(),
-			svcctx.getPrincipal().getAccount(),
-			folderkey.getId(),
-			ckey.getId(),
-			StringUtils.isBlank(filename)? "%": StringUtils.trim(filename) + "%"
-		};
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("subject", svcctx.getPrincipal().getAccount());
+		params.put("cabinet_id", ckey.getId());
+		params.put("folder_id", folderkey.getId());
+		params.put("file_name", StringUtils.isBlank(filename)? "%": StringUtils.trim(filename) + "%");
 		
-		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<CabFileInfo> pwrapper = new PageWrapper<CabFileInfo>();
 		
-		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(filterbuf).toString(), params);
+		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
 		// calculate pagination information, the page menu number is 5
 		PaginationInfo pagination = new PaginationHelper(totalrow, 
 				pagequery.getPageNumber(), 
@@ -335,21 +325,17 @@ public class CabinetServiceImpl implements CabinetService{
 		pwrapper.setPagination(pagination);
 		
 		// get page query sql
-		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.toString(), pagequery);
+		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
 
-		StringBuffer folderbuf = new StringBuffer("SELECT f0.* FROM gp_cab_files f0,");
-		folderbuf.append("(").append(pagesql).append(") f1 ")
-				.append("WHERE f0.file_id = f1.file_id ");
-	
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : " + folderbuf + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + pagesql + " / params : " + params.toString());
 		}
 		
 		List<CabFileInfo> result = null;
 		try{
 			
-			result = jtemplate.query(folderbuf.toString(), params, cabfiledao.getRowMapper());
+			result = jtemplate.query(pagesql.toString(), params, cabfiledao.getRowMapper());
 			
 		}catch(DataAccessException dae){
 			
@@ -368,47 +354,48 @@ public class CabinetServiceImpl implements CabinetService{
 			String entryname, 
 			PageQuery pagequery) throws ServiceException {
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT distinct a.entry_id,a.entry_type,a.cabinet_id ");
-		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(distinct a.entry_id,a.entry_type,a.cabinet_id) ");
-		
-		StringBuffer filterbuf = new StringBuffer();
-		
-		filterbuf.append("FROM gp_cab_entries a LEFT JOIN gp_cab_ace b ON a.acl_id = b.acl_id ")
-					.append("WHERE ")
-					.append("( ");
-		/** ( ... OR ... OR ... OR ... OR ...) AND () */
-		/** set owner filter condition */
-		filterbuf.append("  ( a.owner = ? AND b.subject_type = 'o' AND ")
-					      .append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" ) OR ");
-		/** set group filter condition*/
-		if(!CollectionUtils.isEmpty(svcctx.getPrincipal().getGroups())){
-			filterbuf.append("  ( b.subject_type = 'g' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-						.append(" AND b.subject IN ( ").append(DAOSupport.getInClause(svcctx.getPrincipal().getGroups())).append(" )) OR ");
-		}
-		/** set everyone filter condition */
-		filterbuf.append("  ( b.subject_type = 'e' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value).append(" )  OR ");
-		/** set user filter condition */
-		filterbuf.append("  ( b.subject_type = 'u' AND ").append("b.privilege&").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value)
-					.append(" AND b.subject = ? ))");		
-		filterbuf.append(" AND a.folder_pid = ? "); // folder id
-		filterbuf.append(" AND a.cabinet_id = ? "); // cabinet id
-		filterbuf.append(" AND a.entry_name like ? "); // folder name
-		// find all records
-		SQL_COLS.append(filterbuf);
+		StringBuffer SQL_COLS = new StringBuffer("SELECT entries.* ");
+		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(distinct entries.entry_id, entries.entry_type) ");
 
-		Object[] params = new Object[]{
-			svcctx.getPrincipal().getAccount(),
-			svcctx.getPrincipal().getAccount(),
-			folderkey.getId(),
-			ckey.getId(),
-			StringUtils.isBlank(entryname)? "%": StringUtils.trim(entryname) + "%"
-		};
+		StringBuffer SQL = new StringBuffer();
+		SQL.append(" FROM");
+		SQL.append(" gp_cab_entries entries");
+		SQL.append(" WHERE entries.cabinet_id = :cabinet_id");
+		SQL.append(" AND entries.folder_pid = :folder_pid");
+		SQL.append(" AND entries.entry_name like :entry_name");
+		SQL.append(" AND EXISTS(");
+		SQL.append(" SELECT ace.ace_id");
+		SQL.append(" FROM gp_cab_ace ace");
+		SQL.append(" WHERE 	(");
+		SQL.append(" (");
+		SQL.append("	entries.OWNER = :subject");
+		SQL.append("	AND ace.subject_type = '").append(AceType.OWNER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append(" )");
+		SQL.append(" OR (");
+		SQL.append("	ace.subject_type = '").append(AceType.USER.value).append("'");
+		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
+		SQL.append("	AND ace.subject = :subject");
+		SQL.append(" )");
+		SQL.append(" )");
+		SQL.append(" AND ace.acl_id = entries.acl_id");
+		SQL.append(")");
 		
-		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("subject", svcctx.getPrincipal().getAccount());
+		params.put("cabinet_id", ckey.getId());
+		params.put("folder_pid", folderkey.getId());
+		params.put("entry_name", StringUtils.isBlank(entryname)? "%": StringUtils.trim(entryname) + "%");
 		
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+
 		PageWrapper<CabEntryInfo> pwrapper = new PageWrapper<CabEntryInfo>();
 		
-		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(filterbuf).toString(), params);
+		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
 		// calculate pagination information, the page menu number is 5
 		PaginationInfo pagination = new PaginationHelper(totalrow, 
 				pagequery.getPageNumber(), 
@@ -417,23 +404,17 @@ public class CabinetServiceImpl implements CabinetService{
 		pwrapper.setPagination(pagination);
 		
 		// get page query sql
-		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.toString(), pagequery);
+		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
 
-		StringBuffer folderbuf = new StringBuffer("SELECT f0.* FROM gp_cab_entries f0,");
-		folderbuf.append("(").append(pagesql).append(") f1 ")
-				.append("WHERE f0.cabinet_id = f1.cabinet_id ")
-				.append("AND f0.entry_id = f1.entry_id ")
-				.append("AND f0.entry_type = f1.entry_type ");
-	
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : " + folderbuf + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + pagesql + " / params : " + params.toString());
 		}
 		
 		List<CabEntryInfo> result = null;
 		try{
 			
-			result = jtemplate.query(folderbuf.toString(), params, CabEntryMapper);
+			result = jtemplate.query(pagesql.toString(), params, CabEntryMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -451,7 +432,7 @@ public class CabinetServiceImpl implements CabinetService{
 		List<CabinetInfo> rtv = null;
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("select * from gp_cabinets a, gp_users b ")
-				.append("where (b.public_cabinet_id = a.cabinet_id or b.private_cabinet_id = a.cabinet_id) and ")
+				.append("where (b.publish_cabinet_id = a.cabinet_id or b.netdisk_cabinet_id = a.cabinet_id) and ")
 				.append("a.workgroup_id = ? and ")
 				.append("b.account = ? ");
 		

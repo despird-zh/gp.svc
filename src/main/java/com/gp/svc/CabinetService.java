@@ -23,65 +23,77 @@ public interface CabinetService {
 	public List<CabinetInfo> getCabinets(ServiceContext<?> svcctx, String account)throws ServiceException;
 
 	/**
-	 * Get cabinet infomation 
+	 * Get cabinet information by cabinet id
+	 * 
+	 * @param cabid the cabinet id
 	 **/
-	public CabinetInfo getCabinet(ServiceContext<?> svcctx, InfoId<Long> ckey) throws ServiceException;
+	public CabinetInfo getCabinet(ServiceContext<?> svcctx, InfoId<Long> cabid) throws ServiceException;
 
 	/**
-	 * Get cabinet folders, with folder name filter
+	 * Get cabinet sub folders under a folder in cabinet, with folder name as filter condition
+	 * @param cabid the cabinet id
+	 * @param folderid the folder id
+	 * @param foldername the folder name condition
 	 **/
 	public List<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey,
+			InfoId<Long> cabid,
+			InfoId<Long> folderid,
 			String foldername) throws ServiceException;
 
 	/**
-	 * Get cabinet folders, with folder name filter
+	 * Get cabinet sub folders under a folder in cabinet, with folder name as filter condition. 
+	 * this method support pagination
+	 * 
+	 * @param cabid the cabinet id
+	 * @param folderid the folder id
+	 * @param foldername the folder name condition
+	 * @param pquery the pagination setting
 	 **/
 	public PageWrapper<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey,
+			InfoId<Long> cabid,
+			InfoId<Long> folderid,
 			String foldername, 
 			PageQuery pquery) throws ServiceException;
-	
-	/**
-	 * Get cabinet folders under parent folder path 
-	 **/
-	public List<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey) throws ServiceException;
 
 	/**
-	 * Get cabinet files under specified folder path
+	 * Get cabinet files under a folder in cabinet, with file name filter
+	 * @param cabid the cabinet id
+	 * @param folderid the parent folder id
+	 * @param filename the file name filter condition
 	 **/
 	public List<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey) throws ServiceException;
+			InfoId<Long> cab,
+			InfoId<Long> folderid,
+			String filename) throws ServiceException;
 	
 	/**
-	 * Get cabinet folders, with folder name filter
+	 * Get cabinet files under a folder in cabinet, with file name filter, 
+	 * this method support pagination
+	 * 
+	 * @param cabid the cabinet id
+	 * @param folderid the parent folder id
+	 * @param filename the file name filter condition
+	 * @param pquery the pagination setting
 	 **/
 	public PageWrapper<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey,
+			InfoId<Long> cabid,
+			InfoId<Long> folderid,
 			String filename, 
 			PageQuery pquery) throws ServiceException;
 	
 	/**
-	 * Get cabinet folders, with folder name filter
+	 * Get cabinet entries under a folder in cabinet. with entry name filter
+	 * 
+	 * @param cabid the cabinet id
+	 * @param folderid the parent folder id
+	 * @param entryname the entry name filter
+	 * @param pquery the pagination setting
 	 **/
 	public PageWrapper<CabEntryInfo> getCabEntries(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey,
+			InfoId<Long> cabid,
+			InfoId<Long> folderid,
 			String entryname, 
 			PageQuery pquery) throws ServiceException;
-	
-	/**
-	 * Get cabinet files, with folder name filter
-	 **/
-	public List<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, 
-			InfoId<Long> ckey,
-			InfoId<Long> folderkey,
-			String filename) throws ServiceException;
+
 	
 }

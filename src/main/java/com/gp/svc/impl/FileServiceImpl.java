@@ -234,27 +234,32 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
 		
-		CabAclInfo aclinfo = new CabAclInfo();
-		aclinfo.setInfoId(acl.getAclId());
-		svcctx.setTraceInfo(aclinfo);
-		
-		if(acldao.create(aclinfo) > 0){
-			for(Ace ace : acl.getAllAces()){
-				
-				CabAceInfo aceinfo = new CabAceInfo();
-				aceinfo.setInfoId(ace.getAceId());
-				aceinfo.setAclId(acl.getAclId().getId());
-				aceinfo.setSubjectType(ace.getType().value);
-				aceinfo.setSubject(ace.getSubject());
-				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
-				svcctx.setTraceInfo(aceinfo);
-				acedao.create(aceinfo);
-				
+		try{
+			CabAclInfo aclinfo = new CabAclInfo();
+			aclinfo.setInfoId(acl.getAclId());
+			svcctx.setTraceInfo(aclinfo);
+			
+			if(acldao.create(aclinfo) > 0){
+				for(Ace ace : acl.getAllAces()){
+					
+					CabAceInfo aceinfo = new CabAceInfo();
+					aceinfo.setInfoId(ace.getAceId());
+					aceinfo.setAclId(acl.getAclId().getId());
+					aceinfo.setSubjectType(ace.getType().value);
+					aceinfo.setSubject(ace.getSubject());
+					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+					svcctx.setTraceInfo(aceinfo);
+					acedao.create(aceinfo);
+				}
 			}
+			// update the cabinet file entry's acl_id
+			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
+			pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("fail to set the ace list",dae);
 		}
-		// update the cabinet file entry's acl_id
-		InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
-		pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 	}
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)

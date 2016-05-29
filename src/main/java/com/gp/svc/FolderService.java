@@ -13,7 +13,7 @@ public interface FolderService {
 	/**
 	 * create folder 
 	 **/
-	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file) throws ServiceException;
+	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file, Acl acl) throws ServiceException;
 
 	/**
 	 * copy the folder to target path

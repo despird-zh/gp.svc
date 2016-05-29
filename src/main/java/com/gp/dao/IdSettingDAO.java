@@ -7,5 +7,5 @@ public interface IdSettingDAO{
 	
 	IdSettingInfo queryByIdKey( Identifier idKey);
 	
-	void updateByIdKey(String modifier, Identifier idKey, Long nextValue);
+	int updateByIdKey(String modifier, Identifier idKey, Long nextValue);
 }

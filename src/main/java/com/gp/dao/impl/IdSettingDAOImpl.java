@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled())
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + idKey);
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + idKey.getSchema());
 		
 		IdSettingInfo info = jtemplate.queryForObject(SQL, new String[]{idKey.getSchema()}, IdSettringMapper);
 		
@@ -44,15 +45,19 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 	}
 
 	@Override
-	public void updateByIdKey(String modifier, Identifier idKey, Long nextValue) {
+	public int updateByIdKey(String modifier, Identifier idKey, Long nextValue) {
 		String SQL = "update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? " +
 				"where id_key = ?";
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+				nextValue, modifier, new Date(System.currentTimeMillis()), idKey.getSchema()
+		};
 		if(LOGGER.isDebugEnabled())
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + idKey);
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		
-		jtemplate.update(SQL, new Object[]{nextValue, modifier, new Date(System.currentTimeMillis()), idKey.getSchema()});
+		int cnt = jtemplate.update(SQL, params);
+		return cnt;
 	}
 
 	@Override

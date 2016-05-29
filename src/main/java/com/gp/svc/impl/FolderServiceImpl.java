@@ -1,8 +1,6 @@
 package com.gp.svc.impl;
 
 import java.util.List;
-import java.util.Set;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
+import com.gp.common.Cabinets;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -40,9 +37,7 @@ import com.gp.svc.CommonService;
 public class FolderServiceImpl implements FolderService{
 
 	static Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);
-	// mapper to parse the json into Set<String> of permissions
-	private static ObjectMapper mapper = new ObjectMapper();
-		
+
 	@Autowired 
 	CabFolderDAO cabfolderdao;
 
@@ -66,25 +61,27 @@ public class FolderServiceImpl implements FolderService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file)
+	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo folder, Acl acl)
 			throws ServiceException {
 		
 		if(InfoId.isValid(parentkey))
-			file.setParentId(parentkey.getId());
+			folder.setParentId(parentkey.getId());
 		else
-			file.setParentId(GeneralConstants.FOLDER_ROOT);
+			folder.setParentId(GeneralConstants.FOLDER_ROOT);
 		
 		InfoId<Long> fkey = null;
 		// info key not set yet, create a new one and set it 
-		if(!InfoId.isValid(file.getInfoId())){
+		if(!InfoId.isValid(folder.getInfoId())){
 			
 			fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
-			file.setInfoId(fkey);
+			folder.setInfoId(fkey);
 		}
 		try{
-			svcctx.setTraceInfo(file);
+			svcctx.setTraceInfo(folder);
 			// create folder record
-			cabfolderdao.create(file);
+			cabfolderdao.create(folder);
+			// set acl setting
+			addAcl(svcctx, folder.getInfoId(), acl);
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException(dae);
@@ -168,7 +165,7 @@ public class FolderServiceImpl implements FolderService{
 					// already have ace in database
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(toPermissionString(ace.getPermissions()));
+					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.update(aceinfo);
 				}else{
@@ -180,7 +177,7 @@ public class FolderServiceImpl implements FolderService{
 					
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(toPermissionString(ace.getPermissions()));
+					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);
 				}
@@ -193,65 +190,36 @@ public class FolderServiceImpl implements FolderService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> folderkey, Acl acl)
+	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> folderid, Acl acl)
 			throws ServiceException {
-		
-		CabFolderInfo folderinfo = null;
-		
+
 		try{
-			// create new acl information
-			InfoId<Long> aclId = idservice.generateId(IdKey.CAB_ACL, Long.class);
 			CabAclInfo aclinfo = new CabAclInfo();
-			aclinfo.setInfoId(aclId);
+			aclinfo.setInfoId(acl.getAclId());
 			svcctx.setTraceInfo(aclinfo);
-			cabacldao.create(aclinfo);
 			
-			// update acl information to cab folder
-			folderinfo = cabfolderdao.query(folderkey);
-			folderinfo.setAclId(aclId.getId());
-			cabfolderdao.update(folderinfo);
-			
-			for(Ace ace : acl.getAllAces()){
-				CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), ace.getType().value, ace.getSubject());
-				
-				if(aceinfo != null){
-					// already have ace in database
-					aceinfo.setSubject(ace.getSubject());
-					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(toPermissionString(ace.getPermissions()));
-					svcctx.setTraceInfo(aceinfo);
-					cabacedao.update( aceinfo);
-				}else{
-					// no ace then create new one.
-					aceinfo = new CabAceInfo();
-					InfoId<Long> infoId = idservice.generateId(IdKey.CAB_ACE, Long.class);
-					aceinfo.setAclId(aclId.getId());
-					aceinfo.setInfoId(infoId);
+			if(cabacldao.create(aclinfo) > 0){
+				for(Ace ace : acl.getAllAces()){
 					
+					CabAceInfo aceinfo = new CabAceInfo();
+					aceinfo.setInfoId(ace.getAceId());
+					aceinfo.setAclId(acl.getAclId().getId());
+					aceinfo.setSubjectType(ace.getType().value);
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(toPermissionString(ace.getPermissions()));
+					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);
+					
 				}
 			}
+			// update the cabinet file entry's acl_id
+			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderid.getId());
+			pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("fail to set the ace list",dae);
 		}
-	}
-
-	public String toPermissionString(Set<String> permissions){
-		
-		String permstr;
-		try {
-			permstr = mapper.writeValueAsString(permissions);
-		} catch (JsonProcessingException e) {
-			LOGGER.error("fail to convert into string",e);
-			permstr = "[]";
-		}
-		
-		return permstr;
 	}
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)

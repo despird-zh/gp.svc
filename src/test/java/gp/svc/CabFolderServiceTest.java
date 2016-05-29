@@ -64,21 +64,11 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		cfolderinfo.setAclId(aid.getId());
 		InfoId<Long> pkey = IdKey.USER.getInfoId(46l);
 		cfolderinfo.setCabinetId(3l);
-		folderService.newFolder(svcctx, pkey, cfolderinfo);
+		folderService.newFolder(svcctx, pkey, cfolderinfo,null);
 		
 	}
 
 
-	public void test_file_search() throws Exception{
-		
-		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKey.CABINET.getInfoId(123l);
-		InfoId<Long> folderkey = IdKey.CAB_FOLDER.getInfoId(12l);
-		List<CabFileInfo> flist = cabinetService.getCabFiles(svcctx, ckey, folderkey);
-		for(CabFileInfo cfi: flist){
-			System.out.println("1 -- "+cfi.getEntryName());
-		}
-	}
 
 	public void test_file_pagequery() throws Exception{
 		
@@ -93,16 +83,6 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		}
 	}
 	
-	public void test_folder_search() throws Exception{
-		
-		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKey.CABINET.getInfoId(123l);
-		InfoId<Long> folderkey = IdKey.CAB_FOLDER.getInfoId(12l);
-		List<CabFolderInfo> flist = cabinetService.getCabFolders(svcctx, ckey, folderkey);
-		for(CabFolderInfo cfi: flist){
-			System.out.println("1 -- "+cfi.getEntryName());
-		}
-	}
 	
 	public void test_folder_pagequery() throws Exception{
 		
