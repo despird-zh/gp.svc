@@ -40,7 +40,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 			.append("folder_name, descr, profile, properties,")
 			.append("acl_id, total_size, owner, folder_count,")
 			.append("owm, state, hash_code, file_count,")
-			.append("create_time, creator,")
+			.append("create_time, creator,classification,")
 			.append("modifier, last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
@@ -56,7 +56,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 				info.getEntryName(),info.getDescription(),info.getProfile(),info.getProperties(),
 				info.getAclId(),info.getTotalSize(),info.getOwner(),info.getFolderCount(),
 				info.getOwm(),info.getState(),info.getHashCode(),info.getFileCount(),
-				info.getCreateDate(),info.getCreator(),
+				info.getCreateDate(),info.getCreator(),info.getClassification(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -94,7 +94,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 			.append("folder_name = ? ,descr = ? ,profile = ? ,properties = ? ,")
 			.append("acl_id = ? ,total_size = ? ,owner = ? ,folder_count = ? ,")
 			.append("owm = ? ,state = ? ,hash_code = ? ,file_count = ? ,")
-			.append("create_time = ? ,creator = ? ,")
+			.append("create_time = ? ,creator = ? ,classification = ?,")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where folder_id = ? " );
 		
@@ -103,7 +103,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 				info.getEntryName(),info.getDescription(),info.getProfile(),info.getProperties(),
 				info.getAclId(),info.getTotalSize(),info.getOwner(),info.getFolderCount(),
 				info.getOwm(),info.getState(),info.getHashCode(),info.getFileCount(),
-				info.getCreateDate(),info.getCreator(),
+				info.getCreateDate(),info.getCreator(),info.getClassification(),
 				info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
 		};
@@ -163,6 +163,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 			info.setOwm(rs.getLong("owm"));
 			info.setCreator(rs.getString("creator"));
 			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setClassification(rs.getString("classification"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));

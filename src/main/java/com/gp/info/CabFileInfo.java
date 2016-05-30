@@ -8,8 +8,6 @@ public class CabFileInfo extends CabEntryInfo{
 
 	private static final long serialVersionUID = 7281506326387853239L;
 
-	private String classification;
-
 	private String profile;
 	
 	private String properties;
@@ -98,14 +96,6 @@ public class CabFileInfo extends CabEntryInfo{
 
 	public void setFormat(String format) {
 		this.format = format;
-	}
-	
-	public String getClassification() {
-		return classification;
-	}
-
-	public void setClassification(String classification) {
-		this.classification = classification;
 	}
 
 }

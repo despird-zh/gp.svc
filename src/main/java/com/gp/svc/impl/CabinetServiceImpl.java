@@ -462,10 +462,30 @@ public class CabinetServiceImpl implements CabinetService{
 			InfoId<Long> id = null;
 			if("FOLDER".equals(isfolder)){
 				id = IdKey.CAB_FOLDER.getInfoId(rs.getLong("entry_id"));
-				info = new CabEntryInfo(true);
+			
+				CabFolderInfo ref = new CabFolderInfo();
+				info = ref;
+				
+				ref.setFolderCount(rs.getInt("folder_count"));
+				ref.setFileCount(rs.getInt("file_count"));
+				ref.setTotalSize(rs.getLong("size"));
+				ref.setProfile(rs.getString("profile"));
+				ref.setProperties(rs.getString("properties"));
+				
 			}else{
 				id = IdKey.CAB_FILE.getInfoId(rs.getLong("entry_id"));
-				info = new CabEntryInfo(false);
+				CabFileInfo ref = new CabFileInfo();
+				info = ref;
+				ref.setSize(rs.getLong("size"));
+				ref.setCommentOn(rs.getBoolean("comment_on"));
+				ref.setVersion(rs.getString("version"));
+				ref.setVersionLabel(rs.getString("version_label"));
+				ref.setProfile(rs.getString("profile"));
+				ref.setProperties(rs.getString("properties"));
+				ref.setState(rs.getString("state"));
+				ref.setFormat(rs.getString("format"));
+				ref.setBinaryId(rs.getLong("binary_id"));
+				
 			}
 			
 			info.setInfoId(id);
@@ -481,9 +501,11 @@ public class CabinetServiceImpl implements CabinetService{
 			info.setOwm(rs.getLong("owm"));
 			info.setCreator(rs.getString("creator"));
 			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setClassification(rs.getString("classification"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
 			return info;
 		}
 	};

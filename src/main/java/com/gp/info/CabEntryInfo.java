@@ -16,6 +16,8 @@ public class CabEntryInfo extends TraceableInfo<Long>{
 	
 	private Long parentId;
 		
+	private String classification;
+	
 	private String hashCode;
 		
 	private Long aclId;
@@ -127,6 +129,14 @@ public class CabEntryInfo extends TraceableInfo<Long>{
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public String getClassification() {
+		return classification;
+	}
+
+	public void setClassification(String classification) {
+		this.classification = classification;
 	}
 	
 }
