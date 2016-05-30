@@ -71,22 +71,21 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category, InfoId<?> objectId) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<?> objectId) throws ServiceException {
 		
 		List<TagInfo> result;
 		Map<String, Object> paramap = new HashMap<String, Object>();
 		StringBuffer SQL = new StringBuffer();
 		
-		SQL.append("SELECT rel.rel_id, ");
-		SQL.append("rel.tag_type,  ");
-		SQL.append("rel.category,  ");
-		SQL.append("tag.tag_color,  ");
-		SQL.append("rel.modifier,  ");
+		SQL.append("SELECT rel.rel_id, tag.tag_id, ");
+		SQL.append("tag.tag_type, rel.tag_name, ");
+		SQL.append("rel.category, tag.tag_color, ");
+		SQL.append("rel.modifier, ");
 		SQL.append("rel.last_modified ");
 		SQL.append("FROM gp_tag_rel rel ");
-		SQL.append("LEFT JOIN gp_tags tag on (rel.tag_type = tag.tag_type and rel.tag_name = tag.tag_name) ");
-		SQL.append("WHERE rel.tag_type = :type ");
-		paramap.put("type", tagType);
+		SQL.append("LEFT JOIN gp_tags tag on (rel.category = tag.category and rel.tag_name = tag.tag_name) ");
+		SQL.append("WHERE rel.resource_type = :type ");
+		paramap.put("type", objectId.getIdKey());
 		if(StringUtils.isNotBlank(category)){
 			SQL.append("AND rel.category = :category ");
 			paramap.put("category", category);
@@ -145,15 +144,16 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String tagType, String tagName)
+	public void attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tagName)
 			throws ServiceException {
 		try{
-			List<TagInfo> tags = tagdao.queryTags(tagType, null, tagName);
+			List<TagInfo> tags = tagdao.queryTags(null, category, tagName);
 			if(CollectionUtils.isEmpty(tags)){
 				InfoId<Long> tid = idservice.generateId(IdKey.TAG, Long.class);
 				TagInfo tag = new TagInfo();
 				tag.setInfoId(tid);
-				tag.setTagType(tagType);
+				//tag.setTagType(tagType);
+				tag.setCategory(category);
 				tag.setTagName(tagName);
 				svcctx.setTraceInfo(tag);
 				
@@ -163,8 +163,9 @@ public class TagServiceImpl implements TagService{
 			InfoId<Long> rid = idservice.generateId(IdKey.TAG_REL, Long.class);
 			rel.setInfoId(rid);
 			rel.setResourceId((long)objectId.getId());
-			rel.setTagType(tagType);
+			rel.setResourceType(objectId.getIdKey());
 			rel.setTagName(tagName);
+			rel.setCategory(category);
 			svcctx.setTraceInfo(rel);
 			tagreldao.create(rel);
 			

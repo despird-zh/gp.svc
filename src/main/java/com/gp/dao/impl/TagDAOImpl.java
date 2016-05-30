@@ -154,13 +154,16 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 		List<TagInfo> result = null;
 		ArrayList<String> paramlist = new ArrayList<String>();
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_tags ");
-		SQL.append("WHERE tag_type = ? AND ");
-		paramlist.add(tagType);
+		SQL.append("WHERE 1=1 ");
+		if(StringUtils.isNotBlank(tagType)){
+			SQL.append(" AND tag_type = ? ");
+			paramlist.add(tagType);
+		}
 		if(StringUtils.isNotBlank(category)){
-			SQL.append(" category = ? AND ");
+			SQL.append(" AND category = ? ");
 			paramlist.add(category);
 		}
-		SQL.append(" tag_name LIKE ?");
+		SQL.append(" AND tag_name LIKE ?");
 		paramlist.add(StringUtils.trim(tagName)+"%");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);

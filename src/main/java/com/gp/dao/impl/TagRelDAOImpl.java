@@ -35,7 +35,7 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_tag_rel (")
 			.append("rel_id,")
-			.append("resource_id,tag_type,tag_name,category,")
+			.append("resource_id,resource_type,tag_name,category,")
 			.append("modifier, last_modified")
 			.append(")values(")
 			.append("?,?,")
@@ -45,7 +45,7 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				key.getId(),
-				info.getResourceId(),info.getTagType(),info.getTagName(),info.getCategory(),
+				info.getResourceId(),info.getResourceType(),info.getTagName(),info.getCategory(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -78,12 +78,12 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 	public int update( TagRelInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_tag_rel set ")
-			.append("resource_id = ?,tag_type = ? , tag_name = ?, category = ?,")
+			.append("resource_id = ?,resource_type = ? , tag_name = ?, category = ?,")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where rel_id = ?");
 		
 		Object[] params = new Object[]{
-				info.getResourceId(),info.getTagType(),info.getTagName(),info.getCategory(),
+				info.getResourceId(),info.getResourceType(),info.getTagName(),info.getCategory(),
 				info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
 		};
@@ -128,7 +128,7 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 			
 			info.setResourceId(rs.getLong("resource_id"));
 			info.setTagName(rs.getString("tag_name"));
-			info.setTagType(rs.getString("tag_type"));
+			info.setResourceType(rs.getString("resource_type"));
 			info.setCategory(rs.getString("category"));
 			
 			info.setModifier(rs.getString("modifier"));

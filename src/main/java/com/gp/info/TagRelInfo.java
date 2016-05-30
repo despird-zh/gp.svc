@@ -6,7 +6,7 @@ public class TagRelInfo extends TraceableInfo<Long>{
 
 	private Long resourceId;
 	
-	private String tagType;
+	private String resourceType;
 	
 	private String tagName;
 	
@@ -18,14 +18,6 @@ public class TagRelInfo extends TraceableInfo<Long>{
 
 	public void setResourceId(Long resourceId) {
 		this.resourceId = resourceId;
-	}
-
-	public String getTagType() {
-		return tagType;
-	}
-
-	public void setTagType(String tagType) {
-		this.tagType = tagType;
 	}
 
 	public String getTagName() {
@@ -42,6 +34,14 @@ public class TagRelInfo extends TraceableInfo<Long>{
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 	
 	

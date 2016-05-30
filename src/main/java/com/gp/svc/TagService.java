@@ -22,7 +22,7 @@ public interface TagService {
 	/**
 	 * Get the file tag list 
 	 **/
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category, InfoId<?> objectId) throws ServiceException;
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<?> objectId) throws ServiceException;
 	
 	/**
 	 * create new tag record
