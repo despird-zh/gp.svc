@@ -115,6 +115,8 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Override
 	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, InfoId<?> ... objectIds) throws ServiceException {
 		
 		final Map<InfoId<?>,Set<TagInfo>> result = new HashMap<InfoId<?>,Set<TagInfo>>();
@@ -163,7 +165,8 @@ public class TagServiceImpl implements TagService{
 					InfoId<Long> resid = new InfoId<Long>(idfier, res_id);
 					Set<TagInfo> tags = result.get(resid);
 					if(tags == null){
-						result.put(resid, new HashSet<TagInfo>());
+						tags = new HashSet<TagInfo>();
+						result.put(resid, tags);
 					}
 					TagInfo tag = TAG_MAPPER.mapRow(rs, 0);
 					tags.add(tag);
