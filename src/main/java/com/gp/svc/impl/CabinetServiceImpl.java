@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +28,6 @@ import com.gp.dao.CabFileDAO;
 import com.gp.dao.CabFolderDAO;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.PseudoDAO;
-import com.gp.dao.impl.DAOSupport;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabEntryInfo;
 import com.gp.info.CabFileInfo;
@@ -177,14 +175,15 @@ public class CabinetServiceImpl implements CabinetService{
 		
 		PageWrapper<CabFolderInfo> pwrapper = new PageWrapper<CabFolderInfo>();
 		
-		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
 
@@ -486,7 +485,6 @@ public class CabinetServiceImpl implements CabinetService{
 				ref.setState(rs.getString("state"));
 				ref.setFormat(rs.getString("format"));
 				ref.setBinaryId(rs.getLong("binary_id"));
-				
 			}
 			
 			info.setInfoId(id);
