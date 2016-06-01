@@ -186,7 +186,9 @@ public class CabVersionDAOImpl extends DAOSupport implements CabVersionDAO{
 		Object[] params = new Object[]{				
 				fileid
 			};
-		
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL_BUF.toString() + " / params : " + ArrayUtils.toString(params));
+		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		List<CabVersionInfo> ainfo = jtemplate.query(SQL_BUF.toString(), params, CabVersionMapper);
 		return ainfo;
