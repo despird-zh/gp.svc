@@ -86,6 +86,8 @@ public enum Operations {
 	NEW_FILE,
 	UPDATE_FILE,
 	REMOVE_FILE,
+	MOVE_FILE,
+	COPY_FILE,
 	FIND_FILE,
 	FIND_FILES,
 	/** image */
@@ -109,5 +111,6 @@ public enum Operations {
 	FIND_MEASURE,
 	FIND_MEASURES,
 	/** tag */
-	FIND_TAGS
+	FIND_TAGS,
+	
 }

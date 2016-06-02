@@ -38,7 +38,7 @@ public interface FileService {
 	 * @param srcfilekey the file key of source file 
 	 * @param destinationPkey the destination parent key.
 	 **/
-	public void moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey) throws ServiceException;
+	public boolean moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfileid, InfoId<Long> destinationId) throws ServiceException;
 	
 	/**
 	 * create new version of file

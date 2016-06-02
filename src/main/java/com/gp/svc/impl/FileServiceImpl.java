@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.Cabinets;
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
@@ -129,17 +130,13 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void moveFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
+	public boolean moveFile(ServiceContext<?> svcctx, InfoId<Long> srcFileId, InfoId<Long> destFolderId)
 			throws ServiceException {
-		
-		CabFileInfo cfileinfo = null;
+
 		try{
 			
-			cfileinfo = cabfiledao.query(srcfilekey);
-			
-			cfileinfo.setParentId(destinationPkey.getId());
-			
-			cabfiledao.update(cfileinfo);
+			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(srcFileId.getId());
+			return pseudodao.update(fid, FlatColumns.COL_FOLDER_ID, destFolderId.getId()) > 0;
 			
 		}catch(DataAccessException dae){
 			
@@ -255,7 +252,7 @@ public class FileServiceImpl implements FileService{
 			}
 			// update the cabinet file entry's acl_id
 			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
-			pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
+			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("fail to set the ace list",dae);

@@ -42,9 +42,7 @@ public class Cabinets {
 	static Logger LOGGER = LoggerFactory.getLogger(Cabinets.class);
 	
 	static ObjectMapper JSON_MAPPER = new ObjectMapper();
-	
-	public static FlatColumn COL_ACL_ID = new FlatColumn("acl_id");
-	
+
 	/**
 	 * enums of cabinet type 
 	 **/

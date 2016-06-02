@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.Cabinets;
+import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -215,7 +216,7 @@ public class FolderServiceImpl implements FolderService{
 			}
 			// update the cabinet file entry's acl_id
 			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderid.getId());
-			pseudodao.update(fid, Cabinets.COL_ACL_ID, acl.getAclId().getId());
+			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("fail to set the ace list",dae);
