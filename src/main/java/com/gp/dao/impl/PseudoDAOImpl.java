@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Component;
 
 import com.gp.config.ServiceConfigurer;
@@ -23,7 +24,7 @@ import com.gp.info.InfoId;
 public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(PseudoDAOImpl.class);
-	
+
 	NamedParameterJdbcTemplate nameJdbcTemplate = null;
 	
 	@Autowired
@@ -35,6 +36,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.nameJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+	
 	}
 
 	/**
@@ -55,6 +57,12 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
     		return null;
     	}
     }
+
+	@Override
+	public SimpleJdbcCall getJdbcCall(String procedureName) {
+
+		return new SimpleJdbcCall((JdbcTemplate)this.jdbcTemplate).withProcedureName(procedureName);
+	}
 
 	@Override
 	public Integer update(InfoId<?> id, Map<FlatColLocator, Object> fields) {
@@ -137,5 +145,5 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		
 		return jtemplate.update(SQL.toString(), params);
 	}
-	
+
 }

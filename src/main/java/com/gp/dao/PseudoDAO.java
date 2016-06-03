@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -19,6 +20,8 @@ import com.gp.pagination.PageQuery;
 public interface PseudoDAO {
 
 	public <T> T getJdbcTemplate(Class<T> clazz);
+	
+	public SimpleJdbcCall getJdbcCall(String procedureName);
 	
 	/**
 	 * convert the sql into script with pagination setting

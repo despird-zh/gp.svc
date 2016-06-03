@@ -1,12 +1,17 @@
 package com.gp.svc.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -258,5 +263,30 @@ public class FolderServiceImpl implements FolderService{
 			throw new ServiceException("Fail get folder info", dae);
 		}
 
+	}
+
+	@Override
+	public InfoId<Long> getFolderId(ServiceContext<?> svcctx, InfoId<Long> cabinetId, String path)
+			throws ServiceException {
+	    
+		SqlParameterSource in = new MapSqlParameterSource().
+                  addValue("p_folder_path", path)
+                  .addValue("p_cabinet_id", cabinetId.getId());
+		
+	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_path2fid");
+		Map<String, Object> out = jdbcCall.execute(in);
+		
+		Long id = (Long) out.get("p_folder_id");
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("call procedure: proc_path2fid / params : cabid-{} ; path-{}",cabinetId, path);
+		}
+		return IdKey.CAB_FOLDER.getInfoId(id);
+	}
+
+	@Override
+	public InfoId<Long> getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -49,4 +49,8 @@ public interface FolderService {
 	 * @param folderid the id of folder
 	 **/
 	public CabFolderInfo getFolder(ServiceContext<?> svcctx, InfoId<Long> folderid) throws ServiceException;
+	
+	public InfoId<Long> getFolderId(ServiceContext<?> svcctx, InfoId<Long> cabientId, String path) throws ServiceException;
+	
+	public InfoId<Long> getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException;
 }
