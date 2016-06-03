@@ -52,5 +52,5 @@ public interface FolderService {
 	
 	public InfoId<Long> getFolderId(ServiceContext<?> svcctx, InfoId<Long> cabientId, String path) throws ServiceException;
 	
-	public InfoId<Long> getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException;
+	public String getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException;
 }

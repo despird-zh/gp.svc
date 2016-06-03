@@ -285,8 +285,19 @@ public class FolderServiceImpl implements FolderService{
 	}
 
 	@Override
-	public InfoId<Long> getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+	public String getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException {
+		
+		SqlParameterSource in = new MapSqlParameterSource()
+                .addValue("p_folder_id", folderId.getId());
+		
+	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_fid2path");
+		Map<String, Object> out = jdbcCall.execute(in);
+		
+		String path = (String) out.get("p_folder_path");
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("call procedure: proc_fid2path / params : foderid-{}", folderId.getId());
+		}
+		return path;
 	}
 }
