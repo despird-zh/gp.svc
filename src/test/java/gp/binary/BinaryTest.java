@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.exception.StorageException;
 import com.gp.info.InfoId;
@@ -19,7 +20,7 @@ import com.gp.util.BufferInputStream;
 import com.gp.util.BufferOutputStream;
 import com.gp.util.StorageUtils;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class BinaryTest extends AbstractJUnit4SpringContextTests{
 	
 	public void test() throws Exception{

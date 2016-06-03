@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
@@ -18,7 +19,7 @@ import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.WorkgroupService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class WorkgroupServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	Principal principal = Users.PESUOD_USER;

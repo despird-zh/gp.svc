@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurer;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabAceInfo;
 import com.gp.info.CabEntryInfo;
@@ -30,7 +32,7 @@ import com.gp.svc.FolderService;
 import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	Principal principal = new Principal("demouser");
@@ -68,8 +70,6 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		
 	}
 
-
-
 	public void test_file_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
@@ -82,8 +82,7 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 			System.out.println("2 -- "+cfi.getEntryName());
 		}
 	}
-	
-	
+
 	public void test_folder_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
@@ -97,7 +96,6 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		}
 	}
 	
-	@Test
 	public void test_entry_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
@@ -109,6 +107,21 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		for(CabEntryInfo cfi: pwrapper.getRows()){
 			System.out.println("2 -- "+cfi.getEntryName());
 		}
+	}
+	
+	@Test
+	public void test_fid2path() throws Exception{
+		
+		svcctx = new ServiceContext(principal);		
+		InfoId<Long> ckey = IdKey.CABINET.getInfoId( 329l);
+		InfoId<Long> folderkey = IdKey.CAB_FOLDER.getInfoId( 70l);
+		PageQuery pquery = new PageQuery(10,1);
+		
+		String path = folderService.getFolderPath(svcctx, folderkey);
+		System.out.println("path : " + path);
+		
+		InfoId<Long> fid = folderService.getFolderId(svcctx, ckey, path);
+		System.out.println("fid : " + fid);
 	}
 	
 	public InfoId<Long> newAcl() throws ServiceException{

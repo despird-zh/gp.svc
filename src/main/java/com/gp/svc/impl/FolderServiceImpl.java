@@ -276,7 +276,7 @@ public class FolderServiceImpl implements FolderService{
 	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_path2fid");
 		Map<String, Object> out = jdbcCall.execute(in);
 		
-		Long id = (Long) out.get("p_folder_id");
+		Long id = Long.valueOf((Integer)out.get("p_folder_id"));
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("call procedure: proc_path2fid / params : cabid-{} ; path-{}",cabinetId, path);

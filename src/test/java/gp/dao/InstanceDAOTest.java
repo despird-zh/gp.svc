@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
@@ -17,7 +18,7 @@ import com.gp.info.InstanceInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 
 	Principal principal = Users.PESUOD_USER;

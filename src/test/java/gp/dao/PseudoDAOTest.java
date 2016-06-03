@@ -13,12 +13,13 @@ import org.springframework.jdbc.core.namedparam.ParsedSql;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.dao.PseudoDAO;
 import com.gp.svc.CommonService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 
 	Principal principal = new Principal("demouser");

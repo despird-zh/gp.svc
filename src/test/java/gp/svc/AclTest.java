@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.common.GeneralConstants;
@@ -23,7 +24,7 @@ import com.gp.svc.AclService;
 import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class AclTest extends AbstractJUnit4SpringContextTests{
 	
 	Principal principal = Users.PESUOD_USER;

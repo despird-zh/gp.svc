@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
+import com.config.TestConfig;
 import com.gp.common.GeneralConfig;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
@@ -27,7 +28,7 @@ import com.gp.info.VoteInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.svc.CommonService;
 
-@ContextConfiguration(locations = "/mysql-test.xml")
+@ContextConfiguration(classes={TestConfig.class})
 public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
 
 	Principal principal = new Principal("demouser");
