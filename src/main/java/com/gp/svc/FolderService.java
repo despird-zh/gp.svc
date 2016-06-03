@@ -26,7 +26,7 @@ public interface FolderService {
 	/**
 	 * move the folder to target path
 	 **/
-	public void moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
+	public boolean moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
 	
 	/**
 	 * add ace information

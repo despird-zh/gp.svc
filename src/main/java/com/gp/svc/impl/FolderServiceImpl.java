@@ -136,17 +136,14 @@ public class FolderServiceImpl implements FolderService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
+	public boolean moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
 			throws ServiceException {
-	
-		CabFolderInfo cfi = null;
-		
+
 		try{
 			
-			cfi = cabfolderdao.query(folderkey);
-			cfi.setParentId(destinationPkey.getId());
-
-			cabfolderdao.update(cfi);
+			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(folderkey.getId());
+			return pseudodao.update(fid, FlatColumns.COL_FOLDER_PID, destinationPkey.getId()) > 0;
+			
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail to move the folder",dae);
 		}
@@ -265,6 +262,7 @@ public class FolderServiceImpl implements FolderService{
 
 	}
 
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public InfoId<Long> getFolderId(ServiceContext<?> svcctx, InfoId<Long> cabinetId, String path)
 			throws ServiceException {
@@ -284,6 +282,7 @@ public class FolderServiceImpl implements FolderService{
 		return IdKey.CAB_FOLDER.getInfoId(id);
 	}
 
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public String getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException {
 		
