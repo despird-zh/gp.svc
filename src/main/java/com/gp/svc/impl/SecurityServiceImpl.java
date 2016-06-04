@@ -579,36 +579,4 @@ public class SecurityServiceImpl implements SecurityService{
 			return info;
 		}};
 		
-	@Override
-	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException {
-		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
-				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
-				.append("ON a.storage_id = c.storage_id ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
-				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
-		Map<String,Object> params = new HashMap<String,Object>();
-
-			SQL_FROM.append(" AND a.account in( :accounts )");
-			params.put("accounts", accounts);
-		
-		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
-		String querysql = SQL_COLS.append(SQL_FROM).toString();
-		if(LOGGER.isDebugEnabled()){
-			
-			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
-		}
-		List<UserExInfo> users = null;
-		try{
-			
-			users = jtemplate.query(querysql, params, UserExMapper);
-			
-		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query accounts", dae);
-		}
-
-		return users;
-	}
-	
 }

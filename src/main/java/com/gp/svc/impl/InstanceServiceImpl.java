@@ -1,5 +1,7 @@
 package com.gp.svc.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -186,5 +189,44 @@ public class InstanceServiceImpl implements InstanceService{
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail save instance", dae);
 		}
+	}
+	
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Override
+	public Map<String, InstanceInfo> getAccountSources(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException {
+		
+		final Map<String, InstanceInfo> rtv = new HashMap<String, InstanceInfo>();
+		
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.account ,b.* ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
+				.append("LEFT JOIN gp_instances b ON a.source_id = b.instance_id ")
+				.append("WHERE 1 = 1 ");
+		Map<String,Object> params = new HashMap<String,Object>();
+
+			SQL_FROM.append(" AND a.account in( :accounts )");
+			params.put("accounts", accounts);
+		
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		String querysql = SQL_COLS.append(SQL_FROM).toString();
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
+		}
+
+		try{	
+			jtemplate.query(querysql, params, new RowCallbackHandler(){
+				@Override
+				public void processRow(ResultSet arg0) throws SQLException {
+					InstanceInfo inst = instancedao.getRowMapper().mapRow(arg0, 0);
+					String account = arg0.getString("account");
+					
+					rtv.put(account, inst);
+				}});
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("Fail query accounts", dae);
+		}
+
+		return rtv;
 	}
 }

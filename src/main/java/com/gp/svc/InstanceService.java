@@ -1,6 +1,7 @@
 package com.gp.svc;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gp.common.Instances.State;
 import com.gp.common.ServiceContext;
@@ -46,4 +47,8 @@ public interface InstanceService {
 	 * Change the state of instance 
 	 **/
 	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException;
+	
+	
+	public Map<String, InstanceInfo> getAccountSources(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException;
+	
 }
