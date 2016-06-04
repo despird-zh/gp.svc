@@ -15,8 +15,12 @@
  *******************************************************************************/
 package com.gp.common;
 
+import com.gp.info.InfoId;
+
 public class Instances {
 
+	public static final InfoId<Integer> LOCAL_INST_ID = IdKey.INSTANCE.getInfoId(GeneralConstants.LOCAL_INSTANCE);
+	
 	public static enum State{
 		
 		DEACTIVE,
