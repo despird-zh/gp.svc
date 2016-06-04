@@ -30,6 +30,5 @@ public interface UserDAO extends BaseDAO<UserInfo>{
 	public List<UserInfo> queryAccounts( String accountname, String entity, String[] type);
 	
 	public int updateAsNeed(UserInfo uinfo) ;
-	
-	public RowMapper<UserExInfo> getUserExRowMapper();
+
 }

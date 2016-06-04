@@ -36,6 +36,8 @@ public interface SecurityService {
 		
 	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type,String[] state) throws ServiceException;
 	
+	public List<UserInfo> getAccounts(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException;
+	
 	public PageWrapper<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	public Set<String> getAccountRoles(ServiceContext<?> svcctx, InfoId<Long> wkey, String account) throws ServiceException;

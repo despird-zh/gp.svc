@@ -292,52 +292,6 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		
 		return UserMapper;
 	}
-	
-	public static RowMapper<UserExInfo> UserExMapper = new RowMapper<UserExInfo>(){
-
-		@Override
-		public UserExInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			UserExInfo info = new UserExInfo();
-			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
-			info.setInfoId(id);
-
-			info.setSourceId(rs.getInt("source_id"));
-			info.setAccount(rs.getString("account"));
-			info.setType(rs.getString("type"));
-			info.setMobile(rs.getString("mobile"));
-			info.setPhone(rs.getString("phone"));
-			info.setFullName(rs.getString("full_name"));
-			info.setEmail(rs.getString("email"));
-			info.setPassword(rs.getString("password"));
-			info.setState(rs.getString("state"));
-			info.setCreateDate(rs.getTimestamp("create_time"));
-			info.setExtraInfo(rs.getString("extra_info"));
-			info.setRetryTimes(rs.getInt("retry_times"));
-			info.setLastLogonDate(rs.getDate("last_logon"));
-			info.setLanguage(rs.getString("language"));
-			info.setTimeZone(rs.getString("timezone"));
-			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
-			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
-			info.setGlobalAccount(rs.getString("global_account"));
-			info.setStorageId(rs.getInt("storage_id"));
-			if(hasColumnInResultSet(rs, "storage_name")){
-				info.setStorageName(rs.getString("storage_name"));
-			}
-			info.setAbbr(rs.getString("abbr"));
-			info.setShortName(rs.getString("short_name"));
-			info.setInstanceName(rs.getString("instance_name"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}};
-
-	@Override
-	public RowMapper<UserExInfo> getUserExRowMapper() {
-		
-		return UserExMapper;
-	}
 
 	@Override
 	public int updateAsNeed(UserInfo info) {

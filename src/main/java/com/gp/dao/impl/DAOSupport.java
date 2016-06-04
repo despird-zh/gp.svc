@@ -282,7 +282,7 @@ public abstract class DAOSupport{
 	 * 
 	 * @return boolean exist return true, otherwise return false
 	 **/
-	public static boolean hasColumnInResultSet(ResultSet resultset, String columnName) throws SQLException {
+	public static boolean hasColInResultSet(ResultSet resultset, String columnName) throws SQLException {
 	    ResultSetMetaData rs_metadata = resultset.getMetaData();
 	    int columns = rs_metadata.getColumnCount();
 	    for (int x = 1; x <= columns; x++) {

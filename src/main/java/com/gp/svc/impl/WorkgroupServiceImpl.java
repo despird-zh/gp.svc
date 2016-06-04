@@ -508,7 +508,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		List<UserExInfo> result = null;
 		try{
-			result = jtemplate.query(querysql, params, userdao.getUserExRowMapper());
+			result = jtemplate.query(querysql, params, SecurityServiceImpl.UserExMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query members", dae);
 		}
@@ -558,7 +558,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		List<UserExInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, userdao.getUserExRowMapper());
+			result = jtemplate.query(pagesql, params, SecurityServiceImpl.UserExMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query members", dae);

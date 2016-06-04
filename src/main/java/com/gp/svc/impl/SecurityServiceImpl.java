@@ -1,5 +1,7 @@
 package com.gp.svc.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
+import com.gp.dao.impl.DAOSupport;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
 import com.gp.info.InfoId;
@@ -332,7 +336,7 @@ public class SecurityServiceImpl implements SecurityService{
 		List<UserExInfo> users = null;
 		try{
 			
-			users = jtemplate.query(querysql, params, userdao.getUserExRowMapper());
+			users = jtemplate.query(querysql, params, UserExMapper);
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query accounts", dae);
@@ -385,7 +389,7 @@ public class SecurityServiceImpl implements SecurityService{
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(querysql, params, userdao.getUserExRowMapper());
+			rtv = jtemplate.query(querysql, params, UserExMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query accounts", dae);
 		}
@@ -444,7 +448,7 @@ public class SecurityServiceImpl implements SecurityService{
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(pagesql, params, userdao.getUserExRowMapper());
+			rtv = jtemplate.query(pagesql, params, UserExMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query accounts", dae);
 		}
@@ -531,6 +535,54 @@ public class SecurityServiceImpl implements SecurityService{
 			throw new ServiceException("Fail update account state", dae);
 		}
 		return cnt > 0;
+	}
+
+	
+	public static RowMapper<UserExInfo> UserExMapper = new RowMapper<UserExInfo>(){
+
+		@Override
+		public UserExInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			UserExInfo info = new UserExInfo();
+			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
+			info.setInfoId(id);
+
+			info.setSourceId(rs.getInt("source_id"));
+			info.setAccount(rs.getString("account"));
+			info.setType(rs.getString("type"));
+			info.setMobile(rs.getString("mobile"));
+			info.setPhone(rs.getString("phone"));
+			info.setFullName(rs.getString("full_name"));
+			info.setEmail(rs.getString("email"));
+			info.setPassword(rs.getString("password"));
+			info.setState(rs.getString("state"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setExtraInfo(rs.getString("extra_info"));
+			info.setRetryTimes(rs.getInt("retry_times"));
+			info.setLastLogonDate(rs.getDate("last_logon"));
+			info.setLanguage(rs.getString("language"));
+			info.setTimeZone(rs.getString("timezone"));
+			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
+			info.setGlobalAccount(rs.getString("global_account"));
+			info.setStorageId(rs.getInt("storage_id"));
+			if(DAOSupport.hasColInResultSet(rs, "storage_name")){
+				info.setStorageName(rs.getString("storage_name"));
+			}
+			info.setAbbr(rs.getString("abbr"));
+			info.setShortName(rs.getString("short_name"));
+			info.setInstanceName(rs.getString("instance_name"));
+			
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
+			return info;
+		}};
+		
+	@Override
+	public List<UserInfo> getAccounts(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException {
+		
+		
+		return null;
 	}
 	
 }
