@@ -80,7 +80,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<?> objectId) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<Long> objectId) throws ServiceException {
 		
 		List<TagInfo> result;
 		Map<String, Object> paramap = new HashMap<String, Object>();
@@ -117,9 +117,9 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<?>> objectIds) throws ServiceException {
+	public Map<InfoId<Long>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<Long>> objectIds) throws ServiceException {
 		
-		final Map<InfoId<?>,Set<TagInfo>> result = new HashMap<InfoId<?>,Set<TagInfo>>();
+		final Map<InfoId<Long>,Set<TagInfo>> result = new HashMap<InfoId<Long>,Set<TagInfo>>();
 		
 		Map<String, Object> paramap = new HashMap<String, Object>();
 		StringBuffer SQL = new StringBuffer();

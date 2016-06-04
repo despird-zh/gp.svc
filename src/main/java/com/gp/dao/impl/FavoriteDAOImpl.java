@@ -151,9 +151,9 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("select count(favorite_id) as fav_count ,resource_id,resource_type ");
 		SQL.append("from gp_favorites ");
-		SQL.append("group by resource_id, resource_type ");
 		SQL.append("where resource_type = :res_type ");
-		SQL.append("AND resource_id in (:res_ids )");
+		SQL.append("AND resource_id in (:res_ids ) ");
+		SQL.append("group by resource_id, resource_type ");
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("res_type", resourceType);

@@ -42,7 +42,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.querySummary(type, ids);
 		}catch(DataAccessException dae){
 			
-			new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("Fail to query the resources fav summary ",dae);
 		}
 		return rtv;
 
@@ -62,7 +62,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.querySummary(type, ids);
 		}catch(DataAccessException dae){
 			
-			new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("Fail to query the resources fav summary ",dae);
 		}
 		return rtv;
 	}
@@ -77,7 +77,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.queryByAccount(type, favoriter);
 		}catch(DataAccessException dae){
 			
-			new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("Fail to query the resources fav summary ",dae);
 		}
 		
 		return rtv;
@@ -93,7 +93,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.create(fav)>0;
 		}catch(DataAccessException dae){
 			
-			new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("Fail to query the resources fav summary ",dae);
 		}
 		
 		return rtv;
@@ -111,7 +111,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			
 		}catch(DataAccessException dae){
 			
-			new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("Fail to query the resources fav summary ",dae);
 		}
 		
 		return rtv;

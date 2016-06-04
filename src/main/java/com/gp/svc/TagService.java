@@ -24,7 +24,7 @@ public interface TagService {
 	/**
 	 * Get the file tag list 
 	 **/
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<?> objectId) throws ServiceException;
+	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<Long> objectId) throws ServiceException;
 	
 	/**
 	 * Get the tags of objects
@@ -32,7 +32,7 @@ public interface TagService {
 	 * @return the map of tag set.
 	 *  
 	 **/
-	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<?>> objectIds) throws ServiceException;
+	public Map<InfoId<Long>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<Long>> objectIds) throws ServiceException;
 	
 	/**
 	 * create new tag record
