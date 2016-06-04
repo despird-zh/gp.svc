@@ -32,7 +32,7 @@ public interface TagService {
 	 * @return the map of tag set.
 	 *  
 	 **/
-	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, InfoId<?> ... objectIds) throws ServiceException;
+	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<?>> objectIds) throws ServiceException;
 	
 	/**
 	 * create new tag record

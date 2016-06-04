@@ -117,7 +117,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, InfoId<?> ... objectIds) throws ServiceException {
+	public Map<InfoId<?>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<?>> objectIds) throws ServiceException {
 		
 		final Map<InfoId<?>,Set<TagInfo>> result = new HashMap<InfoId<?>,Set<TagInfo>>();
 		
@@ -134,10 +134,10 @@ public class TagServiceImpl implements TagService{
 		SQL.append("WHERE rel.resource_type = :obj_type and rel.resource_id in ( :obj_ids ) ");
 		SQL.append("ORDER BY rel.resource_type, rel.resource_id ");
 		
-		if(ArrayUtils.isEmpty(objectIds)){
+		if(CollectionUtils.isEmpty(objectIds)){
 			return result;
 		}else{
-			String res_type = objectIds[0].getIdKey();
+			String res_type = objectIds.get(0).getIdKey();
 			List objIds = new ArrayList();
 			for(InfoId<?> objId : objectIds){
 				objIds.add(objId.getId());
