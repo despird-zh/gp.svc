@@ -7,9 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -26,6 +28,8 @@ public class FavoriteServiceImpl implements FavoriteService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Override
 	public Map<InfoId<Long>, Integer> getFavFileSummary(ServiceContext<?> svcctx,  List<InfoId<Long>>infoids )throws ServiceException{
 		
 		String type = IdKey.CAB_FILE.getSchema();
@@ -44,6 +48,8 @@ public class FavoriteServiceImpl implements FavoriteService{
 
 	}
 	
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Override
 	public Map<InfoId<Long>, Integer> getFavFolderSummary(ServiceContext<?> svcctx, List<InfoId<Long>>infoids )throws ServiceException{
 		
 		String type = IdKey.CAB_FOLDER.getSchema();
@@ -61,6 +67,8 @@ public class FavoriteServiceImpl implements FavoriteService{
 		return rtv;
 	}
 	
+	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Override
 	public List<FavoriteInfo> getFavorites(ServiceContext<?> svcctx,String type, String favoriter)throws ServiceException{
 		
 		List<FavoriteInfo> rtv = null;
@@ -75,6 +83,8 @@ public class FavoriteServiceImpl implements FavoriteService{
 		return rtv;
 	}
 	
+	@Transactional(value=ServiceConfigurer.TRNS_MGR)
+	@Override
 	public boolean addFavorite(ServiceContext<?> svcctx, FavoriteInfo fav)throws ServiceException{
 		
 		boolean rtv = false;
@@ -90,6 +100,8 @@ public class FavoriteServiceImpl implements FavoriteService{
 		
 	}
 	
+	@Transactional(value=ServiceConfigurer.TRNS_MGR)
+	@Override
 	public boolean removeFavorite(ServiceContext<?> svcctx, String favoriter, InfoId<Long> resourceId)throws ServiceException{
 		
 		boolean rtv = false;
