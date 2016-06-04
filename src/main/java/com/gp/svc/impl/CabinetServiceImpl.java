@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
+import com.gp.common.Cabinets;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -460,7 +461,7 @@ public class CabinetServiceImpl implements CabinetService{
 			
 			String isfolder = rs.getString("entry_type");
 			InfoId<Long> id = null;
-			if("FOLDER".equals(isfolder)){
+			if(Cabinets.EntryType.FOLDER.name().equals(isfolder)){
 				id = IdKey.CAB_FOLDER.getInfoId(rs.getLong("entry_id"));
 			
 				CabFolderInfo ref = new CabFolderInfo();

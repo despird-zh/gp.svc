@@ -46,6 +46,15 @@ public class Cabinets {
 	/**
 	 * enums of cabinet type 
 	 **/
+	public static enum EntryType{
+		
+		FOLDER,
+		FILE
+	}
+	
+	/**
+	 * enums of cabinet type 
+	 **/
 	public static enum CabinetType{
 		
 		PUBLISH,

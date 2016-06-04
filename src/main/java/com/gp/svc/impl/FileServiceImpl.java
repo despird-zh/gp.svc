@@ -1,6 +1,9 @@
 package com.gp.svc.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -31,6 +34,7 @@ import com.gp.info.CabAclInfo;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabVersionInfo;
 import com.gp.info.CabinetInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
 import com.gp.svc.FileService;
@@ -118,6 +122,8 @@ public class FileServiceImpl implements FileService{
 			cfileinfo = cabfiledao.query(srcfilekey);
 			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
 			cfileinfo.setInfoId(fkey);
+			cfileinfo.setParentId(destinationPkey.getId());
+			svcctx.setTraceInfo(cfileinfo);
 			
 			cabfiledao.create(cfileinfo);
 			
@@ -134,9 +140,14 @@ public class FileServiceImpl implements FileService{
 			throws ServiceException {
 
 		try{
-			
+			// recreate to ensure the id column name is correct.
 			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(srcFileId.getId());
-			return pseudodao.update(fid, FlatColumns.COL_FOLDER_ID, destFolderId.getId()) > 0;
+			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
+			colmap.put(FlatColumns.COL_FOLDER_ID, destFolderId.getId());
+			colmap.put(FlatColumns.COL_MODIFIER, svcctx.getPrincipal().getAccount());
+			colmap.put(FlatColumns.COL_MODIFY_DATE, DateTimeUtils.now());
+			
+			return pseudodao.update(fid, colmap) > 0;
 			
 		}catch(DataAccessException dae){
 			

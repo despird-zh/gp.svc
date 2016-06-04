@@ -1,5 +1,6 @@
 package com.gp.svc.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,10 @@ import com.gp.info.CabAclInfo;
 import com.gp.info.CabFileInfo;
 import com.gp.info.CabFolderInfo;
 import com.gp.info.CabinetInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.svc.FolderService;
+import com.gp.util.DateTimeUtils;
 import com.gp.svc.CommonService;
 
 @Service("folderService")
@@ -108,6 +111,7 @@ public class FolderServiceImpl implements FolderService{
 			InfoId<Long> fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
 			cfi.setInfoId(fkey);
 			cfi.setParentId(destinationPkey.getId());
+			svcctx.setTraceInfo(cfi);
 			// move the current folder 
 			cabfolderdao.create(cfi);
 			
@@ -124,6 +128,7 @@ public class FolderServiceImpl implements FolderService{
 				InfoId<Long> filekey = idservice.generateId(IdKey.CAB_FILE, Long.class);
 				fileinfo.setInfoId(filekey);
 				fileinfo.setParentId(fkey.getId());
+				svcctx.setTraceInfo(fileinfo);
 				cabfiledao.create(fileinfo);
 			}
 			
@@ -136,13 +141,19 @@ public class FolderServiceImpl implements FolderService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
+	public boolean moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destFolderId)
 			throws ServiceException {
 
 		try{
+			// recreate to ensure the id column name is correct.
+			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderkey.getId());
 			
-			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(folderkey.getId());
-			return pseudodao.update(fid, FlatColumns.COL_FOLDER_PID, destinationPkey.getId()) > 0;
+			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
+			colmap.put(FlatColumns.COL_FOLDER_PID, destFolderId.getId());
+			colmap.put(FlatColumns.COL_MODIFIER, svcctx.getPrincipal().getAccount());
+			colmap.put(FlatColumns.COL_MODIFY_DATE, DateTimeUtils.now());
+			
+			return pseudodao.update(fid, colmap) > 0;
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail to move the folder",dae);

@@ -2,9 +2,11 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,8 +113,8 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		DictionaryInfo ainfo = jtemplate.queryForObject(SQL, params, DictionaryMapper);
-		return ainfo;
+		List<DictionaryInfo> infos = jtemplate.query(SQL, params, DictionaryMapper);
+		return CollectionUtils.isEmpty(infos)? null : infos.get(0);
 	}
 
 	@Override
