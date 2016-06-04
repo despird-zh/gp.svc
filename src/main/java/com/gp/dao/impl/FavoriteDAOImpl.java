@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
-import com.gp.info.DictionaryInfo;
 import com.gp.info.FavoriteInfo;
-import com.gp.info.Identifier;
 import com.gp.info.InfoId;
 
+@Component("favoriteDAO")
 public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(FavoriteDAOImpl.class);
@@ -143,7 +144,7 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 	}
 
 	@Override
-	public Map<InfoId<Long>, Integer> querySummary(List<InfoId<Long>> ids) {
+	public Map<InfoId<Long>, Integer> querySummary(String resourceType,List<Long> ids) {
 		
 		final Map<InfoId<Long>, Integer> rtv = new HashMap<InfoId<Long>, Integer>();
 		
@@ -155,12 +156,9 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 		SQL.append("AND resource_id in (:res_ids )");
 		
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("res_type", ids.get(0).getIdKey());
-		List<Object> infoids = new ArrayList<Object>();
-		for(InfoId<?> infoid : ids){
-			infoids.add(infoid.getId());
-		}
-		params.put("res_ids", infoids);
+		params.put("res_type", resourceType);
+		
+		params.put("res_ids", ids);
 		NamedParameterJdbcTemplate jtemplate = this.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + params.toString());
@@ -183,20 +181,40 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 	}
 
 	@Override
-	public List<FavoriteInfo> queryByAccount(String favoriter) {
-		String SQL = "select * from gp_favorites "
-				+ "where favoriter = ?";
+	public List<FavoriteInfo> queryByAccount(String type, String favoriter) {
+		StringBuffer SQL = new StringBuffer("select * from gp_favorites ");
+		SQL.append("where favoriter = ? ");
 		
-		Object[] params = new Object[]{				
-				favoriter
-			};
+		List<Object> params = new ArrayList<Object>();
+		params.add(favoriter);
+		if(StringUtils.isNotBlank(type)){
+			SQL.append("and resource_type = ?");
+			params.add(type);
+		}
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<FavoriteInfo> infos = jtemplate.query(SQL, params, FavMapper);
+		List<FavoriteInfo> infos = jtemplate.query(SQL.toString(), params.toArray(), FavMapper);
 		return infos;
+	}
+
+	@Override
+	public int delete(String favoriter, InfoId<Long> resourceId) {
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_favorites ")
+			.append("where resource_id = ? and resource_type = ? and favoriter = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+				resourceId.getId(), resourceId.getIdKey(), favoriter
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
 	}
 
 }

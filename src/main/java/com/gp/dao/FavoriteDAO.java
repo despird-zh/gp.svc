@@ -8,7 +8,9 @@ import com.gp.info.InfoId;
 
 public interface FavoriteDAO extends BaseDAO<FavoriteInfo>{
 
-	public Map<InfoId<Long>, Integer> querySummary(List<InfoId<Long>> ids);
+	public Map<InfoId<Long>, Integer> querySummary(String resourceType,List<Long> ids);
 	
-	public List<FavoriteInfo> queryByAccount(String favoriter);
+	public List<FavoriteInfo> queryByAccount(String type, String favoriter);
+	
+	public int delete(String favorite, InfoId<Long> resourceId);
 }

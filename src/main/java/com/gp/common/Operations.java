@@ -110,6 +110,7 @@ public enum Operations {
 	/** system measure */
 	FIND_MEASURE,
 	FIND_MEASURES,
+	FIND_FAV_SUM,
 	/** tag */
 	FIND_TAGS,
 	
