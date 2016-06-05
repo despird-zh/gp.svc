@@ -26,12 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.acl.Acl;
-import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 /**
  * Define the constant variables related with Cabinet's operation.
@@ -122,9 +122,11 @@ public class Cabinets {
 	 * Convert a Json array String into Permission Set 
 	 **/
 	public static Set<String> toPermSet(String perms){
+		if(StringUtils.isBlank(perms))
+			return new HashSet<String>();
 		
 		try {
-			return JSON_MAPPER.readValue(perms, HashSet.class);
+			return JSON_MAPPER.readValue(perms, new TypeReference<Set<String>>(){});
 		} catch ( IOException e) {
 			LOGGER.error("Fail convert Set<String> perm to String", e);
 		}
@@ -143,9 +145,11 @@ public class Cabinets {
 	}
 	
 	public static Map<String, Object> toPropertyMap(String props){
+		if(StringUtils.isBlank(props))
+			return new HashMap<String,Object>();
 		
 		try {
-			return JSON_MAPPER.readValue(props, HashMap.class);
+			return JSON_MAPPER.readValue(props, new TypeReference<Map<String, Object>>(){});
 		} catch ( IOException e) {
 			LOGGER.error("Fail convert Json string to Map<String, Object> propmap", e);
 		}
