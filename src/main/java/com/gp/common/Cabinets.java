@@ -16,7 +16,9 @@
 package com.gp.common;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -111,8 +113,7 @@ public class Cabinets {
 		try {
 			return JSON_MAPPER.writeValueAsString(perms);
 		} catch (JsonProcessingException e) {
-			LOGGER.error("Fail convert Set<String> perm to String");
-			
+			LOGGER.error("Fail convert Set<String> perm to String", e);
 		}
 		return StringUtils.EMPTY;
 	}
@@ -125,9 +126,29 @@ public class Cabinets {
 		try {
 			return JSON_MAPPER.readValue(perms, HashSet.class);
 		} catch ( IOException e) {
-			LOGGER.error("Fail convert Set<String> perm to String");
-			
+			LOGGER.error("Fail convert Set<String> perm to String", e);
 		}
 		return new HashSet<String>();
+	}
+	
+	public static String toPropertyString(Map<String, Object> propmap){
+		if(null == propmap)
+			return "{}";
+		try {
+			return JSON_MAPPER.writeValueAsString(propmap);
+		} catch (JsonProcessingException e) {
+			LOGGER.error("Fail convert Map<String, Object> propmap to String", e);
+		}
+		return StringUtils.EMPTY;
+	}
+	
+	public static Map<String, Object> toPropertyMap(String props){
+		
+		try {
+			return JSON_MAPPER.readValue(props, HashMap.class);
+		} catch ( IOException e) {
+			LOGGER.error("Fail convert Json string to Map<String, Object> propmap", e);
+		}
+		return new HashMap<String,Object>();
 	}
 }
