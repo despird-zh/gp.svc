@@ -315,15 +315,15 @@ public class CabinetServiceImpl implements CabinetService{
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<CabFileInfo> pwrapper = new PageWrapper<CabFileInfo>();
-		
-		int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
 
