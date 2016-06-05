@@ -383,7 +383,8 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append(" )");
 		SQL.append(" )");
 		SQL.append(" AND ace.acl_id = entries.acl_id");
-		SQL.append(")");
+		SQL.append(") ");
+		SQL.append("ORDER BY entry_type desc, entry_name ");
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("subject", svcctx.getPrincipal().getAccount());
