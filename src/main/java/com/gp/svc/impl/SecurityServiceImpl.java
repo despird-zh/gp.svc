@@ -29,11 +29,13 @@ import com.gp.common.ServiceContext;
 import com.gp.common.Users.UserState;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
+import com.gp.dao.GroupDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.dao.impl.DAOSupport;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
+import com.gp.info.GroupInfo;
 import com.gp.info.InfoId;
 import com.gp.info.SysOptionInfo;
 import com.gp.info.UserExInfo;
@@ -64,6 +66,9 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Autowired
 	private CabinetDAO cabinetdao;
+	
+	@Autowired
+	private GroupDAO groupdao;
 	
 	@Autowired
 	CommonService idService;
@@ -226,7 +231,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountRoles(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
+	public Set<String> getAccountRoles(ServiceContext<?> svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
 		
 		return null;
@@ -234,9 +239,29 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountGroups(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
+	public Set<String> getAccountGroups(ServiceContext<?> svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
 		
+		StringBuffer SQL = new StringBuffer();
+
+		SQL.append("SELECT grps.* ");
+		SQL.append("FROM gp_groups grps, gp_group_user gusr ");
+		SQL.append("WHERE ");
+		SQL.append("grps.workgroup_id = gusr.workgroup_id AND ");
+		SQL.append("grps.group_id = gusr.group_id AND ");
+		SQL.append("gusr.workgroup_id = ? AND ");
+		SQL.append("gusr.account = ? ");
+		
+		Object[] params = new Object[]{
+				wgroupId.getId(), account
+		};
+		
+		if(LOGGER.isDebugEnabled())
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
+		
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		List<GroupInfo> grps = jtemplate.query(SQL.toString(), params, groupdao.getRowMapper());
+		//CollectionUtils.collect(grps, transformer)
 		return null;
 	}
 

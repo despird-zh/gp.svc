@@ -79,7 +79,7 @@ public interface SecurityService {
 	public PageWrapper<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	/**
-	 * Query Roles of account in a work group
+	 * Query Roles of account in Greoupress System
 	 * 
 	 * @param wgroupId the work group id
 	 * @param account the account i.e login
