@@ -14,6 +14,7 @@ import javax.validation.groups.Default;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -84,7 +85,7 @@ public class ValidationUtils {
 		
 		if(validator == null){
 			
-			validator = Validation.byDefaultProvider()
+			validator = Validation.byProvider(HibernateValidator.class)
 	                .configure()
 	                .messageInterpolator(
 	                    new LocaleMessageInterpolator(msgInterpolator,locale)
