@@ -156,6 +156,7 @@ public class UserRoleDAOImple extends DAOSupport implements UserRoleDAO{
 		}
 		
 	};
+	
 	@Override
 	public RowMapper<UserRoleInfo> getRowMapper() {
 		
