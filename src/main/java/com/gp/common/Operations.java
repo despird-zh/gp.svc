@@ -113,5 +113,6 @@ public enum Operations {
 	FIND_FAV_SUM,
 	/** tag */
 	FIND_TAGS,
-	
+	ATTACH_TAG,
+	DETACH_TAG
 }

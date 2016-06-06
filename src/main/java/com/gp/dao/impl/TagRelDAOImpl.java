@@ -2,9 +2,11 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +40,7 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 			.append("resource_id,resource_type,tag_name,category,")
 			.append("modifier, last_modified")
 			.append(")values(")
-			.append("?,?,")
+			.append("?,")
 			.append("?,?,?,?,")
 			.append("?,?)");
 		
@@ -144,11 +146,28 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 	}
 
 	@Override
+	public TagRelInfo query( InfoId<?> resId, String tagName) {
+		String SQL = "select * from gp_tag_rel "
+				+ "where resource_id = ? and resource_type = ? and tag_name = ?";
+		
+		Object[] params = new Object[]{				
+				resId.getId(), resId.getIdKey(), tagName
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		List<TagRelInfo> infos = jtemplate.query(SQL, params, TagRelMapper);
+		return CollectionUtils.isEmpty(infos)? null : infos.get(0);
+	}
+	
+	@Override
 	public int delete(InfoId<?> resId, String tagName) {
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("delete from gp_tag_rel ")
-			.append("where resource_id = ? and resource_type = ? and tagName = ?");
+			.append("where resource_id = ? and resource_type = ? and tag_name = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{

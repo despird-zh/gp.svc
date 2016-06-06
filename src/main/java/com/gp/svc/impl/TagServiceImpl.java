@@ -222,6 +222,9 @@ public class TagServiceImpl implements TagService{
 			throws ServiceException {
 		
 		try{
+			if(null != tagreldao.query(objectId, tagName))
+				return true; // existed return
+			// check master existence
 			List<TagInfo> tags = tagdao.queryTags(null, category, tagName);
 			if(CollectionUtils.isEmpty(tags)){
 				InfoId<Long> tid = idservice.generateId(IdKey.TAG, Long.class);

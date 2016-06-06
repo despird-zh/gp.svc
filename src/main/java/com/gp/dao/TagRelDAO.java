@@ -11,4 +11,6 @@ public interface TagRelDAO extends BaseDAO<TagRelInfo>{
 	 * @param tagName the tag to be detached 
 	 **/
 	public int delete(InfoId<?> resId, String tagName);
+
+	public TagRelInfo query(InfoId<?> resId, String tagName);
 }
