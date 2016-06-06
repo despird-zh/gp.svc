@@ -17,12 +17,12 @@ public interface TagService {
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType) throws ServiceException;
 
 	/**
-	 * Get the file tag list 
+	 * Get the tag list by tag type and category
 	 **/
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category) throws ServiceException;
 
 	/**
-	 * Get the file tag list 
+	 * Get the file tag list by category and InfoId
 	 **/
 	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<Long> objectId) throws ServiceException;
 	
