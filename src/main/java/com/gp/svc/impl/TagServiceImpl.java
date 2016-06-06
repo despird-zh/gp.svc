@@ -196,10 +196,10 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void removeTag(ServiceContext<?> svcctx, String tagType, String tagName) throws ServiceException {
+	public boolean removeTag(ServiceContext<?> svcctx, String tagType, String tagName) throws ServiceException {
 		
 		try{
-			tagdao.deleteTag(tagType,null, tagName);
+			return tagdao.deleteTag(tagType,null, tagName) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail delete tags",dae);
 		}
@@ -207,10 +207,10 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey) throws ServiceException {
+	public boolean removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey) throws ServiceException {
 		
 		try{
-			tagdao.delete(tagKey);
+			return tagdao.delete(tagKey) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail delete tags",dae);
 		}
@@ -218,15 +218,16 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tagName)
+	public boolean attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tagName)
 			throws ServiceException {
+		
 		try{
 			List<TagInfo> tags = tagdao.queryTags(null, category, tagName);
 			if(CollectionUtils.isEmpty(tags)){
 				InfoId<Long> tid = idservice.generateId(IdKey.TAG, Long.class);
 				TagInfo tag = new TagInfo();
 				tag.setInfoId(tid);
-				//tag.setTagType(tagType);
+				tag.setTagType(objectId.getIdKey());
 				tag.setCategory(category);
 				tag.setTagName(tagName);
 				svcctx.setTraceInfo(tag);
@@ -239,9 +240,13 @@ public class TagServiceImpl implements TagService{
 			rel.setResourceId((long)objectId.getId());
 			rel.setResourceType(objectId.getIdKey());
 			rel.setTagName(tagName);
-			rel.setCategory(category);
+			if(tags.get(0) != null)
+				rel.setCategory(tags.get(0).getCategory());
+			else{
+				rel.setCategory(category);
+			}
 			svcctx.setTraceInfo(rel);
-			tagreldao.create(rel);
+			return tagreldao.create(rel) > 0;
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("fail delete tags",dae);
@@ -249,10 +254,15 @@ public class TagServiceImpl implements TagService{
 	}
 
 	@Override
-	public void detachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tag)
+	public boolean detachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String tag)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		
+		try{
+			
+			return tagreldao.delete(objectId, tag) > 0;
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("fail delete tags",dae);
+		}
 	}
 
 }

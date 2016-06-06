@@ -42,22 +42,23 @@ public interface TagService {
 	/**
 	 * remove the tag
 	 **/
-	public void removeTag(ServiceContext<?> svcctx,String tagType, String tag)throws ServiceException;
+	public boolean removeTag(ServiceContext<?> svcctx,String tagType, String tag)throws ServiceException;
 	
 	/**
 	 * remove the tag
 	 **/
-	public void removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey)throws ServiceException;
+	public boolean removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey)throws ServiceException;
 	
 	
 	/**
-	 * attach the tag 
+	 * attach the tag, Need to clarify the category, if tag not exist in master, append a new tag
+	 * 
 	 **/
-	public void attachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String categroy, String tag) throws ServiceException;
+	public boolean attachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String category, String tag) throws ServiceException;
 	
 	/**
-	 * attach the tag 
+	 * detach the tag 
 	 **/
-	public void detachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String category, String tag) throws ServiceException;
+	public boolean detachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String tag) throws ServiceException;
 	
 }

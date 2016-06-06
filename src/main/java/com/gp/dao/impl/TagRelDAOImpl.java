@@ -142,4 +142,22 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 		
 		return TagRelMapper;
 	}
+
+	@Override
+	public int delete(InfoId<?> resId, String tagName) {
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_tag_rel ")
+			.append("where resource_id = ? and resource_type = ? and tagName = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			resId.getId(), resId.getIdKey(), tagName
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
+	}
 }
