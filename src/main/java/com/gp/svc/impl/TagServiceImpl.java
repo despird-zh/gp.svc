@@ -248,4 +248,11 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
+	@Override
+	public void detachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tag)
+			throws ServiceException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

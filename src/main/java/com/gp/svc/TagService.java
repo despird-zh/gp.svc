@@ -53,6 +53,11 @@ public interface TagService {
 	/**
 	 * attach the tag 
 	 **/
-	public void attachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String tagType, String tag) throws ServiceException;
+	public void attachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String categroy, String tag) throws ServiceException;
+	
+	/**
+	 * attach the tag 
+	 **/
+	public void detachTag(ServiceContext<?> svcctx,InfoId<?> objectId, String category, String tag) throws ServiceException;
 	
 }

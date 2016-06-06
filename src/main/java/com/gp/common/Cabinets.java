@@ -43,7 +43,7 @@ public class Cabinets {
 	
 	static Logger LOGGER = LoggerFactory.getLogger(Cabinets.class);
 	
-	static ObjectMapper JSON_MAPPER = new ObjectMapper();
+	public static ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	/**
 	 * enums of cabinet type 
