@@ -3,6 +3,8 @@ package com.gp.svc.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -46,6 +48,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}		
 	}
 
+	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictGroup")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx, String dictGroup) throws ServiceException {
@@ -69,6 +72,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
+	@CachePut(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictinfo.infoId")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean updateDictEntry(ServiceContext<?> svcctx, DictionaryInfo dictinfo) throws ServiceException {
@@ -81,6 +85,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
+	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictId")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, InfoId<Long> dictId)throws ServiceException 
@@ -92,6 +97,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 	
+	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictkey")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, String dictKey) throws ServiceException {

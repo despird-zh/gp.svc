@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -19,15 +20,18 @@ import com.gp.common.SpringContextUtil;
 		"com.gp.svc.impl",
 		"com.gp.dao.impl" 
 	})
+@EnableCaching(proxyTargetClass = false)  
 public class ServiceConfigurer {
 	
 	public static final String TRNS_MGR = "gpTxManager";
 	
 	public static final String DATA_SRC = "gpDataSource";
 	
-	public static String TRANSFER_CACHE = "fileTransferCache";
+	public static final String TRANSFER_CACHE = "fileTransferCache";
 	
-	public static String SYSSETTING_CACHE = "sysSettingCache";
+	public static final String SYSSETTING_CACHE = "sysSettingCache";
+	
+	public static final String DICTIONARY_CACHE = "dictionaryCache";
 	
 	@Bean 
 	public SpringContextUtil springContextUtil() { 
@@ -43,10 +47,18 @@ public class ServiceConfigurer {
 		
 		SimpleCacheManager scm = new SimpleCacheManager();
 		
-		scm.setCaches(Arrays.asList(fileTransferCache(),sysSettingCache()));
+		scm.setCaches(Arrays.asList(
+				fileTransferCache(),
+				sysSettingCache(),
+				dictionaryCache()
+				)
+			);
 		return scm;
 	}
 	
+	/**
+	 * create file transfer cache bean 
+	 **/
 	@Bean
 	public Cache fileTransferCache(){
 		
@@ -57,10 +69,26 @@ public class ServiceConfigurer {
 		return cache2;
 	}
 	
+	/**
+	 * create system setting cache bean
+	 **/
 	@Bean
 	public Cache sysSettingCache(){
 		
 		GuavaCache cache2 = new GuavaCache(SYSSETTING_CACHE, CacheBuilder.newBuilder()
+	             .expireAfterAccess(30, TimeUnit.MINUTES)
+	             .build());
+		
+		return cache2;
+	}
+	
+	/**
+	 * create dictionary cache bean 
+	 **/
+	@Bean
+	public Cache dictionaryCache(){
+		
+		GuavaCache cache2 = new GuavaCache(DICTIONARY_CACHE, CacheBuilder.newBuilder()
 	             .expireAfterAccess(30, TimeUnit.MINUTES)
 	             .build());
 		
