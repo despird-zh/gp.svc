@@ -81,7 +81,7 @@ public class FileServiceImpl implements FileService{
 			versions = cabversiondao.queryByFileId(filekey.getId());
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to query", dae);
+			throw new ServiceException("excp.query.with", dae, "Versions", filekey);
 		}
 		return versions;
 	}
@@ -105,31 +105,31 @@ public class FileServiceImpl implements FileService{
 			addAcl(svcctx, file.getInfoId(), acl);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to query", dae);
+			throw new ServiceException("excp.create", dae, "Cabinet file");
 		}
 		return fkey;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfilekey, InfoId<Long> destinationPkey)
+	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfileId, InfoId<Long> destFolderId)
 			throws ServiceException {
 		
 		CabFileInfo cfileinfo = null;
 		InfoId<Long> fkey = null;
 		try{
 			
-			cfileinfo = cabfiledao.query(srcfilekey);
+			cfileinfo = cabfiledao.query(srcfileId);
 			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
 			cfileinfo.setInfoId(fkey);
-			cfileinfo.setParentId(destinationPkey.getId());
+			cfileinfo.setParentId(destFolderId.getId());
 			svcctx.setTraceInfo(cfileinfo);
 			
 			cabfiledao.create(cfileinfo);
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to query", dae);
+			throw new ServiceException("excp.copy", dae, srcfileId, destFolderId);
 		}
 		return fkey;
 	}
@@ -151,7 +151,7 @@ public class FileServiceImpl implements FileService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to query", dae);
+			throw new ServiceException("excp.move", dae, srcFileId, destFolderId);
 		}
 
 	}
@@ -194,7 +194,7 @@ public class FileServiceImpl implements FileService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to query", dae);
+			throw new ServiceException("excp.create.with", dae, "Version", filekey);
 		}
 		return vkey;
 	}
@@ -203,6 +203,7 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
+	
 		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
 		Long aclid = fileinfo.getAclId();
 		// find available ace entry 

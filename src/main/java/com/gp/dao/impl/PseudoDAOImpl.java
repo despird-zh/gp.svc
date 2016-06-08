@@ -1,15 +1,19 @@
 package com.gp.dao.impl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -144,6 +148,65 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		}
 		
 		return jtemplate.update(SQL.toString(), params);
+	}
+
+	@Override
+	public Object query(InfoId<?> id, FlatColLocator col) {
+		
+		StringBuffer SQL = new StringBuffer("SELECT ");
+		SQL.append(col.getColumn())
+			.append(" FROM ")
+			.append(id.getIdKey())
+			.append(" WHERE ").append(id.getIdColumn()).append("=?");
+		
+		Object[] params = new Object[]{
+				id.getId()
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
+		}
+		
+		List<Object> ol = jtemplate.queryForList(SQL.toString(), params, Object.class);
+		return CollectionUtils.isEmpty(ol) ? null : ol.get(0);
+	}
+
+	@Override
+	public Map<FlatColLocator, Object> query(InfoId<?> id, FlatColLocator[] cols) {
+		StringBuffer SQL = new StringBuffer("SELECT ");
+		for(FlatColLocator col : cols){
+			SQL.append(col.getColumn()).append(",");
+		}
+		SQL.append("1 as fakecol FROM ")
+			.append(id.getIdKey())
+			.append(" WHERE ").append(id.getIdColumn()).append("=?");
+		
+		Object[] params = new Object[]{
+				id.getId()
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
+		}
+		
+		List<Map<String, Object>> mlist = jtemplate.query(SQL.toString(), params, new ColumnMapRowMapper());
+		if(CollectionUtils.isEmpty(mlist)){
+			
+			return null;
+		}else{
+			
+			Map<String, Object> m = mlist.get(0);
+			Map<FlatColLocator, Object> rst = new HashMap<FlatColLocator, Object>();
+			for(int i = 0; i < cols.length ; i++){
+				rst.put(cols[i], m.get(cols[i].getColumn()));
+			}
+			
+			return rst;
+		}
 	}
 
 }

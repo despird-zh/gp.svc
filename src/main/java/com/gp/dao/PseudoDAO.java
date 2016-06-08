@@ -32,7 +32,7 @@ public interface PseudoDAO {
 	
 	/**
 	 * convert the sql into script with pagination setting
-	 * @param sql the orignal sql script
+	 * @param sql the original sql script
 	 * @param start the start position 
 	 * @param length the length of query rows
 	 **/
@@ -55,7 +55,7 @@ public interface PseudoDAO {
 	/**
 	 * use {@link JdbcTemplate} and parameter list query row count
 	 * @param template the template object
-	 * @param sql the orginal sql
+	 * @param sql the original sql
 	 * @param params the parameter objects array
 	 **/
 	public Integer queryRowCount(JdbcTemplate template, String sql, Object[] params);
@@ -91,4 +91,22 @@ public interface PseudoDAO {
 	 * @return Integer the row count updated 
 	 **/
 	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val);
+	
+	/**
+	 * Query table in flat mode
+	 * 
+	 * @param id the id of row
+	 * @param col the flat column locator 
+	 * @return Object the column value
+	 **/
+	public Object query(InfoId<?> id, FlatColLocator col);
+	
+	/**
+	 * Query table in flat mode
+	 * 
+	 * @param id the id of row
+	 * @param col the flat column locator 
+	 * @return Object the column value
+	 **/
+	public Map<FlatColLocator, Object> query(InfoId<?> id, FlatColLocator[] cols);
 }
