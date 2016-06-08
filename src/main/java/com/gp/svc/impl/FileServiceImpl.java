@@ -13,8 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
-
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.Cabinets;
@@ -204,31 +202,36 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
-		Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
-		
-		Long aclid = Long.valueOf((Integer)val);
-
-		// find available ace entry 
-		CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
-		if(aceinfo == null){
-			// ace not exist yet
-			aceinfo = new CabAceInfo();
-			aceinfo.setInfoId(ace.getAceId());
-			aceinfo.setAclId(aclid);
-			aceinfo.setSubjectType(ace.getType().value);
-			aceinfo.setSubject(ace.getSubject());
-			aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
-			svcctx.setTraceInfo(aceinfo);
-			acedao.create(aceinfo);
+		try{
+			Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
 			
-		}else{
+			Long aclid = Long.valueOf((Integer)val);
+	
+			// find available ace entry 
+			CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
+			if(aceinfo == null){
+				// ace not exist yet
+				aceinfo = new CabAceInfo();
+				aceinfo.setInfoId(ace.getAceId());
+				aceinfo.setAclId(aclid);
+				aceinfo.setSubjectType(ace.getType().value);
+				aceinfo.setSubject(ace.getSubject());
+				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+				svcctx.setTraceInfo(aceinfo);
+				acedao.create(aceinfo);
+				
+			}else{
+				
+				aceinfo.setSubjectType(ace.getType().value);
+				aceinfo.setSubject(ace.getSubject());
+				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+				svcctx.setTraceInfo(aceinfo);
+				
+				acedao.update(aceinfo);
+			}
+		}catch(DataAccessException dae){
 			
-			aceinfo.setSubjectType(ace.getType().value);
-			aceinfo.setSubject(ace.getSubject());
-			aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
-			svcctx.setTraceInfo(aceinfo);
-			
-			acedao.update(aceinfo);
+			throw new ServiceException("excp.add.ace.to", dae, cabfileId);
 		}
 	}
 
@@ -236,9 +239,14 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
-		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
-		Long aclid = fileinfo.getAclId();
-		acedao.deleteBySubject(aclid, type, subject);
+		try{
+			Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
+			Long aclid = Long.valueOf((Integer)val);
+			acedao.deleteBySubject(aclid, type, subject);
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.remove.ace", dae, cabfileId);
+		}
 	}
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
@@ -269,7 +277,7 @@ public class FileServiceImpl implements FileService{
 			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to set the ace list",dae);
+			throw new ServiceException("excp.set.acl",dae, cabfileId);
 		}
 	}
 
@@ -299,7 +307,7 @@ public class FileServiceImpl implements FileService{
 			return CollectionUtils.isEmpty(storages)? null : storages.get(0);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the storage of cabinet file.",dae);
+			throw new ServiceException("excp.query.with",dae, "storage", fileid);
 		}
 	}
 
@@ -322,7 +330,7 @@ public class FileServiceImpl implements FileService{
 		try{
 			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail get cabinet info", dae);
+			throw new ServiceException("excp.query.with",dae, "cabinet", fileid);
 		}
 		return rtv;
 	}
@@ -333,7 +341,7 @@ public class FileServiceImpl implements FileService{
 		try{
 			return cabfiledao.query(fileid);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail get folder info", dae);
+			throw new ServiceException("excp.query.with",dae, "file information", fileid);
 		}
 	}
 
