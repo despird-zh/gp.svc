@@ -13,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
@@ -203,9 +204,10 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
-		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
+		Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
 		
-		Long aclid = fileinfo.getAclId();
+		Long aclid = Long.valueOf((Integer)val);
+
 		// find available ace entry 
 		CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
 		if(aceinfo == null){
