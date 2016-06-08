@@ -40,6 +40,7 @@ public class CommonServiceImpl implements CommonService{
 	@Transactional(value=ServiceConfigurer.TRNS_MGR,propagation = Propagation.REQUIRES_NEW )
 	@Override
 	public <T> InfoId<T> generateId(String modifier, Identifier idkey, Class<T> type) throws ServiceException{
+		
 		InfoId<?> newId = null;
 		
 		try{
@@ -73,6 +74,11 @@ public class CommonServiceImpl implements CommonService{
 			
 			Long nextValue = idinfo.getCurrValue() + idinfo.getStepIncrement();			
 			idsettingdao.updateByIdKey(modifier, idkey, nextValue);
+			
+		}catch(Exception e){
+			
+			throw new ServiceException("excp.generate.id", e, idkey.getSchema());
+			
 		}finally{
 			lock.unlock();
 		}
@@ -94,7 +100,7 @@ public class CommonServiceImpl implements CommonService{
 			return pseudodao.update(id, fields);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail update data.", dae);
+			throw new ServiceException("excp.update.flat", dae, id);
 		}
 	}
 
@@ -105,7 +111,7 @@ public class CommonServiceImpl implements CommonService{
 			return pseudodao.update(id, col, val);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail update data.", dae);
+			throw new ServiceException("excp.update.flat", dae, id);
 		}
 	}
 
@@ -116,7 +122,7 @@ public class CommonServiceImpl implements CommonService{
 			return pseudodao.update(id, col, val);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail update data.", dae);
+			throw new ServiceException("excp.update.flat", dae, id);
 		}
 	}
 
