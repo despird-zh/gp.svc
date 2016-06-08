@@ -3,9 +3,12 @@ package com.gp.svc.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,17 +48,31 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 	@Override
 	public List<RolePageInfo> getRolePages(InfoId<Integer> roleId) throws ServiceException {
 		
-		StringBuffer SQL = new StringBuffer("");
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_role_page WHERE role_id = ?");
 		
-		return null;
+		Object[] params = new Object[]{roleId.getId()};
+		
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
+		}
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		
+		try{
+			return jtemplate.query(SQL.toString(), params, rolepagedao.getRowMapper());
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae,"RolePage", roleId);
+		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean setPagePerms(InfoId<Integer> roleId, InfoId<Integer> pageId, Map<FlatColLocator, Boolean> perms)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			return rolepagedao.update(roleId, pageId, perms) > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae,"RolePage",  roleId + "/" + pageId);
+		}
 	}
 
 }

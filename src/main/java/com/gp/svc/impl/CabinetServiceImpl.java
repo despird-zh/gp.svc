@@ -67,7 +67,7 @@ public class CabinetServiceImpl implements CabinetService{
 			return cabinetdao.query(ckey);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail get the cabinet information", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet", ckey);
 		}
 	}
 
@@ -124,7 +124,7 @@ public class CabinetServiceImpl implements CabinetService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query folders in cabinet", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet Folder", ckey);
 		}
 		return result;
 
@@ -199,7 +199,7 @@ public class CabinetServiceImpl implements CabinetService{
 			result = jtemplate.query(pagesql, params, cabfolderdao.getRowMapper());
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query folders in cabinet", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet Folder", ckey);
 		}
 		pwrapper.setRows(result);
 		
@@ -261,7 +261,7 @@ public class CabinetServiceImpl implements CabinetService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query files in cabinet", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet File", ckey);
 		}
 		return result;
 
@@ -339,7 +339,7 @@ public class CabinetServiceImpl implements CabinetService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query files in cabinet", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet File", ckey);
 		}
 		pwrapper.setRows(result);
 		
@@ -420,7 +420,7 @@ public class CabinetServiceImpl implements CabinetService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query entries in cabinet", dae);
+			throw new ServiceException("excp.query.with", dae, "Cabinet Entry", ckey);
 		}
 		pwrapper.setRows(result);
 		
@@ -449,7 +449,7 @@ public class CabinetServiceImpl implements CabinetService{
 			rtv = jdbctemplate.query(SQL.toString(), parms, mapper);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail get cabinets of account[" + account + "]",dae);
+			throw new ServiceException("excp.query.with",dae, "Personal cabinets", "account:" + account);
 		}
 		return rtv;
 	}

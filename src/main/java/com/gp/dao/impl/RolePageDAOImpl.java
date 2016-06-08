@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -89,7 +90,7 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 	@Override
 	public int update(RolePageInfo info) {
 		
-		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page (page_id=?, role_id=?");
+		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page SET page_id=?, role_id=?");
 
 		List<Object> params = new ArrayList<Object>();
 		params.add(info.getPageId());
@@ -167,9 +168,37 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 		}
 		
 	};
+	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public int update(InfoId<Integer> roleId, InfoId<Integer> pageId, Map<FlatColLocator, Boolean> perms) {
+		
+		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page SET ");
+
+		List<Object> params = new ArrayList<Object>();
+
+		
+		for(Map.Entry<FlatColLocator, Boolean> entry: perms.entrySet()){
+			SQL.append(entry.getKey().getColumn()).append(" = ?,");
+			params.add(entry.getValue());
+		}
+		
+		SQL.append(" last_modified=? WHERE page_id=?, role_id=?");
+		params.add(new Date(System.currentTimeMillis()));
+		params.add(pageId.getId());
+		params.add(roleId.getId());
+
+		JdbcTemplate jtemplate = getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled())
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, params.toString());
+		
+		int cnt  = jtemplate.update(SQL.toString(), params.toArray());
+		return cnt;
 	}
 
 }
