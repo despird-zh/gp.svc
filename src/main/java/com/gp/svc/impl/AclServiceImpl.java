@@ -6,6 +6,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,69 +51,83 @@ public class AclServiceImpl implements AclService{
 	@Override
 	public InfoId<Long> addAclInfo(ServiceContext<?> svcctx, List<CabAceInfo> aces)  throws ServiceException{
 
-		InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
-		CabAclInfo cabaclinfo = new CabAclInfo();
-		cabaclinfo.setInfoId(aclid);
-		svcctx.setTraceInfo(cabaclinfo);
-		cabacldao.create(cabaclinfo);
-		
-		for(CabAceInfo ace : aces){
-			InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
-			ace.setInfoId(aceid);
-			ace.setAclId(aclid.getId());
-			svcctx.setTraceInfo(ace);
-			cabacedao.create(ace);
+		try{
+			InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
+			CabAclInfo cabaclinfo = new CabAclInfo();
+			cabaclinfo.setInfoId(aclid);
+			svcctx.setTraceInfo(cabaclinfo);
+			cabacldao.create(cabaclinfo);
+			
+			for(CabAceInfo ace : aces){
+				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				ace.setInfoId(aceid);
+				ace.setAclId(aclid.getId());
+				svcctx.setTraceInfo(ace);
+				cabacedao.create(ace);
+			}
+			
+			return aclid;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.create.with", dae, "ACL","ACES");
 		}
-		
-		return aclid;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public InfoId<Long> addAceInfo(ServiceContext<?> svcctx, InfoId<Long> aclId, CabAceInfo ace) throws ServiceException{
 		
-		CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
-				ace.getSubjectType(), 
-				ace.getSubject());
-		
-		if(aceinfo != null){
+		try{
+			CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
+					ace.getSubjectType(), 
+					ace.getSubject());
 			
-			aceinfo.setPrivilege(ace.getPrivilege());
-			aceinfo.setPermissions(ace.getPermissions());
-			cabacedao.update( aceinfo);
+			if(aceinfo != null){
+				
+				aceinfo.setPrivilege(ace.getPrivilege());
+				aceinfo.setPermissions(ace.getPermissions());
+				cabacedao.update( aceinfo);
+				
+				return aceinfo.getInfoId();
+			}else{
+				
+				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				ace.setInfoId(aceid);
+				ace.setAclId(aclId.getId());
+				cabacedao.create(ace);
+				
+				return ace.getInfoId();
+			}
+		}catch(DataAccessException dae){
 			
-			return aceinfo.getInfoId();
-		}else{
-			
-			InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
-			ace.setInfoId(aceid);
-			ace.setAclId(aclId.getId());
-			cabacedao.create(ace);
-			
-			return ace.getInfoId();
+			throw new ServiceException("excp.add.ace", dae, aclId);
 		}
 	}
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void addAceInfos(ServiceContext<?> svcctx, InfoId<Long> aclId, CabAceInfo ... aces)  throws ServiceException{
-		
-		for(CabAceInfo ace : aces){
-			
-			CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
-					ace.getSubjectType(), 
-					ace.getSubject());
-			
-			if(aceinfo != null){
-				aceinfo.setPrivilege(ace.getPrivilege());
-				aceinfo.setPermissions(ace.getPermissions());
-				cabacedao.update( aceinfo);
-			}else{
-				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
-				ace.setInfoId(aceid);
-				ace.setAclId(aclId.getId());
-				cabacedao.create(ace);
+		try{
+			for(CabAceInfo ace : aces){
+				
+				CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
+						ace.getSubjectType(), 
+						ace.getSubject());
+				
+				if(aceinfo != null){
+					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPermissions(ace.getPermissions());
+					cabacedao.update( aceinfo);
+				}else{
+					InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+					ace.setInfoId(aceid);
+					ace.setAclId(aclId.getId());
+					cabacedao.create(ace);
+				}
 			}
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.add.ace", dae, aclId);
 		}
 
 	}
@@ -121,84 +136,110 @@ public class AclServiceImpl implements AclService{
 	@Override
 	public CabAceInfo getAceInfo(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
-		CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
-				aceType, 
-				subject);
-		
-		return aceinfo;
+		try{
+			CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
+					aceType, 
+					subject);
+			
+			return aceinfo;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query.with", dae, "ACE", aclId);
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public Acl getAcl(ServiceContext<?> svcctx, InfoId<Long> aclId)  throws ServiceException{
 		
-		CabAclInfo aclinfo = cabacldao.query(aclId);
-		Acl acl = new Acl();
-		acl.setAclId(aclinfo.getInfoId());
-		// find ace list of acl
-		List<CabAceInfo> acelist = cabacedao.queryByAcl(aclId.getId());
-		for(CabAceInfo cai : acelist){
-			// parse type
-			AceType type = AceType.parse(cai.getSubjectType());
-			Ace ace = new Ace(type, cai.getSubject());
-			ace.setAceId(cai.getInfoId());
-			ace.setPrivilege(cai.getPrivilege(), true);
-			Set<String> perms = null;
-			// parse the permission set
-			try {
-				perms = mapper.readValue(cai.getPermissions(), new TypeReference<Set<String>>(){});
-			} catch (Exception e) {
-				
-				throw new ServiceException("Fail to parse the permissions string", e);
-			} 
-
-			ace.setPermissions(perms, true);
-			// add to acl.
-			acl.addAce(ace, false);
+		try{
+			CabAclInfo aclinfo = cabacldao.query(aclId);
+			Acl acl = new Acl();
+			acl.setAclId(aclinfo.getInfoId());
+			// find ace list of acl
+			List<CabAceInfo> acelist = cabacedao.queryByAcl(aclId.getId());
+			for(CabAceInfo cai : acelist){
+				// parse type
+				AceType type = AceType.parse(cai.getSubjectType());
+				Ace ace = new Ace(type, cai.getSubject());
+				ace.setAceId(cai.getInfoId());
+				ace.setPrivilege(cai.getPrivilege(), true);
+				Set<String> perms = null;
+				// parse the permission set
+				try {
+					perms = mapper.readValue(cai.getPermissions(), new TypeReference<Set<String>>(){});
+				} catch (Exception e) {
+					
+					throw new ServiceException("Fail to parse the permissions string", e);
+				} 
+	
+				ace.setPermissions(perms, true);
+				// add to acl.
+				acl.addAce(ace, false);
+			}
+			return acl;
+			
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query.with", dae, "ACL", aclId);
 		}
-		return acl;
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public Ace getAce(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
-		CabAceInfo aci = cabacedao.queryBySubject(aclId.getId(), aceType, subject);
-		
-		if(null == aci)
-			return null;
-		
-		AceType type = AceType.parse(aci.getSubjectType());
-		Ace ace = new Ace(type, aci.getSubject());
-		ace.setAceId(aci.getInfoId());
-		ace.setPrivilege(aci.getPrivilege(), true);
-		Set<String> perms = null;
-		// parse the permission set
-		try {
-			perms = mapper.readValue(aci.getPermissions(), new TypeReference<Set<String>>(){});
-		} catch (Exception e) {
+		try{
+			CabAceInfo aci = cabacedao.queryBySubject(aclId.getId(), aceType, subject);
 			
-			throw new ServiceException("Fail to parse the permissions string", e);
-		} 
-
-		ace.setPermissions(perms, true);
-		return ace;
+			if(null == aci)
+				return null;
+			
+			AceType type = AceType.parse(aci.getSubjectType());
+			Ace ace = new Ace(type, aci.getSubject());
+			ace.setAceId(aci.getInfoId());
+			ace.setPrivilege(aci.getPrivilege(), true);
+			Set<String> perms = null;
+			// parse the permission set
+			try {
+				perms = mapper.readValue(aci.getPermissions(), new TypeReference<Set<String>>(){});
+			} catch (Exception e) {
+				
+				throw new ServiceException("Fail to parse the permissions string", e);
+			} 
+	
+			ace.setPermissions(perms, true);
+			return ace;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query.with", dae, "ACE", aclId);
+		}
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean removeAcl(ServiceContext<?> svcctx, InfoId<Long> aclId)  throws ServiceException{
 
-		// delete the related aces
-		cabacedao.deleteByAcl(aclId.getId());
-		return cabacldao.delete(aclId) > 0;
+		try{
+			// delete the related aces
+			cabacedao.deleteByAcl(aclId.getId());
+			return cabacldao.delete(aclId) > 0;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.delete.with", dae, "ACL", aclId);
+		}
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean removeAce(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
-		return cabacedao.deleteBySubject(aclId.getId(), aceType, subject) > 0;
+		try{
+			return cabacedao.deleteBySubject(aclId.getId(), aceType, subject) > 0;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.delete.with", dae, "ACE", "aclid="+aclId.getId() + "/type="+aceType + "/subject"+subject);
+		}
 	}
 
 }

@@ -47,16 +47,17 @@ public class ActLogServiceImpl implements ActLogService{
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		PageWrapper<ActLogInfo> pwrapper = new PageWrapper<ActLogInfo>();
-		// get count sql scripts.
-		String countsql = SQL_COUNT.append(SQL_FROM).toString();
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			// get count sql scripts.
+			String countsql = SQL_COUNT.append(SQL_FROM).toString();
+			int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL_FROM).toString(), pagequery);
 		
@@ -70,7 +71,7 @@ public class ActLogServiceImpl implements ActLogService{
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query activity logs", dae);
+			throw new ServiceException("excp.query.with", dae,"Workgroup's ActionLog", wid);
 		}
 
 		return pwrapper;
@@ -112,7 +113,7 @@ public class ActLogServiceImpl implements ActLogService{
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query activity logs", dae);
+			throw new ServiceException("excp.query.with", dae,"Account's ActionLog", account);
 		}
 
 		return pwrapper;
@@ -131,16 +132,17 @@ public class ActLogServiceImpl implements ActLogService{
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		PageWrapper<ActLogInfo> pwrapper = new PageWrapper<ActLogInfo>();
-		// get count sql scripts.
-		String countsql = SQL_COUNT.append(SQL_FROM).toString();
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			// get count sql scripts.
+			String countsql = SQL_COUNT.append(SQL_FROM).toString();
+			int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL_FROM).toString(), pagequery);
 		
@@ -154,7 +156,7 @@ public class ActLogServiceImpl implements ActLogService{
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query activity logs", dae);
+			throw new ServiceException("excp.query.with", dae,"Resource's ActionLog", objectId);
 		}
 
 		return pwrapper;
