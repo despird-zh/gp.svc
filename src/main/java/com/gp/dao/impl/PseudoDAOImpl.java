@@ -1,7 +1,6 @@
 package com.gp.dao.impl;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -174,14 +173,18 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 	}
 
 	@Override
-	public Map<FlatColLocator, Object> query(InfoId<?> id, FlatColLocator[] cols) {
+	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols) {
+		
 		StringBuffer SQL = new StringBuffer("SELECT ");
 		for(FlatColLocator col : cols){
 			SQL.append(col.getColumn()).append(",");
 		}
-		SQL.append("1 as fakecol FROM ")
+		if(SQL.lastIndexOf(",") == SQL.length() -1)
+			SQL.deleteCharAt(SQL.length() -1);
+		
+		SQL.append(" FROM ")
 			.append(id.getIdKey())
-			.append(" WHERE ").append(id.getIdColumn()).append("=?");
+			.append(" WHERE ").append(id.getIdColumn()).append(" = ?");
 		
 		Object[] params = new Object[]{
 				id.getId()
@@ -194,19 +197,13 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 		}
 		
 		List<Map<String, Object>> mlist = jtemplate.query(SQL.toString(), params, new ColumnMapRowMapper());
-		if(CollectionUtils.isEmpty(mlist)){
-			
-			return null;
-		}else{
-			
-			Map<String, Object> m = mlist.get(0);
-			Map<FlatColLocator, Object> rst = new HashMap<FlatColLocator, Object>();
-			for(int i = 0; i < cols.length ; i++){
-				rst.put(cols[i], m.get(cols[i].getColumn()));
-			}
-			
-			return rst;
+		
+		if( CollectionUtils.isEmpty(mlist))
+			return null ;
+		else {
+			return mlist.get(0);
 		}
+		
 	}
 
 }

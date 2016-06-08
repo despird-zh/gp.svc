@@ -14,24 +14,32 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
+import com.gp.common.FlatColumns;
+import com.gp.common.IdKey;
 import com.gp.common.Principal;
-import com.gp.common.ServiceContext;
 import com.gp.dao.PseudoDAO;
-import com.gp.svc.CommonService;
+import com.gp.info.FlatColLocator;
+import com.gp.info.InfoId;
 
 @ContextConfiguration(classes={TestConfig.class})
 public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 
 	Principal principal = new Principal("demouser");
-	ServiceContext svcctx ;
 	@Autowired
     private PseudoDAO pseudodao;
-	
-	@Autowired
-    private CommonService idService;
-	
+
 	@Test
-	public void test() {
+	public void testquery(){
+		
+		InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(120l);
+		Object val = pseudodao.query(fid, FlatColumns.COL_ACL_ID);
+		System.out.println("value : " + val);
+		
+		Map<String, Object> valm = pseudodao.query(fid, new FlatColLocator[]{FlatColumns.COL_ACL_ID,FlatColumns.COL_MODIFIER});
+		System.out.println("value map : " + valm.toString());
+	}
+	
+	public void testsql() {
 		
 		String namedSql = "select 3  from dual where 1 in (:p1) and :priv";
 		
@@ -45,8 +53,6 @@ public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 	    map.put("p1", parameters);
 	    map.put("priv", "3&1=1");
 
-		svcctx = new ServiceContext(principal);
-		
 		try {
 
 			NamedParameterJdbcTemplate jt = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);

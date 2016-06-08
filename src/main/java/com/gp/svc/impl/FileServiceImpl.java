@@ -203,8 +203,8 @@ public class FileServiceImpl implements FileService{
 	@Override
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
-	
 		CabFileInfo fileinfo = cabfiledao.query(cabfileId);
+		
 		Long aclid = fileinfo.getAclId();
 		// find available ace entry 
 		CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
