@@ -2,7 +2,10 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -16,16 +19,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("dictionaryDAO")
 public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);
 	
 	@Autowired
 	public DictionaryDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
@@ -35,35 +40,51 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	@Override
 	public int create( DictionaryInfo info) {
 
-		StringBuffer SQL = new StringBuffer();
-		SQL.append("insert into gp_dictionary (")
+		Map<FlatColLocator, String> labelMap = info.getLabelMap();
+		StringBuffer SQL_COL = new StringBuffer();
+		StringBuffer SQL_VAL = new StringBuffer();
+		SQL_COL.append("INSERT INTO gp_dictionary (")
 			.append("dict_id,dict_group,")
-			.append("dict_key,dict_value,language,label,")
-			.append("modifier, last_modified")
-			.append(")values(")
+			.append("dict_key,dict_value,default_lang,");
+		
+		SQL_VAL.append("VALUES(")
 			.append("?,?,")
-			.append("?,?,?,?,")
-			.append("?,?)");
+			.append("?,?,?,");
 		
-		Object[] params = new Object[]{
-				info.getInfoId().getId(),info.getGroup(),
-				info.getKey(),info.getValue(),info.getLanguage(),info.getLabel(),
-				info.getModifier(),info.getModifyDate()
-		};
+		List<Object> plist = new ArrayList<Object>();
+		plist.add(info.getInfoId().getId());
+		plist.add(info.getGroup());
+		plist.add(info.getKey());
+		plist.add(info.getValue());
+		plist.add(info.getDefaultLang());
 		
+		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){
+			SQL_COL.append(entry.getKey().getColumn()).append(",");
+			SQL_VAL.append("?,");
+			plist.add(entry.getValue());
+		}
+		SQL_COL.append("modifier, last_modified)");
+		SQL_VAL.append("?,?)");
+		
+		
+		plist.add(info.getModifier());
+		plist.add(info.getModifyDate());
+
+		StringBuffer SQL = SQL_COL.append(SQL_VAL);
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(plist));
 		}
-		return jtemplate.update(SQL.toString(),params);
+		
+		return jtemplate.update(SQL.toString(), plist.toArray());
 		
 	}
 
 	@Override
 	public int delete( InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_dictionary ")
-			.append("where dict_id = ?");
+		SQL.append("DELETE FROM gp_dictionary ")
+			.append("WHERE dict_id = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -78,25 +99,38 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 
 	@Override
 	public int update(DictionaryInfo info) {
+		
+		Map<FlatColLocator, String> labelMap = info.getLabelMap();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_dictionary set ")
+		SQL.append("UPDATE gp_dictionary SET ")
 			.append("dict_group = ?,")
-			.append("dict_key = ?,dict_value = ?,label = ?,language=?,")
-			.append("modifier = ?, last_modified = ? ")
+			.append("dict_key = ?,dict_value = ?, default_lang=?,");
+		
+
+		List<Object> plist = new ArrayList<Object>();
+		plist.add(info.getGroup());
+		plist.add(info.getKey());
+		plist.add(info.getValue());
+		plist.add(info.getDefaultLang());
+		
+		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){
+			SQL.append(entry.getKey().getColumn()).append("= ?,");
+			plist.add(entry.getValue());
+		}
+		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where dict_id = ?");
 		
-		Object[] params = new Object[]{
-				info.getGroup(),
-				info.getKey(),info.getValue(),info.getLabel(),info.getLanguage(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		plist.add(info.getModifier());
+		plist.add(info.getModifyDate());
+		plist.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + plist.toString());
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+	
+		int rtv = jtemplate.update(SQL.toString(),plist.toArray());
+		
 		return rtv;
 	}
 
@@ -133,10 +167,20 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 			info.setGroup(rs.getString("dict_group"));
 			info.setKey(rs.getString("dict_key"));
 			info.setValue(rs.getString("dict_value"));
-			info.setLabel(rs.getString("label"));
-			info.setLanguage(rs.getString("language"));
+			info.setDefaultLang(rs.getString("default_lang"));
+		
+			Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
+			labelMap.put(FlatColumns.COL_DICT_DE_DE, rs.getString(FlatColumns.COL_DICT_DE_DE.getColumn()));
+			labelMap.put(FlatColumns.COL_DICT_EN_US, rs.getString(FlatColumns.COL_DICT_EN_US.getColumn()));
+			labelMap.put(FlatColumns.COL_DICT_FR_FR, rs.getString(FlatColumns.COL_DICT_ZH_CN.getColumn()));
+			labelMap.put(FlatColumns.COL_DICT_ZH_CN, rs.getString(FlatColumns.COL_DICT_ZH_CN.getColumn()));
+			labelMap.put(FlatColumns.COL_DICT_RU_RU, rs.getString(FlatColumns.COL_DICT_RU_RU.getColumn()));
+			
+			info.setLabelMap(labelMap);
+			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
 			return info;
 		}
 	};

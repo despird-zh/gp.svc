@@ -1,5 +1,8 @@
 package com.gp.info;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.validation.constraints.NotNull;
 
 public class DictionaryInfo extends TraceableInfo<Long>{
@@ -14,21 +17,18 @@ public class DictionaryInfo extends TraceableInfo<Long>{
 	
 	@NotNull
 	private String value;
-	
-	@NotNull
-	private String label;
 
 	@NotNull
-	private String defaultLanguage;
+	private String defaultLang;
+
+	private Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
 	
-	private String labelzh_CN;
-	
-	public String getDefaultLanguage() {
-		return defaultLanguage;
+	public String getDefaultLang() {
+		return defaultLang;
 	}
 
-	public void setDefaultLanguage(String defaultLanguage) {
-		this.defaultLanguage = defaultLanguage;
+	public void setDefaultLang(String defaultLang) {
+		this.defaultLang = defaultLang;
 	}
 
 	public String getGroup() {
@@ -54,13 +54,20 @@ public class DictionaryInfo extends TraceableInfo<Long>{
 	public void setValue(String value) {
 		this.value = value;
 	}
-
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
 		
+	public Map<FlatColLocator, String> getLabelMap() {
+		return labelMap;
+	}
+
+	public void setLabelMap(Map<FlatColLocator, String> labelMap) {
+		this.labelMap = labelMap;
+	}
+	
+	public String getLabel(FlatColLocator col){
+		return labelMap.get(col);
+	}
+	
+	public void putLabel(FlatColLocator col, String label){
+		labelMap.put(col, value);
+	}
 }
