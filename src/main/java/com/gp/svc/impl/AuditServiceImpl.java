@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,9 @@ public class AuditServiceImpl implements AuditService{
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<AuditInfo> getAudits(ServiceContext<?> svcctx, String subject, String object, String operation) throws ServiceException {
+		
 		List<Object> parmlist = new ArrayList<Object>();
+		
 		StringBuffer sqlbuf = new StringBuffer();
 		sqlbuf.append("SELECT * FROM gp_audit WHERE 1=1 ")
 			.append("and source_id = ? ");
@@ -69,24 +72,36 @@ public class AuditServiceImpl implements AuditService{
 			
 			LOGGER.debug("SQL : {} / params : {}", sqlbuf.toString(), ArrayUtils.toString(params));
 		}
+		try{
+			List<AuditInfo> result = template.query(sqlbuf.toString(), params, mapper);
 		
-		List<AuditInfo> result = template.query(sqlbuf.toString(), params, mapper);
-		return result;
+			return result;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query", dae,"Audit log");
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean deleteAudit(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
 
-		int cnt = auditdao.delete( id);
-		return cnt > 0;
+		try{
+			int cnt = auditdao.delete( id);
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.delete.with", dae,"Audit", id);
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean addAudit(ServiceContext<?> svcctx, AuditInfo ainfo) throws ServiceException {
-		
-		return auditdao.create( ainfo)>0;
+		try{
+			return auditdao.create( ainfo) > 0;
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.create", dae,"Audit");
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
@@ -125,9 +140,12 @@ public class AuditServiceImpl implements AuditService{
 			LOGGER.debug("SQL : {} / params : {}", sqlbuf.toString(), ArrayUtils.toString(params));
 		}
 		
-		int cnt = template.update(sqlbuf.toString(), params);
-		
-		return cnt > 0;
+		try{
+			int cnt = template.update(sqlbuf.toString(), params);
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.delete", dae,"Audit");
+		}
 	}
 
 }
