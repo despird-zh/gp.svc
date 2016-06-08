@@ -33,7 +33,9 @@ public class FavoriteServiceImpl implements FavoriteService{
 	public Map<InfoId<Long>, Integer> getFavFileSummary(ServiceContext<?> svcctx,  List<InfoId<Long>>infoids )throws ServiceException{
 		
 		String type = IdKey.CAB_FILE.getSchema();
+		
 		List<Long> ids = new ArrayList<Long>();
+		
 		for(InfoId<Long> infoid : infoids){
 			ids.add(infoid.getId());
 		}
@@ -42,7 +44,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.querySummary(type, ids);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("excp.query.with",dae, "Favorite Files Summary", infoids.toString());
 		}
 		return rtv;
 
@@ -62,7 +64,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.querySummary(type, ids);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("excp.query.with",dae, "Favorite Folders Summary", infoids.toString());
 		}
 		return rtv;
 	}
@@ -77,7 +79,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			rtv = favoritedao.queryByAccount(type, favoriter);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("excp.query.with",dae, "Favorite Summary", "favoriter:" + favoriter);
 		}
 		
 		return rtv;
@@ -90,10 +92,10 @@ public class FavoriteServiceImpl implements FavoriteService{
 		boolean rtv = false;
 		try{
 			
-			rtv = favoritedao.create(fav)>0;
+			rtv = favoritedao.create(fav) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("excp.create", dae, "Favorite");
 		}
 		
 		return rtv;
@@ -111,7 +113,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail to query the resources fav summary ",dae);
+			throw new ServiceException("excp.delete.with", dae, favoriter + "'s Favorite", resourceId);
 		}
 		
 		return rtv;

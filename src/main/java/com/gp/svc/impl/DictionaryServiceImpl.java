@@ -34,7 +34,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx) throws ServiceException {
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("select * from gp_dictionary");
+		
+		SQL.append("SELECT * FROM gp_dictionary");
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
@@ -44,7 +45,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			List<DictionaryInfo> result = template.query(SQL.toString(), rmapper);
 			return result;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get dictions", dae);
+			throw new ServiceException("excp.query", dae, "Dictionary");
 		}		
 	}
 
@@ -65,10 +66,10 @@ public class DictionaryServiceImpl implements DictionaryService{
 			};
 		
 		try{
-			List<DictionaryInfo> result = template.query(SQL.toString(),parms ,rmapper);
+			List<DictionaryInfo> result = template.query(SQL.toString(), parms ,rmapper);
 			return result;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get dictions", dae);
+			throw new ServiceException("excp.query.with", dae, "Dictionary", dictGroup);
 		}
 	}
 
@@ -81,7 +82,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			svcctx.setTraceInfo(dictinfo);
 			return dictionarydao.update(dictinfo) > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail update diction", dae);
+			throw new ServiceException("excp.query.with", dae, "Dictionary", dictinfo);
 		}
 	}
 
@@ -93,7 +94,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		try{
 			return dictionarydao.query( dictId);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get diction", dae);
+			throw new ServiceException("excp.query.with", dae, "Dictionary", dictId);
 		}
 	}
 	
@@ -103,7 +104,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, String dictKey) throws ServiceException {
 		
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("select * from gp_dictionary where dict_key = ?");
+		SQL.append("SELECT * FROM gp_dictionary WHERE dict_key = ?");
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
@@ -117,7 +118,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			DictionaryInfo result = template.queryForObject(SQL.toString(), parms, rmapper);			
 			return result;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get diction", dae);
+			throw new ServiceException("excp.query.with", dae, "Dictionary", dictKey);
 		}
 	}
 
