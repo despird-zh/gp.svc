@@ -15,4 +15,6 @@ public class FlatColumns {
 	public static FlatColumn DICT_FR_FR = new FlatColumn("lbl_fr_fr");
 	public static FlatColumn DICT_DE_DE = new FlatColumn("lbl_de_de");
 	public static FlatColumn DICT_RU_RU = new FlatColumn("lbl_ru_ru");
+	
+	public static FlatColumn IMG_NAME = new FlatColumn("image_name");
 }

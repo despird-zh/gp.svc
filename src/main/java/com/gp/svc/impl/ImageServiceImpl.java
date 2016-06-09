@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
@@ -147,14 +148,14 @@ public class ImageServiceImpl implements ImageService{
 	public String getImageFileName(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
 		try{
 			// force not to retrieve the binary data : parent = ""
-			ImageInfo info = imagedao.query(id, "");
-			if(null == info)
+			Object name = pseudodao.query(id, FlatColumns.IMG_NAME);
+			if(null == name)
 				return null;
 			
-			return info.getFileName();
+			return (String) name;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query ",dae);
+			throw new ServiceException("excp.query.with",dae, "image name", id);
 		}
 	}
 
