@@ -1,5 +1,6 @@
 package com.gp.svc.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -77,7 +78,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query organization node", dae);
+			throw new ServiceException("excp.query.with", dae, "Org hier", parentNodeId);
 		}
 		
 		return orglist;
@@ -108,7 +109,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query organization node", dae);
+			throw new ServiceException("excp.create", dae, "Org hierarchy");
 		}
 	}
 
@@ -122,7 +123,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query organization node", dae);
+			throw new ServiceException("excp.update", dae, "org hierarchy");
 		}
 	}
 
@@ -135,7 +136,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query organization node", dae);
+			throw new ServiceException("excp.query.with", dae, "org hierarchy", orgid);
 		}
 	}
 	
@@ -154,7 +155,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query organization node", dae);
+			throw new ServiceException("excp.delete.with", dae, "Org hierarchy", orgid);
 		}
 	}
 
@@ -168,7 +169,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getGroupId());
 			if(!InfoId.isValid(groupId))
-				throw new ServiceException("The org's group not valid");
+				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
 				InfoId<Long> gid = IdKey.GROUP.getInfoId(orginfo.getGroupId());
@@ -196,7 +197,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			}
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail add organization member", dae);
+			throw new ServiceException("excp.add.mbr", dae, "org hierarchy", Arrays.toString(accounts));
 		}
 
 	}
@@ -211,7 +212,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getGroupId());
 			if(!InfoId.isValid(groupId))
-				throw new ServiceException("The org's group not valid");
+				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
 				
@@ -221,7 +222,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail remove organization member", dae);
+			throw new ServiceException("excp.remove.mbr", dae, "org hierarchy", orgid);
 		}
 	}
 
@@ -247,7 +248,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			rtv = jtemplate.query(SQL.toString(), params, userdao.getRowMapper());	
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query org members", dae);
+			throw new ServiceException("excp.query.with", dae, "org hierarchy", orgid);
 		}
 
 		return rtv;
