@@ -7,8 +7,9 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 
 	public int deleteByAccount(InfoId<Long> membergroupId, String account);
 	
-	public boolean existByAccount(InfoId<Long> membergroupId, String account);
+	public InfoId<Long> existByAccount(InfoId<Long> membergroupId, String account);
 	
 	public int deleteByGroup(InfoId<Long> membergroupId);
+	
 	
 }

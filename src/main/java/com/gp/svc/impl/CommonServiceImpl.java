@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.IdSettingDAO;
 import com.gp.dao.PseudoDAO;
@@ -89,7 +89,7 @@ public class CommonServiceImpl implements CommonService{
 	@Override
 	public <T> InfoId<T> generateId( Identifier idkey,Class<T> type) throws ServiceException {
 		
-		return generateId(Users.PESUOD_USER.getAccount(),idkey, type);
+		return generateId(GroupUsers.PESUOD_USER.getAccount(),idkey, type);
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)

@@ -4,14 +4,14 @@ import java.util.List;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.GroupInfo;
+import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.info.WorkgroupLiteInfo;
-import com.gp.info.WorkgroupUserExInfo;
-import com.gp.info.WorkgroupUserInfo;
+import com.gp.info.WorkgroupMemberInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 
@@ -24,12 +24,12 @@ public interface WorkgroupService {
 	/**
 	 * Create the workgroup information, build public and private cabinets at the same time.
 	 **/
-	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException;
+	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo,Long pubcapacity, Long pricapacity) throws ServiceException;
 	
 	/**
 	 * Update the work group information 
 	 **/
-	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException;
+	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo,Long pubcapacity, Long pricapacity) throws ServiceException;
 	
 	/**
 	 * get workgroup information by key 
@@ -38,15 +38,15 @@ public interface WorkgroupService {
 	
 	public WorkgroupExInfo getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public boolean addWorkgroupMember(ServiceContext svcctx, WorkgroupUserInfo wminfo) throws ServiceException;
+	public boolean addWorkgroupMember(ServiceContext svcctx, GroupUserInfo wminfo) throws ServiceException;
 
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account) throws ServiceException;
 	
-	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
+	public List<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId) throws ServiceException;
 	
 	
-	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
+	public PageWrapper<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException;
 	
 	/**

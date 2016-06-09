@@ -17,7 +17,7 @@ package com.gp.common;
 
 import com.gp.info.InfoId;
 
-public class Users {
+public class GroupUsers {
 	
 	public static Principal ADMIN_USER = new Principal("admin");
 	
@@ -37,9 +37,15 @@ public class Users {
 	}
 	
 	public static enum UserState{
-		
 		ACTIVE,
 		DEACTIVE,
 		FROZEN
+	}
+	
+	public static enum GroupType{
+		ORG_HIER_MBR, // organization hierarchy group
+		WORKGROUP_MBR, // workgroup's member group
+		WORKGROUP_GRP, // workgroup's group
+		POST_MBR // post attendees
 	}
 }

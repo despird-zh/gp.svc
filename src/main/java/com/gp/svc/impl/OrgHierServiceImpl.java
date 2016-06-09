@@ -12,14 +12,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
+import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.OrgHierDAO;
-import com.gp.dao.OrgUserDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
@@ -27,7 +28,6 @@ import com.gp.info.GroupInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
-import com.gp.info.OrgUserInfo;
 import com.gp.info.UserInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
@@ -43,9 +43,6 @@ public class OrgHierServiceImpl implements OrgHierService{
 	@Autowired
 	private OrgHierDAO orghierdao;
 
-	@Autowired
-	private OrgUserDAO orguserdao;
-	
 	@Autowired
 	private GroupDAO groupdao;
 	
@@ -98,12 +95,13 @@ public class OrgHierServiceImpl implements OrgHierService{
 			ginfo.setWorkgroupId(GeneralConstants.ORGHIER_WORKGROUP);
 			ginfo.setGroupName(orginfo.getOrgName() + "'s group");
 			ginfo.setDescription(orginfo.getDescription());
+			ginfo.setGroupType(GroupUsers.GroupType.ORG_HIER_MBR.name());
 			// set trace information
 			svcctx.setTraceInfo(ginfo);
 			// create group
 			groupdao.create(ginfo);
 			// update org hier info with group id
-			orginfo.setGroupId(gid.getId());
+			orginfo.setMemberGroupId(gid.getId());
 			
 			return orghierdao.create(orginfo) > 0;
 		
@@ -146,11 +144,10 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
-			InfoId<Long> org_grpid = IdKey.GROUP.getInfoId(orginfo.getGroupId());
+			InfoId<Long> org_grpid = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
 			groupuserdao.deleteByGroup(org_grpid);// remove group users
 			groupdao.delete(org_grpid);// remove group
-			orguserdao.deleteByOrgHier(orgid); // remove org-node users
-			
+
 			return orghierdao.delete(orgid) >0;
 			
 		}catch(DataAccessException dae){
@@ -167,31 +164,23 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 			
-			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getGroupId());
+			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
 			if(!InfoId.isValid(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
-				InfoId<Long> gid = IdKey.GROUP.getInfoId(orginfo.getGroupId());
-				if(groupuserdao.existByAccount(gid, account)){
+				InfoId<Long> gid = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
+				InfoId<Long> mbrid = groupuserdao.existByAccount(gid, account);
+				if(InfoId.isValid(mbrid)){
 					continue;
 				}
 				GroupUserInfo  guinfo = new GroupUserInfo();
 				InfoId<Long> rid = idservice.generateId(IdKey.GROUP_USER, Long.class);
 				guinfo.setInfoId(rid);
-				guinfo.setGroupId(orginfo.getGroupId());
-				guinfo.setWorkgroupId(GeneralConstants.ORGHIER_WORKGROUP);
+				guinfo.setGroupId(orginfo.getMemberGroupId());
 				guinfo.setAccount(account);				
 				svcctx.setTraceInfo(guinfo);
 				
-				OrgUserInfo oui = new OrgUserInfo();
-				InfoId<Long> ouid = idservice.generateId(IdKey.ORG_USER, Long.class);
-				oui.setInfoId(ouid);
-				oui.setAccount(account);
-				oui.setOrgId(orgid.getId());				
-				svcctx.setTraceInfo(oui);
-				
-				orguserdao.create(oui);
 				groupuserdao.create(guinfo);
 	
 			}
@@ -210,13 +199,12 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 			
-			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getGroupId());
+			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
 			if(!InfoId.isValid(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
-				
-				orguserdao.deleteByAccount(orgid, account);				
+			
 				groupuserdao.deleteByAccount(groupId, account);
 			}
 			
@@ -232,13 +220,16 @@ public class OrgHierServiceImpl implements OrgHierService{
 			throws ServiceException {
 		
 		List<UserInfo> rtv = null;
-		OrgHierInfo orginfo = orghierdao.query(orgid);
+		Object val = pseudodao.query(orgid, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("SELECT b.* FROM gp_users b, gp_org_user a ")
-			.append("WHERE a.account = b.account ")
-			.append(" AND a.org_id = ?");
 		
-		Object[] params = new Object[]{orginfo.getInfoId().getId()};
+		SQL.append("SELECT b.* FROM gp_users b, gp_group_user a ")
+			.append("WHERE a.account = b.account ")
+			.append(" AND a.group_id = ?");
+		
+		Object[] params = new Object[]{ memberGroupId };
+		
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		if(LOGGER.isDebugEnabled()){

@@ -14,7 +14,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
@@ -24,7 +24,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = Users.PESUOD_USER;
+	Principal principal = GroupUsers.PESUOD_USER;
 
 	@Autowired
     private DictionaryDAO dictdao;

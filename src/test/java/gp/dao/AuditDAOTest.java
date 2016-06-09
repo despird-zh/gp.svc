@@ -12,7 +12,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.dao.AuditDAO;
 import com.gp.info.AuditInfo;
 import com.gp.info.InfoId;
@@ -21,7 +21,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class AuditDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = Users.PESUOD_USER;
+	Principal principal = GroupUsers.PESUOD_USER;
 	ServiceContext svcctx ;
 	@Autowired
     private AuditDAO auditdao;

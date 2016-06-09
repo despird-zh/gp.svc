@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Cabinets;
+import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
+import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.Images;
 import com.gp.common.SystemOptions;
@@ -36,10 +38,10 @@ import com.gp.dao.ImageDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.dao.WorkgroupDAO;
-import com.gp.dao.WorkgroupUserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.ActLogInfo;
 import com.gp.info.CabinetInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.GroupInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.ImageInfo;
@@ -50,8 +52,7 @@ import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.info.WorkgroupLiteInfo;
-import com.gp.info.WorkgroupUserExInfo;
-import com.gp.info.WorkgroupUserInfo;
+import com.gp.info.WorkgroupMemberInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -89,10 +90,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Autowired
 	GroupUserDAO groupuserdao;
-	
-	@Autowired
-	WorkgroupUserDAO workgroupuserdao;
-	
+
 	@Autowired
 	CommonService idService;
 	
@@ -114,7 +112,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	 **/
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException {
+	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 		
 		InfoId<Long> wkey = winfo.getInfoId();
 		// set trace info
@@ -138,16 +136,15 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		pubinfo.setStorageId(winfo.getStorageId());
 		pubinfo.setSourceId(winfo.getSourceId());
 		pubinfo.setVersionable(versionable);
-		Long capacity = null;
-		capacity = svcctx.getContextData(CTX_KEY_PUBCAPACITY, Long.class);
-		if(null == capacity){
+
+		if(null == pubcapacity){
 			// set capacity 
 			SysOptionInfo sysopt = systemservice.getOption(svcctx, SystemOptions.WORKGROUP_CABINET_QUOTA);
-			capacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
-			capacity = capacity * 1024 * 1024;// into bytes
+			pubcapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
+			pubcapacity = pubcapacity * 1024 * 1024;// into bytes
 		}
-		pubinfo.setCapacity(capacity);
-
+		pubinfo.setCapacity(pubcapacity);
+		svcctx.setTraceInfo(pubinfo);
 		// allocate an key for private cabinet
 		InfoId<Long> prikey = idService.generateId( IdKey.CABINET, Long.class);
 		winfo.setNetdiskCabinet(prikey.getId());
@@ -165,17 +162,26 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		priinfo.setStorageId(winfo.getStorageId());
 		priinfo.setVersionable(versionable);
 		priinfo.setSourceId(winfo.getSourceId());
-		Long pcapacity = null;
-		pcapacity = svcctx.getContextData(CTX_KEY_PRICAPACITY, Long.class);
-		if(null == pcapacity){
+
+		if(null == pricapacity){
 			// set capacity 
 			SysOptionInfo sysopt = systemservice.getOption(svcctx, SystemOptions.WORKGROUP_CABINET_QUOTA);
-			pcapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
-			pcapacity = pcapacity * 1024 * 1024;
+			pricapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
+			pricapacity = pricapacity * 1024 * 1024;
 		}
 
 		// set capacity 
-		priinfo.setCapacity(pcapacity);
+		priinfo.setCapacity(pricapacity);
+		svcctx.setTraceInfo(priinfo);
+		
+		GroupInfo group = new GroupInfo();
+		InfoId<Long> grpid = idService.generateId( IdKey.GROUP, Long.class);
+		group.setInfoId(grpid);
+		group.setGroupName("Workgroup's Member Group");
+		group.setGroupType(GroupUsers.GroupType.WORKGROUP_MBR.name());
+		group.setWorkgroupId(winfo.getInfoId().getId());
+		winfo.setMemberGroupId(grpid.getId());
+		svcctx.setTraceInfo(group);
 		int cnt = 0;
 		try{
 			// create image firstly.		
@@ -201,7 +207,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			cnt = workgroupdao.create( winfo);
 			cabinetdao.create( pubinfo);
 			cabinetdao.create( priinfo);			
-
+			groupdao.create(group);
 			
 		}catch(DataAccessException dae){
 
@@ -215,7 +221,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	 **/
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException {
+	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 		
 		InfoId<Long> wkey = winfo.getInfoId();
 
@@ -251,17 +257,17 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			for(CabinetInfo cab : cabinets){
 				// public cabinet
 				if(Cabinets.CabinetType.PUBLISH.name().equals(cab.getCabinetType())){
-					Long pcapacity = svcctx.getContextData(CTX_KEY_PUBCAPACITY, Long.class);
-					if(null != pcapacity){
-						cabinetdao.updateCabCapacity(cab.getInfoId(), pcapacity);
+					
+					if(null != pubcapacity){
+						cabinetdao.updateCabCapacity(cab.getInfoId(), pubcapacity);
 					}
 					cabinetdao.changeStorage(cab.getInfoId(), storageId);
 					winfo.setPublishCabinet(cab.getInfoId().getId());
 				}
 				if(Cabinets.CabinetType.NETDISK.name().equals(cab.getCabinetType())){
-					Long pcapacity = svcctx.getContextData(CTX_KEY_PRICAPACITY, Long.class);
-					if(null != pcapacity){
-						cabinetdao.updateCabCapacity(cab.getInfoId(), pcapacity);
+					
+					if(null != pricapacity){
+						cabinetdao.updateCabCapacity(cab.getInfoId(), pricapacity);
 					}
 					cabinetdao.changeStorage(cab.getInfoId(), storageId);
 					winfo.setNetdiskCabinet(cab.getInfoId().getId());
@@ -292,22 +298,24 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
+	public List<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();
 		
+		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
+		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
-
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroup_user b ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
 		
 		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
 				.append("  ON b.account = a.account ")
 				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
 				.append("  ON a.source_id = c.instance_id ")
-				.append("WHERE b.workgroup_id = :wgroup_id ");
+				.append("WHERE b.group_id = :group_id");
 		
-		params.put("wgroup_id", wkey.getId());
+		params.put("group_id", memberGroupId);
 		
 		if(StringUtils.isNotBlank(uname)){
 			
@@ -326,9 +334,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupUserExInfo> result = null;
+		List<WorkgroupMemberInfo> result = null;
 		try{
-			result = jtemplate.query(querysql, params, WorkgroupUserExMapper);
+			result = jtemplate.query(querysql, params, WGroupMemberMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query members", dae);
 		}
@@ -338,22 +346,24 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
+	public PageWrapper<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException {
 	
-		Map<String,Object> params = new HashMap<String,Object>();		
+		Map<String,Object> params = new HashMap<String,Object>();
+		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
 		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.user_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroup_user b ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
 		
 		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
 				.append("  ON b.account = a.account ")
 				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
 				.append("  ON a.source_id = c.instance_id ")
-				.append("WHERE b.workgroup_id = :wgroup_id ")
+				.append("WHERE b.group_id = :group_id")
 				.append("ORDER BY b.rel_id");
 		
-		params.put("wgroup_id", wkey.getId());
+		params.put("group_id", memberGroupId);
 		
 		if(StringUtils.isNotBlank(uname)){
 			
@@ -368,7 +378,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<WorkgroupUserExInfo> pwrapper = new PageWrapper<WorkgroupUserExInfo>();
+		PageWrapper<WorkgroupMemberInfo> pwrapper = new PageWrapper<WorkgroupMemberInfo>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -385,9 +395,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupUserExInfo> result = null;
+		List<WorkgroupMemberInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, WorkgroupUserExMapper);
+			result = jtemplate.query(pagesql, params, WGroupMemberMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail query members", dae);
@@ -398,23 +408,28 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addWorkgroupMember(ServiceContext svcctx, WorkgroupUserInfo wminfo)
+	public boolean addWorkgroupMember(ServiceContext svcctx, GroupUserInfo memberinfo)
 			throws ServiceException {
 		try{
 			
-			WorkgroupUserInfo wuinfo = workgroupuserdao.queryByAccount(wminfo.getWorkgroupId(), wminfo.getAccount());			
-			if(null != wuinfo){
+			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberinfo.getGroupId());
+			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
+	
+			if(InfoId.isValid(mbrid)){
 				// member already existed, update 
-				wuinfo.setRole(wminfo.getRole());
-				svcctx.setTraceInfo(wuinfo);				
-				workgroupuserdao.update(wuinfo);
+				Map<FlatColLocator, Object> cols = new HashMap<FlatColLocator, Object>();
+				cols.put(FlatColumns.MBR_ROLE, memberinfo.getRole());
+				cols.put(FlatColumns.MODIFIER, svcctx.getPrincipal().getAccount());
+				cols.put(FlatColumns.MODIFY_DATE, DateTimeUtils.now());				
+
+				pseudodao.update(mbrid, cols);
 			}else{
 				// not exist, then create new record
-				svcctx.setTraceInfo(wminfo);				
+				svcctx.setTraceInfo(memberinfo);				
 				// prepare new record
-				InfoId<Long> rid = idService.generateId( IdKey.WORKGROUP_USER, Long.class);
-				wminfo.setInfoId(rid);				
-				workgroupuserdao.create( wminfo);
+				InfoId<Long> rid = idService.generateId( IdKey.GROUP_USER, Long.class);
+				memberinfo.setInfoId(rid);				
+				groupuserdao.create( memberinfo);
 			}
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail add members", dae);
@@ -427,43 +442,29 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
 		
-		String DelSQL = "delete from gp_workgroup_user where workgroup_id = ? and account = ? ";
-		String DelGroupSQL = "delete from gp_group_user where workgroup_id = ? and account = ? ";
-		
-		Object[] params = new Object[]{
-				wkey.getId(),
-				account
-		};
-		
-		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		if(LOGGER.isDebugEnabled()){			
-			LOGGER.debug("SQL : " + DelSQL + " / params : " + ArrayUtils.toString(params));
-			LOGGER.debug("SQL : " + DelGroupSQL + " / params : " + ArrayUtils.toString(params));
-		}
+		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
 		// remote old records.
 		try{
-			
-			jtemplate.update(DelGroupSQL, params);
-			return jtemplate.update(DelSQL, params)>0;
-			
+			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberGroupId);
+			return groupuserdao.deleteByAccount(grpid, account) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail remove members", dae);
 		}
 	}
 
-	public static RowMapper<WorkgroupUserExInfo> WorkgroupUserExMapper = new RowMapper<WorkgroupUserExInfo>(){
+	public static RowMapper<WorkgroupMemberInfo> WGroupMemberMapper = new RowMapper<WorkgroupMemberInfo>(){
 
 		@Override
-		public WorkgroupUserExInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public WorkgroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
-			WorkgroupUserExInfo info = new WorkgroupUserExInfo();
+			WorkgroupMemberInfo info = new WorkgroupMemberInfo();
 			InfoId<Long> id = IdKey.WORKGROUP_USER.getInfoId(rs.getLong("rel_id"));
 			info.setInfoId(id);
 
 			info.setAccount(rs.getString("account"));
 			info.setRole(rs.getString("role"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			
+
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			
@@ -483,17 +484,22 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
+		
 		Map<String,Object> params = new HashMap<String,Object>();
+		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
+		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ");
-		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id,workgroup_id from gp_workgroup_user WHERE workgroup_id = :wgroup_id ) b ")
+		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id from gp_group_user WHERE group_id = :group_id ) b ")
 				.append("ON b.account= a.account ")
 				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) c ")
 				.append("ON a.source_id = c.instance_id ")
 				.append("WHERE b.rel_id IS NULL ");
 
-		params.put("wgroup_id", wkey.getId());
+		params.put("group_id", memberGroupId);
+		
 		if(StringUtils.isNotBlank(uname)){
 			
 			SQL_FROM.append("AND (a.account like :uname OR a.email like :uname OR a.full_name like :uname) ");
@@ -519,17 +525,21 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
+		
 		Map<String,Object> params = new HashMap<String,Object>();
+		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+		Long memberGroupId = Long.valueOf((Integer)val);
+		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ");
-		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id,workgroup_id from gp_workgroup_user WHERE workgroup_id = :wgroup_id ) b ")
+		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id from gp_group_user WHERE group_id = :group_id ) b ")
 				.append("ON b.account= a.account ")
 				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) c ")
 				.append("ON a.source_id = c.instance_id ")
 				.append("WHERE b.rel_id IS NULL ");
 
-		params.put("wgroup_id", wkey.getId());
+		params.put("group_id", memberGroupId);
 		if(StringUtils.isNotBlank(uname)){
 			
 			SQL_FROM.append("AND (a.account like :uname OR a.email like :uname OR a.full_name like :uname) ");
@@ -574,9 +584,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		Map<String,Object> params = new HashMap<String,Object>();
 		
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_groups ")
-				.append("WHERE workgroup_id = :wgroup_id ");
+				.append("WHERE workgroup_id = :wgroup_id AND group_type = :group_type");
 		
 		params.put("wgroup_id", wkey.getId());
+		params.put("group_type", GroupUsers.GroupType.WORKGROUP_GRP.name());
 		if(StringUtils.isNotBlank(gname)){
 			
 			SQL.append(" AND group_name LIKE :gname");
@@ -607,8 +618,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		int cnt = 0;
 		
 		try{		
+			ginfo.setGroupType(GroupUsers.GroupType.WORKGROUP_GRP.name());
 			InfoId<Long> wgoupId = IdKey.WORKGROUP.getInfoId(ginfo.getWorkgroupId());
-			GroupInfo orig = groupdao.queryByName(wgoupId, ginfo.getGroupName());
+			GroupInfo orig = groupdao.queryByName(wgoupId,GroupUsers.GroupType.WORKGROUP_GRP.name(), ginfo.getGroupName());
 			if(null != orig){
 				
 				orig.setGroupName(ginfo.getGroupName());
@@ -635,9 +647,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		try{
 			// locate the id of group name.
-			GroupInfo ginfo = groupdao.queryByName(wkey, gname);
+			GroupInfo ginfo = groupdao.queryByName(wkey,GroupUsers.GroupType.WORKGROUP_GRP.name(), gname);
 			groupuserdao.deleteByGroup(ginfo.getInfoId());
-			return groupdao.deleteByName(wkey, gname) > 0;
+			return groupdao.deleteByName(wkey,GroupUsers.GroupType.WORKGROUP_GRP.name(), gname) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("Fail delte group", dae);
 		}
@@ -661,12 +673,11 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			throws ServiceException {
 
 		try{
-			GroupInfo ginfo = groupdao.query(groupid);
-			Long wgroupid = ginfo.getWorkgroupId();
+
 			for(String account : accounts){
 				
-				boolean exist = groupuserdao.existByAccount(groupid, account);
-				if(exist) {
+				InfoId<Long> mbrId = groupuserdao.existByAccount(groupid, account);
+				if(InfoId.isValid(mbrId)) {
 					LOGGER.debug("User : {} already exist in group : {}", account, groupid.toString());
 					continue;
 				}
@@ -674,7 +685,6 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
 				guinfo.setInfoId(guid);
 				guinfo.setGroupId(groupid.getId());
-				guinfo.setWorkgroupId(wgroupid);
 				guinfo.setAccount(account);
 				svcctx.setTraceInfo(guinfo);
 				groupuserdao.create(guinfo);
@@ -694,9 +704,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		Map<String,Object> params = new HashMap<String,Object>();
 		
 		StringBuffer SQL = new StringBuffer("SELECT b.* FROM gp_group_user a, gp_users b ")
-				.append("WHERE a.account = b.account and a.group_id = :gid ");
+				.append("WHERE a.account = b.account and a.group_id = :group_id ");
 		
-		params.put("gid", groupid.getId());
+		params.put("group_id", groupid.getId());
 				
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 

@@ -11,7 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
@@ -20,7 +20,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class GroupUserDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = Users.PESUOD_USER;
+	Principal principal = GroupUsers.PESUOD_USER;
 	ServiceContext svcctx ;
 	@Autowired
     private GroupUserDAO groupdao;
@@ -40,7 +40,6 @@ public class GroupUserDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setInfoId(id);
 		
 		info.setAccount("accout1");
-		info.setWorkgroupId(123l);
 		info.setGroupId(234l);		
 		
 		info.setModifier("modifer001");
@@ -70,7 +69,6 @@ public class GroupUserDAOTest extends AbstractJUnit4SpringContextTests{
 			
 			GroupUserInfo info = new GroupUserInfo();
 			info.setInfoId(id);
-			info.setWorkgroupId(123l);
 			info.setAccount("accout1");
 			info.setGroupId(234l);		
 			

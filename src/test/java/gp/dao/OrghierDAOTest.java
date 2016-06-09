@@ -11,7 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.dao.OrgHierDAO;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
@@ -20,7 +20,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class OrghierDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = Users.PESUOD_USER;
+	Principal principal = GroupUsers.PESUOD_USER;
 	ServiceContext svcctx ;
 	@Autowired
     private OrgHierDAO orgdao;
@@ -38,7 +38,7 @@ public class OrghierDAOTest extends AbstractJUnit4SpringContextTests{
 		OrgHierInfo info = new OrgHierInfo();
 		info.setInfoId(id);
 		
-		info.setGroupId(123l);
+		info.setMemberGroupId(123l);
 		info.setLevel("level");
 		info.setParentOrg(989l);
 		info.setOrgName("orgname 001");
@@ -71,7 +71,7 @@ public class OrghierDAOTest extends AbstractJUnit4SpringContextTests{
 			OrgHierInfo info = new OrgHierInfo();
 			info.setInfoId(id);
 			
-			info.setGroupId(123l);
+			info.setMemberGroupId(123l);
 			info.setLevel("level");
 			info.setParentOrg(989l);
 			info.setOrgName("orgname 001");

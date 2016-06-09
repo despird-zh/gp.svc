@@ -10,6 +10,9 @@ public class FlatColumns {
 	public static FlatColumn MODIFIER = new FlatColumn("modifier");
 	public static FlatColumn MODIFY_DATE = new FlatColumn("last_modified");
 	
+	public static FlatColumn MBR_GRP_ID = new FlatColumn("mbr_group_id");
+	public static FlatColumn MBR_ROLE = new FlatColumn("role");
+	
 	public static FlatColumn DICT_ZH_CN = new FlatColumn("lbl_zh_cn");
 	public static FlatColumn DICT_EN_US = new FlatColumn("lbl_en_us");
 	public static FlatColumn DICT_FR_FR = new FlatColumn("lbl_fr_fr");

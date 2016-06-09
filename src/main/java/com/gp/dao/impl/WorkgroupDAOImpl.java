@@ -39,13 +39,13 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_workgroups (")
 			.append("source_id,workgroup_id,workgroup_name,hash_code,storage_id,")
-			.append("descr,state,admin,creator,org_id,")
+			.append("descr,state,admin,creator,org_id,mbr_group_id,")
 			.append("publish_cab_id, netdisk_cab_id,owm,publish_enable,task_enable,")
 			.append("share_enable, link_enable,post_enable,netdisk_enable,avatar_id,")
 			.append("create_time,modifier, last_modified")
 			.append(")values(")
 			.append("?,?,?,?,?,")
-			.append("?,?,?,?,?,")
+			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?)");
@@ -53,7 +53,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getHashCode(),info.getStorageId(),
-				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),
+				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),info.getMemberGroupId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),
 				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),
 				info.getCreateDate(),info.getModifier(),info.getModifyDate()
@@ -93,7 +93,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_workgroups SET ")
-			.append("workgroup_name = ?,org_id = ?,storage_id = ?,source_id = ?, ")
+			.append("workgroup_name = ?,org_id = ?,storage_id = ?,source_id = ?, mbr_group_id = ?,")
 			.append("descr = ?,state = ? ,admin = ?,creator = ?,hash_code = ?,")
 			.append("create_time = ?,modifier = ?, last_modified = ?,avatar_id = ?,")
 			.append("publish_cab_id = ?,netdisk_cab_id = ? ,owm = ? ,publish_enable = ? ,task_enable = ? ,")
@@ -101,7 +101,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			.append("WHERE workgroup_id = ?  ");
 		
 		Object[] params = new Object[]{
-				info.getWorkgroupName(),info.getOrgId(),info.getStorageId(),info.getSourceId(),
+				info.getWorkgroupName(),info.getOrgId(),info.getStorageId(),info.getSourceId(),info.getMemberGroupId(),
 				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getHashCode(),
 				info.getCreateDate(),info.getModifier(),info.getModifyDate(),info.getAvatarId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),
@@ -171,6 +171,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			info.setPublishEnable(rs.getBoolean("publish_enable"));
 			info.setTaskEnable(rs.getBoolean("task_enable"));
 			info.setAvatarId(rs.getLong("avatar_id"));
+			info.setMemberGroupId(rs.getLong("mbr_group_id"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));

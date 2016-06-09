@@ -2,9 +2,11 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,16 +38,16 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_group_user (")
 			.append("rel_id,group_id,")
-			.append("account,workgroup_id,")
+			.append("account,")
 			.append("modifier, last_modified")
 			.append(")values(")
 			.append("?,?,")
-			.append("?,?,")
+			.append("?,")
 			.append("?,?)");
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				key.getId(),info.getGroupId(),
-				info.getAccount(),info.getWorkgroupId(),
+				info.getAccount(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -80,13 +82,13 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	public int update(GroupUserInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_group_user set ")
-			.append("group_id = ?,workgroup_id =?,")
+			.append("group_id = ?,")
 			.append("account = ?,")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where rel_id = ? ");
 		
 		Object[] params = new Object[]{
-				info.getGroupId(),info.getWorkgroupId(),
+				info.getGroupId(),
 				info.getAccount(),
 				info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
@@ -133,8 +135,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 			
 			info.setAccount(rs.getString("account"));
 			info.setGroupId(rs.getLong("group_id"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			
+
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			return info;
@@ -167,8 +168,8 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public boolean existByAccount(InfoId<Long> groupId, String account) {
-		String SQL = "select count(1) from gp_group_user "
+	public InfoId<Long> existByAccount(InfoId<Long> groupId, String account) {
+		String SQL = "select rel_id from gp_group_user "
 				+ "where group_id = ? and account = ?";
 		
 		Object[] params = new Object[]{				
@@ -180,8 +181,9 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		Integer cnt = jtemplate.queryForObject(SQL, params, Integer.class);
-		return cnt > 0;
+		List<Long> cnt = jtemplate.queryForList(SQL, params, Long.class);
+		
+		return CollectionUtils.isEmpty(cnt)?null:IdKey.GROUP_USER.getInfoId(cnt.get(0));
 	}
 
 	@Override

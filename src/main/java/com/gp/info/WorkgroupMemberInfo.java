@@ -1,6 +1,6 @@
 package com.gp.info;
 
-public class WorkgroupUserExInfo extends WorkgroupUserInfo{
+public class WorkgroupMemberInfo extends GroupUserInfo{
 	
 	private static final long serialVersionUID = 1L;
 	

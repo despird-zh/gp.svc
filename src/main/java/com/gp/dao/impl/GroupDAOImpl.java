@@ -37,17 +37,17 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_groups (")
-			.append("workgroup_id,group_id,")
+			.append("workgroup_id,group_id,group_type,")
 			.append("group_name,descr,")
 			.append("modifier, last_modified")
 			.append(")values(")
-			.append("?,?,")
+			.append("?,?,?,")
 			.append("?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getWorkgroupId(),key.getId(),
+				info.getWorkgroupId(),key.getId(),info.getGroupType(),
 				info.getGroupName(),info.getDescription(),
 				info.getModifier(),info.getModifyDate()
 		};
@@ -83,13 +83,13 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_groups set ")
-			.append("workgroup_id = ?,")
+			.append("workgroup_id = ?,group_type = ?,")
 			.append("group_name = ?,descr = ? ,")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where group_id = ? ");
 		
 		Object[] params = new Object[]{
-				info.getWorkgroupId(),
+				info.getWorkgroupId(),info.getGroupType(),
 				info.getGroupName(),info.getDescription(),
 				info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
@@ -137,6 +137,7 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 
 			info.setWorkgroupId(rs.getLong("workgroup_id"));
 			info.setGroupName(rs.getString("group_name"));
+			info.setGroupType(rs.getString("group_type"));
 			info.setDescription(rs.getString("descr"));
 			
 			info.setModifier(rs.getString("modifier"));
@@ -153,15 +154,16 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public int deleteByName(InfoId<Long> workgroupId, String group) {
+	public int deleteByName(InfoId<Long> workgroupId,String type, String group) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("DELETE FROM gp_groups ")
-			.append("WHERE workgroup_id = ? AND group_name = ?");
+			.append("WHERE workgroup_id = ? AND group_name = ? AND group_type = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
 				workgroupId.getId(),
-				group
+				group,
+				type
 		};
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : "+ SQL.toString() + "/ PARAMS : " + ArrayUtils.toString(params));
@@ -170,14 +172,15 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public GroupInfo queryByName(InfoId<Long> workgroupId, String group) {
+	public GroupInfo queryByName(InfoId<Long> workgroupId, String type, String group) {
 		
 		String SQL = "SELECT * FROM gp_groups "
-				+ "WHERE group_name = ? AND workgroup_id = ?";
+				+ "WHERE group_name = ? AND workgroup_id = ? AND group_type = ?";
 		
 		Object[] params = new Object[]{				
 				group,
 				workgroupId.getId(),
+				type
 			};
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);

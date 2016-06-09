@@ -6,7 +6,7 @@ public class OrgHierInfo extends TraceableInfo<Long>{
 
 	private Long parentOrg;
 
-	private Long groupId;
+	private Long memberGroupId;
 	
 	private String level;
 	
@@ -52,14 +52,6 @@ public class OrgHierInfo extends TraceableInfo<Long>{
 		this.description = description;
 	}
 
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
 	public String getAdmin() {
 		return admin;
 	}
@@ -82,6 +74,14 @@ public class OrgHierInfo extends TraceableInfo<Long>{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Long getMemberGroupId() {
+		return memberGroupId;
+	}
+
+	public void setMemberGroupId(Long memberGroupId) {
+		this.memberGroupId = memberGroupId;
 	}
 	
 	

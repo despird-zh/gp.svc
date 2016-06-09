@@ -11,7 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.dao.CabFileDAO;
 import com.gp.info.CabFileInfo;
 import com.gp.info.InfoId;
@@ -20,7 +20,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class CabFileDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = Users.PESUOD_USER;
+	Principal principal = GroupUsers.PESUOD_USER;
 	ServiceContext svcctx ;
 	@Autowired
     private CabFileDAO filedao;

@@ -36,7 +36,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_org_hier (")
-			.append("org_pid,org_id,group_id,admin,")
+			.append("org_pid,org_id,mbr_group_id,admin,")
 			.append("org_level,org_name,descr,manager,")
 			.append("email, modifier, last_modified")
 			.append(")values(")
@@ -47,7 +47,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		InfoId<Long> key = info.getInfoId();
 		
 		Object[] params = new Object[]{
-				info.getParentOrg(),key.getId(),info.getGroupId(),info.getAdmin(),
+				info.getParentOrg(),key.getId(),info.getMemberGroupId(),info.getAdmin(),
 				info.getLevel(),info.getOrgName(),info.getDescription(),info.getManager(),
 				info.getEmail(),info.getModifier(),info.getModifyDate()
 		};
@@ -82,13 +82,13 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_org_hier set ")
-			.append("org_pid = ?,group_id = ?,admin = ?,")
+			.append("org_pid = ?,mbr_group_id = ?,admin = ?,")
 			.append("org_level = ? ,org_name = ?,manager = ?, email = ?,")
 			.append("descr = ?,modifier = ?, last_modified = ? ")
 			.append("where org_id = ? ");
 		
 		Object[] params = new Object[]{
-				info.getParentOrg(),info.getGroupId(),info.getAdmin(),
+				info.getParentOrg(),info.getMemberGroupId(),info.getAdmin(),
 				info.getLevel(),info.getOrgName(),info.getManager(),info.getEmail(),
 				info.getDescription(),info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
@@ -133,7 +133,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 			InfoId<Long> id = IdKey.ORG_HIER.getInfoId(rs.getLong("org_id"));
 			info.setInfoId(id);
 			
-			info.setGroupId(rs.getLong("group_id"));
+			info.setMemberGroupId(rs.getLong("mbr_group_id"));
 			info.setLevel(rs.getString("org_level"));
 			info.setParentOrg(rs.getLong("org_pid"));
 			info.setOrgName(rs.getString("org_name"));

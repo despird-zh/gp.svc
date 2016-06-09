@@ -63,6 +63,8 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 	@NotNull
 	private Boolean taskEnable;
 	
+	private Long memberGroupId;
+	
 	private Long avatarId;
 	
 	public Boolean getShareEnable() {
@@ -227,6 +229,14 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 
 	public void setAvatarId(Long avatarId) {
 		this.avatarId = avatarId;
+	}
+
+	public Long getMemberGroupId() {
+		return memberGroupId;
+	}
+
+	public void setMemberGroupId(Long memberGroupId) {
+		this.memberGroupId = memberGroupId;
 	}
 
 

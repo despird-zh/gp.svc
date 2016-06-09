@@ -16,6 +16,18 @@ public class GroupInfo extends TraceableInfo<Long>{
 	@Size(min=1, max=16)
 	private String groupName;
 	
+	@NotNull
+	@Size(min=1, max=32)
+	private String groupType;
+	
+	public String getGroupType() {
+		return groupType;
+	}
+
+	public void setGroupType(String groupType) {
+		this.groupType = groupType;
+	}
+
 	private String description;
 
 	public Long getWorkgroupId() {

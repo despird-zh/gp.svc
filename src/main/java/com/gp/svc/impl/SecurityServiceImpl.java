@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.SystemOptions;
 import com.gp.common.ServiceContext;
-import com.gp.common.Users.UserState;
+import com.gp.common.GroupUsers.UserState;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupDAO;
@@ -37,6 +39,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
 import com.gp.info.GroupInfo;
 import com.gp.info.InfoId;
+import com.gp.info.KVPair;
 import com.gp.info.SysOptionInfo;
 import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
@@ -226,26 +229,32 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountRoles(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
+	public String getAccountRole(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
-		
+		StringBuffer SQL = new StringBuffer("SELECT ");
+		try{
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query", dae, "Account lite information");
+		}
 		return null;
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
+	public Set<KVPair<Long, String>> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
 		
+		final Set<KVPair<Long, String>> grpset = new HashSet<KVPair<Long, String>>();
 		StringBuffer SQL = new StringBuffer();
 
-		SQL.append("SELECT grps.* ");
+		SQL.append("SELECT grps.group_id, grps.group_name ");
 		SQL.append("FROM gp_groups grps, gp_group_user gusr ");
 		SQL.append("WHERE ");
-		SQL.append("grps.workgroup_id = gusr.workgroup_id AND ");
-		SQL.append("grps.group_id = gusr.group_id AND ");
-		SQL.append("gusr.workgroup_id = ? AND ");
-		SQL.append("gusr.account = ? ");
+		SQL.append("  grps.workgroup_id = gusr.workgroup_id AND ");
+		SQL.append("  grps.group_id = gusr.group_id AND ");
+		SQL.append("  gusr.workgroup_id = ? AND ");
+		SQL.append("  gusr.account = ? ");
 		
 		Object[] params = new Object[]{
 			wgroupId.getId(), account
@@ -255,9 +264,18 @@ public class SecurityServiceImpl implements SecurityService{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
 		
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		List<GroupInfo> grps = jtemplate.query(SQL.toString(), params, groupdao.getRowMapper());
-		//CollectionUtils.collect(grps, transformer)
-		return null;
+		
+		jtemplate.query(SQL.toString(), params, new RowCallbackHandler(){
+
+			@Override
+			public void processRow(ResultSet rs) throws SQLException {
+				KVPair<Long, String> kvp = new KVPair<Long, String>();
+				kvp.setKey(rs.getLong("group_id"));
+				kvp.setValue(rs.getString("group_name"));
+				grpset.add(kvp);
+			}});
+		
+		return grpset;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)

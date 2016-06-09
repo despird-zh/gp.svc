@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.gp.common.ServiceContext;
-import com.gp.common.Users;
+import com.gp.common.GroupUsers;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
+import com.gp.info.KVPair;
 import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.pagination.PageQuery;
@@ -81,7 +82,7 @@ public interface SecurityService {
 	 * @param wgroupId the work group id
 	 * @param account the account i.e login
 	 **/
-	public Set<String> getAccountRoles(ServiceContext svcctx, InfoId<Long> wgroupId, String account) throws ServiceException;
+	public String getAccountRole(ServiceContext svcctx, InfoId<Long> wgroupId, String account) throws ServiceException;
 
 	/**
 	 * Query Groups of account in a work group
@@ -89,7 +90,7 @@ public interface SecurityService {
 	 * @param wgroupId the work group id
 	 * @param account the account i.e login
 	 **/
-	public Set<String> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account) throws ServiceException;
+	public Set<KVPair<Long, String>> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account) throws ServiceException;
 	
 	/**
 	 * Remove the account information
@@ -110,7 +111,7 @@ public interface SecurityService {
 	 * @param userId the id of user
 	 * @param state the state of account
 	 **/
-	public boolean changeAccountState(ServiceContext svcctx, InfoId<Long> userId, Users.UserState state) throws ServiceException;
+	public boolean changeAccountState(ServiceContext svcctx, InfoId<Long> userId, GroupUsers.UserState state) throws ServiceException;
 	
 	/**
 	 * Update the Logon trace information

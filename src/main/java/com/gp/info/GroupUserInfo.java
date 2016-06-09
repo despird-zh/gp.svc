@@ -4,12 +4,12 @@ public class GroupUserInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = 1L;
 
-	private Long workgroupId;
-	
 	private Long groupId;
 	
 	private String account;
 
+	private String role;
+	
 	public Long getGroupId() {
 		return groupId;
 	}
@@ -26,12 +26,12 @@ public class GroupUserInfo extends TraceableInfo<Long>{
 		this.account = account;
 	}
 
-	public Long getWorkgroupId() {
-		return workgroupId;
+	public String getRole() {
+		return role;
 	}
 
-	public void setWorkgroupId(Long workgroupId) {
-		this.workgroupId = workgroupId;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	
