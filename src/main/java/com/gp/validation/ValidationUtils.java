@@ -2,6 +2,7 @@ package com.gp.validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.springframework.validation.beanvalidation.MessageSourceResourceBundle
 import com.gp.common.GeneralConfig;
 import com.gp.common.GeneralConstants;
 import com.gp.common.SystemOptions;
+import com.gp.validate.ValidateMessage;
 
 /**
  * This utils implements base on hibernate validation, 
@@ -106,9 +108,9 @@ public class ValidationUtils {
 	 * @param object the bean object
 	 *  
 	 **/
-	public static <T> List<ValidationMessage> validate(Locale locale, T object) {
+	public static <T> Set<ValidateMessage> validate(Locale locale, T object) {
 		
-		List<ValidationMessage> result = new ArrayList<ValidationMessage>();
+		Set<ValidateMessage> result = new HashSet<ValidateMessage>();
 		
 		Validator validator = getValidator(locale);
 		
@@ -117,7 +119,7 @@ public class ValidationUtils {
 			
 			for (ConstraintViolation<T> cv : set) {
 				
-				ValidationMessage vm = new ValidationMessage(
+				ValidateMessage vm = new ValidateMessage(
 						cv.getPropertyPath().toString(), 
 						cv.getMessage());
 				
@@ -136,15 +138,15 @@ public class ValidationUtils {
 	 * @param propertyName the name of bean property
 	 * 
 	 **/
-	public static <T> List<ValidationMessage> validateProperty(Locale locale, T object, String propertyName) {
+	public static <T> Set<ValidateMessage> validateProperty(Locale locale, T object, String propertyName) {
 		
-		List<ValidationMessage> result = new ArrayList<ValidationMessage>();
+		Set<ValidateMessage> result = new HashSet<ValidateMessage>();
 		
 		Validator validator = getValidator(locale);
 		Set<ConstraintViolation<T>> set = validator.validateProperty(object, propertyName, Default.class);
 		if (CollectionUtils.isNotEmpty(set)) {
 			for (ConstraintViolation<T> cv : set) {
-				ValidationMessage vm = new ValidationMessage(
+				ValidateMessage vm = new ValidateMessage(
 						cv.getPropertyPath().toString(), 
 						cv.getMessage());
 				
