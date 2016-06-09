@@ -51,7 +51,7 @@ public class InstanceServiceImpl implements InstanceService{
 			return instancedao.query(id);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get instance", dae);
+			throw new ServiceException("excp.query.with", dae, "instance", id);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class InstanceServiceImpl implements InstanceService{
 			return instancedao.queryByCodes(entity, node);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get instance", dae);
+			throw new ServiceException("excp.query.with", dae, "instance", "entity:"+entity+"/node:"+node);
 		}
 	}
 	
@@ -77,7 +77,7 @@ public class InstanceServiceImpl implements InstanceService{
 			int cnt = instancedao.update(instance);
 			return cnt > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail save instance", dae);
+			throw new ServiceException("excp.update", dae, "instance");
 		}
 	}
 
@@ -110,7 +110,7 @@ public class InstanceServiceImpl implements InstanceService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.query", dae, "instance");
 		}
 
 		return rtv;
@@ -137,16 +137,17 @@ public class InstanceServiceImpl implements InstanceService{
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<InstanceInfo> pwrapper = new PageWrapper<InstanceInfo>();
-		// get count sql scripts.
-		String countsql = StringUtils.replaceOnce(SQL.toString(), "SELECT * FROM", "SELECT COUNT(*) FROM");
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			// get count sql scripts.
+			String countsql = StringUtils.replaceOnce(SQL.toString(), "SELECT * FROM", "SELECT COUNT(*) FROM");
+			int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL.toString(), pagequery);
 		
@@ -159,7 +160,7 @@ public class InstanceServiceImpl implements InstanceService{
 			pwrapper.setRows(rtv);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.query", dae, "instance");
 		}
 
 		return pwrapper;
@@ -174,7 +175,7 @@ public class InstanceServiceImpl implements InstanceService{
 			return instancedao.updateState(instanceId, state.name()) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.update.with", dae, "instance state", instanceId);
 		}
 
 	}
@@ -187,7 +188,7 @@ public class InstanceServiceImpl implements InstanceService{
 			int cnt = instancedao.create(instance);
 			return cnt > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail save instance", dae);
+			throw new ServiceException("excp.create", dae, "external instance");
 		}
 	}
 	
@@ -224,7 +225,7 @@ public class InstanceServiceImpl implements InstanceService{
 				}});
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query accounts", dae);
+			throw new ServiceException("excp.query", dae, "account's instance");
 		}
 
 		return rtv;
