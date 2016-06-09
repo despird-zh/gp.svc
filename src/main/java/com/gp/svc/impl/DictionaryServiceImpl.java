@@ -31,7 +31,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx) throws ServiceException {
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx) throws ServiceException {
 
 		StringBuffer SQL = new StringBuffer();
 		
@@ -52,7 +52,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictGroup")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx, String dictGroup) throws ServiceException {
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("select * from gp_dictionary where dict_group = ?");
@@ -76,7 +76,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@CachePut(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictinfo.infoId")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateDictEntry(ServiceContext<?> svcctx, DictionaryInfo dictinfo) throws ServiceException {
+	public boolean updateDictEntry(ServiceContext svcctx, DictionaryInfo dictinfo) throws ServiceException {
 
 		try{
 			svcctx.setTraceInfo(dictinfo);
@@ -89,7 +89,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictId")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, InfoId<Long> dictId)throws ServiceException 
+	public DictionaryInfo getDictEntry(ServiceContext svcctx, InfoId<Long> dictId)throws ServiceException 
 	{
 		try{
 			return dictionarydao.query( dictId);
@@ -101,7 +101,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictkey")
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, String dictKey) throws ServiceException {
+	public DictionaryInfo getDictEntry(ServiceContext svcctx, String dictKey) throws ServiceException {
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("SELECT * FROM gp_dictionary WHERE dict_key = ?");

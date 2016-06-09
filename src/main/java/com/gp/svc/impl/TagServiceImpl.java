@@ -55,7 +55,7 @@ public class TagServiceImpl implements TagService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext svcctx, String tagType) throws ServiceException {
 		
 		List<TagInfo> result;
 		try{
@@ -68,7 +68,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String tagType, String category) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext svcctx, String tagType, String category) throws ServiceException {
 		List<TagInfo> result;
 		try{
 			result = tagdao.queryTags(tagType, category, "");
@@ -80,7 +80,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<TagInfo> getTags(ServiceContext<?> svcctx, String category, InfoId<Long> objectId) throws ServiceException {
+	public List<TagInfo> getTags(ServiceContext svcctx, String category, InfoId<Long> objectId) throws ServiceException {
 		
 		List<TagInfo> result;
 		Map<String, Object> paramap = new HashMap<String, Object>();
@@ -117,7 +117,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Map<InfoId<Long>, Set<TagInfo>> getTags(ServiceContext<?> svcctx, List<InfoId<Long>> objectIds) throws ServiceException {
+	public Map<InfoId<Long>, Set<TagInfo>> getTags(ServiceContext svcctx, List<InfoId<Long>> objectIds) throws ServiceException {
 		
 		final Map<InfoId<Long>,Set<TagInfo>> result = new HashMap<InfoId<Long>,Set<TagInfo>>();
 		
@@ -182,7 +182,7 @@ public class TagServiceImpl implements TagService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newTag(ServiceContext<?> svcctx, TagInfo taginfo) throws ServiceException {
+	public boolean newTag(ServiceContext svcctx, TagInfo taginfo) throws ServiceException {
 		
 		if(!InfoId.isValid(taginfo.getInfoId())){
 			
@@ -196,7 +196,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeTag(ServiceContext<?> svcctx, String tagType, String tagName) throws ServiceException {
+	public boolean removeTag(ServiceContext svcctx, String tagType, String tagName) throws ServiceException {
 		
 		try{
 			return tagdao.deleteTag(tagType,null, tagName) > 0;
@@ -207,7 +207,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeTag(ServiceContext<?> svcctx, InfoId<Long> tagKey) throws ServiceException {
+	public boolean removeTag(ServiceContext svcctx, InfoId<Long> tagKey) throws ServiceException {
 		
 		try{
 			return tagdao.delete(tagKey) > 0;
@@ -218,7 +218,7 @@ public class TagServiceImpl implements TagService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean attachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String category, String tagName)
+	public boolean attachTag(ServiceContext svcctx, InfoId<?> objectId, String category, String tagName)
 			throws ServiceException {
 		
 		try{
@@ -257,7 +257,7 @@ public class TagServiceImpl implements TagService{
 	}
 
 	@Override
-	public boolean detachTag(ServiceContext<?> svcctx, InfoId<?> objectId, String tag)
+	public boolean detachTag(ServiceContext svcctx, InfoId<?> objectId, String tag)
 			throws ServiceException {
 		try{
 			

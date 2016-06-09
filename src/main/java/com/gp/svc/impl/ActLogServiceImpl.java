@@ -36,7 +36,7 @@ public class ActLogServiceImpl implements ActLogService{
 	
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getWorkgroupActivityLogs(ServiceContext<?> svcctx, InfoId<Long> wid,
+	public PageWrapper<ActLogInfo> getWorkgroupActivityLogs(ServiceContext svcctx, InfoId<Long> wid,
 			PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
@@ -79,7 +79,7 @@ public class ActLogServiceImpl implements ActLogService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getAccountActivityLogs(ServiceContext<?> svcctx, String account, PageQuery pagequery)
+	public PageWrapper<ActLogInfo> getAccountActivityLogs(ServiceContext svcctx, String account, PageQuery pagequery)
 			throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
@@ -121,7 +121,7 @@ public class ActLogServiceImpl implements ActLogService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getObjectActivityLogs(ServiceContext<?> svcctx, InfoId<?> objectId,
+	public PageWrapper<ActLogInfo> getObjectActivityLogs(ServiceContext svcctx, InfoId<?> objectId,
 			PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");

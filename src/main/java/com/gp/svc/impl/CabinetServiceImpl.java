@@ -60,7 +60,7 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public CabinetInfo getCabinet(ServiceContext<?> svcctx, InfoId<Long> ckey) throws ServiceException {
+	public CabinetInfo getCabinet(ServiceContext svcctx, InfoId<Long> ckey) throws ServiceException {
 
 		try{
 			
@@ -73,7 +73,7 @@ public class CabinetServiceImpl implements CabinetService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
+	public List<CabFolderInfo> getCabFolders(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername) throws ServiceException {
 
 		StringBuffer SQL = new StringBuffer();
@@ -132,7 +132,7 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<CabFolderInfo> getCabFolders(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
+	public PageWrapper<CabFolderInfo> getCabFolders(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername, PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT folders.* ");
@@ -209,7 +209,7 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
+	public List<CabFileInfo> getCabFiles(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String filename) throws ServiceException {
 
 		StringBuffer SQL = new StringBuffer();
@@ -269,7 +269,7 @@ public class CabinetServiceImpl implements CabinetService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<CabFileInfo> getCabFiles(ServiceContext<?> svcctx, 
+	public PageWrapper<CabFileInfo> getCabFiles(ServiceContext svcctx, 
 			InfoId<Long> ckey,
 			InfoId<Long> folderkey,
 			String filename, 
@@ -348,7 +348,7 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<CabEntryInfo> getCabEntries(ServiceContext<?> svcctx, 
+	public PageWrapper<CabEntryInfo> getCabEntries(ServiceContext svcctx, 
 			InfoId<Long> ckey,
 			InfoId<Long> folderkey,
 			String entryname, 
@@ -429,7 +429,7 @@ public class CabinetServiceImpl implements CabinetService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<CabinetInfo> getCabinets(ServiceContext<?> svcctx, String account) throws ServiceException {
+	public List<CabinetInfo> getCabinets(ServiceContext svcctx, String account) throws ServiceException {
 
 		List<CabinetInfo> rtv = null;
 		StringBuffer SQL = new StringBuffer();

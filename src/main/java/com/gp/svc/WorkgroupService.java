@@ -24,59 +24,59 @@ public interface WorkgroupService {
 	/**
 	 * Create the workgroup information, build public and private cabinets at the same time.
 	 **/
-	public boolean newWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException;
+	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException;
 	
 	/**
 	 * Update the work group information 
 	 **/
-	public boolean updateWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException;
+	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException;
 	
 	/**
 	 * get workgroup information by key 
 	 **/
-	public WorkgroupInfo getWorkgroup(ServiceContext<?> svcctx, InfoId<Long> wkey) throws ServiceException;
+	public WorkgroupInfo getWorkgroup(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public WorkgroupExInfo getWorkgroupEx(ServiceContext<?> svcctx, InfoId<Long> wkey) throws ServiceException;
+	public WorkgroupExInfo getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public boolean addWorkgroupMember(ServiceContext<?> svcctx, WorkgroupUserInfo wminfo) throws ServiceException;
+	public boolean addWorkgroupMember(ServiceContext svcctx, WorkgroupUserInfo wminfo) throws ServiceException;
 
-	public boolean removeWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account) throws ServiceException;
+	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account) throws ServiceException;
 	
-	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname , 
+	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId) throws ServiceException;
 	
 	
-	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname , 
+	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Get the users that could be added to work group 
 	 **/
-	public List<UserExInfo> getAvailableUsers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname) throws ServiceException;
+	public List<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException;
 
-	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Get the groups under a work group, the search condition is group name 
 	 **/
-	public List<GroupInfo> getWorkgroupGroups(ServiceContext<?> svcctx, InfoId<Long> wkey, String gname) throws ServiceException;	
+	public List<GroupInfo> getWorkgroupGroups(ServiceContext svcctx, InfoId<Long> wkey, String gname) throws ServiceException;	
 	
-	public boolean addWorkgroupGroup(ServiceContext<?> svcctx, GroupInfo ginfo) throws ServiceException;	
+	public boolean addWorkgroupGroup(ServiceContext svcctx, GroupInfo ginfo) throws ServiceException;	
 	
-	public boolean removeWorkgroupGroup(ServiceContext<?> svcctx, InfoId<Long> wkey,String gname) throws ServiceException;	
+	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> wkey,String gname) throws ServiceException;	
 	
-	public boolean removeWorkgroupGroup(ServiceContext<?> svcctx, InfoId<Long> groupid) throws ServiceException;	
+	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> groupid) throws ServiceException;	
 	
-	public boolean addWorkgroupGroupMember(ServiceContext<?> svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
+	public boolean addWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
-	public List<UserInfo> getWorkgroupGroupMembers(ServiceContext<?> svcctx, InfoId<Long> groupid) throws ServiceException;
+	public List<UserInfo> getWorkgroupGroupMembers(ServiceContext svcctx, InfoId<Long> groupid) throws ServiceException;
 	
-	public boolean removeWorkgroupGroupMember(ServiceContext<?> svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
+	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
-	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 	
-	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
+	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
-	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 
 }

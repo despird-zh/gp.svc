@@ -38,7 +38,7 @@ public class ImageServiceImpl implements ImageService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public ImageInfo getImage(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
+	public ImageInfo getImage(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 
 		try{
 			return imagedao.query(id);
@@ -50,7 +50,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<ImageInfo> getImages(ServiceContext<?> svcctx, String format) throws ServiceException {
+	public List<ImageInfo> getImages(ServiceContext svcctx, String format) throws ServiceException {
 		
 		List<ImageInfo> result = null;
 		String QUERY_SQL = "SELECT * FROM gp_images WHERE image_format LIKE ? ";
@@ -92,7 +92,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public ImageInfo getImage(ServiceContext<?> svcctx, InfoId<Long> id, String parentPath)
+	public ImageInfo getImage(ServiceContext svcctx, InfoId<Long> id, String parentPath)
 			throws ServiceException {
 				
 		try{
@@ -106,7 +106,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newImage(ServiceContext<?> svcctx, ImageInfo info) throws ServiceException {
+	public boolean newImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
 			
 			svcctx.setTraceInfo(info);
@@ -119,7 +119,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateImage(ServiceContext<?> svcctx, ImageInfo info) throws ServiceException {
+	public boolean updateImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
 			svcctx.setTraceInfo(info);
 			int cnt = imagedao.update(info);
@@ -133,7 +133,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeImage(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
+	public boolean removeImage(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{
 			
 			return imagedao.delete(id) > 0;
@@ -145,7 +145,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public String getImageFileName(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
+	public String getImageFileName(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{
 			// force not to retrieve the binary data : parent = ""
 			Object name = pseudodao.query(id, FlatColumns.IMG_NAME);

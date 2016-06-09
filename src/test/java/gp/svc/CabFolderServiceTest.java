@@ -36,7 +36,7 @@ import com.gp.svc.SecurityService;
 public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	
 	Principal principal = new Principal("demouser");
-	ServiceContext<?> svcctx ;
+	ServiceContext svcctx ;
 	
 	@Autowired
     private CommonService idService;

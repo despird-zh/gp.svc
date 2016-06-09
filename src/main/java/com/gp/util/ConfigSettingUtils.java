@@ -43,7 +43,7 @@ public class ConfigSettingUtils {
 		String value = GeneralConfig.getString(key);
 		
 		if(StringUtils.isBlank(value) && systemservice != null){
-			ServiceContext<Object> svcctx = ServiceContext.getPseudoServiceContext();
+			ServiceContext svcctx = ServiceContext.getPseudoServiceContext();
 			try {
 			
 				SysOptionInfo soi = systemservice.getOption(svcctx, key);

@@ -37,7 +37,7 @@ public class AuditServiceImpl implements AuditService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<AuditInfo> getAudits(ServiceContext<?> svcctx, String subject, String object, String operation) throws ServiceException {
+	public List<AuditInfo> getAudits(ServiceContext svcctx, String subject, String object, String operation) throws ServiceException {
 		
 		List<Object> parmlist = new ArrayList<Object>();
 		
@@ -83,7 +83,7 @@ public class AuditServiceImpl implements AuditService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean deleteAudit(ServiceContext<?> svcctx, InfoId<Long> id) throws ServiceException {
+	public boolean deleteAudit(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 
 		try{
 			int cnt = auditdao.delete( id);
@@ -95,7 +95,7 @@ public class AuditServiceImpl implements AuditService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addAudit(ServiceContext<?> svcctx, AuditInfo ainfo) throws ServiceException {
+	public boolean addAudit(ServiceContext svcctx, AuditInfo ainfo) throws ServiceException {
 		try{
 			return auditdao.create( ainfo) > 0;
 			
@@ -106,7 +106,7 @@ public class AuditServiceImpl implements AuditService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean purgeAudits(ServiceContext<?> svcctx, String subject, String objectType, Date reservedate)
+	public boolean purgeAudits(ServiceContext svcctx, String subject, String objectType, Date reservedate)
 			throws ServiceException {
 		
 		List<Object> parmlist = new ArrayList<Object>();

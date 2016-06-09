@@ -54,6 +54,6 @@ public class SecurityServiceTest extends AbstractJUnit4SpringContextTests{
 		info.setModifier("modifer001");
 		info.setModifyDate(new Date(System.currentTimeMillis()));
 		
-		securityService.newAccount(svcctx, info);
+		securityService.newAccount(svcctx, info,120l,34l);
 	}
 }

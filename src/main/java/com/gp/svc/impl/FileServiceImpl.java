@@ -71,7 +71,7 @@ public class FileServiceImpl implements FileService{
 	
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<CabVersionInfo> getVersions(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
+	public List<CabVersionInfo> getVersions(ServiceContext svcctx, InfoId<Long> filekey) throws ServiceException {
 		
 		List<CabVersionInfo> versions = null;
 		
@@ -87,7 +87,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
+	public InfoId<Long> newFile(ServiceContext svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
 		InfoId<Long> fkey = file.getInfoId();
 		
@@ -110,7 +110,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> copyFile(ServiceContext<?> svcctx, InfoId<Long> srcfileId, InfoId<Long> destFolderId)
+	public InfoId<Long> copyFile(ServiceContext svcctx, InfoId<Long> srcfileId, InfoId<Long> destFolderId)
 			throws ServiceException {
 		
 		CabFileInfo cfileinfo = null;
@@ -134,7 +134,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean moveFile(ServiceContext<?> svcctx, InfoId<Long> srcFileId, InfoId<Long> destFolderId)
+	public boolean moveFile(ServiceContext svcctx, InfoId<Long> srcFileId, InfoId<Long> destFolderId)
 			throws ServiceException {
 
 		try{
@@ -156,7 +156,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> newVersion(ServiceContext<?> svcctx, InfoId<Long> filekey) throws ServiceException {
+	public InfoId<Long> newVersion(ServiceContext svcctx, InfoId<Long> filekey) throws ServiceException {
 
 		CabFileInfo cfileinfo = null;
 		InfoId<Long> vkey = null;
@@ -199,7 +199,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
+	public void addAce(ServiceContext svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
 		try{
 			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
@@ -236,7 +236,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
+	public void removeAce(ServiceContext svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
 		try{
 			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
@@ -250,7 +250,7 @@ public class FileServiceImpl implements FileService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
+	public void addAcl(ServiceContext svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
 		
 		try{
 			CabAclInfo aclinfo = new CabAclInfo();
@@ -312,7 +312,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
+	public CabinetInfo getCabinetInfo(ServiceContext svcctx, InfoId<Long> fileid) throws ServiceException {
 		CabinetInfo rtv = null;
 		StringBuffer qbuf = new StringBuffer("Select a.* from gp_cabinets a, gp_cab_files b ");
 		qbuf.append("Where b.cabinet_id = a.cabinet_id and b.file_id = ?");
@@ -336,7 +336,7 @@ public class FileServiceImpl implements FileService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public CabFileInfo getFile(ServiceContext<?> svcctx, InfoId<Long> fileid) throws ServiceException {
+	public CabFileInfo getFile(ServiceContext svcctx, InfoId<Long> fileid) throws ServiceException {
 		try{
 			return cabfiledao.query(fileid);
 		}catch(DataAccessException dae){

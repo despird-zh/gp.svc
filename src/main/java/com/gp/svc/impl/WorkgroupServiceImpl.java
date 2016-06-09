@@ -114,7 +114,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	 **/
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException {
+	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException {
 		
 		InfoId<Long> wkey = winfo.getInfoId();
 		// set trace info
@@ -215,7 +215,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	 **/
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateWorkgroup(ServiceContext<?> svcctx, WorkgroupInfo winfo) throws ServiceException {
+	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo) throws ServiceException {
 		
 		InfoId<Long> wkey = winfo.getInfoId();
 
@@ -280,7 +280,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public WorkgroupInfo getWorkgroup(ServiceContext<?> svcctx, InfoId<Long> wkey) throws ServiceException {
+	public WorkgroupInfo getWorkgroup(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
 		WorkgroupInfo winfo = null;
 
@@ -292,7 +292,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext<?> svcctx, InfoId<Long> wkey, 
+	public List<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -338,7 +338,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext<?> svcctx, InfoId<Long> wkey, 
+	public PageWrapper<WorkgroupUserExInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();		
@@ -398,7 +398,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addWorkgroupMember(ServiceContext<?> svcctx, WorkgroupUserInfo wminfo)
+	public boolean addWorkgroupMember(ServiceContext svcctx, WorkgroupUserInfo wminfo)
 			throws ServiceException {
 		try{
 			
@@ -424,7 +424,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeWorkgroupMember(ServiceContext<?> svcctx, InfoId<Long> wkey, String account)
+	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
 		
 		String DelSQL = "delete from gp_workgroup_user where workgroup_id = ? and account = ? ";
@@ -482,7 +482,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExInfo> getAvailableUsers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
+	public List<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
 		Map<String,Object> params = new HashMap<String,Object>();
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 
@@ -518,7 +518,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext<?> svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
+	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
 		Map<String,Object> params = new HashMap<String,Object>();
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
@@ -569,7 +569,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<GroupInfo> getWorkgroupGroups(ServiceContext<?> svcctx, InfoId<Long> wkey, String gname) throws ServiceException {
+	public List<GroupInfo> getWorkgroupGroups(ServiceContext svcctx, InfoId<Long> wkey, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
@@ -601,7 +601,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addWorkgroupGroup(ServiceContext<?> svcctx, GroupInfo ginfo)
+	public boolean addWorkgroupGroup(ServiceContext svcctx, GroupInfo ginfo)
 			throws ServiceException {
 		
 		int cnt = 0;
@@ -630,7 +630,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeWorkgroupGroup(ServiceContext<?> svcctx, InfoId<Long> wkey, String gname)
+	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> wkey, String gname)
 			throws ServiceException {
 		
 		try{
@@ -645,7 +645,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeWorkgroupGroup(ServiceContext<?> svcctx, InfoId<Long> groupid)
+	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> groupid)
 			throws ServiceException {
 		try{
 			groupuserdao.deleteByGroup(groupid);
@@ -657,7 +657,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addWorkgroupGroupMember(ServiceContext<?> svcctx, InfoId<Long> groupid, String... accounts)
+	public boolean addWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String... accounts)
 			throws ServiceException {
 
 		try{
@@ -688,7 +688,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserInfo> getWorkgroupGroupMembers(ServiceContext<?> svcctx, InfoId<Long> groupid) throws ServiceException {
+	public List<UserInfo> getWorkgroupGroupMembers(ServiceContext svcctx, InfoId<Long> groupid) throws ServiceException {
 
 
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -716,7 +716,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeWorkgroupGroupMember(ServiceContext<?> svcctx, InfoId<Long> groupid, String... accounts)
+	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String... accounts)
 			throws ServiceException {
 		
 		try{
@@ -731,7 +731,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname) throws ServiceException {
+	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
@@ -768,7 +768,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext<?> svcctx, String gname) throws ServiceException {
+	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
@@ -803,7 +803,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public WorkgroupExInfo getWorkgroupEx(ServiceContext<?> svcctx, InfoId<Long> wkey) throws ServiceException {
+	public WorkgroupExInfo getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
 		Object[] params = new Object[]{wkey.getId()};
 		
@@ -835,7 +835,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext<?> svcctx, String gname,List<String> tags, PageQuery pagequery)
+	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
 			throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();

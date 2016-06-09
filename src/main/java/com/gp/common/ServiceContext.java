@@ -29,7 +29,7 @@ import com.gp.util.DateTimeUtils;
  * @author gary diao
  * @version 0.1 2014-12-12
  **/
-public class ServiceContext<A> extends GeneralContext<A> {
+public class ServiceContext extends GeneralContext {
 
 	/** the principal  */
 	private Principal principal = null;
@@ -37,7 +37,7 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	/** the workgroup key */
 	private InfoId<Long> workgroupId = null;
 	
-	private static ServiceContext<Object> pseudoservice = null;
+	private static ServiceContext pseudoservice = null;
 	
 	/** 
 	 * constructor with principal
@@ -64,7 +64,7 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	}	
 	
 	/**
-	 * Set the workgroupKey of current context
+	 * Set the work group key of current context
 	 **/
 	public void setWorkgroupId(InfoId<Long> workgroupId){
 		
@@ -72,7 +72,7 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	}
 	
 	/**
-	 * Get the workgroup key of current context.
+	 * Get the work group key of current context.
 	 **/
 	public InfoId<Long> getWorkgroupId(){
 		
@@ -107,11 +107,11 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	 * 
 	 * @return ServiceContext<Object> the pseudo service context.
 	 **/
-	public static ServiceContext<Object> getPseudoServiceContext(){
+	public static ServiceContext getPseudoServiceContext(){
 		
 		if(pseudoservice == null){
 		
-			pseudoservice = new ServiceContext<Object>(Users.PESUOD_USER);
+			pseudoservice = new ServiceContext(Users.PESUOD_USER);
 		}
 		
 		return pseudoservice;
@@ -124,11 +124,11 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	 * 
 	 * @return ServiceContext<Object> the pseudo service context.
 	 **/
-	public static ServiceContext<Object> getPseudoServiceContext(boolean newone){
+	public static ServiceContext getPseudoServiceContext(boolean newone){
 		
 		if(newone){
 						
-			return new ServiceContext<Object>(Users.PESUOD_USER);
+			return new ServiceContext(Users.PESUOD_USER);
 		}
 		
 		return getPseudoServiceContext();
@@ -141,11 +141,11 @@ public class ServiceContext<A> extends GeneralContext<A> {
 	 * 
 	 * @return ServiceContext<Object> the pseudo service context.
 	 **/
-	public static ServiceContext<Object> getPseudoServiceContext(int sourceId){
+	public static ServiceContext getPseudoServiceContext(int sourceId){
 		
 		Principal principal = Users.PESUOD_USER;
 		
-		return new ServiceContext<Object>(principal);
+		return new ServiceContext(principal);
 		
 	}
     

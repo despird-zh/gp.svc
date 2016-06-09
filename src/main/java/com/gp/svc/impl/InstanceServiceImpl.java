@@ -44,7 +44,7 @@ public class InstanceServiceImpl implements InstanceService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public InstanceInfo getInstnaceInfo(ServiceContext<?> svcctx, InfoId<Integer> id) throws ServiceException {
+	public InstanceInfo getInstnaceInfo(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
 		
 		try{
 			
@@ -57,7 +57,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public InstanceInfo getInstnace(ServiceContext<?> svcctx, String entity, String node) throws ServiceException {
+	public InstanceInfo getInstnace(ServiceContext svcctx, String entity, String node) throws ServiceException {
 		
 		try{
 			
@@ -70,7 +70,7 @@ public class InstanceServiceImpl implements InstanceService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean saveInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException {
+	public boolean saveInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException {
 
 		try{
 			svcctx.setTraceInfo(instance);
@@ -83,7 +83,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename)
+	public List<InstanceInfo> getInstances(ServiceContext svcctx, String instancename)
 			throws ServiceException {
 		
 		List<InstanceInfo> rtv = null;
@@ -118,7 +118,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename, PageQuery pagequery)
+	public PageWrapper<InstanceInfo> getInstances(ServiceContext svcctx, String instancename, PageQuery pagequery)
 			throws ServiceException {
 		
 		List<InstanceInfo> rtv = null;
@@ -168,7 +168,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
+	public boolean changeInstanceState(ServiceContext svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
 
 		try{
 			
@@ -182,7 +182,7 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addExtInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException {
+	public boolean addExtInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException {
 		try{
 			svcctx.setTraceInfo(instance);
 			int cnt = instancedao.create(instance);
@@ -194,7 +194,7 @@ public class InstanceServiceImpl implements InstanceService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Map<String, InstanceInfo> getAccountSources(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException {
+	public Map<String, InstanceInfo> getAccountSources(ServiceContext svcctx, List<String> accounts) throws ServiceException {
 		
 		final Map<String, InstanceInfo> rtv = new HashMap<String, InstanceInfo>();
 		

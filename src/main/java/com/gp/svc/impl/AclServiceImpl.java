@@ -49,7 +49,7 @@ public class AclServiceImpl implements AclService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> addAclInfo(ServiceContext<?> svcctx, List<CabAceInfo> aces)  throws ServiceException{
+	public InfoId<Long> addAclInfo(ServiceContext svcctx, List<CabAceInfo> aces)  throws ServiceException{
 
 		try{
 			InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
@@ -75,7 +75,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> addAceInfo(ServiceContext<?> svcctx, InfoId<Long> aclId, CabAceInfo ace) throws ServiceException{
+	public InfoId<Long> addAceInfo(ServiceContext svcctx, InfoId<Long> aclId, CabAceInfo ace) throws ServiceException{
 		
 		try{
 			CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
@@ -106,7 +106,7 @@ public class AclServiceImpl implements AclService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addAceInfos(ServiceContext<?> svcctx, InfoId<Long> aclId, CabAceInfo ... aces)  throws ServiceException{
+	public void addAceInfos(ServiceContext svcctx, InfoId<Long> aclId, CabAceInfo ... aces)  throws ServiceException{
 		try{
 			for(CabAceInfo ace : aces){
 				
@@ -134,7 +134,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public CabAceInfo getAceInfo(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
+	public CabAceInfo getAceInfo(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
 		try{
 			CabAceInfo aceinfo = cabacedao.queryBySubject(aclId.getId(), 
@@ -150,7 +150,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Acl getAcl(ServiceContext<?> svcctx, InfoId<Long> aclId)  throws ServiceException{
+	public Acl getAcl(ServiceContext svcctx, InfoId<Long> aclId)  throws ServiceException{
 		
 		try{
 			CabAclInfo aclinfo = cabacldao.query(aclId);
@@ -187,7 +187,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Ace getAce(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
+	public Ace getAce(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
 		try{
 			CabAceInfo aci = cabacedao.queryBySubject(aclId.getId(), aceType, subject);
@@ -218,7 +218,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeAcl(ServiceContext<?> svcctx, InfoId<Long> aclId)  throws ServiceException{
+	public boolean removeAcl(ServiceContext svcctx, InfoId<Long> aclId)  throws ServiceException{
 
 		try{
 			// delete the related aces
@@ -232,7 +232,7 @@ public class AclServiceImpl implements AclService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeAce(ServiceContext<?> svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
+	public boolean removeAce(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
 		try{
 			return cabacedao.deleteBySubject(aclId.getId(), aceType, subject) > 0;

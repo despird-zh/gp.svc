@@ -13,7 +13,7 @@ public interface FolderService {
 	/**
 	 * create folder 
 	 **/
-	public InfoId<Long> newFolder(ServiceContext<?> svcctx, InfoId<Long> parentkey, CabFolderInfo file, Acl acl) throws ServiceException;
+	public InfoId<Long> newFolder(ServiceContext svcctx, InfoId<Long> parentkey, CabFolderInfo file, Acl acl) throws ServiceException;
 
 	/**
 	 * copy the folder to target path
@@ -21,36 +21,36 @@ public interface FolderService {
 	 * @param folderkey the key of source folder object
 	 * @param distinationPkey the parent folder key of destination
 	 **/
-	public InfoId<Long> copyFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
+	public InfoId<Long> copyFolder(ServiceContext svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
 
 	/**
 	 * move the folder to target path
 	 **/
-	public boolean moveFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
+	public boolean moveFolder(ServiceContext svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey) throws ServiceException;
 	
 	/**
 	 * add ace information
 	 **/
-	public void addAce(ServiceContext<?> svcctx, InfoId<Long> folderkey, Ace ... ace )throws ServiceException;
+	public void addAce(ServiceContext svcctx, InfoId<Long> folderkey, Ace ... ace )throws ServiceException;
 	
 	/**
 	 * add acl information 
 	 **/
-	public void addAcl(ServiceContext<?> svcctx, InfoId<Long> folderkey,  Acl acl )throws ServiceException;
+	public void addAcl(ServiceContext svcctx, InfoId<Long> folderkey,  Acl acl )throws ServiceException;
 
 	/**
 	 * find cabinet information by folder id 
 	 * @param folderid the id of folder which reside in target cabinet
 	 **/
-	public CabinetInfo getCabinetInfo(ServiceContext<?> svcctx, InfoId<Long> folderid)throws ServiceException;
+	public CabinetInfo getCabinetInfo(ServiceContext svcctx, InfoId<Long> folderid)throws ServiceException;
 	
 	/**
 	 * Find the folder information 
 	 * @param folderid the id of folder
 	 **/
-	public CabFolderInfo getFolder(ServiceContext<?> svcctx, InfoId<Long> folderid) throws ServiceException;
+	public CabFolderInfo getFolder(ServiceContext svcctx, InfoId<Long> folderid) throws ServiceException;
 	
-	public InfoId<Long> getFolderId(ServiceContext<?> svcctx, InfoId<Long> cabientId, String path) throws ServiceException;
+	public InfoId<Long> getFolderId(ServiceContext svcctx, InfoId<Long> cabientId, String path) throws ServiceException;
 	
-	public String getFolderPath(ServiceContext<?> svcctx, InfoId<Long> folderId) throws ServiceException;
+	public String getFolderPath(ServiceContext svcctx, InfoId<Long> folderId) throws ServiceException;
 }

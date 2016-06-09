@@ -56,7 +56,7 @@ import com.gp.util.DateTimeUtils;
 @Service("securityService")
 public class SecurityServiceImpl implements SecurityService{
 	
-	Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);
 	
 	@Autowired
 	PseudoDAO pseudodao;
@@ -78,7 +78,7 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newAccount(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
+	public boolean newAccount(ServiceContext svcctx, UserInfo uinfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 			
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
@@ -97,14 +97,13 @@ public class SecurityServiceImpl implements SecurityService{
 		pubinfo.setModifier(svcctx.getPrincipal().getAccount());
 		pubinfo.setModifyDate(DateTimeUtils.now());
 		pubinfo.setStorageId(uinfo.getStorageId());
-		Long capacity = null;
-		capacity = svcctx.getContextData(CTX_KEY_PUBCAPACITY, Long.class);
-		if(null == capacity){
+
+		if(null == pubcapacity){
 			// set capacity 
 			SysOptionInfo sysopt = systemservice.getOption(svcctx, SystemOptions.PERSONAL_CABINET_QUOTA.toString());
-			capacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
+			pubcapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
 		}
-		pubinfo.setCapacity(capacity);
+		pubinfo.setCapacity(pubcapacity);
 
 		// allocate an key for private cabinet
 		InfoId<Long> prikey = idService.generateId( IdKey.CABINET, Long.class);
@@ -122,15 +121,13 @@ public class SecurityServiceImpl implements SecurityService{
 		priinfo.setModifyDate(DateTimeUtils.now());
 		priinfo.setStorageId(uinfo.getStorageId());
 		
-		Long pcapacity = null;
-		pcapacity = svcctx.getContextData(CTX_KEY_PRICAPACITY, Long.class);
-		if(null == pcapacity){
+		if(null == pricapacity){
 			// set capacity 
 			SysOptionInfo sysopt = systemservice.getOption(svcctx, SystemOptions.PERSONAL_CABINET_QUOTA.toString());
-			pcapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
+			pricapacity = StringUtils.isNumeric(sysopt.getOptionValue()) ? Long.valueOf(sysopt.getOptionValue()) :512L;
 		}
 		// set capacity 
-		priinfo.setCapacity(pcapacity);
+		priinfo.setCapacity(pricapacity);
 		int cnt = 0;
 		try{			
 			cnt = userdao.create( uinfo);		
@@ -138,14 +135,14 @@ public class SecurityServiceImpl implements SecurityService{
 			cabinetdao.create( priinfo);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail create user account", dae);
+			throw new ServiceException("excp.create", dae, "account");
 		}
 		return cnt > 0;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public int updateAccount(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
+	public int updateAccount(ServiceContext svcctx, UserInfo uinfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
@@ -157,14 +154,14 @@ public class SecurityServiceImpl implements SecurityService{
 				uinfo.setPassword(oldinfo.getPassword());
 			
 			InfoId<Integer> storageId = IdKey.STORAGE.getInfoId(uinfo.getStorageId());
-			Long pubcapacity = svcctx.getContextData(CTX_KEY_PUBCAPACITY, Long.class);
+			
 			InfoId<Long> pubcab = null;
 			if(null != pubcapacity){
 				pubcab = IdKey.CABINET.getInfoId(oldinfo.getPublishCabinet());
 				cabinetdao.updateCabCapacity(pubcab, pubcapacity);
 			}
 			cabinetdao.changeStorage(pubcab, storageId);
-			Long pricapacity = svcctx.getContextData(CTX_KEY_PRICAPACITY, Long.class);
+			
 			InfoId<Long> pricab = null;
 			if(null != pricapacity){
 				pricab = IdKey.CABINET.getInfoId(oldinfo.getNetdiskCabinet());
@@ -177,14 +174,14 @@ public class SecurityServiceImpl implements SecurityService{
 			return cnt ;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail create user account", dae);
+			throw new ServiceException("excp.update", dae, "account");
 		}
 
 	}
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean newAccountExt(ServiceContext<?> svcctx, UserInfo uinfo) throws ServiceException {
+	public boolean newAccountExt(ServiceContext svcctx, UserInfo uinfo) throws ServiceException {
 
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
@@ -195,14 +192,14 @@ public class SecurityServiceImpl implements SecurityService{
 
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail create external account", dae);
+			throw new ServiceException("excp.create", dae, "external account");
 		}
 		return cnt > 0;
 	}
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public UserInfo getAccountLite(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
+	public UserInfo getAccountLite(ServiceContext svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
 		
 		UserInfo uinfo = null;
 		try{
@@ -218,12 +215,10 @@ public class SecurityServiceImpl implements SecurityService{
 				Object[] parms = new Object[]{account, type};
 				
 				JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-				
 				uinfo = jtemplate.queryForObject(SQL.toString(), parms, userdao.getRowMapper());
-				
 			}
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail get user account", dae);
+			throw new ServiceException("excp.query", dae, "Account lite information");
 		}
 		return uinfo;
 		
@@ -231,7 +226,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountRoles(ServiceContext<?> svcctx, InfoId<Long> wgroupId, String account)
+	public Set<String> getAccountRoles(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
 		
 		return null;
@@ -239,7 +234,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public Set<String> getAccountGroups(ServiceContext<?> svcctx, InfoId<Long> wgroupId, String account)
+	public Set<String> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
 		
 		StringBuffer SQL = new StringBuffer();
@@ -253,7 +248,7 @@ public class SecurityServiceImpl implements SecurityService{
 		SQL.append("gusr.account = ? ");
 		
 		Object[] params = new Object[]{
-				wgroupId.getId(), account
+			wgroupId.getId(), account
 		};
 		
 		if(LOGGER.isDebugEnabled())
@@ -267,7 +262,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean removeAccount(ServiceContext<?> svcctx, InfoId<Long> userId, String account) throws ServiceException {
+	public boolean removeAccount(ServiceContext svcctx, InfoId<Long> userId, String account) throws ServiceException {
 		
 		int cnt = -1;
 		try{
@@ -302,7 +297,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean changePassword(ServiceContext<?> svcctx, String account, String password) throws ServiceException {
+	public boolean changePassword(ServiceContext svcctx, String account, String password) throws ServiceException {
 		int cnt = -1;
 		try{
 			cnt = userdao.changePassword( account, password);
@@ -315,7 +310,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public boolean existAccount(ServiceContext<?> svcctx, String account) throws ServiceException {
+	public boolean existAccount(ServiceContext svcctx, String account) throws ServiceException {
 		
 		boolean exist = userdao.existAccount( account);
 
@@ -324,7 +319,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public UserExInfo getAccountFull(ServiceContext<?> svcctx, InfoId<Long> userId, String account, String type)
+	public UserExInfo getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
 			throws ServiceException {
 
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
@@ -372,7 +367,7 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] types,String[] states)
+	public List<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
 		
 		List<UserExInfo> rtv = null;
@@ -424,7 +419,7 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExInfo> getAccounts(ServiceContext<?> svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
+	public PageWrapper<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
 			throws ServiceException {
 		
 		List<UserExInfo> rtv = null;
@@ -485,7 +480,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateLogonTrace(ServiceContext<?> svcctx ,InfoId<Long> userkey, boolean resetRetry) throws ServiceException {
+	public boolean updateLogonTrace(ServiceContext svcctx ,InfoId<Long> userkey, boolean resetRetry) throws ServiceException {
 		
 		StringBuffer SQL = new StringBuffer();
 
@@ -517,7 +512,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean changeAccountState(ServiceContext<?> svcctx, InfoId<Long> userkey, UserState state) throws ServiceException {
+	public boolean changeAccountState(ServiceContext svcctx, InfoId<Long> userkey, UserState state) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
 		Object[] params = null;
 		if(UserState.ACTIVE == state){

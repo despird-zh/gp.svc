@@ -10,11 +10,11 @@ import com.gp.info.InfoId;
 
 public interface AuditService {
 
-	public List<AuditInfo> getAudits(ServiceContext<?> svcctx, String subject, String object, String operation) throws ServiceException;
+	public List<AuditInfo> getAudits(ServiceContext svcctx, String subject, String object, String operation) throws ServiceException;
 	
-	public boolean deleteAudit(ServiceContext<?> svcctx, InfoId<Long> id ) throws ServiceException;
+	public boolean deleteAudit(ServiceContext svcctx, InfoId<Long> id ) throws ServiceException;
 	
-	public boolean addAudit(ServiceContext<?> svcctx, AuditInfo ainfo ) throws ServiceException;
+	public boolean addAudit(ServiceContext svcctx, AuditInfo ainfo ) throws ServiceException;
 	
-	public boolean purgeAudits(ServiceContext<?> svcctx, String subject, String objectType, Date reservedate) throws ServiceException;
+	public boolean purgeAudits(ServiceContext svcctx, String subject, String objectType, Date reservedate) throws ServiceException;
 }

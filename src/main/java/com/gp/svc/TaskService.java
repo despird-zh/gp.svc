@@ -20,7 +20,7 @@ public interface TaskService {
 	 * @param fromDate the query start date
 	 * 
 	 **/
-	public List<TaskInfo> getWorkgrupTasks(ServiceContext<?> svcctx, InfoId<Long> workgroupKey ,Tasks.TaskState state,  Date fromDate) throws ServiceException;
+	public List<TaskInfo> getWorkgrupTasks(ServiceContext svcctx, InfoId<Long> workgroupKey ,Tasks.TaskState state,  Date fromDate) throws ServiceException;
 	
 	/**
 	 * Get complete tasks of specified person
@@ -30,7 +30,7 @@ public interface TaskService {
 	 * @param fromDate the query start date
 	 * 
 	 **/
-	public List<TaskInfo> getPersonalTasks(ServiceContext<?> svcctx, String account, Tasks.TaskState state,  Date fromDate) throws ServiceException;
+	public List<TaskInfo> getPersonalTasks(ServiceContext svcctx, String account, Tasks.TaskState state,  Date fromDate) throws ServiceException;
 
 	/**
 	 * Create a new task information
@@ -38,19 +38,19 @@ public interface TaskService {
 	 * @param task the task information
 	 * @return InfoId<Long> the task key
 	 **/
-	public InfoId<Long> newTask(ServiceContext<?> svcctx, TaskInfo task) throws ServiceException;
+	public InfoId<Long> newTask(ServiceContext svcctx, TaskInfo task) throws ServiceException;
 	
 	/**
 	 * Remove the task information
 	 * 
 	 * 
 	 **/
-	public void remoteTask(ServiceContext<?> svcctx, InfoId<Long> taskKey) throws ServiceException;
+	public void remoteTask(ServiceContext svcctx, InfoId<Long> taskKey) throws ServiceException;
 	
-	public TaskInfo getTask(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey) throws ServiceException;
+	public TaskInfo getTask(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey) throws ServiceException;
 	
-	public List<TaskRouteInfo> getTaskRoutes(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey) throws ServiceException;
+	public List<TaskRouteInfo> getTaskRoutes(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey) throws ServiceException;
 	
-	public InfoId<Long> forwardTask(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey,String nextExecutor) throws ServiceException;
+	public InfoId<Long> forwardTask(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey,String nextExecutor) throws ServiceException;
 	
 }

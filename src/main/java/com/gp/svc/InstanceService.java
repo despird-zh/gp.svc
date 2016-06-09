@@ -16,39 +16,39 @@ public interface InstanceService {
 	/**
 	 * Get the instance information by id 
 	 **/
-	public InstanceInfo getInstnaceInfo(ServiceContext<?> svcctx,InfoId<Integer> id) throws ServiceException;
+	public InstanceInfo getInstnaceInfo(ServiceContext svcctx,InfoId<Integer> id) throws ServiceException;
 	
 	/**
 	 * Get instance information by entity and node keys 
 	 **/
-	public InstanceInfo getInstnace(ServiceContext<?> svcctx, String entity, String node) throws ServiceException;
+	public InstanceInfo getInstnace(ServiceContext svcctx, String entity, String node) throws ServiceException;
 	
 	/**
 	 * Save the instance information 
 	 **/
-	public boolean saveInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException;
+	public boolean saveInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException;
 
 	/**
 	 * Add external instance information into system 
 	 **/
-	public boolean addExtInstnace(ServiceContext<?> svcctx, InstanceInfo instance) throws ServiceException;
+	public boolean addExtInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException;
 
 	/**
 	 * Support for full query without paging process on server-side 
 	 **/
-	public List<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename) throws ServiceException;
+	public List<InstanceInfo> getInstances(ServiceContext svcctx, String instancename) throws ServiceException;
 
 	/**
 	 * Support for server-side paging process 
 	 **/
-	public PageWrapper<InstanceInfo> getInstances(ServiceContext<?> svcctx, String instancename, PageQuery pquery) throws ServiceException;
+	public PageWrapper<InstanceInfo> getInstances(ServiceContext svcctx, String instancename, PageQuery pquery) throws ServiceException;
 
 	/**
 	 * Change the state of instance 
 	 **/
-	public boolean changeInstanceState(ServiceContext<?> svcctx, InfoId<Integer> instanceId, State state) throws ServiceException;
+	public boolean changeInstanceState(ServiceContext svcctx, InfoId<Integer> instanceId, State state) throws ServiceException;
 	
 	
-	public Map<String, InstanceInfo> getAccountSources(ServiceContext<?> svcctx, List<String> accounts) throws ServiceException;
+	public Map<String, InstanceInfo> getAccountSources(ServiceContext svcctx, List<String> accounts) throws ServiceException;
 	
 }

@@ -17,47 +17,47 @@ import com.gp.svc.TaskService;
 public class TaskServiceImpl implements TaskService{
 
 	@Override
-	public List<TaskInfo> getWorkgrupTasks(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, TaskState state,
+	public List<TaskInfo> getWorkgrupTasks(ServiceContext svcctx, InfoId<Long> workgroupKey, TaskState state,
 			Date fromDate) throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<TaskInfo> getPersonalTasks(ServiceContext<?> svcctx, String account, TaskState state, Date fromDate)
+	public List<TaskInfo> getPersonalTasks(ServiceContext svcctx, String account, TaskState state, Date fromDate)
 			throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public InfoId<Long> newTask(ServiceContext<?> svcctx, TaskInfo task) throws ServiceException {
+	public InfoId<Long> newTask(ServiceContext svcctx, TaskInfo task) throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void remoteTask(ServiceContext<?> svcctx, InfoId<Long> taskKey) throws ServiceException {
+	public void remoteTask(ServiceContext svcctx, InfoId<Long> taskKey) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public TaskInfo getTask(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey)
+	public TaskInfo getTask(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey)
 			throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<TaskRouteInfo> getTaskRoutes(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey)
+	public List<TaskRouteInfo> getTaskRoutes(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey)
 			throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public InfoId<Long> forwardTask(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey,
+	public InfoId<Long> forwardTask(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> taskKey,
 			String nextExecutor) throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;

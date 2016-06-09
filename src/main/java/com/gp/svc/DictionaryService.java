@@ -9,13 +9,13 @@ import com.gp.info.InfoId;
 
 public interface DictionaryService {
 
-	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx)throws ServiceException;
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx)throws ServiceException;
 
-	public List<DictionaryInfo> getDictEntries(ServiceContext<?> svcctx, String dictGroup)throws ServiceException;
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup)throws ServiceException;
 
-	public boolean updateDictEntry(ServiceContext<?> svcctx, DictionaryInfo dictinfo) throws ServiceException;
+	public boolean updateDictEntry(ServiceContext svcctx, DictionaryInfo dictinfo) throws ServiceException;
 
-	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, InfoId<Long> dictId) throws ServiceException;
+	public DictionaryInfo getDictEntry(ServiceContext svcctx, InfoId<Long> dictId) throws ServiceException;
 	
-	public DictionaryInfo getDictEntry(ServiceContext<?> svcctx, String dictKey) throws ServiceException;
+	public DictionaryInfo getDictEntry(ServiceContext svcctx, String dictKey) throws ServiceException;
 }

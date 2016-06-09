@@ -72,7 +72,7 @@ public class SystemServiceImpl implements SystemService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx) throws ServiceException {
+	public List<SysOptionInfo> getOptions(ServiceContext svcctx) throws ServiceException {
 		try{
 			return sysoptiondao.queryAll();
 		}catch(DataAccessException dae){
@@ -82,7 +82,7 @@ public class SystemServiceImpl implements SystemService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey) throws ServiceException {
+	public List<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sys_options ");
 		Object[] params = null;
 		if(StringUtils.isNotBlank(groupKey)){
@@ -105,7 +105,7 @@ public class SystemServiceImpl implements SystemService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey, PageQuery pagequery) throws ServiceException {
+	public PageWrapper<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey, PageQuery pagequery) throws ServiceException {
 		
 		List<SysOptionInfo> rows = null;
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sys_options ");
@@ -150,7 +150,7 @@ public class SystemServiceImpl implements SystemService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateOption(ServiceContext<?> svcctx, String optKey, String value) throws ServiceException {
+	public boolean updateOption(ServiceContext svcctx, String optKey, String value) throws ServiceException {
 		
 		SysOptionInfo opt = sysoptiondao.queryByKey( optKey);
 		opt.setOptionValue(value);
@@ -169,7 +169,7 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	@Override
-	public boolean updateOption(ServiceContext<?> svcctx, InfoId<Long> oKey, String value) throws ServiceException {
+	public boolean updateOption(ServiceContext svcctx, InfoId<Long> oKey, String value) throws ServiceException {
 		
 		SysOptionInfo opt = sysoptiondao.query( oKey);
 		opt.setOptionValue(value);
@@ -188,7 +188,7 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	@Override
-	public SysOptionInfo getOption(ServiceContext<?> svcctx, String oKey) throws ServiceException {
+	public SysOptionInfo getOption(ServiceContext svcctx, String oKey) throws ServiceException {
 		
 		if(null != cache){
 			SysOptionInfo rtv = cache.get(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, SysOptionInfo.class);
@@ -209,7 +209,7 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	@Override
-	public SysOptionInfo getOption(ServiceContext<?> svcctx, InfoId<Long> oKey) throws ServiceException {
+	public SysOptionInfo getOption(ServiceContext svcctx, InfoId<Long> oKey) throws ServiceException {
 		try{
 			return sysoptiondao.query( oKey);
 		}catch(DataAccessException dae){
@@ -218,7 +218,7 @@ public class SystemServiceImpl implements SystemService{
 	}
 
 	@Override
-	public List<String> getOptionGroups(ServiceContext<?> svcctx) throws ServiceException {
+	public List<String> getOptionGroups(ServiceContext svcctx) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("select distinct opt_group from gp_sys_options");
 		
 		JdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);	

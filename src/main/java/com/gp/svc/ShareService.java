@@ -13,29 +13,29 @@ import com.gp.info.ShareItemInfo;
  **/
 public interface ShareService {
 
-	public List<ShareInfo> getShares(ServiceContext<?> svcctx, InfoId<Long> workgroupKey)throws ServiceException;
+	public List<ShareInfo> getShares(ServiceContext svcctx, InfoId<Long> workgroupKey)throws ServiceException;
 	
-	public InfoId<Long> newShare(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, ShareInfo share)throws ServiceException;
+	public InfoId<Long> newShare(ServiceContext svcctx, InfoId<Long> workgroupKey, ShareInfo share)throws ServiceException;
 	
-	public void removeShare(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
+	public void removeShare(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
 	
-	public ShareInfo getShare(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
+	public ShareInfo getShare(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
 	
-	public void updateShare(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, ShareInfo share)throws ServiceException;
+	public void updateShare(ServiceContext svcctx, InfoId<Long> workgroupKey, ShareInfo share)throws ServiceException;
 	
-	public List<ShareItemInfo> getShareItmes(ServiceContext<?> svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
+	public List<ShareItemInfo> getShareItmes(ServiceContext svcctx, InfoId<Long> workgroupKey, InfoId<Long> shareKey)throws ServiceException;
 	
-	public InfoId<Long> addShareItem(ServiceContext<?> svcctx, 
+	public InfoId<Long> addShareItem(ServiceContext svcctx, 
 			InfoId<Long> workgroupKey, 
 			InfoId<Long> shareKey,
 			ShareItemInfo shareitem)throws ServiceException;
 	
-	public void removeShareItem(ServiceContext<?> svcctx, 
+	public void removeShareItem(ServiceContext svcctx, 
 			InfoId<Long> workgroupKey, 
 			InfoId<Long> shareKey, 
 			InfoId<Long> shareItemKey)throws ServiceException;
 
-	public ShareItemInfo getShareItem(ServiceContext<?> svcctx, 
+	public ShareItemInfo getShareItem(ServiceContext svcctx, 
 			InfoId<Long> workgroupKey, 
 			InfoId<Long> shareKey, 
 			InfoId<Long> shareItemKey)throws ServiceException;

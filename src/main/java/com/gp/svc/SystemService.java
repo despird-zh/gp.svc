@@ -11,19 +11,19 @@ import com.gp.pagination.PageWrapper;
 
 public interface SystemService {
 
-	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx) throws ServiceException;
+	public List<SysOptionInfo> getOptions(ServiceContext svcctx) throws ServiceException;
 	
-	public List<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey) throws ServiceException;
+	public List<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey) throws ServiceException;
 	
-	public PageWrapper<SysOptionInfo> getOptions(ServiceContext<?> svcctx, String groupKey, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey, PageQuery pagequery) throws ServiceException;
 	
-	public boolean updateOption(ServiceContext<?> svcctx, String key, String value) throws ServiceException;
+	public boolean updateOption(ServiceContext svcctx, String key, String value) throws ServiceException;
 	
-	public boolean updateOption(ServiceContext<?> svcctx, InfoId<Long> oKey, String value) throws ServiceException;
+	public boolean updateOption(ServiceContext svcctx, InfoId<Long> oKey, String value) throws ServiceException;
 	
-	public SysOptionInfo getOption(ServiceContext<?> svcctx, String optKey) throws ServiceException;
+	public SysOptionInfo getOption(ServiceContext svcctx, String optKey) throws ServiceException;
 
-	public SysOptionInfo getOption(ServiceContext<?> svcctx, InfoId<Long> oKey) throws ServiceException;
+	public SysOptionInfo getOption(ServiceContext svcctx, InfoId<Long> oKey) throws ServiceException;
 
-	public List<String> getOptionGroups(ServiceContext<?> svcctx) throws ServiceException;
+	public List<String> getOptionGroups(ServiceContext svcctx) throws ServiceException;
 }
