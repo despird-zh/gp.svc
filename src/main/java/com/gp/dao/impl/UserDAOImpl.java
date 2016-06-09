@@ -22,7 +22,6 @@ import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserDAO;
 import com.gp.info.InfoId;
-import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 
 @Component("userDAO")

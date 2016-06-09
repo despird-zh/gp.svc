@@ -2,9 +2,6 @@ package com.gp.dao;
 
 import java.util.List;
 
-import org.springframework.jdbc.core.RowMapper;
-
-import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 
 public interface UserDAO extends BaseDAO<UserInfo>{
