@@ -93,30 +93,30 @@ public class FolderServiceImpl implements FolderService{
 			addAcl(svcctx, folder.getInfoId(), acl);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException(dae);
+			throw new ServiceException("excp.create", dae, "Cabinet folder");
 		}
 		return fkey;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public InfoId<Long> copyFolder(ServiceContext<?> svcctx, InfoId<Long> folderkey, InfoId<Long> destinationPkey)
+	public InfoId<Long> copyFolder(ServiceContext<?> svcctx, InfoId<Long> folderid, InfoId<Long> destFolderId)
 			throws ServiceException {
 		
 		CabFolderInfo cfi = null;
 		
 		try{
-			cfi = cabfolderdao.query(folderkey);
+			cfi = cabfolderdao.query(folderid);
 			// new folder key
 			InfoId<Long> fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
 			cfi.setInfoId(fkey);
-			cfi.setParentId(destinationPkey.getId());
+			cfi.setParentId(destFolderId.getId());
 			svcctx.setTraceInfo(cfi);
 			// move the current folder 
 			cabfolderdao.create(cfi);
 			
 			// find child sub folders
-			List<CabFolderInfo> flist = cabfolderdao.queryByParent(folderkey.getId());
+			List<CabFolderInfo> flist = cabfolderdao.queryByParent(folderid.getId());
 			for(CabFolderInfo finfo : flist){
 				// recursively copy folder to target location
 				copyFolder(svcctx, finfo.getInfoId(), fkey);
@@ -133,10 +133,10 @@ public class FolderServiceImpl implements FolderService{
 			}
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail to move the folder",dae);
+			throw new ServiceException("excp.copy.folder", dae, folderid, destFolderId);
 		}
 
-		return folderkey;
+		return folderid;
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
@@ -156,7 +156,7 @@ public class FolderServiceImpl implements FolderService{
 			return pseudodao.update(fid, colmap) > 0;
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail to move the folder",dae);
+			throw new ServiceException("excp.move.folder", dae, folderkey, destFolderId);
 		}
 	}
 
@@ -165,11 +165,9 @@ public class FolderServiceImpl implements FolderService{
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> folderkey, Ace ... aces)
 			throws ServiceException {
 		
-		CabFolderInfo folderinfo = null;
-		
 		try{
-			folderinfo = cabfolderdao.query(folderkey);
-			Long aclid = folderinfo.getAclId();
+			Object val = pseudodao.query(folderkey, FlatColumns.COL_ACL_ID);	
+			Long aclid = Long.valueOf((Integer)val);
 			
 			for(Ace ace : aces){
 				
@@ -198,7 +196,7 @@ public class FolderServiceImpl implements FolderService{
 			}
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to set the ace list",dae);
+			throw new ServiceException("excp.add.ace.to", dae, folderkey);
 		}
 	}
 
@@ -232,7 +230,7 @@ public class FolderServiceImpl implements FolderService{
 			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail to set the ace list",dae);
+			throw new ServiceException("excp.set.acl",dae, folderid);
 		}
 	}
 
@@ -256,7 +254,7 @@ public class FolderServiceImpl implements FolderService{
 		try{
 			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail get cabinet info", dae);
+			throw new ServiceException("excp.query.with",dae, "cabinet", folderid);
 		}
 		return rtv;
 	}
@@ -268,7 +266,7 @@ public class FolderServiceImpl implements FolderService{
 		try{
 			return cabfolderdao.query(folderid);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail get folder info", dae);
+			throw new ServiceException("excp.query.with",dae, "folder", folderid);
 		}
 
 	}
@@ -283,9 +281,13 @@ public class FolderServiceImpl implements FolderService{
                   .addValue("p_cabinet_id", cabinetId.getId());
 		
 	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_path2fid");
-		Map<String, Object> out = jdbcCall.execute(in);
-		
-		Long id = Long.valueOf((Integer)out.get("p_folder_id"));
+	    Long id = null;
+	    try{
+			Map<String, Object> out = jdbcCall.execute(in);
+			id = Long.valueOf((Integer)out.get("p_folder_id"));
+	    }catch(DataAccessException dae){
+	    	throw new ServiceException("excp.proc.with",dae, "proc_path2fid", path);
+	    }
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("call procedure: proc_path2fid / params : cabid-{} ; path-{}",cabinetId, path);
@@ -301,9 +303,13 @@ public class FolderServiceImpl implements FolderService{
                 .addValue("p_folder_id", folderId.getId());
 		
 	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_fid2path");
-		Map<String, Object> out = jdbcCall.execute(in);
-		
-		String path = (String) out.get("p_folder_path");
+	    String path = null;
+	    try{
+	    	Map<String, Object> out = jdbcCall.execute(in);
+	    	path = (String) out.get("p_folder_path");
+	    }catch(DataAccessException dae){
+	    	throw new ServiceException("excp.proc.with",dae, "proc_fid2path", folderId);
+	    }
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("call procedure: proc_fid2path / params : foderid-{}", folderId.getId());

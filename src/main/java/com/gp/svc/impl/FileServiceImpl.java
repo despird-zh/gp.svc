@@ -90,13 +90,12 @@ public class FileServiceImpl implements FileService{
 	public InfoId<Long> newFile(ServiceContext<?> svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
 		InfoId<Long> fkey = file.getInfoId();
-		try{
-			
-			if(!InfoId.isValid(fkey)){
-				fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
-				file.setInfoId(fkey);
-			}
-			
+		
+		if(!InfoId.isValid(fkey)){
+			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
+			file.setInfoId(fkey);
+		}
+		try{	
 			// create file entry
 			svcctx.setTraceInfo(file);
 			cabfiledao.create(file);
@@ -128,7 +127,7 @@ public class FileServiceImpl implements FileService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("excp.copy", dae, srcfileId, destFolderId);
+			throw new ServiceException("excp.copy.file", dae, srcfileId, destFolderId);
 		}
 		return fkey;
 	}
@@ -150,7 +149,7 @@ public class FileServiceImpl implements FileService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("excp.move", dae, srcFileId, destFolderId);
+			throw new ServiceException("excp.move.file", dae, srcFileId, destFolderId);
 		}
 
 	}
