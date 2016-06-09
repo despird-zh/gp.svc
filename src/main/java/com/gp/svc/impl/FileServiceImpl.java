@@ -141,9 +141,9 @@ public class FileServiceImpl implements FileService{
 			// recreate to ensure the id column name is correct.
 			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(srcFileId.getId());
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
-			colmap.put(FlatColumns.COL_FOLDER_ID, destFolderId.getId());
-			colmap.put(FlatColumns.COL_MODIFIER, svcctx.getPrincipal().getAccount());
-			colmap.put(FlatColumns.COL_MODIFY_DATE, DateTimeUtils.now());
+			colmap.put(FlatColumns.FOLDER_ID, destFolderId.getId());
+			colmap.put(FlatColumns.MODIFIER, svcctx.getPrincipal().getAccount());
+			colmap.put(FlatColumns.MODIFY_DATE, DateTimeUtils.now());
 			
 			return pseudodao.update(fid, colmap) > 0;
 			
@@ -202,7 +202,7 @@ public class FileServiceImpl implements FileService{
 	public void addAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
+			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
 			
 			Long aclid = Long.valueOf((Integer)val);
 	
@@ -239,7 +239,7 @@ public class FileServiceImpl implements FileService{
 	public void removeAce(ServiceContext<?> svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(cabfileId, FlatColumns.COL_ACL_ID);
+			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
 			Long aclid = Long.valueOf((Integer)val);
 			acedao.deleteBySubject(aclid, type, subject);
 		}catch(DataAccessException dae){
@@ -273,7 +273,7 @@ public class FileServiceImpl implements FileService{
 			}
 			// update the cabinet file entry's acl_id
 			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
-			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
+			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.set.acl",dae, cabfileId);

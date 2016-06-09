@@ -149,9 +149,9 @@ public class FolderServiceImpl implements FolderService{
 			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderkey.getId());
 			
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
-			colmap.put(FlatColumns.COL_FOLDER_PID, destFolderId.getId());
-			colmap.put(FlatColumns.COL_MODIFIER, svcctx.getPrincipal().getAccount());
-			colmap.put(FlatColumns.COL_MODIFY_DATE, DateTimeUtils.now());
+			colmap.put(FlatColumns.FOLDER_PID, destFolderId.getId());
+			colmap.put(FlatColumns.MODIFIER, svcctx.getPrincipal().getAccount());
+			colmap.put(FlatColumns.MODIFY_DATE, DateTimeUtils.now());
 			
 			return pseudodao.update(fid, colmap) > 0;
 			
@@ -166,7 +166,7 @@ public class FolderServiceImpl implements FolderService{
 			throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(folderkey, FlatColumns.COL_ACL_ID);	
+			Object val = pseudodao.query(folderkey, FlatColumns.ACL_ID);	
 			Long aclid = Long.valueOf((Integer)val);
 			
 			for(Ace ace : aces){
@@ -227,7 +227,7 @@ public class FolderServiceImpl implements FolderService{
 			}
 			// update the cabinet file entry's acl_id
 			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderid.getId());
-			pseudodao.update(fid, FlatColumns.COL_ACL_ID, acl.getAclId().getId());
+			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.set.acl",dae, folderid);

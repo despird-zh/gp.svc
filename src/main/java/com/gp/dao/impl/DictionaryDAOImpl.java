@@ -170,11 +170,11 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 			info.setDefaultLang(rs.getString("default_lang"));
 		
 			Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
-			labelMap.put(FlatColumns.COL_DICT_DE_DE, rs.getString(FlatColumns.COL_DICT_DE_DE.getColumn()));
-			labelMap.put(FlatColumns.COL_DICT_EN_US, rs.getString(FlatColumns.COL_DICT_EN_US.getColumn()));
-			labelMap.put(FlatColumns.COL_DICT_FR_FR, rs.getString(FlatColumns.COL_DICT_ZH_CN.getColumn()));
-			labelMap.put(FlatColumns.COL_DICT_ZH_CN, rs.getString(FlatColumns.COL_DICT_ZH_CN.getColumn()));
-			labelMap.put(FlatColumns.COL_DICT_RU_RU, rs.getString(FlatColumns.COL_DICT_RU_RU.getColumn()));
+			labelMap.put(FlatColumns.DICT_DE_DE, rs.getString(FlatColumns.DICT_DE_DE.getColumn()));
+			labelMap.put(FlatColumns.DICT_EN_US, rs.getString(FlatColumns.DICT_EN_US.getColumn()));
+			labelMap.put(FlatColumns.DICT_FR_FR, rs.getString(FlatColumns.DICT_ZH_CN.getColumn()));
+			labelMap.put(FlatColumns.DICT_ZH_CN, rs.getString(FlatColumns.DICT_ZH_CN.getColumn()));
+			labelMap.put(FlatColumns.DICT_RU_RU, rs.getString(FlatColumns.DICT_RU_RU.getColumn()));
 			
 			info.setLabelMap(labelMap);
 			

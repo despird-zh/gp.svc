@@ -43,7 +43,7 @@ public class ImageServiceImpl implements ImageService{
 			return imagedao.query(id);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query ",dae);
+			throw new ServiceException("excp.query.with",dae,"image", id);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class ImageServiceImpl implements ImageService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query ",dae);
+			throw new ServiceException("excp.query.with",dae,"Image","format = "+format);
 		}
 		
 		return result;
@@ -99,7 +99,7 @@ public class ImageServiceImpl implements ImageService{
 			return imagedao.query(id, parentPath);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query ",dae);
+			throw new ServiceException("excp.query.with", dae, "image", id);
 		}
 	}
 
@@ -112,7 +112,7 @@ public class ImageServiceImpl implements ImageService{
 			return imagedao.create(info) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail create ",dae);
+			throw new ServiceException("excp.create",dae, "image");
 		}
 	}
 
@@ -126,7 +126,7 @@ public class ImageServiceImpl implements ImageService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail update ",dae);
+			throw new ServiceException("excp.update",dae, "image");
 		}
 	}
 
@@ -138,7 +138,7 @@ public class ImageServiceImpl implements ImageService{
 			return imagedao.delete(id) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail delete ",dae);
+			throw new ServiceException("excp.delete.with", dae, "image", id);
 		}
 	}
 

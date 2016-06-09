@@ -46,11 +46,11 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setValue("dv001");
 		info.setDefaultLang("zh_cn");
 		Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
-		labelMap.put(FlatColumns.COL_DICT_DE_DE, "de demo");
-		labelMap.put(FlatColumns.COL_DICT_EN_US, "this demo");
-		labelMap.put(FlatColumns.COL_DICT_FR_FR, "franch demo");
-		labelMap.put(FlatColumns.COL_DICT_ZH_CN, "测试");
-		labelMap.put(FlatColumns.COL_DICT_RU_RU, "this russia");
+		labelMap.put(FlatColumns.DICT_DE_DE, "de demo");
+		labelMap.put(FlatColumns.DICT_EN_US, "this demo");
+		labelMap.put(FlatColumns.DICT_FR_FR, "franch demo");
+		labelMap.put(FlatColumns.DICT_ZH_CN, "测试");
+		labelMap.put(FlatColumns.DICT_RU_RU, "this russia");
 		
 		info.setLabelMap(labelMap);
 		info.setModifier("modifer001");
@@ -86,11 +86,11 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 			
 			info.setDefaultLang("zh_cn");
 			Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
-			labelMap.put(FlatColumns.COL_DICT_DE_DE, "de demo");
-			labelMap.put(FlatColumns.COL_DICT_EN_US, "this demo");
-			labelMap.put(FlatColumns.COL_DICT_FR_FR, "franch demo");
-			labelMap.put(FlatColumns.COL_DICT_ZH_CN, "测试");
-			labelMap.put(FlatColumns.COL_DICT_RU_RU, "this russia");
+			labelMap.put(FlatColumns.DICT_DE_DE, "de demo");
+			labelMap.put(FlatColumns.DICT_EN_US, "this demo");
+			labelMap.put(FlatColumns.DICT_FR_FR, "franch demo");
+			labelMap.put(FlatColumns.DICT_ZH_CN, "测试");
+			labelMap.put(FlatColumns.DICT_RU_RU, "this russia");
 			
 			info.setLabelMap(labelMap);
 			info.setModifier("modifer001");
