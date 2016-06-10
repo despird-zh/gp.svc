@@ -3,6 +3,7 @@ package com.gp.svc.impl;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -171,7 +172,30 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Override
 	public String getMessagePattern(Locale locale, String dictKey){
 		
-		DictionaryInfo dinfo = this.getDictEntry(dictKey);
+		DictionaryInfo dinfo = this.getDictEntry(StringUtils.lowerCase(dictKey));
+		String msgptn = null;
+		if(Locale.ENGLISH.equals(locale)){
+			msgptn = dinfo.getLabel(FlatColumns.DICT_EN_US);
+		}else if(Locale.SIMPLIFIED_CHINESE.equals(locale)){
+			msgptn = dinfo.getLabel(FlatColumns.DICT_ZH_CN);
+		}else if(Locale.FRANCE.equals(locale)){
+			msgptn = dinfo.getLabel(FlatColumns.DICT_FR_FR);
+		}else if(Locale.GERMAN.equals(locale)){
+			msgptn = dinfo.getLabel(FlatColumns.DICT_DE_DE);
+		}
+		
+		return msgptn;
+	}
+	
+	
+	@Override
+	public String getPropertyName(Locale locale, String dictKey){
+		
+		String newkey = StringUtils.lowerCase(dictKey);
+		if(!StringUtils.startsWith(newkey, "prop.")){
+			newkey = "prop." + newkey;
+		}
+		DictionaryInfo dinfo = this.getDictEntry(newkey);
 		String msgptn = null;
 		if(Locale.ENGLISH.equals(locale)){
 			msgptn = dinfo.getLabel(FlatColumns.DICT_EN_US);

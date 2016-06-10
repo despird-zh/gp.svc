@@ -22,6 +22,8 @@ public interface DictionaryService {
 	
 	public String getMessagePattern(Locale locale, String dictKey);
 	
+	public String getPropertyName(Locale locale, String dictKey);
+	
 	public DictionaryInfo getDictEntry(String dictKey) ;
 	
 	public List<DictionaryInfo> getDictGroupEntries(String dictGroup);

@@ -1,4 +1,4 @@
-package com.gp.validation;
+package com.gp.validate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +34,12 @@ import com.gp.validate.ValidateMessage;
  * @version 0.1 2015-1-1
  * 
  **/
-public class ValidationUtils {
+public class ValidateUtils {
 	
 	/**
 	 * singleton instance
 	 **/
-	private static ValidationUtils instance;
+	private static ValidateUtils instance;
 	
 	private MessageSource msgSource = null;
 	
@@ -47,7 +47,7 @@ public class ValidationUtils {
 	 * Hide the ValidationUtils constructor.
 	 * 
 	 **/
-	private ValidationUtils(){
+	private ValidateUtils(){
 		
 		String basenameStr = GeneralConfig.getString(SystemOptions.VALID_MSG_RESOURCES);
 		if(StringUtils.isNotBlank(basenameStr)){
@@ -62,7 +62,7 @@ public class ValidationUtils {
 	 * Self complete initialization 
 	 **/
 	static {
-		instance = new ValidationUtils();		
+		instance = new ValidateUtils();		
 	}
 	
 	/**
@@ -138,22 +138,25 @@ public class ValidationUtils {
 	 * @param propertyName the name of bean property
 	 * 
 	 **/
-	public static <T> Set<ValidateMessage> validateProperty(Locale locale, T object, String propertyName) {
+	public static <T> Set<ValidateMessage> validateProperty(Locale locale, T object, String ...propertyName) {
 		
 		Set<ValidateMessage> result = new HashSet<ValidateMessage>();
 		
 		Validator validator = getValidator(locale);
-		Set<ConstraintViolation<T>> set = validator.validateProperty(object, propertyName, Default.class);
-		if (CollectionUtils.isNotEmpty(set)) {
-			for (ConstraintViolation<T> cv : set) {
-				ValidateMessage vm = new ValidateMessage(
-						cv.getPropertyPath().toString(), 
-						cv.getMessage());
-				
-				result.add(vm);
+		for(String propname : propertyName){
+			
+			Set<ConstraintViolation<T>> set = validator.validateProperty(object, propname, Default.class);
+			
+			if (CollectionUtils.isNotEmpty(set)) {
+				for (ConstraintViolation<T> cv : set) {
+					ValidateMessage vm = new ValidateMessage(
+							cv.getPropertyPath().toString(), 
+							cv.getMessage());
+					
+					result.add(vm);
+				}
 			}
 		}
-		
 		return result;
 	}
 
