@@ -408,11 +408,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addWorkgroupMember(ServiceContext svcctx, GroupUserInfo memberinfo)
+	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo memberinfo)
 			throws ServiceException {
 		try{
 			
 			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberinfo.getGroupId());
+			if(!InfoId.isValid(grpid)){
+				Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
+				grpid = IdKey.GROUP.getInfoId(Long.valueOf((Integer)val));
+				memberinfo.setGroupId(grpid.getId());
+			}
 			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
 	
 			if(InfoId.isValid(mbrid)){

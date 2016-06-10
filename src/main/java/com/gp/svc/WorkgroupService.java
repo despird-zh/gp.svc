@@ -38,7 +38,7 @@ public interface WorkgroupService {
 	
 	public WorkgroupExInfo getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public boolean addWorkgroupMember(ServiceContext svcctx, GroupUserInfo wminfo) throws ServiceException;
+	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo wminfo) throws ServiceException;
 
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account) throws ServiceException;
 	
