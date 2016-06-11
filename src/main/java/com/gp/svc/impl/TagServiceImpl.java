@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +60,7 @@ public class TagServiceImpl implements TagService{
 		try{
 			result = tagdao.queryTags(tagType, null, "");
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
+			throw new ServiceException("excp.query",dae,"tags");
 		}
 		return result;
 	}
@@ -73,7 +72,7 @@ public class TagServiceImpl implements TagService{
 		try{
 			result = tagdao.queryTags(tagType, category, "");
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
+			throw new ServiceException("excp.query",dae, "tags");
 		}
 		return result;
 	}
@@ -110,7 +109,7 @@ public class TagServiceImpl implements TagService{
 			result = jtemplate.query(SQL.toString(), paramap, tagdao.getRowMapper());
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
+			throw new ServiceException("excp.query",dae, "tags");
 		}
 		return result;
 	}
@@ -174,7 +173,7 @@ public class TagServiceImpl implements TagService{
 			});
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query tags",dae);
+			throw new ServiceException("excp.query",dae, "tags");
 		}
 		return result;
 		
@@ -189,9 +188,11 @@ public class TagServiceImpl implements TagService{
 			InfoId<Long> id = idservice.generateId(IdKey.TAG, Long.class);
 			taginfo.setInfoId(id);
 		}
-		
-		return tagdao.create(taginfo) > 0;
-
+		try{
+			return tagdao.create(taginfo) > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.create",dae, "tag");
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
@@ -201,7 +202,7 @@ public class TagServiceImpl implements TagService{
 		try{
 			return tagdao.deleteTag(tagType,null, tagName) > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail delete tags",dae);
+			throw new ServiceException("excp.delete.with",dae, "tag", tagName);
 		}
 	}
 
@@ -252,7 +253,7 @@ public class TagServiceImpl implements TagService{
 			return tagreldao.create(rel) > 0;
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail delete tags",dae);
+			throw new ServiceException("excp.attach.tag",dae, tagName, objectId);
 		}
 	}
 
@@ -264,7 +265,7 @@ public class TagServiceImpl implements TagService{
 			return tagreldao.delete(objectId, tag) > 0;
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail delete tags",dae);
+			throw new ServiceException("excp.detach.tag",dae,tag, objectId);
 		}
 	}
 

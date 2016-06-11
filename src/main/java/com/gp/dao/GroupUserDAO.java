@@ -11,5 +11,5 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 	
 	public int deleteByGroup(InfoId<Long> membergroupId);
 	
-	
+	public int deleteMemberByAccount(InfoId<Long> wgroupId, String account);
 }

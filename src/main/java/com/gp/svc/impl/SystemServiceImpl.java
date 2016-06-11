@@ -76,7 +76,7 @@ public class SystemServiceImpl implements SystemService{
 		try{
 			return sysoptiondao.queryAll();
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system options", dae);
+			throw new ServiceException("excp.query", dae, "system options");
 		}
 	}
 
@@ -99,7 +99,7 @@ public class SystemServiceImpl implements SystemService{
 			List<SysOptionInfo> rows = jdbctemplate.query(SQL.toString(), params, sysoptiondao.getRowMapper());	
 			return rows;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system options", dae);
+			throw new ServiceException("excp.query.with", dae, "system options", groupKey);
 		}
 	}
 
@@ -142,7 +142,7 @@ public class SystemServiceImpl implements SystemService{
 			rows = jdbctemplate.query(pagesql, params, sysoptiondao.getRowMapper());	
 			pwrapper.setRows(rows);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system options", dae);
+			throw new ServiceException("excp.query", dae, "system options");
 		}
 		
 		return pwrapper;
@@ -163,7 +163,7 @@ public class SystemServiceImpl implements SystemService{
 			}
 			return m;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail update system option", dae);
+			throw new ServiceException("excp.update.with", dae, "system options", "key="+optKey);
 		}
 
 	}
@@ -182,7 +182,7 @@ public class SystemServiceImpl implements SystemService{
 			}	
 			return m;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail update system option", dae);
+			throw new ServiceException("excp.update.with", dae, "system options", "key="+oKey);
 		}
 
 	}
@@ -204,7 +204,7 @@ public class SystemServiceImpl implements SystemService{
 		try{
 			return sysoptiondao.queryByKey( oKey);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system option", dae);
+			throw new ServiceException("excp.query.with", dae, "system options", "key="+oKey);
 		}
 	}
 
@@ -213,7 +213,7 @@ public class SystemServiceImpl implements SystemService{
 		try{
 			return sysoptiondao.query( oKey);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system option", dae);
+			throw new ServiceException("excp.query.with", dae, "system options", "key="+oKey);
 		}
 	}
 
@@ -233,7 +233,7 @@ public class SystemServiceImpl implements SystemService{
 				}});	
 			return rows;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail get system options", dae);
+			throw new ServiceException("excp.query", dae, "system option groups");
 		}
 	}
 

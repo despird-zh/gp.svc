@@ -58,7 +58,7 @@ public class StorageServiceImpl implements StorageService{
 			return binarydao.create(binary) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail create binary record",dae);
+			throw new ServiceException("excp.create",dae, "Binary");
 		}
 	}
 
@@ -76,15 +76,21 @@ public class StorageServiceImpl implements StorageService{
 			return binarydao.query(id);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("fail query binary record",dae);
+			throw new ServiceException("excp.query.with",dae, "binary", id);
 		}
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean removeBinary(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		
+		try{			
+			return binarydao.delete(id) > 0;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.delete.with",dae, "binary", id);
+		}
+
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
@@ -94,7 +100,7 @@ public class StorageServiceImpl implements StorageService{
 			svcctx.setTraceInfo(storage);
 			return storagedao.create(storage) > 0;	
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.create", dae, "storage");
 		}
 	}
 
@@ -104,15 +110,19 @@ public class StorageServiceImpl implements StorageService{
 		try{
 			return storagedao.query(id);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.query.with", dae, "storage", id);
 		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public boolean existStorage(ServiceContext svcctx, String storagename) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		String CNT_SQL = "SELECT Count(storage_id) from gp_storages where storage_name = '" + storagename + "'";
+		try{
+			return pseudodao.queryRowCount(CNT_SQL) > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.row.count", dae);
+		}
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
@@ -129,7 +139,7 @@ public class StorageServiceImpl implements StorageService{
 			int cnt = storagedao.delete(id);
 			return cnt >0 ;
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.delete.with", dae, "storage", id);
 		}
 
 	}
@@ -165,7 +175,7 @@ public class StorageServiceImpl implements StorageService{
 		try{
 			rtv = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());	
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.query", dae, "storage");
 		}
 
 		return rtv;
@@ -204,7 +214,7 @@ public class StorageServiceImpl implements StorageService{
 		try{
 			rtv = jtemplate.query(pagesql, params, storagedao.getRowMapper());	
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail query instance", dae);
+			throw new ServiceException("excp.query", dae, "storage");
 		}
 		pwrapper.setRows(rtv);
 		
@@ -219,7 +229,7 @@ public class StorageServiceImpl implements StorageService{
 			svcctx.setTraceInfo(storage);
 			storagedao.update(storage);
 		}catch(DataAccessException dae){
-			throw new ServiceException("fail update storage", dae);
+			throw new ServiceException("excp.update", dae, "storage");
 		}
 	}
 }

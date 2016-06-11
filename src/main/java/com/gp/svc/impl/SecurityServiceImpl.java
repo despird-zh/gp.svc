@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +25,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Cabinets;
+import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
+import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.SystemOptions;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers.UserState;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
-import com.gp.dao.GroupDAO;
+import com.gp.dao.GroupUserDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.dao.impl.DAOSupport;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
-import com.gp.info.GroupInfo;
+import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.info.SysOptionInfo;
@@ -71,7 +74,7 @@ public class SecurityServiceImpl implements SecurityService{
 	private CabinetDAO cabinetdao;
 	
 	@Autowired
-	private GroupDAO groupdao;
+	private GroupUserDAO groupuserdao;
 	
 	@Autowired
 	CommonService idService;
@@ -231,13 +234,29 @@ public class SecurityServiceImpl implements SecurityService{
 	@Override
 	public String getAccountRole(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
-		StringBuffer SQL = new StringBuffer("SELECT ");
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_group_user WHERE group_id =? AND account = ?");
+		String role = null;
 		try{
+			Object val = pseudodao.query(wgroupId, FlatColumns.MBR_GRP_ID);
+			if(null == val || NumberUtils.toLong(val.toString()) == 0){
+				throw new ServiceException("excp.invld.id", wgroupId);
+			}
+			Long mbrgid = Long.valueOf((Integer)val);
+			Object[] params = new Object[]{
+					mbrgid, account
+			};
 			
+			if(LOGGER.isDebugEnabled())
+				LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
+			
+			JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+			List<GroupUserInfo> gulist = jtemplate.query(SQL.toString(), params, groupuserdao.getRowMapper());
+			role = CollectionUtils.isEmpty(gulist)? null : gulist.get(0).getRole();
+		
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "Account lite information");
 		}
-		return null;
+		return role;
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
@@ -252,7 +271,7 @@ public class SecurityServiceImpl implements SecurityService{
 		SQL.append("FROM gp_groups grps, gp_group_user gusr ");
 		SQL.append("WHERE ");
 		SQL.append("  grps.workgroup_id = gusr.workgroup_id AND ");
-		SQL.append("  grps.group_id = gusr.group_id AND ");
+		SQL.append("  grps.group_id = gusr.group_id AND grps.group_type = '").append(GroupUsers.GroupType.WORKGROUP_GRP.name()).append("' AND ");
 		SQL.append("  gusr.workgroup_id = ? AND ");
 		SQL.append("  gusr.account = ? ");
 		
@@ -264,17 +283,19 @@ public class SecurityServiceImpl implements SecurityService{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
 		
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		
-		jtemplate.query(SQL.toString(), params, new RowCallbackHandler(){
-
-			@Override
-			public void processRow(ResultSet rs) throws SQLException {
-				KVPair<Long, String> kvp = new KVPair<Long, String>();
-				kvp.setKey(rs.getLong("group_id"));
-				kvp.setValue(rs.getString("group_name"));
-				grpset.add(kvp);
-			}});
-		
+		try{
+			jtemplate.query(SQL.toString(), params, new RowCallbackHandler(){
+	
+				@Override
+				public void processRow(ResultSet rs) throws SQLException {
+					KVPair<Long, String> kvp = new KVPair<Long, String>();
+					kvp.setKey(rs.getLong("group_id"));
+					kvp.setValue(rs.getString("group_name"));
+					grpset.add(kvp);
+				}});
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae,"workgroup groups", account + "/" + wgroupId);
+		}
 		return grpset;
 	}
 
@@ -308,7 +329,7 @@ public class SecurityServiceImpl implements SecurityService{
 			cabinetdao.delete( cabId);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail remove user account", dae);
+			throw new ServiceException("excp.remove.acnt", dae, account);
 		}
 		return cnt > 0;		
 	}
@@ -320,7 +341,7 @@ public class SecurityServiceImpl implements SecurityService{
 		try{
 			cnt = userdao.changePassword( account, password);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail change password", dae);
+			throw new ServiceException("excp.update.with", dae, account, "new password");
 		}
 		return cnt > 0;
 		
@@ -329,10 +350,11 @@ public class SecurityServiceImpl implements SecurityService{
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public boolean existAccount(ServiceContext svcctx, String account) throws ServiceException {
-		
-		boolean exist = userdao.existAccount( account);
-
-		return exist;
+		try{
+			return userdao.existAccount( account);
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae, "account existence", account);
+		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
@@ -377,7 +399,7 @@ public class SecurityServiceImpl implements SecurityService{
 			users = jtemplate.query(querysql, params, UserExMapper);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query accounts", dae);
+			throw new ServiceException("excp.query.with", dae, "account full informaiton", account);
 		}
 
 		return CollectionUtils.isEmpty(users)? null : users.get(0);
@@ -429,7 +451,7 @@ public class SecurityServiceImpl implements SecurityService{
 		try{
 			rtv = jtemplate.query(querysql, params, UserExMapper);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query accounts", dae);
+			throw new ServiceException("excp.query", dae, "accounts");
 		}
 
 		return rtv;
@@ -489,7 +511,7 @@ public class SecurityServiceImpl implements SecurityService{
 		try{
 			rtv = jtemplate.query(pagesql, params, UserExMapper);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query accounts", dae);
+			throw new ServiceException("excp.query", dae, "accounts");
 		}
 		pwrapper.setRows(rtv);
 		
@@ -523,7 +545,7 @@ public class SecurityServiceImpl implements SecurityService{
 		try{
 			cnt = jtemplate.update(SQL.toString(), params);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail update logon trace", dae);
+			throw new ServiceException("excp.update", dae, "logon trace");
 		}
 		return cnt > 0;
 	}
@@ -571,7 +593,7 @@ public class SecurityServiceImpl implements SecurityService{
 		try{
 			cnt = jtemplate.update(SQL.toString(), params);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail update account state", dae);
+			throw new ServiceException("excp.update.with", dae ,"account's state", userkey);
 		}
 		return cnt > 0;
 	}

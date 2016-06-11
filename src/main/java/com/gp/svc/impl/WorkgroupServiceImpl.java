@@ -211,7 +211,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 		}catch(DataAccessException dae){
 
-			throw new ServiceException("error when create new workgroup", dae);
+			throw new ServiceException("excp.create", dae, "workgroup");
 		}
 		return cnt > 0;
 	}
@@ -279,7 +279,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 		}catch(DataAccessException dae){
 
-			throw new ServiceException("error when update workgroup", dae);
+			throw new ServiceException("excp.update", dae, "workgroup");
 		}
 		return cnt > 0;
 	}
@@ -338,7 +338,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			result = jtemplate.query(querysql, params, WGroupMemberMapper);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query.with", dae, "workgroup members", wkey);
 		}
 
 		return result;
@@ -400,7 +400,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			result = jtemplate.query(pagesql, params, WGroupMemberMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query.with", dae, "workgroup members", wkey);
 		}
 
 		return pwrapper;
@@ -437,7 +437,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				groupuserdao.create( memberinfo);
 			}
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail add members", dae);
+			throw new ServiceException("excp.add.mbr", dae, memberinfo.getAccount(), wkey);
 		}
 		return true;
 	}
@@ -452,9 +452,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		// remote old records.
 		try{
 			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberGroupId);
-			return groupuserdao.deleteByAccount(grpid, account) > 0;
+			return groupuserdao.deleteMemberByAccount(grpid, account) > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail remove members", dae);
+			throw new ServiceException("excp.remove.mbr", dae, account, wkey);
 		}
 	}
 
@@ -521,7 +521,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			result = jtemplate.query(querysql, params, SecurityServiceImpl.UserExMapper);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae, "workgroup members");
 		}
 
 		return result;
@@ -576,7 +576,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			result = jtemplate.query(pagesql, params, SecurityServiceImpl.UserExMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae, "workgroup members");
 		}
 
 		return pwrapper;
@@ -609,7 +609,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			result = jtemplate.query(SQL.toString(), params, groupdao.getRowMapper());
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae, "workgroup groups");
 		}
 
 		return result;
@@ -640,7 +640,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			}
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail create group", dae);
+			throw new ServiceException("excp.create", dae, "workgroup group");
 		}
 		return cnt > 0;
 	}
@@ -656,7 +656,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			groupuserdao.deleteByGroup(ginfo.getInfoId());
 			return groupdao.deleteByName(wkey,GroupUsers.GroupType.WORKGROUP_GRP.name(), gname) > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail delte group", dae);
+			throw new ServiceException("excp.delete", dae, "workgroup group");
 		}
 	}
 
@@ -696,7 +696,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			}
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail add workgroup member",dae);
+			throw new ServiceException("excp.add.mbr", dae, "member", "workgroup group");
 		}
 		return true;
 	}
@@ -723,7 +723,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			result = jtemplate.query(SQL.toString(), params, userdao.getRowMapper());
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae, "workgroup group members");
 		}
 
 		return result;
@@ -739,7 +739,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				groupuserdao.deleteByAccount(groupid, account);
 			}
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail remove members", dae);
+			throw new ServiceException("excp.remove.mbr", dae, "member", "workgroup group");
 		}
 		return true;
 	}
@@ -775,7 +775,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae , "local workgroups");
 		}
 		
 		return result;
@@ -810,7 +810,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			result = jtemplate.query(querysql, params, workgroupdao.getWorkgroupExRowMapper());
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae, "remote workgroups");
 		}
 
 		return result;
@@ -842,7 +842,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("Fail query members", dae);
+			throw new ServiceException("excp.query", dae,"workgroup full information");
 		}
 		
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
@@ -901,7 +901,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			result = jtemplate.query(pagesql, params, WorkgroupLiteMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
-			throw new ServiceException("Fail query workgroup lite info", dae);
+			throw new ServiceException("excp.query", dae ,"workgroup");
 		}
 
 		return pwrapper;
