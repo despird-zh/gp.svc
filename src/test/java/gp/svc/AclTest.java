@@ -27,7 +27,7 @@ import com.gp.svc.SecurityService;
 @ContextConfiguration(classes={TestConfig.class})
 public class AclTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = GroupUsers.PESUOD_USER;
+	Principal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	
 	@Autowired

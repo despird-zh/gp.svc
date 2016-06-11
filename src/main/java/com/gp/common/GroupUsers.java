@@ -17,15 +17,25 @@ package com.gp.common;
 
 import com.gp.info.InfoId;
 
+/**
+ * Define the constants related to Group and user etc. 
+ *  
+ **/
 public class GroupUsers {
 	
+	/**
+	 * The Administrator principal 
+	 **/
 	public static Principal ADMIN_USER = new Principal("admin");
 	
-	public static Principal PESUOD_USER = new Principal("pesudo-user");
+	/**
+	 * The pseudo user definition
+	 **/
+	public static Principal PSEUDO_USER = new Principal("pesudo-user");
 	
 	static{
 		InfoId<Long> pkey = IdKey.USER.getInfoId(0l);
-		PESUOD_USER.setUserId(pkey);
+		PSEUDO_USER.setUserId(pkey);
 		pkey = IdKey.USER.getInfoId(-99l);
 		ADMIN_USER.setUserId(pkey);
 	}

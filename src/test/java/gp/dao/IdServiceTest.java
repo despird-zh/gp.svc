@@ -17,7 +17,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class IdServiceTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = GroupUsers.PESUOD_USER;
+	Principal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	@Autowired
     private CommonService idService;

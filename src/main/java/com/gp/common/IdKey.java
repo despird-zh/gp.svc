@@ -26,10 +26,8 @@ public enum IdKey implements Identifier{
 
 	WORKGROUP("gp_workgroups","workgroup_id", Long.class),
 	WORKGROUP_MIRROR("gp_workgroup_mirror","mirror_id", Long.class),
-	WORKGROUP_USER("gp_workgroup_user","rel_id", Long.class),
 	CABINET("gp_cabinets","cabinet_id", Long.class),
 	ORG_HIER("gp_org_hier","org_id", Long.class),
-	ORG_USER("gp_org_user","rel_id", Long.class),
 	INSTANCE("gp_instances","instance_id", Integer.class),
 	USER("gp_users","user_id", Long.class),
 	GROUP("gp_groups","group_id", Long.class),
@@ -53,7 +51,6 @@ public enum IdKey implements Identifier{
 	BINARY("gp_binaries","binary_id", Long.class),
 	POST("gp_posts","post_id", Long.class),
 	POST_COMMENT("gp_post_comments","comment_id", Long.class),
-	POST_USER("gp_post_user","rel_id", Long.class),
 	VOTE("gp_votes","vote_id", Long.class),
 	AUDIT("gp_audits","audit_id", Long.class),
 	DICTIONARY("gp_dictionary","dict_id", Long.class),

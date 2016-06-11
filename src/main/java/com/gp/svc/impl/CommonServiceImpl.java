@@ -89,7 +89,7 @@ public class CommonServiceImpl implements CommonService{
 	@Override
 	public <T> InfoId<T> generateId( Identifier idkey,Class<T> type) throws ServiceException {
 		
-		return generateId(GroupUsers.PESUOD_USER.getAccount(),idkey, type);
+		return generateId(GroupUsers.PSEUDO_USER.getAccount(),idkey, type);
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)

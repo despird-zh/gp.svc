@@ -111,7 +111,7 @@ public class ServiceContext extends GeneralContext {
 		
 		if(pseudoservice == null){
 		
-			pseudoservice = new ServiceContext(GroupUsers.PESUOD_USER);
+			pseudoservice = new ServiceContext(GroupUsers.PSEUDO_USER);
 		}
 		
 		return pseudoservice;
@@ -128,7 +128,7 @@ public class ServiceContext extends GeneralContext {
 		
 		if(newone){
 						
-			return new ServiceContext(GroupUsers.PESUOD_USER);
+			return new ServiceContext(GroupUsers.PSEUDO_USER);
 		}
 		
 		return getPseudoServiceContext();
@@ -143,7 +143,7 @@ public class ServiceContext extends GeneralContext {
 	 **/
 	public static ServiceContext getPseudoServiceContext(int sourceId){
 		
-		Principal principal = GroupUsers.PESUOD_USER;
+		Principal principal = GroupUsers.PSEUDO_USER;
 		
 		return new ServiceContext(principal);
 		

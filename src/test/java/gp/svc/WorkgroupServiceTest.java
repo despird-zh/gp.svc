@@ -22,7 +22,7 @@ import com.gp.svc.WorkgroupService;
 @ContextConfiguration(classes={TestConfig.class})
 public class WorkgroupServiceTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = GroupUsers.PESUOD_USER;
+	Principal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	
 	@Autowired

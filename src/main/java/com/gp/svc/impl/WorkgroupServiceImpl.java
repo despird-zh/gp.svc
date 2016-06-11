@@ -464,7 +464,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		public WorkgroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
 			WorkgroupMemberInfo info = new WorkgroupMemberInfo();
-			InfoId<Long> id = IdKey.WORKGROUP_USER.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKey.GROUP_USER.getInfoId(rs.getLong("rel_id"));
 			info.setInfoId(id);
 
 			info.setAccount(rs.getString("account"));

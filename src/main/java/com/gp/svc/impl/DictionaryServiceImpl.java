@@ -3,7 +3,11 @@ package com.gp.svc.impl;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,6 +30,14 @@ import com.gp.svc.DictionaryService;
 @Service("dictionaryService")
 public class DictionaryServiceImpl implements DictionaryService{
 
+	public static Logger LOGGER = LoggerFactory.getLogger(DictionaryServiceImpl.class);
+	
+	public static final String LANG_EN_US = "en_US";
+	public static final String LANG_FR_FR = "fr_FR";
+	public static final String LANG_ZH_CN = "zh_CN";
+	public static final String LANG_DE_DE = "de_DE";
+	public static final String LANG_RU_RU = "ru_RU";
+	
 	@Autowired
 	private DictionaryDAO dictionarydao;
 	
@@ -118,6 +130,9 @@ public class DictionaryServiceImpl implements DictionaryService{
 			};
 		
 		try{
+			if(LOGGER.isDebugEnabled()){
+				LOGGER.debug("SQL : {} / PARAM : {}", SQL.toString(), ArrayUtils.toString(parms));
+			}
 			DictionaryInfo result = template.queryForObject(SQL.toString(), parms, rmapper);			
 			return result;
 		}catch(DataAccessException dae){
@@ -138,10 +153,13 @@ public class DictionaryServiceImpl implements DictionaryService{
 			};
 		
 		try{
+			if(LOGGER.isDebugEnabled()){
+				LOGGER.debug("SQL : {} / PARAM : {}", SQL.toString(), ArrayUtils.toString(parms));
+			}
 			DictionaryInfo result = template.queryForObject(SQL.toString(), parms, rmapper);			
 			return result;
 		}catch(DataAccessException dae){
-			dae.printStackTrace();
+			LOGGER.error("Fail to find dict entry key :" + dictKey, dae);
 			return null;
 		}
 	}
@@ -164,7 +182,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			List<DictionaryInfo> result = template.query(SQL.toString(), parms ,rmapper);
 			return result;
 		}catch(DataAccessException dae){
-			dae.printStackTrace();
+			LOGGER.error("Fail to find dict entry group :" + dictGroup, dae);
 			return null;
 		}
 	}
@@ -174,14 +192,16 @@ public class DictionaryServiceImpl implements DictionaryService{
 		
 		DictionaryInfo dinfo = this.getDictEntry(StringUtils.lowerCase(dictKey));
 		String msgptn = null;
-		if(Locale.ENGLISH.equals(locale)){
+		if(LANG_EN_US.equals(locale.toString())){
 			msgptn = dinfo.getLabel(FlatColumns.DICT_EN_US);
-		}else if(Locale.SIMPLIFIED_CHINESE.equals(locale)){
+		}else if(LANG_ZH_CN.equals(locale.toString())){
 			msgptn = dinfo.getLabel(FlatColumns.DICT_ZH_CN);
-		}else if(Locale.FRANCE.equals(locale)){
+		}else if(LANG_FR_FR.equals(locale.toString())){
 			msgptn = dinfo.getLabel(FlatColumns.DICT_FR_FR);
-		}else if(Locale.GERMAN.equals(locale)){
+		}else if(LANG_DE_DE.equals(locale.toString())){
 			msgptn = dinfo.getLabel(FlatColumns.DICT_DE_DE);
+		}else if(LANG_RU_RU.equals(locale.toString())){
+			msgptn = dinfo.getLabel(FlatColumns.DICT_RU_RU);
 		}
 		
 		return msgptn;

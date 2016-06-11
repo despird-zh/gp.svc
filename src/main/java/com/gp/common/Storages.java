@@ -30,6 +30,8 @@ public class Storages {
 	
 	static Logger LOGGER = LoggerFactory.getLogger(Storages.class);
 	
+	public static final int DEFAULT_STORAGE_ID = 1;
+	
 	public static enum StorageType{		
 		DISK,
 		HDFS
