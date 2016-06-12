@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,13 +210,13 @@ public class OrgHierServiceImpl implements OrgHierService{
 		
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
-			
+
 			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
 			if(!InfoId.isValid(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
-			
+	
 				groupuserdao.deleteByAccount(groupId, account);
 			}
 			

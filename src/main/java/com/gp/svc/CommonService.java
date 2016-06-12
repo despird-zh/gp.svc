@@ -65,4 +65,22 @@ public interface CommonService {
 	 * @return Integer the row count updated 
 	 **/
 	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val)throws ServiceException;
+	
+	/**
+	 * Query table in flat mode
+	 * 
+	 * @param id the id of row
+	 * @param col the flat column locator 
+	 * @return Object the column value
+	 **/
+	public Object query(InfoId<?> id, FlatColLocator col)throws ServiceException;
+	
+	/**
+	 * Query table in flat mode
+	 * 
+	 * @param id the id of row
+	 * @param col the flat column locator 
+	 * @return Map<String, Object> the map key is FlatColLocator.getColumn() i.e. column name
+	 **/
+	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols)throws ServiceException;
 }
