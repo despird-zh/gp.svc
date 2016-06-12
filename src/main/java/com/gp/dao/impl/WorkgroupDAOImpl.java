@@ -38,13 +38,13 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_workgroups (")
-			.append("source_id,workgroup_id,workgroup_name,hash_code,storage_id,")
+			.append("source_id,workgroup_id,workgroup_name,hash_code,storage_id,manager,")
 			.append("descr,state,admin,creator,org_id,mbr_group_id,")
 			.append("publish_cab_id, netdisk_cab_id,owm,publish_enable,task_enable,")
 			.append("share_enable, link_enable,post_enable,netdisk_enable,avatar_id,")
 			.append("create_time,modifier, last_modified")
 			.append(")values(")
-			.append("?,?,?,?,?,")
+			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?,?,?,")
@@ -52,7 +52,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getHashCode(),info.getStorageId(),
+				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getHashCode(),info.getStorageId(),info.getManager(),
 				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),info.getMemberGroupId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),
 				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),
@@ -94,7 +94,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_workgroups SET ")
 			.append("workgroup_name = ?,org_id = ?,storage_id = ?,source_id = ?, mbr_group_id = ?,")
-			.append("descr = ?,state = ? ,admin = ?,creator = ?,hash_code = ?,")
+			.append("descr = ?,state = ? ,admin = ?,creator = ?,hash_code = ?, manager=?, ")
 			.append("create_time = ?,modifier = ?, last_modified = ?,avatar_id = ?,")
 			.append("publish_cab_id = ?,netdisk_cab_id = ? ,owm = ? ,publish_enable = ? ,task_enable = ? ,")
 			.append("share_enable = ? , link_enable = ? ,post_enable = ? ,netdisk_enable = ? ")
@@ -102,7 +102,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		
 		Object[] params = new Object[]{
 				info.getWorkgroupName(),info.getOrgId(),info.getStorageId(),info.getSourceId(),info.getMemberGroupId(),
-				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getHashCode(),
+				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getHashCode(),info.getManager(),
 				info.getCreateDate(),info.getModifier(),info.getModifyDate(),info.getAvatarId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),
 				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),
@@ -156,6 +156,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			info.setDescription(rs.getString("descr"));
 			info.setState(rs.getString("state"));
 			info.setAdmin(rs.getString("admin"));
+			info.setManager(rs.getString("manager"));
 			info.setCreator(rs.getString("creator"));
 			info.setCreateDate(rs.getTimestamp("create_time"));
 			info.setStorageId(rs.getInt("storage_id"));
@@ -200,6 +201,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			info.setDescription(rs.getString("descr"));
 			info.setState(rs.getString("state"));
 			info.setAdmin(rs.getString("admin"));
+			info.setManager(rs.getString("manager"));
 			info.setCreator(rs.getString("creator"));
 			info.setCreateDate(rs.getTimestamp("create_time"));
 			info.setStorageId(rs.getInt("storage_id"));

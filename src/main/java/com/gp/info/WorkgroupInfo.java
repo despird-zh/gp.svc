@@ -27,6 +27,9 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 	@NotEmpty
 	private String admin;
 	
+	@NotEmpty
+	private String manager;
+	
 	@Min(0)
 	@NotNull
 	private Long publishCabinet = 0l;
@@ -237,6 +240,14 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 
 	public void setMemberGroupId(Long memberGroupId) {
 		this.memberGroupId = memberGroupId;
+	}
+
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
 
 

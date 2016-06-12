@@ -38,16 +38,16 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_group_user (")
 			.append("rel_id,group_id,")
-			.append("account,")
+			.append("account,role,")
 			.append("modifier, last_modified")
 			.append(")values(")
 			.append("?,?,")
-			.append("?,")
+			.append("?,?,")
 			.append("?,?)");
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				key.getId(),info.getGroupId(),
-				info.getAccount(),
+				info.getAccount(),info.getRole(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -135,7 +135,8 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 			
 			info.setAccount(rs.getString("account"));
 			info.setGroupId(rs.getLong("group_id"));
-
+			info.setRole(rs.getString("role"));
+			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			return info;
