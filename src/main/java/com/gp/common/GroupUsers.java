@@ -40,22 +40,73 @@ public class GroupUsers {
 		ADMIN_USER.setUserId(pkey);
 	}
 	
+	/**
+	 * the user type definition
+	 * <ol>
+	 * <li>LDAP - user from ldap server</li>
+	 * <li>INLINE - user create in system</li>
+	 * <li>EXTERNAL - user from external</li>
+	 * </ol>
+	 **/
 	public static enum UserType{
 		LDAP, // LDAP user 
 		INLINE, // inline user
 		EXTERNAL // external user
 	}
 	
+	/**
+	 * the user state
+	 * <ol>
+	 * <li>ACTIVE - the user active</li>
+	 * <li>DEACTIVE - the deactive one, user cannot login</li>
+	 * <li>FROZEN - the user cannot log in any more, except admin to unlock it</li>
+	 * </ol>
+	 **/
 	public static enum UserState{
 		ACTIVE,
 		DEACTIVE,
 		FROZEN
 	}
 	
+	/**
+	 * Group Type define the group category
+	 * <ol>
+	 * <li>ORG_HIER_MBR - organization hierarchy group</li>
+	 * <li>WORKGROUP_MBR - workgroup's member group</li>
+	 * <li>WORKGROUP_GRP - workgroup's group</li>
+	 * <li>POST_MBR - post attendees</li>
+	 * </ol>
+	 **/
 	public static enum GroupType{
 		ORG_HIER_MBR, // organization hierarchy group
 		WORKGROUP_MBR, // workgroup's member group
 		WORKGROUP_GRP, // workgroup's group
 		POST_MBR // post attendees
+	}
+	
+	/**
+	 * Work group member role point out the member's privilege scope
+	 * <ol>
+	 * <li>MANAGER - access to the full feature of work group</li>
+	 * <li>CONTRIBUTOR - create new post, task, doc. etc. </li>
+	 * <li>CONSUMER - only browse the resources except hidden ones</li>
+	 * </ol>
+	 **/
+	public static enum WorkgroupMemberRole{
+		MANAGER,
+		CONTRIBUTOR,
+		CONSUMER
+	}
+	
+	/**
+	 * Organization hierarchy member role
+	 * <ol>
+	 * <li>MANAGER - org. node manager</li>
+	 * <li>MANAGER - org. node member</li>
+	 * </ol> 
+	 **/
+	public static enum OrgHierMemberRole{
+		MANAGER,
+		MEMBER
 	}
 }

@@ -85,21 +85,31 @@ public class OrgHierServiceImpl implements OrgHierService{
 	@Override
 	public boolean newOrgHierNode(ServiceContext svcctx, OrgHierInfo orginfo) throws ServiceException {
 		
-		try{
-			svcctx.setTraceInfo(orginfo);
-			// prepare the group information
-			GroupInfo ginfo = new GroupInfo();
-			InfoId<Long> gid = idservice.generateId(IdKey.GROUP, Long.class);
-			ginfo.setInfoId(gid);
-			// org group with fixed workgroup -888
-			ginfo.setWorkgroupId(GeneralConstants.ORGHIER_WORKGROUP);
-			ginfo.setGroupName(orginfo.getOrgName() + "'s group");
-			ginfo.setDescription(orginfo.getDescription());
-			ginfo.setGroupType(GroupUsers.GroupType.ORG_HIER_MBR.name());
-			// set trace information
-			svcctx.setTraceInfo(ginfo);
+		svcctx.setTraceInfo(orginfo);
+		// prepare the group information
+		GroupInfo ginfo = new GroupInfo();
+		InfoId<Long> gid = idservice.generateId(IdKey.GROUP, Long.class);
+		ginfo.setInfoId(gid);
+		// org group with fixed workgroup ORGHIER_WORKGROUP=-998
+		ginfo.setWorkgroupId(GeneralConstants.ORGHIER_WORKGROUP);
+		ginfo.setGroupName(orginfo.getOrgName() + "'s group");
+		ginfo.setDescription(orginfo.getDescription());
+		ginfo.setGroupType(GroupUsers.GroupType.ORG_HIER_MBR.name());
+		// set trace information
+		svcctx.setTraceInfo(ginfo);
+		// create group user record
+		GroupUserInfo mbrinfo= new GroupUserInfo();
+		InfoId<Long> guid = idservice.generateId(IdKey.GROUP_USER, Long.class);
+		mbrinfo.setInfoId(guid);
+		mbrinfo.setAccount(orginfo.getAdmin());
+		mbrinfo.setGroupId(gid.getId());
+		mbrinfo.setRole(GroupUsers.OrgHierMemberRole.MANAGER.name());
+		svcctx.setTraceInfo(mbrinfo);
+		try{	
 			// create group
 			groupdao.create(ginfo);
+			// create group user
+			groupuserdao.create(mbrinfo);
 			// update org hier info with group id
 			orginfo.setMemberGroupId(gid.getId());
 			
@@ -178,6 +188,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 				InfoId<Long> rid = idservice.generateId(IdKey.GROUP_USER, Long.class);
 				guinfo.setInfoId(rid);
 				guinfo.setGroupId(orginfo.getMemberGroupId());
+				guinfo.setRole(GroupUsers.OrgHierMemberRole.MEMBER.name());
 				guinfo.setAccount(account);				
 				svcctx.setTraceInfo(guinfo);
 				
