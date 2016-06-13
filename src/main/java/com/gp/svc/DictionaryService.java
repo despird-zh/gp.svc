@@ -1,8 +1,6 @@
 package com.gp.svc;
 
 import java.util.List;
-import java.util.Locale;
-
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.DictionaryInfo;
@@ -19,12 +17,8 @@ public interface DictionaryService {
 	public DictionaryInfo getDictEntry(ServiceContext svcctx, InfoId<Long> dictId) throws ServiceException;
 	
 	public DictionaryInfo getDictEntry(ServiceContext svcctx, String dictKey) throws ServiceException;
-	
-	public String getMessagePattern(Locale locale, String dictKey);
-	
-	public String getPropertyName(Locale locale, String dictKey);
-	
-	public DictionaryInfo getDictEntry(String dictKey) ;
+
+	public DictionaryInfo getDictEntry(String dictKey, boolean property) ;
 	
 	public List<DictionaryInfo> getDictGroupEntries(String dictGroup);
 	
