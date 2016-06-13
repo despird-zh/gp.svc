@@ -204,20 +204,4 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		return rtv;
 	}
 
-	@Override
-	public int deleteMemberByAccount(InfoId<Long> wgroupId, String account) {
-		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_group_user ")
-			.append("where workgroup_id = ? and account = ?");
-		
-		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		Object[] params = new Object[]{
-				wgroupId.getId(), account
-		};
-		if(LOGGER.isDebugEnabled()){			
-			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
-		}
-		int rtv = jtemplate.update(SQL.toString(), params);
-		return rtv;
-	}
 }

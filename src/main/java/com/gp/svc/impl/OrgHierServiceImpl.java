@@ -1,15 +1,20 @@
 package com.gp.svc.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +63,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, Long parentNodeId)
+	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<Long> parentNodeId)
 			throws ServiceException {
 
 		List<OrgHierInfo> orglist = null;
@@ -72,7 +77,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 		try{
 			
-			orglist = jtemplate.query(SQL.toString(), new Object[]{parentNodeId}, orghierdao.getRowMapper());
+			orglist = jtemplate.query(SQL.toString(), new Object[]{parentNodeId.getId()}, orghierdao.getRowMapper());
 		
 		}catch(DataAccessException dae){
 			
@@ -256,5 +261,38 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 		return rtv;
 
+	}
+
+	@Override
+	public Map<Long, Integer> getOrgHierGrandNodeCount(ServiceContext svcctx, InfoId<Long> orgid)
+			throws ServiceException {
+		
+		final Map<Long, Integer> result = new HashMap<Long, Integer> ();
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("select count(org_id) as grand_cnt, org_pid from gp_org_hier ");
+		SQL.append(" where org_pid in (select org_id from gp_org_hier where org_pid = ?)");
+		SQL.append(" group by org_pid");
+		
+		Object[] params = new Object[]{ orgid.getId() };
+		
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + SQL.toString() + " / PARAMS : " + ArrayUtils.toString(params));
+		}
+		try{
+			jtemplate.query(SQL.toString(), params, new RowCallbackHandler(){
+
+				@Override
+				public void processRow(ResultSet rs) throws SQLException {
+					result.put(rs.getLong("org_pid"), rs.getInt("grand_cnt"));
+				}});	
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae, "grand's count", orgid);
+		}
+
+		return result;
 	}
 }

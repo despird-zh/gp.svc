@@ -30,7 +30,6 @@ import com.gp.common.Images;
 import com.gp.common.SystemOptions;
 import com.gp.config.ServiceConfigurer;
 import com.gp.common.ServiceContext;
-import com.gp.dao.ActLogDAO;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
@@ -182,6 +181,15 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		group.setWorkgroupId(winfo.getInfoId().getId());
 		winfo.setMemberGroupId(grpid.getId());
 		svcctx.setTraceInfo(group);
+		// create group user record
+		GroupUserInfo mbrinfo= new GroupUserInfo();
+		InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+		mbrinfo.setInfoId(guid);
+		mbrinfo.setAccount(winfo.getManager());
+		mbrinfo.setGroupId(grpid.getId());
+		mbrinfo.setRole(GroupUsers.WorkgroupMemberRole.MANAGER.name());
+		svcctx.setTraceInfo(mbrinfo);
+		
 		int cnt = 0;
 		try{
 			// create image firstly.		
@@ -208,7 +216,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			cabinetdao.create( pubinfo);
 			cabinetdao.create( priinfo);			
 			groupdao.create(group);
-			
+			groupuserdao.create(mbrinfo);
 		}catch(DataAccessException dae){
 
 			throw new ServiceException("excp.create", dae, "workgroup");
@@ -411,9 +419,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo memberinfo)
 			throws ServiceException {
 		try{
-			
-			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberinfo.getGroupId());
-			if(!InfoId.isValid(grpid)){
+			InfoId<Long> grpid = null; 
+			if(null == memberinfo.getGroupId() || memberinfo.getGroupId() <= 0){
 				Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
 				grpid = IdKey.GROUP.getInfoId(Long.valueOf((Integer)val));
 				memberinfo.setGroupId(grpid.getId());
@@ -447,12 +454,18 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
 		
-		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
-		// remote old records.
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("Delete from gp_group_user ");
+		SQL.append(" where group_id in (select group_id from gp_groups where workgroup_id = ? ) ");
+		SQL.append(" AND account = ?");
+		
+		Object[] params = new Object[]{wkey.getId(), account};
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
 		try{
-			InfoId<Long> grpid = IdKey.GROUP.getInfoId(memberGroupId);
-			return groupuserdao.deleteMemberByAccount(grpid, account) > 0;
+			return jtemplate.update(SQL.toString(), params) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.remove.mbr", dae, account, wkey);
 		}

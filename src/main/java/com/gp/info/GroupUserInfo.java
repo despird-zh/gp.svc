@@ -1,13 +1,17 @@
 package com.gp.info;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class GroupUserInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = 1L;
 
 	private Long groupId;
 	
+	@NotEmpty
 	private String account;
 
+	@NotEmpty
 	private String role;
 	
 	public Long getGroupId() {
