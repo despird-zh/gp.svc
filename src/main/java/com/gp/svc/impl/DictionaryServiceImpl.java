@@ -3,6 +3,7 @@ package com.gp.svc.impl;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
@@ -156,8 +157,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 			if(LOGGER.isDebugEnabled()){
 				LOGGER.debug("SQL : {} / PARAM : {}", SQL.toString(), ArrayUtils.toString(parms));
 			}
-			DictionaryInfo result = template.queryForObject(SQL.toString(), parms, rmapper);			
-			return result;
+			List<DictionaryInfo> result = template.query(SQL.toString(), parms, rmapper);			
+			return CollectionUtils.isEmpty(result) ? null : result.get(0);
 		}catch(DataAccessException dae){
 			LOGGER.error("Fail to find dict entry key :" + dictKey, dae);
 			return null;
