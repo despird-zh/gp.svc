@@ -11,6 +11,8 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = -8823921041371521351L;
 
+	private Long parentId;
+	
 	@NotEmpty
 	private String workgroupName;
 	
@@ -250,5 +252,12 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 		this.manager = manager;
 	}
 
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
 
 }
