@@ -40,11 +40,11 @@ import com.gp.dao.UserDAO;
 import com.gp.dao.impl.DAOSupport;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
+import com.gp.info.CombineInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.info.SysOptionInfo;
-import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -53,6 +53,7 @@ import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.SystemService;
+import com.gp.svc.info.UserExt;
 import com.gp.util.DateTimeUtils;
 
 /**
@@ -361,7 +362,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public UserExInfo getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
+	public CombineInfo<UserInfo, UserExt> getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
 			throws ServiceException {
 
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
@@ -395,7 +396,7 @@ public class SecurityServiceImpl implements SecurityService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExInfo> users = null;
+		List<CombineInfo<UserInfo, UserExt>> users = null;
 		try{
 			
 			users = jtemplate.query(querysql, params, UserExMapper);
@@ -409,10 +410,10 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
+	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
 		
-		List<UserExInfo> rtv = null;
+		List<CombineInfo<UserInfo, UserExt>> rtv = null;
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
 				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
@@ -461,10 +462,10 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
+	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
 			throws ServiceException {
 		
-		List<UserExInfo> rtv = null;
+		List<CombineInfo<UserInfo, UserExt>> rtv = null;
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
@@ -492,7 +493,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<UserExInfo> pwrapper = new PageWrapper<UserExInfo>();
+		PageWrapper<CombineInfo<UserInfo, UserExt>> pwrapper = new PageWrapper<CombineInfo<UserInfo, UserExt>>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM.toString()).toString();
@@ -601,11 +602,12 @@ public class SecurityServiceImpl implements SecurityService{
 	}
 
 	
-	public static RowMapper<UserExInfo> UserExMapper = new RowMapper<UserExInfo>(){
+	public static RowMapper<CombineInfo<UserInfo, UserExt>> UserExMapper = new RowMapper<CombineInfo<UserInfo, UserExt>>(){
 
 		@Override
-		public UserExInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			UserExInfo info = new UserExInfo();
+		public CombineInfo<UserInfo, UserExt> mapRow(ResultSet rs, int rowNum) throws SQLException {
+			CombineInfo<UserInfo, UserExt> cinfo = new CombineInfo<UserInfo, UserExt>();
+			UserInfo info = new UserInfo();
 			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
 			info.setInfoId(id);
 
@@ -628,17 +630,22 @@ public class SecurityServiceImpl implements SecurityService{
 			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
+			// save extend data
+			UserExt ext = new UserExt();
 			if(DAOSupport.hasColInResultSet(rs, "storage_name")){
-				info.setStorageName(rs.getString("storage_name"));
+				ext.setStorageName(rs.getString("storage_name"));
 			}
-			info.setAbbr(rs.getString("abbr"));
-			info.setShortName(rs.getString("short_name"));
-			info.setInstanceName(rs.getString("instance_name"));
+			ext.setAbbr(rs.getString("abbr"));
+			ext.setShortName(rs.getString("short_name"));
+			ext.setInstanceName(rs.getString("instance_name"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			
-			return info;
+			cinfo.setPrimary(info);
+			cinfo.setExtended(ext);
+			
+			return cinfo;
 		}};
 		
 }

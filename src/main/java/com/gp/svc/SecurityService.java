@@ -6,12 +6,13 @@ import java.util.Set;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.exception.ServiceException;
+import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
-import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
+import com.gp.svc.info.UserExt;
 
 public interface SecurityService {
 	
@@ -53,7 +54,7 @@ public interface SecurityService {
 	 * @param account the account, i.e login 
 	 * @param type the type of user: inner / ldap / external 
 	 **/
-	public UserExInfo getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
+	public CombineInfo<UserInfo, UserExt> getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
 		
 	/**
 	 * Query the account list 
@@ -63,7 +64,7 @@ public interface SecurityService {
 	 * @param type the types condition
 	 * @param state the states condition
 	 **/
-	public List<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type,String[] state) throws ServiceException;
+	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type,String[] state) throws ServiceException;
 
 	/**
 	 * Query the account list per page support pagination request
@@ -74,7 +75,7 @@ public interface SecurityService {
 	 * @param pagequery the page query condition
 	 *  
 	 **/
-	public PageWrapper<UserExInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Query Roles of account in Greoupress System

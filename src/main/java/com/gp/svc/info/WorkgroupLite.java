@@ -1,8 +1,8 @@
-package com.gp.info;
+package com.gp.svc.info;
 
 import java.util.Date;
 
-public class WorkgroupLiteInfo extends WorkgroupInfo{
+public class WorkgroupLite{
 
 	private static final long serialVersionUID = -5788108460179216377L;
 

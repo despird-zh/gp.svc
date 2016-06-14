@@ -1,6 +1,6 @@
-package com.gp.info;
+package com.gp.svc.info;
 
-public class UserExInfo extends UserInfo{
+public class UserExt{
 
 	private static final long serialVersionUID = 1L;
 

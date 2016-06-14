@@ -40,17 +40,16 @@ import com.gp.dao.WorkgroupDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.ActLogInfo;
 import com.gp.info.CabinetInfo;
+import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.GroupInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
 import com.gp.info.SysOptionInfo;
-import com.gp.info.UserExInfo;
 import com.gp.info.UserInfo;
-import com.gp.info.WorkgroupExInfo;
 import com.gp.info.WorkgroupInfo;
-import com.gp.info.WorkgroupLiteInfo;
+import com.gp.svc.info.WorkgroupLite;
 import com.gp.info.WorkgroupMemberInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -59,6 +58,8 @@ import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.SystemService;
 import com.gp.svc.WorkgroupService;
+import com.gp.svc.info.UserExt;
+import com.gp.svc.info.WorkgroupExt;
 import com.gp.util.DateTimeUtils;
 
 /**
@@ -501,7 +502,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
+	public List<CombineInfo<UserInfo, UserExt>> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
@@ -530,7 +531,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExInfo> result = null;
+		List<CombineInfo<UserInfo, UserExt>> result = null;
 		try{
 			result = jtemplate.query(querysql, params, SecurityServiceImpl.UserExMapper);
 		}catch(DataAccessException dae){
@@ -542,7 +543,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
+	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
@@ -566,7 +567,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<UserExInfo> pwrapper = new PageWrapper<UserExInfo>();
+		PageWrapper<CombineInfo<UserInfo, UserExt>> pwrapper = new PageWrapper<CombineInfo<UserInfo, UserExt>>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -584,7 +585,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExInfo> result = null;
+		List<CombineInfo<UserInfo, UserExt>> result = null;
 		try{
 			result = jtemplate.query(pagesql, params, SecurityServiceImpl.UserExMapper);
 			pwrapper.setRows(result);
@@ -759,15 +760,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExInfo> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
+	public List<CombineInfo<WorkgroupInfo,WorkgroupExt>> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.* ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
 				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
+				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
 				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE);
 		
 		if(StringUtils.isNotBlank(gname)){
@@ -782,9 +784,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExInfo> result = null;
+		List<CombineInfo<WorkgroupInfo,WorkgroupExt>> result = null;
 		try{
-			result = jtemplate.query(querysql, params, workgroupdao.getWorkgroupExRowMapper());
+			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -796,15 +798,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
+	public List<CombineInfo<WorkgroupInfo,WorkgroupExt>> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.* ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
 				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
+				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
 				.append("WHERE a.source_id <> ").append(GeneralConstants.LOCAL_INSTANCE);
 		
 		if(StringUtils.isNotBlank(gname)){
@@ -819,9 +822,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExInfo> result = null;
+		List<CombineInfo<WorkgroupInfo,WorkgroupExt>> result = null;
 		try{
-			result = jtemplate.query(querysql, params, workgroupdao.getWorkgroupExRowMapper());
+			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "remote workgroups");
 		}
@@ -831,15 +834,16 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public WorkgroupExInfo getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
+	public CombineInfo<WorkgroupInfo,WorkgroupExt> getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
 		Object[] params = new Object[]{wkey.getId()};
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.* ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
 				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
+				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
 				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE)
 				.append(" AND workgroup_id = ?");
 				
@@ -849,9 +853,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / PARAMS : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExInfo> result = null;
+		List<CombineInfo<WorkgroupInfo,WorkgroupExt>> result = null;
 		try{
-			result = jtemplate.query(querysql, params, workgroupdao.getWorkgroupExRowMapper());
+			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -863,7 +867,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<WorkgroupLiteInfo> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
+	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
 			throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -892,7 +896,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<WorkgroupLiteInfo> pwrapper = new PageWrapper<WorkgroupLiteInfo>();
+		PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> pwrapper = new PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -909,7 +913,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + params.toString());
 		}
-		List<WorkgroupLiteInfo> result = null;
+		List<CombineInfo<WorkgroupInfo,WorkgroupLite>> result = null;
 		try{
 			result = jtemplate.query(pagesql, params, WorkgroupLiteMapper);
 			pwrapper.setRows(result);
@@ -920,13 +924,13 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return pwrapper;
 	}
 	
-	public static RowMapper<WorkgroupLiteInfo> WorkgroupLiteMapper = new RowMapper<WorkgroupLiteInfo>(){
+	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> WorkgroupLiteMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>(){
 
 		@Override
-		public WorkgroupLiteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public CombineInfo<WorkgroupInfo,WorkgroupLite> mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
-			WorkgroupLiteInfo info = new WorkgroupLiteInfo();
-			
+			CombineInfo<WorkgroupInfo,WorkgroupLite> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupLite>();
+			WorkgroupInfo info = new WorkgroupInfo();
 			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
 			info.setInfoId(id);			
 			info.setSourceId(rs.getInt("source_id"));			
@@ -949,18 +953,71 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			info.setPublishEnable(rs.getBoolean("publish_enable"));
 			info.setTaskEnable(rs.getBoolean("task_enable"));
 			info.setAvatarId(rs.getLong("avatar_id"));
-			
-			info.setAdminName(rs.getString("full_name"));
-			info.setImageExt(rs.getString("image_ext"));
-			info.setImageFormat(rs.getString("image_format"));
-			info.setImageTouch(rs.getTimestamp("touch_time"));
-			
 			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));			
 			
+			WorkgroupLite lite = new WorkgroupLite();
+			lite.setAdminName(rs.getString("full_name"));
+			lite.setImageExt(rs.getString("image_ext"));
+			lite.setImageFormat(rs.getString("image_format"));
+			lite.setImageTouch(rs.getTimestamp("touch_time"));
 			
-			return info;
+			cinfo.setPrimary(info);
+			cinfo.setExtended(lite);
+			
+			return cinfo;
 		}
 	};
 
+	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>> WorkgroupExMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>>(){
+
+		public CombineInfo<WorkgroupInfo,WorkgroupExt> mapRow(ResultSet rs, int rowNum) throws SQLException {
+		
+			CombineInfo<WorkgroupInfo,WorkgroupExt> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupExt>();
+			
+			WorkgroupInfo info = new WorkgroupInfo();
+			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			info.setInfoId(id);			
+			info.setSourceId(rs.getInt("source_id"));			
+			info.setWorkgroupName(rs.getString("workgroup_name"));
+			info.setDescription(rs.getString("descr"));
+			info.setState(rs.getString("state"));
+			info.setAdmin(rs.getString("admin"));
+			info.setManager(rs.getString("manager"));
+			info.setCreator(rs.getString("creator"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setStorageId(rs.getInt("storage_id"));
+			info.setPublishCabinet(rs.getLong("publish_cab_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
+			info.setOrgId(rs.getLong("org_id"));
+			info.setHashCode(rs.getString("hash_code"));
+			info.setOwm(rs.getLong("owm"));
+			info.setShareEnable(rs.getBoolean("share_enable"));
+			info.setLinkEnable(rs.getBoolean("link_enable"));
+			info.setPostEnable(rs.getBoolean("post_enable"));
+			info.setNetdiskEnable(rs.getBoolean("netdisk_enable"));
+			info.setPublishEnable(rs.getBoolean("publish_enable"));
+			info.setTaskEnable(rs.getBoolean("task_enable"));
+			info.setAvatarId(rs.getLong("avatar_id"));
+			info.setMemberGroupId(rs.getLong("mbr_group_id"));
+			info.setParentId(rs.getLong("workgroup_pid"));
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));		
+			
+			WorkgroupExt ext = new WorkgroupExt();
+			ext.setEntityCode(rs.getString("entity_code"));
+			ext.setNodeCode(rs.getString("node_code"));
+			ext.setInstanceAbbr(rs.getString("abbr"));
+			ext.setInstanceName(rs.getString("instance_name"));
+			ext.setInstanceShort(rs.getString("short_name"));
+			ext.setAdminName(rs.getString("full_name"));
+			ext.setManagerName(rs.getString("mgr_name"));
+			
+			cinfo.setPrimary(info);
+			cinfo.setExtended(ext);
+			
+			return cinfo;
+		}
+		
+	};
 }

@@ -1,6 +1,6 @@
-package com.gp.info;
+package com.gp.svc.info;
 
-public class WorkgroupExInfo extends WorkgroupInfo{
+public class WorkgroupExt{
 	
 	private static final long serialVersionUID = -8823921041371521351L;
 
@@ -16,6 +16,8 @@ public class WorkgroupExInfo extends WorkgroupInfo{
 	
 	private String adminName;
 
+	private String managerName;
+	
 	public String getInstanceName() {
 		return instanceName;
 	}
@@ -62,6 +64,14 @@ public class WorkgroupExInfo extends WorkgroupInfo{
 
 	public void setNodeCode(String nodeCode) {
 		this.nodeCode = nodeCode;
+	}
+
+	public String getManagerName() {
+		return managerName;
+	}
+
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
 	}
 
 }
