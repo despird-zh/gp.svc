@@ -602,7 +602,6 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 
-	
 	public static RowMapper<CombineInfo<UserInfo, UserExt>> UserExMapper = new RowMapper<CombineInfo<UserInfo, UserExt>>(){
 
 		@Override
