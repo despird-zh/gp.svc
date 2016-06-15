@@ -38,6 +38,7 @@ import com.gp.dao.GroupUserDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.dao.impl.DAOSupport;
+import com.gp.dao.impl.UserDAOImpl;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
 import com.gp.info.CombineInfo;
@@ -607,29 +608,7 @@ public class SecurityServiceImpl implements SecurityService{
 		@Override
 		public CombineInfo<UserInfo, UserExt> mapRow(ResultSet rs, int rowNum) throws SQLException {
 			CombineInfo<UserInfo, UserExt> cinfo = new CombineInfo<UserInfo, UserExt>();
-			UserInfo info = new UserInfo();
-			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
-			info.setInfoId(id);
-
-			info.setSourceId(rs.getInt("source_id"));
-			info.setAccount(rs.getString("account"));
-			info.setType(rs.getString("type"));
-			info.setMobile(rs.getString("mobile"));
-			info.setPhone(rs.getString("phone"));
-			info.setFullName(rs.getString("full_name"));
-			info.setEmail(rs.getString("email"));
-			info.setPassword(rs.getString("password"));
-			info.setState(rs.getString("state"));
-			info.setCreateDate(rs.getTimestamp("create_time"));
-			info.setExtraInfo(rs.getString("extra_info"));
-			info.setRetryTimes(rs.getInt("retry_times"));
-			info.setLastLogonDate(rs.getDate("last_logon"));
-			info.setLanguage(rs.getString("language"));
-			info.setTimeZone(rs.getString("timezone"));
-			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
-			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
-			info.setGlobalAccount(rs.getString("global_account"));
-			info.setStorageId(rs.getInt("storage_id"));
+			UserInfo info = UserDAOImpl.UserMapper.mapRow(rs, rowNum);
 			// save extend data
 			UserExt ext = new UserExt();
 			if(DAOSupport.hasColInResultSet(rs, "storage_name")){
@@ -638,10 +617,7 @@ public class SecurityServiceImpl implements SecurityService{
 			ext.setAbbr(rs.getString("abbr"));
 			ext.setShortName(rs.getString("short_name"));
 			ext.setInstanceName(rs.getString("instance_name"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
+	
 			cinfo.setPrimary(info);
 			cinfo.setExtended(ext);
 			
