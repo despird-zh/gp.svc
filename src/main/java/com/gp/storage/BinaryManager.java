@@ -79,14 +79,15 @@ public class BinaryManager {
 	 * ChunkBuffer use {@link ByteBuffer} store byte data of file chunk.
 	 *  
 	 * @param binaryKey the key of binary record
-	 * @param chunkdata the chunk data of source data
+	 * @param range the content range to be written
+	 * @param input the source data stream
 	 *   
 	 **/
-	public void fillBinaryChunk(InfoId<Long> binaryKey, ChunkBuffer chunkdata) throws StorageException{
+	public void fillBinary(InfoId<Long> binaryKey, ContentRange range, InputStream input) throws StorageException{
 		
 		BinaryInfo binfo = binarydao.query(binaryKey);
 		String binaryURI = binfo.getStoreLocation();
-		fillBinaryChunk(binaryURI, chunkdata);
+		fillBinary(binaryURI, input);
 	}
 	
 	/**
@@ -94,10 +95,10 @@ public class BinaryManager {
 	 * ChunkBuffer use {@link ByteBuffer} store byte data of file chunk.
 	 *  
 	 * @param binaryURI the uri string of target binary
-	 * @param chunkdata the chunk data of source data
-	 *   
+	 * @param range the content range to be written
+	 * @param input the source data stream
 	 **/
-	public void fillBinaryChunk(String binaryURI, ChunkBuffer chunkdata) throws StorageException{
+	public void fillBinary(String binaryURI, ContentRange range, InputStream input) throws StorageException{
 		
 		BinUriMeta meta = new BinUriMeta(binaryURI);	
 		BinaryAccessor binaccessor = null;
@@ -113,11 +114,8 @@ public class BinaryManager {
 			
 			binaccessor = this.diskaccessor;
 		}
-		// check if necessary to flip buffer
-		if(chunkdata.getByteBuffer().position() != 0)
-			chunkdata.getByteBuffer().flip();
 		
-		binaccessor.fillBinaryChunk(meta.BinaryId, storagesetting, rootpath, chunkdata);		
+		binaccessor.fillBinary(meta.BinaryId, storagesetting, rootpath, input);		
 	}
 	
 	/**
@@ -164,10 +162,10 @@ public class BinaryManager {
 	 * @param chunkdata the chunk data holder
 	 *   
 	 **/
-	public void dumpBinaryChunk(InfoId<Long> binaryKey, ChunkBuffer chunkdata)throws StorageException{
+	public void dumpBinaryChunk(InfoId<Long> binaryKey, ContentRange range, OutputStream output)throws StorageException{
 		BinaryInfo binfo = binarydao.query(binaryKey);
 		String binaryURI = binfo.getStoreLocation();
-		dumpBinaryChunk(binaryURI, chunkdata);
+		dumpBinary(binaryURI, output);
 	}
 	
 	/**
@@ -177,7 +175,7 @@ public class BinaryManager {
 	 * @param chunkdata the chunk data holder
 	 *   
 	 **/
-	public void dumpBinaryChunk(String binaryURI, ChunkBuffer chunkdata)throws StorageException{
+	public void dumpBinary(String binaryURI, ContentRange range, OutputStream output)throws StorageException{
 		
 		BinUriMeta meta = new BinUriMeta(binaryURI);	
 		BinaryAccessor binaccessor = null;
@@ -190,12 +188,9 @@ public class BinaryManager {
 			
 			binaccessor = this.diskaccessor;
 		}
-		// clear the buffer
-		chunkdata.getByteBuffer().clear();
-		binaccessor.dumpBinaryChunk(meta.BinaryId, storagesetting, rootpath, chunkdata);
-		
-		if(chunkdata.getByteBuffer().position() != 0)
-			chunkdata.getByteBuffer().flip();
+
+		binaccessor.dumpBinary(meta.BinaryId, storagesetting, rootpath, output);
+
 	}
 	
 	/**

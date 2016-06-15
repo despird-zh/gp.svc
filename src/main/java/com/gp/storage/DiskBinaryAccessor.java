@@ -1,15 +1,11 @@
 package com.gp.storage;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-
+import java.io.RandomAccessFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +16,6 @@ import com.gp.dao.BinaryDAO;
 import com.gp.dao.StorageDAO;
 import com.gp.exception.StorageException;
 import com.gp.info.InfoId;
-import com.gp.util.BufferOutputStream;
 
 /**
  * the accessor to read/write binary on disk. the file operation utilize the guava library.
@@ -37,46 +32,87 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		super(storagedao, binarydao);
 	}
 
-	public void fillBinaryChunk(InfoId<Long> binaryId, StorageSetting setting, String path, ChunkBuffer chunkdata) throws StorageException{
+	static int BUFFER_SIZE = 4 * 1024;
+	
+	public void dumpBinary(InfoId<Long> binaryId, StorageSetting setting, String path, ContentRange range, OutputStream target) throws StorageException{
 		
 		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
-		String storelocation = rootpath + path;
-		File tgtbinary = new File(storelocation);
-		if(!tgtbinary.getParentFile().exists()){
+		
+		byte[] data = new byte[BUFFER_SIZE];
+		try(RandomAccessFile srcbinary = new RandomAccessFile(rootpath + path,"r")){
 			
-			boolean success = tgtbinary.getParentFile().mkdirs();
-			if(!success)
-				throw new StorageException("fail prepare store location : {}", storelocation);
+			long begin = range.getStartPos();
+			srcbinary.seek(begin);
+			int remain = range.getRangeLength();
+			int count = 0;
+			while (remain > 0 && count != -1) {
+				
+				count = remain > BUFFER_SIZE ? 
+						srcbinary.read(data):
+						srcbinary.read(data, 0, remain);
+						
+				target.write(data, 0, count);
+				begin += count;
+				remain -= count;
+				srcbinary.seek(begin);
+			}
+			
+		}catch( IOException ioe){
+			throw new StorageException("Fail to dump binary to output stream", ioe);
 		}
 		
-		try (FileChannel ch = FileChannel.open(Paths.get(rootpath + path), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND)){
-		   
-		    int dlen = ch.write(chunkdata.getByteBuffer(),chunkdata.getChunkOffset());
-		    LOGGER.debug("-- write pos : {} / len : {} to storeage : {}",chunkdata.getChunkOffset(), dlen, storelocation);
-		    ch.force(true);
-		} catch (IOException e) {
-			throw new StorageException("fail to copy the source binary to target.",e);
-		}
 	}
 
-	public void dumpBinaryChunk(InfoId<Long> binaryId, StorageSetting setting, String path, ChunkBuffer chunkdata) throws StorageException{
+	public void dumpBinary(InfoId<Long> binaryId, StorageSetting setting, String path, OutputStream target)throws StorageException {
 		
 		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
 		
 		File srcbinary = new File(rootpath + path);
-		try(BufferOutputStream outputstream = new BufferOutputStream(chunkdata.getByteBuffer());
-			FileInputStream fis = new FileInputStream(srcbinary);
-			) {
-			// skip offset length 
-			fis.skip(chunkdata.getChunkOffset());
-			// copy from file
-			outputstream.writeFromStream(fis);
-			
+
+		try {
+			Files.copy(srcbinary, target);
 		} catch (IOException e) {
 			throw new StorageException("fail to copy the source binary to target.",e);
 		}
 	}
-
+	
+	public void fillBinary(InfoId<Long> binaryId, StorageSetting setting, String path, ContentRange range, InputStream source) throws StorageException{
+		
+		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
+		String storelocation = rootpath + path;
+		File tgtfile = new File(storelocation);
+		if(!tgtfile.getParentFile().exists()){
+			
+			boolean success = tgtfile.getParentFile().mkdirs();
+			if(!success)
+				throw new StorageException("fail prepare store location : {}", storelocation);
+		}
+		
+		byte[] data = new byte[BUFFER_SIZE];
+		try(RandomAccessFile tgtbinary = new RandomAccessFile(rootpath + path,"w")){
+			
+			long begin = range.getStartPos();
+			tgtbinary.seek(begin);
+			
+			int remain = range.getRangeLength();
+			int count = 0;
+			
+			while (remain > 0 && count != -1) {
+				
+				count = remain > BUFFER_SIZE ? 
+						source.read(data):
+						source.read(data, 0, remain);
+						
+				tgtbinary.write(data, 0, count);
+				begin += count;
+				remain -= count;
+				tgtbinary.seek(begin);
+			}
+		}catch( IOException ioe){
+			throw new StorageException("Fail to fill binary to target stream", ioe);
+		}
+	}
+	
 	public void fillBinary(InfoId<Long> binaryId, StorageSetting setting, String path, final InputStream source) throws StorageException{
 		
 		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
@@ -103,16 +139,4 @@ public class DiskBinaryAccessor extends BinaryAccessor{
 		}
 	}
 
-	public void dumpBinary(InfoId<Long> binaryId, StorageSetting setting, String path, OutputStream target)throws StorageException {
-		
-		String rootpath = setting.getValue(Storages.StoreSetting.StorePath.name());
-		
-		File srcbinary = new File(rootpath + path);
-
-		try {
-			Files.copy(srcbinary, target);
-		} catch (IOException e) {
-			throw new StorageException("fail to copy the source binary to target.",e);
-		}
-	}
 }

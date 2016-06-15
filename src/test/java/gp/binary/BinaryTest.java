@@ -48,14 +48,8 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize, i)){
-				BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
-				System.out.println("limit : " + cbuffer.getByteBuffer().limit() +"/pos : " + cbuffer.getByteBuffer().position());
-				
-				BufferInputStream bis = new BufferInputStream(cbuffer.getByteBuffer());
-				long count = bis.readToStream(fo);
-				System.out.println("count : " + count);
-			}
+			//BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
+			
 		}
 		fo.flush();
 		fo.close();
@@ -72,15 +66,8 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){
+			//BinaryManager.instance().fillBinaryChunk(bid, cbuffer);
 			
-			try(ChunkBuffer cbuffer = BufferManager.instance().acquireChunkBuffer(filesize,  i)){
-				
-				BufferOutputStream bos = new BufferOutputStream(cbuffer.getByteBuffer());
-				long count = bos.writeFromStream(fi);
-				System.out.println("limit : " + cbuffer.getByteBuffer().limit() +"/pos : " + cbuffer.getByteBuffer().position());
-				System.out.println("count : " + count);
-				BinaryManager.instance().fillBinaryChunk(bid, cbuffer);
-			}
 		}
 	}
 }

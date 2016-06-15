@@ -53,10 +53,10 @@ public abstract class BinaryAccessor {
 	 * @param binaryId the id the binary
 	 * @param setting the setting of storage
 	 * @param path the relative path under storage.
-	 * @param chunkdata the bytes data holder
-	 *  
+	 * @param range the expected data range
+	 * @param source the source stream
 	 **/
-	public abstract void fillBinaryChunk(InfoId<Long> binaryId, StorageSetting setting, String path, ChunkBuffer chunkdata) throws StorageException;
+	public abstract void fillBinary(InfoId<Long> binaryId, StorageSetting setting, String path, ContentRange range,InputStream source) throws StorageException;
 	
 	/**
 	 * Dump the binary chunk to binary store
@@ -64,9 +64,10 @@ public abstract class BinaryAccessor {
 	 * @param binaryId the id the binary
 	 * @param setting the setting of storage
 	 * @param path the relative path under storage.
-	 * @param chunkdata the bytes data holder
+	 * @param range the expected data range
+	 * @param source the target stream
 	 **/
-	public abstract void dumpBinaryChunk(InfoId<Long> binaryId, StorageSetting setting, String path, ChunkBuffer chunkdata)throws StorageException;
+	public abstract void dumpBinary(InfoId<Long> binaryId, StorageSetting setting, String path, ContentRange range,OutputStream target)throws StorageException;
 	
 	/**
 	 * Fill the binary store with specified stream.
