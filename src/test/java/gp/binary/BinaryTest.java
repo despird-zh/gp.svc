@@ -14,10 +14,6 @@ import com.gp.common.IdKey;
 import com.gp.exception.StorageException;
 import com.gp.info.InfoId;
 import com.gp.storage.BinaryManager;
-import com.gp.storage.BufferManager;
-import com.gp.storage.ChunkBuffer;
-import com.gp.util.BufferInputStream;
-import com.gp.util.BufferOutputStream;
 import com.gp.util.StorageUtils;
 
 @ContextConfiguration(classes={TestConfig.class})
@@ -43,7 +39,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("bpath : " + bpath);
 
 		FileOutputStream fo = new FileOutputStream(f1);
-		int chunks = ChunkBuffer.calculateAmount(filesize, BufferManager.BUFFER_SIZE);
+		int chunks = StorageUtils.calcAmount(filesize, 2*1024*1024);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(22l);
 		for(int i = 0 ; i < chunks; i++){
@@ -62,7 +58,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		long filesize = f1.length();
 
 		FileInputStream fi = new FileInputStream(f1);
-		int chunks = ChunkBuffer.calculateAmount(filesize, BufferManager.BUFFER_SIZE);
+		int chunks = StorageUtils.calcAmount(filesize, 2*1024*1024);
 		
 		InfoId<Long> bid = IdKey.BINARY.getInfoId(1122l);
 		for(int i = 0 ; i < chunks; i++){
