@@ -202,10 +202,8 @@ public class FileServiceImpl implements FileService{
 	public void addAce(ServiceContext svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
-			
-			Long aclid = Long.valueOf((Integer)val);
-	
+			Long aclid = pseudodao.query(cabfileId, FlatColumns.ACL_ID, Long.class);
+
 			// find available ace entry 
 			CabAceInfo aceinfo = acedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());
 			if(aceinfo == null){
@@ -239,8 +237,8 @@ public class FileServiceImpl implements FileService{
 	public void removeAce(ServiceContext svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(cabfileId, FlatColumns.ACL_ID);
-			Long aclid = Long.valueOf((Integer)val);
+			Long aclid = pseudodao.query(cabfileId, FlatColumns.ACL_ID, Long.class);
+	
 			acedao.deleteBySubject(aclid, type, subject);
 		}catch(DataAccessException dae){
 			

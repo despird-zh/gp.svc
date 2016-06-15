@@ -237,8 +237,8 @@ public class OrgHierServiceImpl implements OrgHierService{
 			throws ServiceException {
 		
 		List<UserInfo> rtv = null;
-		Object val = pseudodao.query(orgid, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
+		Long memberGroupId = pseudodao.query(orgid, FlatColumns.MBR_GRP_ID, Long.class);
+	
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("SELECT b.* FROM gp_users b, gp_group_user a ")

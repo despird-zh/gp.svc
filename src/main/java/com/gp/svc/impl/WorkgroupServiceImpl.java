@@ -239,7 +239,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			// set trace info
 			svcctx.setTraceInfo(winfo);
-
+			Long mbrgrpid = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
+			winfo.setMemberGroupId(mbrgrpid);
 			// create image firstly.		
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
@@ -313,8 +314,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 		Map<String,Object> params = new HashMap<String,Object>();
 		
-		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
+		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
@@ -360,8 +360,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			String uname , InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();
-		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
+		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
+		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.user_id) ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
@@ -370,7 +370,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				.append("  ON b.account = a.account ")
 				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
 				.append("  ON a.source_id = c.instance_id ")
-				.append("WHERE b.group_id = :group_id")
+				.append("WHERE b.group_id = :group_id ")
 				.append("ORDER BY b.rel_id");
 		
 		params.put("group_id", memberGroupId);
@@ -389,16 +389,17 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<WorkgroupMemberInfo> pwrapper = new PageWrapper<WorkgroupMemberInfo>();
-		// get count sql scripts.
-		String countsql = SQL_COUNT.append(SQL_FROM).toString();
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			// get count sql scripts.
+			String countsql = SQL_COUNT.append(SQL_FROM).toString();
+			int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL_FROM).toString(), pagequery);
 		if(LOGGER.isDebugEnabled()){
@@ -423,8 +424,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			InfoId<Long> grpid = null; 
 			if(null == memberinfo.getGroupId() || memberinfo.getGroupId() <= 0){
-				Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-				grpid = IdKey.GROUP.getInfoId(Long.valueOf((Integer)val));
+				Long val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID,  Long.class);
+				grpid = IdKey.GROUP.getInfoId(val);
 				memberinfo.setGroupId(grpid.getId());
 			}
 			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
@@ -506,8 +507,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public List<CombineInfo<UserInfo, UserExt>> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
-		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
+		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 
@@ -547,9 +547,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
-		Object val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID);
-		Long memberGroupId = Long.valueOf((Integer)val);
-		
+		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
+
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*, b.rel_id, c.* ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ");

@@ -73,7 +73,7 @@ public interface CommonService {
 	 * @param col the flat column locator 
 	 * @return Object the column value
 	 **/
-	public Object query(InfoId<?> id, FlatColLocator col)throws ServiceException;
+	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz)throws ServiceException;
 	
 	/**
 	 * Query table in flat mode

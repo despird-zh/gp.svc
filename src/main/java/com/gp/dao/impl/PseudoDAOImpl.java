@@ -150,7 +150,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 	}
 
 	@Override
-	public Object query(InfoId<?> id, FlatColLocator col) {
+	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz) {
 		
 		StringBuffer SQL = new StringBuffer("SELECT ");
 		SQL.append(col.getColumn())
@@ -168,7 +168,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
 		}
 		
-		List<Object> ol = jtemplate.queryForList(SQL.toString(), params, Object.class);
+		List<T> ol = jtemplate.queryForList(SQL.toString(), params, clazz);
 		return CollectionUtils.isEmpty(ol) ? null : ol.get(0);
 	}
 

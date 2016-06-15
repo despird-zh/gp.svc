@@ -99,7 +99,7 @@ public interface PseudoDAO {
 	 * @param col the flat column locator 
 	 * @return Object the column value
 	 **/
-	public Object query(InfoId<?> id, FlatColLocator col);
+	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz);
 	
 	/**
 	 * Query table in flat mode

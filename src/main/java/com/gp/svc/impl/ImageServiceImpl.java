@@ -148,11 +148,9 @@ public class ImageServiceImpl implements ImageService{
 	public String getImageFileName(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{
 			// force not to retrieve the binary data : parent = ""
-			Object name = pseudodao.query(id, FlatColumns.IMG_NAME);
-			if(null == name)
-				return null;
-			
-			return (String) name;
+			String name = pseudodao.query(id, FlatColumns.IMG_NAME, String.class);
+		
+			return name;
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.query.with",dae, "image name", id);

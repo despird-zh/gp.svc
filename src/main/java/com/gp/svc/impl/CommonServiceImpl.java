@@ -128,10 +128,10 @@ public class CommonServiceImpl implements CommonService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly =true)
 	@Override
-	public Object query(InfoId<?> id, FlatColLocator col) throws ServiceException{
+	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz) throws ServiceException{
 		
 		try{
-			return pseudodao.query(id, col);
+			return pseudodao.query(id, col, clazz);
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.query.flat", dae, id);

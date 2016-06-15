@@ -166,9 +166,8 @@ public class FolderServiceImpl implements FolderService{
 			throws ServiceException {
 		
 		try{
-			Object val = pseudodao.query(folderkey, FlatColumns.ACL_ID);	
-			Long aclid = Long.valueOf((Integer)val);
-			
+			Long aclid = pseudodao.query(folderkey, FlatColumns.ACL_ID, Long.class);	
+	
 			for(Ace ace : aces){
 				
 				CabAceInfo aceinfo = cabacedao.queryBySubject(aclid, ace.getType().value, ace.getSubject());

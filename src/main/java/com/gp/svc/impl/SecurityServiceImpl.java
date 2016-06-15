@@ -241,11 +241,11 @@ public class SecurityServiceImpl implements SecurityService{
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_group_user WHERE group_id =? AND account = ?");
 		String role = null;
 		try{
-			Object val = pseudodao.query(wgroupId, FlatColumns.MBR_GRP_ID);
-			if(null == val || NumberUtils.toLong(val.toString()) == 0){
+			Long mbrgid = pseudodao.query(wgroupId, FlatColumns.MBR_GRP_ID, Long.class);
+			if(null == mbrgid || mbrgid == 0){
 				throw new ServiceException("excp.invld.id", wgroupId);
 			}
-			Long mbrgid = Long.valueOf((Integer)val);
+			
 			Object[] params = new Object[]{
 					mbrgid, account
 			};

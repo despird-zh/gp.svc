@@ -47,7 +47,7 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,")
+			.append("?,?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
