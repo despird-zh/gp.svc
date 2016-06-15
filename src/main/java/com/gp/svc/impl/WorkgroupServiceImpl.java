@@ -778,7 +778,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			SQL_FROM.append(" AND a.workgroup_name LIKE :wgroup ");
 			params.put("wgroup", "%" + StringUtils.trim(gname) + "%");
 		}
-				
+		SQL_FROM.append(" GROUP BY a.workgroup_name");
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		String querysql = SQL_COLS.append(SQL_FROM.toString()).toString() ;
 		if(LOGGER.isDebugEnabled()){
@@ -866,6 +866,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return CollectionUtils.isEmpty(result) ? null : result.get(0);
 	}
 
+	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
@@ -888,26 +889,27 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		if(CollectionUtils.isNotEmpty(tags)){			
 			SQL_FROM.append(" AND EXISTS ( SELECT tag_name from gp_tag_rel ");
-			SQL_FROM.append("            WHERE resource_type = 'WG' ");
+			SQL_FROM.append("            WHERE resource_type = 'gp_workgroups' ");
 			SQL_FROM.append("               AND workgroup_id = a.workgroup_id");
 			SQL_FROM.append("               AND tag_name in( :tags)) ");
 			params.put("tags", tags);
 		}
-		SQL_FROM.append(" ORDER BY a.workgroup_id DESC");
+		SQL_FROM.append(" ORDER BY a.workgroup_id DESC, a.workgroup_name");
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
 		PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> pwrapper = new PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>();
-		// get count sql scripts.
-		String countsql = SQL_COUNT.append(SQL_FROM).toString();
-		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
-		// calculate pagination information, the page menu number is 5
-		PaginationInfo pagination = new PaginationHelper(totalrow, 
-				pagequery.getPageNumber(), 
-				pagequery.getPageSize(), 5).getPaginationInfo();
-		
-		pwrapper.setPagination(pagination);
-		
+		if(pagequery.isTotalCountEnable()){
+			// get count sql scripts.
+			String countsql = SQL_COUNT.append(SQL_FROM).toString();
+			int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
+			// calculate pagination information, the page menu number is 5
+			PaginationInfo pagination = new PaginationHelper(totalrow, 
+					pagequery.getPageNumber(), 
+					pagequery.getPageSize(), 5).getPaginationInfo();
+			
+			pwrapper.setPagination(pagination);
+		}
 		// get page query sql
 		String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL_FROM).toString(), pagequery);
 		if(LOGGER.isDebugEnabled()){
