@@ -162,10 +162,10 @@ public class BinaryManager {
 	 * @param chunkdata the chunk data holder
 	 *   
 	 **/
-	public void dumpBinaryChunk(InfoId<Long> binaryKey, ContentRange range, OutputStream output)throws StorageException{
+	public void dumpBinary(InfoId<Long> binaryKey, ContentRange range, OutputStream output)throws StorageException{
 		BinaryInfo binfo = binarydao.query(binaryKey);
 		String binaryURI = binfo.getStoreLocation();
-		dumpBinary(binaryURI, output);
+		dumpBinary(binaryURI,range, output);
 	}
 	
 	/**
