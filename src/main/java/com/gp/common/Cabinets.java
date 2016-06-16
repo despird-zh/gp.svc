@@ -87,6 +87,16 @@ public class Cabinets {
 	}
 	
 	/**
+	 * classification of document or folder
+	 **/
+	public enum Classification{
+		TOP_SECRET,
+		SECRET,
+		CONFIDENTIAL,
+		UNCLASSIFIED
+	}
+	
+	/**
 	 * InfoId of certain cabinet root 
 	 **/
 	public static InfoId<Long> ROOT_FOLDER = IdKey.CAB_FOLDER.getInfoId(GeneralConstants.FOLDER_ROOT);
