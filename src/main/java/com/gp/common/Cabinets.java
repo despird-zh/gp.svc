@@ -129,7 +129,7 @@ public class Cabinets {
 	}
 	
 	/**
-	 * Convert a Json array String into Permission Set 
+	 * Convert a Json array String into Permission Set on cabinet entry
 	 **/
 	public static Set<String> toPermSet(String perms){
 		if(StringUtils.isBlank(perms))
