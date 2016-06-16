@@ -777,7 +777,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			SQL_FROM.append(" AND a.workgroup_name LIKE :wgroup ");
 			params.put("wgroup", "%" + StringUtils.trim(gname) + "%");
 		}
-		SQL_FROM.append(" GROUP BY a.workgroup_name");
+		SQL_FROM.append(" ORDER BY a.workgroup_name");
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		String querysql = SQL_COLS.append(SQL_FROM.toString()).toString() ;
 		if(LOGGER.isDebugEnabled()){
@@ -815,7 +815,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			SQL_FROM.append(" AND a.workgroup_name LIKE :wgroup ");
 			params.put("wgroup", "%" + StringUtils.trim(gname) + "%");
 		}
-
+		SQL_FROM.append(" ORDER BY a.workgroup_name");
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		String querysql = SQL_COLS.append(SQL_FROM.toString()).toString() ;
 		if(LOGGER.isDebugEnabled()){
