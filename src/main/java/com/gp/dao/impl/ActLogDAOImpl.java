@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ActLogDAO;
 import com.gp.info.ActLogInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 @Component("activitylogDAO")
 public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
@@ -83,19 +87,24 @@ public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 	}
 
 	@Override
-	public int update(ActLogInfo info) {
+	public int update(ActLogInfo info, FlatColLocator ...cols) {
 		
 		StringBuffer SQL = new StringBuffer();
-		
+		Set<String> exclcols = FlatColumns.toColumnSet(cols);
+		List<Object> params = new ArrayList<Object>();
 		SQL.append("update gp_activity_log set ")
-			.append("workgroup_id = ?,account =?,user_name = ? ,")
+		if(exclcols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,")
+			params.add(info.getWorkgroupId());
+		}
+			.append("account =?,user_name = ? ,")
 			.append("audit_id = ?,activity_date = ? , activity = ?,object_id=?,")
 			.append("object_excerpt = ?, predicate_id = ?, predicate_excerpt = ?, ")
 			.append("modifier = ?, last_modified = ? ")
 			.append("where log_id = ? ");
 		
 		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getAccount(),info.getUserName(),
+				,info.getAccount(),info.getUserName(),
 				info.getAuditId(),info.getActivityDate(),info.getActivity(),info.getObjectId(),
 				info.getObjectExcerpt(),info.getPredicateId(),info.getPredicateExcerpt(),
 				info.getModifier(),info.getModifyDate(),

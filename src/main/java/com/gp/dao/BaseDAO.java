@@ -2,6 +2,7 @@ package com.gp.dao;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 /**
@@ -35,10 +36,11 @@ public interface BaseDAO <T> {
 	 * 
 	 * @param id the row id
 	 * @param info the information of row
+	 * @param excludeCols the columns excluded from update
 	 * 
 	 * @return int the row count of updated.
 	 **/
-	public int update(T info);
+	public int update(T info, FlatColLocator ... excludeCols);
 
 	/**
 	 * Query row by id
