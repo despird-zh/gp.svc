@@ -39,7 +39,6 @@ import com.gp.dao.UserDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.dao.impl.WorkgroupDAOImpl;
 import com.gp.exception.ServiceException;
-import com.gp.info.ActLogInfo;
 import com.gp.info.CabinetInfo;
 import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
@@ -239,8 +238,6 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		try{
 			// set trace info
 			svcctx.setTraceInfo(winfo);
-			Long mbrgrpid = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
-			winfo.setMemberGroupId(mbrgrpid);
 			// create image firstly.		
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
@@ -285,8 +282,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				}
 			}
 			
-			// update workgroup 
-			cnt = workgroupdao.update( winfo);
+			// update work group, exclude the member group id 
+			cnt = workgroupdao.update( winfo, FlatColumns.MBR_GRP_ID);
 			
 		}catch(DataAccessException dae){
 
