@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.PostInfo;
 
@@ -82,30 +86,84 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 	}
 
 	@Override
-	public int update( PostInfo info) {
+	public int update( PostInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_posts set ")
-		.append("workgroup_id = ? ,hash_code = ?, source_id = ?, ")
-		.append("owner = ? ,content = ? ,excerpt = ? ,title = ? , owm = ?,")
-		.append("state = ? ,comment_on = ? ,post_type = ? ,comment_count = ? ,")
-		.append("upvote_count = ? ,downvote_count = ? ,post_time = ? ,")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where post_id = ? ");
+		SQL.append("update gp_posts set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(), info.getHashCode(),info.getSourceId(),
-				info.getOwner(),info.getContent(),info.getExcerpt(),info.getTitle(), info.getOwm(),
-				info.getState(),info.isCommentOn(),info.getPostType(),info.getCommentCount(),
-				info.getUpvoteCount(),info.getDownvoteCount(),info.getPostDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("hash_code")){
+			SQL.append("hash_code = ?, ");
+			params.add(info.getHashCode());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ?, ");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("owner")){
+			SQL.append("owner = ? ,");
+			params.add(info.getOwner());
+		}
+		if(!cols.contains("content")){
+			SQL.append("content = ? ,");
+			params.add(info.getContent());
+		}
+		if(!cols.contains("excerpt")){
+			SQL.append("excerpt = ? ,");
+			params.add(info.getExcerpt());
+		}
+		if(!cols.contains("title")){
+			SQL.append("title = ? , ");
+			params.add(info.getTitle());
+		}
+		if(!cols.contains("owm")){
+			SQL.append("owm = ?,");
+			params.add(info.getOwm());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ? ,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("comment_on")){
+			SQL.append("comment_on = ? ,");
+			params.add(info.isCommentOn());
+		}
+		if(!cols.contains("post_type")){
+			SQL.append("post_type = ? ,");
+			params.add(info.getPostType());
+		}
+		if(!cols.contains("comment_count")){
+			SQL.append("comment_count = ? ,");
+			params.add(info.getCommentCount());
+		}
+		if(!cols.contains("upvote_count")){
+			SQL.append("upvote_count = ? ,");
+			params.add(info.getUpvoteCount());
+		}
+		if(!cols.contains("downvote_count")){
+			SQL.append("downvote_count = ? ,");
+			params.add(info.getDownvoteCount());
+		}
+		if(!cols.contains("post_time")){
+			SQL.append("post_time = ? ,");
+			params.add(info.getPostDate());
+		}
+		
+		SQL.append("modifier = ?,last_modified = ? ")
+		.append("where post_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SysOptionDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.SysOptionInfo;
 
@@ -80,21 +84,35 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 	}
 
 	@Override
-	public int update( SysOptionInfo info) {
+	public int update( SysOptionInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_sys_options set ")
-			.append("opt_group = ?,")
-			.append("opt_key = ?,opt_value = ? , descr = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where sys_opt_id = ?");
+		SQL.append("update gp_sys_options set ");
+		if(!cols.contains("opt_group")){
+			SQL.append("opt_group = ?,");
+			params.add(info.getOptionGroup());
+		}
+		if(!cols.contains("opt_key")){
+			SQL.append("opt_key = ?,");
+			params.add(info.getOptionKey());
+		}
+		if(!cols.contains("opt_value")){
+			SQL.append("opt_value = ? , ");
+			params.add(info.getOptionValue());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
 		
-		Object[] params = new Object[]{
-				info.getOptionGroup(),
-				info.getOptionKey(),info.getOptionValue(),info.getDescription(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where sys_opt_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+		
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
@@ -102,7 +120,7 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		
 		int rtv = -1;
-		rtv = jtemplate.update(SQL.toString(), params);
+		rtv = jtemplate.update(SQL.toString(), params.toArray());
 
 		return rtv;
 	}

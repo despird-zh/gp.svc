@@ -92,31 +92,64 @@ public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 		StringBuffer SQL = new StringBuffer();
 		Set<String> exclcols = FlatColumns.toColumnSet(cols);
 		List<Object> params = new ArrayList<Object>();
-		SQL.append("update gp_activity_log set ")
-		if(exclcols.contains("workgroup_id")){
-			SQL.append("workgroup_id = ?,")
+		SQL.append("update gp_activity_log set ");
+		if(!exclcols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-			.append("account =?,user_name = ? ,")
-			.append("audit_id = ?,activity_date = ? , activity = ?,object_id=?,")
-			.append("object_excerpt = ?, predicate_id = ?, predicate_excerpt = ?, ")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where log_id = ? ");
+		if(!exclcols.contains("account")){
+			SQL.append("account = ?,");
+			params.add(info.getAccount());
+		}
+		if(!exclcols.contains("user_name")){
+			SQL.append("user_name = ?,");
+			params.add(info.getUserName());
+		}
+		if(!exclcols.contains("audit_id")){
+			SQL.append("audit_id = ?,");
+			params.add(info.getAuditId());
+		}
+		if(!exclcols.contains("activity_date")){
+			SQL.append("activity_date = ?,");
+			params.add(info.getActivityDate());
+		}
+		if(!exclcols.contains("activity")){
+			SQL.append("activity = ?,");
+			params.add(info.getActivity());
+		}
+		if(!exclcols.contains("object_id")){
+			SQL.append("object_id = ?,");
+			params.add(info.getObjectId());
+		}
+		if(!exclcols.contains("object_excerpt")){
+			SQL.append("object_excerpt = ?,");
+			params.add(info.getObjectExcerpt());
+		}
+		if(!exclcols.contains("predicate_id")){
+			SQL.append("predicate_id = ?,");
+			params.add(info.getPredicateId());
+		}
+		if(!exclcols.contains("predicate_excerpt")){
+			SQL.append("predicate_excerpt = ?,");
+			params.add(info.getPredicateExcerpt());
+		}
 		
-		Object[] params = new Object[]{
-				,info.getAccount(),info.getUserName(),
-				info.getAuditId(),info.getActivityDate(),info.getActivity(),info.getObjectId(),
-				info.getObjectExcerpt(),info.getPredicateId(),info.getPredicateExcerpt(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("modifier = ?,");
+		params.add(info.getModifier());
+	
+
+		SQL.append("last_modified = ? ");
+		params.add(info.getModifyDate());
+
+		SQL.append("where log_id = ? ");
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + params.toString());
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MessageDispatchDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.MessageDispatchInfo;
 
@@ -78,28 +83,48 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 	}
 
 	@Override
-	public int update( MessageDispatchInfo info) {
+	public int update( MessageDispatchInfo info, FlatColLocator ...exclcols) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_message_dispatch set ")
-		.append("message_id = ?,")
-		.append("msg_content = ?,account = ?,global_account = ?, ")
-		.append("touch_flag = ?, touch_time = ?, ")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where rel_id = ? ");
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
+		SQL.append("update gp_message_dispatch set ");
+		if(!cols.contains("message_id")){
+			SQL.append("message_id = ?,");
+			params.add(info.getMessageId());
+		}
+		if(!cols.contains("msg_content")){
+			SQL.append("msg_content = ?,");
+			params.add(info.getMessageContent());
+		}
+		if(!cols.contains("account")){
+			SQL.append("account = ?,");
+			params.add(info.getAccount());
+		}
+		if(!cols.contains("global_account")){
+			SQL.append("global_account = ?, ");
+			params.add(info.getGlobalAccount());
+		}
+		if(!cols.contains("touch_flag")){
+			SQL.append("touch_flag = ?,");
+			params.add(info.getTouchFlag());
+		}
+		if(!cols.contains("touch_time")){
+			SQL.append("touch_time = ?, ");
+			params.add(info.getTouchTime());
+		}
 		
-		Object[] params = new Object[]{
-				info.getMessageId(),
-				info.getMessageContent(),info.getAccount(),info.getGlobalAccount(),
-				info.getTouchFlag(),info.getTouchTime(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("modifier = ?,last_modified = ? ")
+		.append("where rel_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

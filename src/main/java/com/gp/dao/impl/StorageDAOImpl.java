@@ -2,7 +2,10 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.StorageDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.StorageInfo;
 
@@ -78,28 +83,50 @@ public class StorageDAOImpl extends DAOSupport implements StorageDAO{
 	}
 
 	@Override
-	public int update(StorageInfo info) {
+	public int update(StorageInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_storages set ")
-			.append("storage_name = ?,capacity = ?,used = ?,")
-			.append("setting_json = ?,storage_type = ?,state = ?,")
-			.append("description = ?, modifier = ?, last_modified = ? ")
-			.append("where storage_id = ?");
+		SQL.append("update gp_storages set ");
 		
-		Object[] params = new Object[]{
-				info.getStorageName(),info.getCapacity(),info.getUsed(),
-				info.getSettingJson(),info.getStorageType(),info.getState(),
-				info.getDescription(),info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("storage_name")){
+			SQL.append("storage_name = ?,");
+			params.add(info.getStorageName());
+		}
+		if(!cols.contains("capacity")){
+			SQL.append("capacity = ?,");
+			params.add(info.getCapacity());
+		}
+		if(!cols.contains("used")){
+			SQL.append("used = ?,");
+			params.add(info.getUsed());
+		}
+		if(!cols.contains("setting_json")){
+			SQL.append("setting_json = ?,");
+			params.add(info.getSettingJson());
+		}
+		if(!cols.contains("storage_type")){
+			SQL.append("storage_type = ?,");
+			params.add(info.getStorageType());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		
+		SQL.append("description = ?, modifier = ?, last_modified = ? ")
+			.append("where storage_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){
 			
-			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), Arrays.toString(params));
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(),params);
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

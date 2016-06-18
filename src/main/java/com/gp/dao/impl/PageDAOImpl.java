@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
@@ -91,18 +93,31 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 	}
 
 	@Override
-	public int update(PageInfo info) {
-		
-		StringBuffer SQL = new StringBuffer("UPDATE gp_pages (page_name=?,");
-		SQL.append("module=?,descr=?,page_abbr=?,");
-
+	public int update(PageInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
-		params.add(info.getPageName());
-		params.add(info.getModule());
-		params.add(info.getDescription());
-		params.add(info.getPageAbbr());
+		StringBuffer SQL = new StringBuffer("UPDATE gp_pages SET page_name=?,");
+	
+		if(!cols.contains("page_name")){
+			SQL.append("page_name=?,");
+			params.add(info.getPageName());
+		}
+		if(!cols.contains("module")){
+			SQL.append("module=?,");
+			params.add(info.getModule());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr=?,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("page_abbr")){
+			SQL.append("page_abbr=?,");
+			params.add(info.getPageAbbr());
+		}
 		
 		for(Map.Entry<FlatColLocator, String> entry: info.getActionMap().entrySet()){
+			if(cols.contains(entry.getKey().getColumn())) continue;
+			
 			SQL.append(entry.getKey().getColumn()).append("=?,");
 			params.add(entry.getValue());
 		}

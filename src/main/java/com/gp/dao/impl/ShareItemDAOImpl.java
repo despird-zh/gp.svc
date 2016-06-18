@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareItemDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.ShareItemInfo;
 
@@ -76,27 +81,44 @@ public class ShareItemDAOImpl extends DAOSupport implements ShareItemDAO{
 	}
 
 	@Override
-	public int update(ShareItemInfo info) {
+	public int update(ShareItemInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_share_item set ")
-			.append("workgroup_id = ?,share_id =?,")
-			.append("cabinet_id = ?,resource_id = ? , resource_type = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where share_item_id = ? ");
+		SQL.append("update gp_share_item set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getShareId(),
-				info.getCabinetId(),info.getResourceId(),info.getResourceType(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("share_id")){
+			SQL.append("share_id =?,");
+			params.add(info.getShareId());
+		}
+		if(!cols.contains("cabinet_id")){
+			SQL.append("cabinet_id = ?,");
+			params.add(info.getCabinetId());
+		}
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id = ? , ");
+			params.add(info.getResourceId());
+		}
+		if(!cols.contains("resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
+		}
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where share_item_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

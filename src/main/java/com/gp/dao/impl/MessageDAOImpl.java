@@ -2,7 +2,10 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MessageDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.MessageInfo;
 
@@ -81,30 +86,71 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 	}
 
 	@Override
-	public int update(MessageInfo info) {
+	public int update(MessageInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_messages set ")
-		.append("workgroup_id = ?,")
-		.append("cabinet_id = ?,resource_id = ?,resource_type = ?,operation = ?,")
-		.append("msg_dict_key = ?, msg_params_json = ?,  category = ?,source_id = ?, ")
-		.append("send_global_account = ?, send_account = ?,  reply_enable = ?,")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where message_id = ? ");
+		SQL.append("update gp_messages set ");
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("cabinet_id")){
+			SQL.append("cabinet_id = ?,");
+			params.add(info.getCabinetId());
+		}
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id = ?,");
+			params.add(info.getResourceId());
+		}
+		if(!cols.contains("resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
+		}
+		if(!cols.contains("operation")){
+			SQL.append("operation = ?,");
+			params.add(info.getOperation());
+		}
+		if(!cols.contains("msg_dict_key")){
+			SQL.append("msg_dict_key = ?, ");
+			params.add(info.getMsgDictKey());
+		}
+		if(!cols.contains("msg_params_json")){
+			SQL.append("msg_params_json = ?,  ");
+			params.add(info.getMsgParams());
+		}
+		if(!cols.contains("category")){
+			SQL.append("category = ?,");
+			params.add(info.getCategory());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ?, ");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("send_global_account")){
+		SQL.append("send_global_account = ?, ");
+		params.add(info.getSendGlobalAccount());
+		}
+		if(!cols.contains("send_account")){
+		SQL.append("send_account = ?,  ");
+		params.add(info.getSendAccount());
+		}
+		if(!cols.contains("reply_enable")){
+		SQL.append("reply_enable = ?,");
+		params.add(info.getReplyEnable());
+		}
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),
-				info.getCabinetId(),info.getResourceId(),info.getResourceType(),info.getOperation(),
-				info.getMsgDictKey(),info.getMsgParams(),info.getCategory(),info.getSourceId(),
-				info.getSendGlobalAccount(),info.getSendAccount(),info.getReplyEnable(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("modifier = ?,last_modified = ? ")
+			.append("where message_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, params);
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

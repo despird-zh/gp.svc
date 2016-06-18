@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -18,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserRoleDAO;
@@ -85,14 +87,15 @@ public class UserRoleDAOImple extends DAOSupport implements UserRoleDAO{
 	}
 
 	@Override
-	public int update(UserRoleInfo info) {
+	public int update(UserRoleInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		
 		StringBuffer SQL = new StringBuffer("UPDATE gp_user_role (user_id =?,");
-	
-		List<Object> params = new ArrayList<Object>();
 		params.add(info.getUserId());
 		
 		for(Map.Entry<FlatColLocator, Integer> entry: info.getRoleMap().entrySet()){
+			if(cols.contains(entry.getKey().getColumn())) continue;
 			SQL.append(entry.getKey().getColumn()).append("=?,");
 			params.add(entry.getValue());
 		}

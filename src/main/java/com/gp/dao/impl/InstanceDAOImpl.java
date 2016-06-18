@@ -2,8 +2,10 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,10 +18,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.InstanceDAO;
 import com.gp.info.InstanceInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("instanceDAO")
@@ -81,28 +85,72 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	}
 
 	@Override
-	public int update(InstanceInfo info) {
-
+	public int update(InstanceInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_instances set ")
-			.append("entity_code = ?, node_code = ?, instance_name = ?,")
-			.append("abbr = ?,short_name = ? ,descr = ?,email = ?,state = ?,")
-			.append("service_url = ?,binary_url = ?,admin = ?,hash_key = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where instance_id = ?");
+		SQL.append("update gp_instances set ");
 		
-		Object[] params = new Object[]{
-				info.getEntityCode(),info.getNodeCode(),info.getInstanceName(),
-				info.getAbbr(),info.getShortName(),info.getDescription(),info.getEmail(),info.getState(),
-				info.getServiceUrl(),info.getBinaryUrl(),info.getAdmin(),info.getHashKey(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("entity_code")){
+			SQL.append("entity_code = ?,");
+			params.add(info.getEntityCode());
+		}
+		if(!cols.contains("node_code")){
+			SQL.append("node_code = ?,");
+			params.add(info.getNodeCode());
+		}
+		if(!cols.contains("instance_name")){
+			SQL.append("instance_name = ?,");
+			params.add(info.getInstanceName());
+		}
+		if(!cols.contains("abbr")){
+			SQL.append("abbr = ?,");
+			params.add(info.getAbbr());
+		}
+		if(!cols.contains("short_name")){
+			SQL.append("short_name = ? ,");
+			params.add(info.getShortName());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("email")){
+			SQL.append("email = ?,");
+			params.add(info.getEmail());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("service_url")){
+		SQL.append("service_url = ?,");
+		params.add(info.getServiceUrl());
+		}
+		if(!cols.contains("binary_url")){
+		SQL.append("binary_url = ?,");
+		params.add(info.getBinaryUrl());
+		}
+		if(!cols.contains("admin")){
+		SQL.append("admin = ?,");
+		params.add(info.getAdmin());
+		}
+		if(!cols.contains("hash_key")){
+		SQL.append("hash_key = ?,");
+		params.add(info.getHashKey());
+		}
+	
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where instance_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+		
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, params);
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

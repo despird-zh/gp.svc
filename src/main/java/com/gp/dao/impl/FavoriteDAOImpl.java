@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -22,10 +23,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
 import com.gp.info.FavoriteInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("favoriteDAO")
@@ -78,23 +81,35 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 	}
 
 	@Override
-	public int update(FavoriteInfo info) {
+	public int update(FavoriteInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_favorites set ")
-			.append("favoriter = ? ,resource_id = ?, resource_type = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where favorite_id = ?");
+		SQL.append("update gp_favorites set ");
 		
-		Object[] params = new Object[]{
-				info.getFavoriter(),info.getResourceId(),info.getResourceType(),
-				info.getModifier(),info.getModifyDate(),info.getInfoId().getId()
-		};
+		if(!cols.contains("favoriter")){
+			SQL.append("favoriter = ? ,");
+			params.add(info.getFavoriter());
+		}
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id = ?,");
+			params.add(info.getResourceId());
+		}
+		if(!cols.contains("resource_type")){
+			SQL.append(" resource_type = ?,");
+			params.add(info.getResourceType());
+		}
+		SQL.append("modifier = ?, last_modified = ? ");
+		SQL.append("where favorite_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -20,6 +21,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MeasureDAO;
@@ -245,17 +247,25 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public int update(MeasureInfo info) {
-		
-		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET measure_time = ?, measure_type = ?, trace_src_id = ?,");
-		
-		ArrayList<Object> params = new ArrayList<Object>();
-		// prepare 3 params
-		params.add(info.getMeasureTime());
-		params.add(info.getMeasureType());
-		params.add(info.getTraceSourceId());
+	public int update(MeasureInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
+		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET ");
+		if(!cols.contains("measure_time")){
+			SQL.append("measure_time = ?, ");
+			params.add(info.getMeasureTime());
+		}
+		if(!cols.contains("measure_type")){
+			SQL.append("measure_type = ?, ");
+			params.add(info.getMeasureType());
+		}
+		if(!cols.contains("trace_src_id")){
+			SQL.append("trace_src_id = ?,");
+			params.add(info.getTraceSourceId());
+		}
 		
 		for(Map.Entry<FlatColLocator, String> entry : info.getFlatColMap().entrySet()){
+			if(cols.contains(entry.getKey().getColumn())) continue;
 			
 			SQL.append(entry.getKey().getColumn()).append(" = ?,");
 			params.add(entry.getValue());

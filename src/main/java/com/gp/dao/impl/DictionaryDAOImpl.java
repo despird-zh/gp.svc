@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -98,25 +99,36 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	}
 
 	@Override
-	public int update(DictionaryInfo info) {
-		
+	public int update(DictionaryInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> plist = new ArrayList<Object>();
 		Map<FlatColLocator, String> labelMap = info.getLabelMap();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("UPDATE gp_dictionary SET ")
-			.append("dict_group = ?,")
-			.append("dict_key = ?,dict_value = ?, default_lang=?,");
-		
-
-		List<Object> plist = new ArrayList<Object>();
-		plist.add(info.getGroup());
-		plist.add(info.getKey());
-		plist.add(info.getValue());
-		plist.add(info.getDefaultLang());
+		SQL.append("UPDATE gp_dictionary SET ");
+		if(!cols.contains("dict_group")){
+			SQL.append("dict_group = ?,");
+			plist.add(info.getGroup());
+		}
+		if(!cols.contains("dict_key")){
+			SQL.append("dict_key = ?,");
+			plist.add(info.getKey());
+		}
+		if(!cols.contains("dict_value")){
+			SQL.append("dict_value = ?,");
+			plist.add(info.getValue());
+		}
+		if(!cols.contains("default_lang")){
+			SQL.append("default_lang = ?,");
+			plist.add(info.getDefaultLang());
+		}
 		
 		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){
+			if(cols.contains(entry.getKey().getColumn())) continue;
+			
 			SQL.append(entry.getKey().getColumn()).append("= ?,");
 			plist.add(entry.getValue());
 		}
+		
 		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where dict_id = ?");
 		

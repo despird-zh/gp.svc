@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostCommentDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.PostCommentInfo;
 
@@ -79,28 +83,68 @@ public class PostCommentDAOImpl extends DAOSupport implements PostCommentDAO{
 	}
 
 	@Override
-	public int update( PostCommentInfo info) {
+	public int update( PostCommentInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_post_comments set ")
-		.append("workgroup_id = ?,comment_pid = ?,owm = ?,")
-		.append("post_id = ?,hash_code = ?,author = ?,source_id = ? ,")
-		.append("owner = ?,content = ?,state = ?,comment_time = ?,")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where comment_id = ? ");
+		SQL.append("update gp_post_comments set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getParentId(),info.getOwm(),
-				info.getPostId(),info.getHashCode(),info.getAuthor(),info.getSourceId(),
-				info.getOwner(),info.getContent(),info.getState(),info.getCommentDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("comment_pid")){
+			SQL.append("comment_pid = ?,");
+			params.add(info.getParentId());
+		}
+		if(!cols.contains("owm")){
+			SQL.append("owm = ?,");
+			params.add(info.getOwm());
+		}
+		if(!cols.contains("post_id")){
+			SQL.append("post_id = ?,");
+			params.add(info.getPostId());
+		}
+		if(!cols.contains("hash_code")){
+			SQL.append("hash_code = ?,");
+			params.add(info.getHashCode());
+		}
+		if(!cols.contains("author")){
+			SQL.append("author = ?,");
+			params.add(info.getAuthor());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("owner")){
+			SQL.append("owner = ?,");
+			params.add(info.getOwner());
+		}
+		if(!cols.contains("content")){
+			SQL.append("content = ?,");
+			params.add(info.getContent());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("comment_time")){
+			SQL.append("comment_time = ?,");
+			params.add(info.getCommentDate());
+		}
+		
+		SQL.append("modifier = ?,last_modified = ? ")
+		.append("where comment_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

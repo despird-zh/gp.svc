@@ -11,12 +11,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +35,11 @@ import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
 
@@ -122,52 +127,49 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	}
 
 	@Override
-	public int update(final ImageInfo info) {
-		
+	public int update(final ImageInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		final File binaryFile = info.getImageFile();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("UPDATE gp_images SET ")
-			.append("image_name = ?, ");
-		if(null != binaryFile && binaryFile.exists()){
-			SQL.append("image_format =? , image_ext = ?,");
+		SQL.append("UPDATE gp_images SET ");
+		if(!cols.contains("image_name")){
+			SQL.append("image_name = ?, ");
+			params.add(info.getImageName());
 		}
+		if(null != binaryFile && binaryFile.exists()){
+			if(!cols.contains("image_format")){
+				SQL.append("image_format =? ,");
+				params.add(info.getFormat());
+			}
+			if(!cols.contains("image_ext")){
+				SQL.append("image_ext = ?,");
+				params.add(info.getExtension());
+			}
+		}
+		
 		SQL.append("modifier = ?, last_modified = ? ")
 			.append("WHERE image_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		String UPD_SQL = "UPDATE gp_images SET image_data = ? , touch_time = ? WHERE image_id = ? ";
 		
-		Object[] params = null;
-		if(null != binaryFile && binaryFile.exists()){
-			params = new Object[]{	
-					info.getImageName(),
-					info.getFormat(),
-					info.getExtension(),
-					info.getModifier(),
-					info.getModifyDate(),
-					info.getInfoId().getId()
-			};
-		}else{
-			params = new Object[]{	
-					info.getImageName(),
-					info.getModifier(),
-					info.getModifyDate(),
-					info.getInfoId().getId()
-			};
-		}
 		final LobHandler lobHandler = new DefaultLobHandler();
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		InputStream is = null;
 		int cnt =0;
 		try{
 			if(LOGGER.isDebugEnabled()){
-				LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
+				LOGGER.debug("SQL : {} / PARAMS : {}", SQL, params);
 			}
-			cnt = jtemplate.update(SQL.toString(), params);
+			cnt = jtemplate.update(SQL.toString(), params.toArray());
 			if(cnt > 0 && null != binaryFile && binaryFile.exists()){
 			is = new FileInputStream(binaryFile);
 				final InputStream fis = is;
 				if(LOGGER.isDebugEnabled()){
-					LOGGER.debug("SQL : {} / PARAMS : {}", UPD_SQL, Arrays.toString(params));
+					LOGGER.debug("SQL : {} / PARAMS : {}", UPD_SQL, params);
 				}
 				jtemplate.execute(UPD_SQL, new AbstractLobCreatingPreparedStatementCallback(lobHandler) {
 					protected void setValues(PreparedStatement pstmt, LobCreator lobCreator) throws SQLException{
@@ -182,12 +184,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 			// ignore
 			e.printStackTrace();
 		}finally{
-			try {
-				if(null != is)
-					is.close();
-			} catch (IOException e) {
-				// ignore	
-			}
+			IOUtils.closeQuietly(is);
 		}
 		
 		return 0;

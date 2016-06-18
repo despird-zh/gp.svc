@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabVersionDAO;
 import com.gp.info.CabVersionInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("cabVersionDAO")
@@ -87,33 +91,99 @@ public class CabVersionDAOImpl extends DAOSupport implements CabVersionDAO{
 	}
 
 	@Override
-	public int update(CabVersionInfo info) {
-		
+	public int update(CabVersionInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_cab_versions set ")
-			.append("cabinet_id = ? ,folder_id = ? ,source_id = ? ,")
-			.append("file_name = ? ,descr = ? ,profile = ? ,properties = ? ,")
-			.append("version_label = ? ,size = ? ,owner = ? ,comment_on = ? ,")
-			.append("version = ? ,state = ? ,binary_id = ? ,format = ? ,")
-			.append("create_time = ? ,creator = ? ,file_id = ?, owm=?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where version_id = ? ");
+		SQL.append("update gp_cab_versions set ");
 		
-		Object[] params = new Object[]{
-				info.getCabinetId(),info.getParentId(),info.getSourceId(),
-				info.getFileName(),info.getDescription(),info.getProfile(),info.getProperties(),
-				info.getVersionLabel(),info.getSize(),info.getOwner(),info.isCommentOn(),
-				info.getVersion(),info.getState(),info.getBinaryId(),info.getFormat(),
-				info.getCreateDate(),info.getCreator(),info.getFileId(),info.getOwm(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		if(!cols.contains("cabinet_id")){
+			SQL.append("cabinet_id = ? ,");
+			params.add(info.getCabinetId());
+		}
+		if(!cols.contains("folder_id")){
+			SQL.append("folder_id = ? ,");
+			params.add(info.getParentId());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("file_name")){
+			SQL.append("file_name = ? ,");
+			params.add(info.getFileId());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ? ,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("profile")){
+			SQL.append("profile = ? ,");
+			params.add(info.getProfile());
+		}
+		if(!cols.contains("properties")){
+			SQL.append("properties = ? ,");
+			params.add(info.getProperties());
+		}
+		if(!cols.contains("version_label")){
+			SQL.append("version_label = ? ,");
+			params.add(info.getVersionLabel());
+		}
+		if(!cols.contains("size")){
+			SQL.append("size = ? ,");
+			params.add(info.getSize());
+		}
+		if(!cols.contains("owner")){
+			SQL.append("owner = ? ,");
+			params.add(info.getOwner());
+		}
+		if(!cols.contains("comment_on")){
+			SQL.append("comment_on = ? ,");
+			params.add(info.isCommentOn());
+		}
+		if(!cols.contains("version")){
+			SQL.append("version = ? ,");
+			params.add(info.getVersion());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ? ,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("binary_id")){
+			SQL.append("binary_id = ? ,");
+			params.add(info.getBinaryId());
+		}
+		if(!cols.contains("format")){
+			SQL.append("format = ? ,");
+			params.add(info.getFormat());
+		}
+		if(!cols.contains("create_time")){
+			SQL.append("create_time = ? ,");
+			params.add(info.getCreateDate());
+		}
+		if(!cols.contains("creator")){
+			SQL.append("creator = ? ,");
+			params.add(info.getCreator());
+		}
+		if(!cols.contains("file_id")){
+			SQL.append("file_id = ?, ");
+			params.add(info.getFileId());
+		}
+		if(!cols.contains("owm")){
+			SQL.append("owm=?,");
+			params.add(info.getOwm());
+		}
+		SQL.append("modifier = ?, last_modified = ? ");
+		SQL.append("where version_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

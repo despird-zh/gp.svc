@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TaskRouteDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.TaskRouteInfo;
 
@@ -77,28 +82,56 @@ public class TaskRouteDAOImpl extends DAOSupport implements TaskRouteDAO{
 	}
 
 	@Override
-	public int update(TaskRouteInfo info) {
+	public int update(TaskRouteInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_task_route set ")
-			.append("workgroup_id = ?,")
-			.append("task_chronical_id = ?,task_id = ?,task_forward_id = ?,executor = ?,")
-			.append("owner = ?,state = ?,forward_time = ?,")
-			.append("modifier = ?, last_modified = ? ")
+		SQL.append("update gp_task_route set ");
+		
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("task_chronical_id")){
+			SQL.append("task_chronical_id = ?,");
+			params.add(info.getChronicalTaskId());
+		}
+		if(!cols.contains("task_id")){
+			SQL.append("task_id = ?,");
+			params.add(info.getTaskId());
+		}
+		if(!cols.contains("task_forward_id")){
+			SQL.append("task_forward_id = ?,");
+			params.add(info.getForwardTaskId());
+		}
+		if(!cols.contains("executor")){
+			SQL.append("executor = ?,");
+			params.add(info.getExecutor());
+		}
+		if(!cols.contains("owner")){
+			SQL.append("owner = ?,");
+			params.add(info.getOwner());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("forward_time")){
+			SQL.append("forward_time = ?,");
+			params.add(info.getFordwardDate());
+		}
+		
+		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where rel_id = ? ");
-		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),
-				info.getChronicalTaskId(),info.getTaskId(),info.getForwardTaskId(),info.getExecutor(),
-				info.getOwner(),info.getState(),info.getFordwardDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.VoteDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.VoteInfo;
 
@@ -74,26 +79,45 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 	}
 
 	@Override
-	public int update( VoteInfo info) {
+	public int update( VoteInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_votes set ")
-			.append("workgroup_id = ?,resource_id = ?,")
-			.append("resource_type = ?,voter = ?,opinion = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where vote_id = ?");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getResourceId(),
-				info.getResourceType(),info.getVoter(),info.getOpinion(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("update gp_votes set ");
+		
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id = ?,");
+			params.add(info.getResourceId());
+		}
+		if(!cols.contains("resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
+		}
+		if(!cols.contains("voter")){
+			SQL.append("voter = ?,");
+			params.add(info.getVoter());
+		}
+		if(!cols.contains("opinion")){
+			SQL.append("opinion = ?,");
+			params.add(info.getOpinion());
+		}
+
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where vote_id = ?");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

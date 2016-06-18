@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabCommentDAO;
 import com.gp.info.CabCommentInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("cabCommentDAO")
@@ -81,28 +85,68 @@ public class CabCommentDAOImpl extends DAOSupport implements CabCommentDAO{
 	}
 
 	@Override
-	public int update(CabCommentInfo info) {
-		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_cab_comments set ")
-		.append("workgroup_id = ?,comment_pid = ?,hash_code = ?,")
-		.append("file_id = ?,author = ?,owm = ?,source_id = ? ,")
-		.append("owner = ?,content = ?,state = ?,comment_time = ?,")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where comment_id = ? ");
+	public int update(CabCommentInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getParentId(),info.getHashCode(),
-				info.getDocId(),info.getAuthor(),info.getOwm(),info.getSourceId(),
-				info.getOwner(),info.getContent(),info.getState(),info.getCommentDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("update gp_cab_comments set ");
+		if(!cols.contains("workgroup_id")){
+		SQL.append("workgroup_id = ?,");
+		params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("comment_pid")){
+		SQL.append("comment_pid = ?,");
+		params.add(info.getParentId());
+		}
+		if(!cols.contains("hash_code")){
+		SQL.append("hash_code = ?,");
+		params.add(info.getHashCode());
+		}
+		if(!cols.contains("file_id")){
+		SQL.append("file_id = ?,");
+		params.add(info.getDocId());
+		}
+		if(!cols.contains("author")){
+		SQL.append("author = ?,");
+		params.add(info.getAuthor());
+		}
+		if(!cols.contains("owm")){
+		SQL.append("owm = ?,");
+		params.add(info.getOwm());
+		}
+		if(!cols.contains("source_id")){
+		SQL.append("source_id = ? ,");
+		params.add(info.getSourceId());
+		}
+		if(!cols.contains("owner")){
+		SQL.append("owner = ?,");
+		params.add(info.getOwner());
+		}
+		if(!cols.contains("content")){
+		SQL.append("content = ?,");
+		params.add(info.getContent());
+		}
+		if(!cols.contains("state")){
+		SQL.append("state = ?,");
+		params.add(info.getState());
+		}
+		if(!cols.contains("comment_time")){
+		SQL.append("comment_time = ?,");
+		params.add(info.getCommentDate());
+		}
+
+		SQL.append("modifier = ?,last_modified = ? ");
+		SQL.append("where comment_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

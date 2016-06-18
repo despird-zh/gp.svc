@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,9 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.GroupInfo;
 import com.gp.info.InfoId;
 
@@ -79,27 +83,38 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public int update(GroupInfo info) {
-
+	public int update(GroupInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_groups set ")
-			.append("workgroup_id = ?,group_type = ?,")
-			.append("group_name = ?,descr = ? ,")
-			.append("modifier = ?, last_modified = ? ")
+		SQL.append("update gp_groups set ");
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("group_type")){
+			SQL.append("group_type = ?,");
+			params.add(info.getGroupType());
+		}
+		if(!cols.contains("group_name")){
+			SQL.append("group_name = ?,");
+			params.add(info.getGroupName());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ? ,");
+			params.add(info.getDescription());
+		}
+		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where group_id = ? ");
-		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getGroupType(),
-				info.getGroupName(),info.getDescription(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : "+ SQL.toString() + "/ PARAMS : " + ArrayUtils.toString(params));
 		
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.BinaryDAO;
 import com.gp.info.BinaryInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("binaryDAO")
@@ -81,28 +85,59 @@ public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 	}
 
 	@Override
-	public int update(BinaryInfo info) {
+	public int update(BinaryInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_binaries set ")
-		.append("size = ?,source_id = ? ,storage_id = ?,")
-		.append("hash_code = ?,store_location = ?,state = ?,")
-		.append("format = ?, creator = ?,create_time = ?,")
-		.append("modifier = ?,last_modified = ? ")
-		.append("where binary_id = ?  ");
+		SQL.append("update gp_binaries set ");
+		if(!cols.contains("size")){
+			SQL.append("size = ?,");
+			params.add(info.getSize());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("storage_id")){
+			SQL.append("storage_id = ?,");
+			params.add(info.getStorageId());
+		}
+		if(!cols.contains("hash_code")){
+			SQL.append("hash_code = ?,");
+			params.add(info.getHashCode());
+		}
+		if(!cols.contains("store_location")){
+			SQL.append("store_location = ?,");
+			params.add(info.getStoreLocation());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("format")){
+			SQL.append("format = ?, ");
+			params.add(info.getFormat());
+		}
+		if(!cols.contains("creator")){
+			SQL.append("creator = ?,");
+			params.add(info.getCreator());
+		}
+		if(!cols.contains("create_time")){
+			SQL.append("create_time = ?,");
+			params.add(info.getCreateDate());
+		}
 		
-		Object[] params = new Object[]{
-				info.getSize(),info.getSourceId(),info.getStorageId(),
-				info.getHashCode(),info.getStoreLocation(),info.getState(),
-				info.getFormat(), info.getCreator(),info.getCreateDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		SQL.append("modifier = ?,last_modified = ? ");
+		SQL.append("where binary_id = ?  ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

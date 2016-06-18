@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachRelDAO;
 import com.gp.info.AttachRelInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("attachRelDAO")
@@ -76,27 +81,47 @@ public class AttachRelDAOImpl extends DAOSupport implements AttachRelDAO{
 	}
 
 	@Override
-	public int update( AttachRelInfo info) {
+	public int update( AttachRelInfo info,  FlatColLocator ...exclcols) {
 
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_attach_rel set ")
-			.append("workgroup_id = ?,resource_id =?,")
-			.append("resource_type = ?,atta_id = ?, atta_name = ?, atta_type=?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where rel_id = ? ");
-		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getResourceId(),
-				info.getResourceType(),info.getAttachId(),info.getAttachName(),info.getAttachType(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("update gp_attach_rel set ");
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id =?,");
+			params.add(info.getResourceId());
+		}
+		if(!cols.contains("resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
+		}
+		if(!cols.contains("atta_id")){
+			SQL.append("atta_id = ?, ");
+			params.add(info.getAttachId());
+		}
+		if(!cols.contains("atta_name")){
+			SQL.append("atta_name = ?, ");
+			params.add(info.getAttachName());
+		}
+		if(!cols.contains("atta_type")){
+			SQL.append("atta_type=?,");
+			params.add(info.getAttachType());
+		}
+		SQL.append("modifier = ?, last_modified = ? ");
+		SQL.append("where rel_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

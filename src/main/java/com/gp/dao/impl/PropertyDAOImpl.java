@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,18 +17,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PropertyDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.PropertyInfo;
 
 @Component("propertyDAO")
 public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 
-
 	static Logger LOGGER = LoggerFactory.getLogger(PropertyDAOImpl.class);
-	
 	
 	@Autowired
 	public PropertyDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
@@ -75,26 +78,43 @@ public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 	}
 
 	@Override
-	public int update(PropertyInfo info) {
+	public int update(PropertyInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_properties set ")
-			.append("prop_label = ?,")
-			.append("type = ?,default_value = ?,enums = ?,format = ?,")
-			.append("modifier = ?, last_modified = ? ")
+		SQL.append("update gp_properties set ");
+		if(!cols.contains("")){
+			SQL.append("prop_label = ?,");
+			params.add(info.getLabel());
+		}
+		if(!cols.contains("type")){
+			SQL.append("type = ?,");
+			params.add(info.getType());
+		}
+		if(!cols.contains("default_value")){
+			SQL.append("default_value = ?,");
+			params.add(info.getDefaultValue());
+		}
+		if(!cols.contains("enums")){
+			SQL.append("enums = ?,");
+			params.add(info.getEnumValues());
+		}
+		if(!cols.contains("format")){
+			SQL.append("format = ?,");
+			params.add(info.getFormat());
+		}
+	
+		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where prop_id = ?");
-		
-		Object[] params = new Object[]{
-				info.getLabel(),
-				info.getType(),info.getDefaultValue(),info.getEnumValues(),info.getFormat(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

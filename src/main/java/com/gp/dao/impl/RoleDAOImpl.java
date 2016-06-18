@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,9 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RoleDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.RoleInfo;
 
@@ -74,24 +78,31 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 	}
 
 	@Override
-	public int update(RoleInfo info) {
+	public int update(RoleInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_roles set ")
-			.append("role_name = ?,descr = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where role_id = ? ");
 		
-		Object[] params = new Object[]{
-				info.getRoleName(),info.getDescription(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		SQL.append("update gp_roles set ");
+		if(!cols.contains("role_name")){
+			SQL.append("role_name = ?,");
+			params.add(info.getRoleName());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		SQL.append("modifier = ?, last_modified = ? ");
+		SQL.append("where role_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

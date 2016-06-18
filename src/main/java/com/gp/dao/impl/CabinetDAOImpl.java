@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.info.CabinetInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("cabinetDAO")
@@ -78,27 +82,68 @@ public class CabinetDAOImpl extends DAOSupport implements CabinetDAO{
 	}
 
 	@Override
-	public int update(CabinetInfo info) {
-
+	public int update(CabinetInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_cabinets set ")
-			.append("workgroup_id = ?,cabinet_name =?,cabinet_type = ?,used = ?,source_id = ?,")
-			.append("descr = ?,version_enable = ?,capacity = ?,storage_id = ?,")
-			.append("creator = ?,create_time = ?,modifier = ?, last_modified = ? ")
-			.append("where cabinet_id = ? ");
+		SQL.append("update gp_cabinets set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getCabinetName(),info.getCabinetType(),info.getUsed(),info.getSourceId(),
-				info.getDescription(),info.isVersionable(),info.getCapacity(),info.getStorageId(),
-				info.getCreator(),info.getCreateDate(),info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("cabinet_name")){
+			SQL.append("cabinet_name =?,");
+			params.add(info.getCabinetName());
+		}
+		if(!cols.contains("cabinet_type")){
+			SQL.append("cabinet_type = ?,");
+			params.add(info.getCabinetType());
+		}
+		if(!cols.contains("used")){
+			SQL.append("used = ?,");
+			params.add(info.getUsed());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ?,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("version_enable")){
+			SQL.append("version_enable = ?,");
+			params.add(info.isVersionable());
+		}
+		if(!cols.contains("capacity")){
+			SQL.append("capacity = ?,");
+			params.add(info.getCapacity());
+		}
+		if(!cols.contains("storage_id")){
+			SQL.append("storage_id = ?,");
+			params.add(info.getStorageId());
+		}
+		if(!cols.contains("creator")){
+			SQL.append("creator = ?,");
+			params.add(info.getCreator());
+		}
+		if(!cols.contains("create_time")){
+			SQL.append("create_time = ?,");
+			params.add(info.getCreateDate());
+		}
+
+		SQL.append("modifier = ?, last_modified = ? where cabinet_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+	
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

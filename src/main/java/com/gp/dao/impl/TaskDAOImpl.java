@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TaskDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.TaskInfo;
 
@@ -80,30 +85,83 @@ public class TaskDAOImpl extends DAOSupport implements TaskDAO{
 	}
 
 	@Override
-	public int update(TaskInfo info) {
+	public int update(TaskInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_tasks set ")
-			.append("workgroup_id = ?,hash_code = ?,source_id = ? ,")
-			.append("task_chronical_id = ?,task_name = ?,descr = ?,weight = ?,")
-			.append("state = ?,due_time = ?,exec_opinion = ?,exec_time = ?,")
-			.append("complete_time = ?,assignee_json = ?,owner = ?,executor = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where task_id = ? ");
+		SQL.append("update gp_tasks set ");
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("hash_code")){
+			SQL.append("hash_code = ?,");
+			params.add(info.getHashCode());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("task_chronical_id")){
+			SQL.append("task_chronical_id = ?,");
+			params.add(info.getTaskChronicalId());
+		}
+		if(!cols.contains("task_name")){
+			SQL.append("task_name = ?,");
+			params.add(info.getTaskName());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("weight")){
+			SQL.append("weight = ?,");
+			params.add(info.getWeight());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("due_time")){
+			SQL.append("due_time = ?,");
+			params.add(info.getDueDate());
+		}
+		if(!cols.contains("exec_opinion")){
+			SQL.append("exec_opinion = ?,");
+			params.add(info.getOpinion());
+		}
+		if(!cols.contains("exec_time")){
+			SQL.append("exec_time = ?,");
+			params.add(info.getExecuteDate());
+		}
+		if(!cols.contains("complete_time")){
+			SQL.append("complete_time = ?,");
+			params.add(info.getCompleteDate());
+		}
+		if(!cols.contains("assignee_json")){
+			SQL.append("assignee_json = ?,");
+			params.add(info.getAsignee());
+		}
+		if(!cols.contains("owner")){
+			SQL.append("owner = ?,");
+			params.add(info.getOwner());
+		}
+		if(!cols.contains("executor")){
+			SQL.append("executor = ?,");
+			params.add(info.getExecutor());
+		}
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getHashCode(),info.getSourceId(),
-				info.getTaskChronicalId(),info.getTaskName(),info.getDescription(),info.getWeight(),
-				info.getState(),info.getDueDate(),info.getOpinion(),info.getExecuteDate(),
-				info.getCompleteDate(),info.getAsignee(),info.getOwner(),info.getExecutor(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where task_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

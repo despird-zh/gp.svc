@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupMirrorDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.WorkgroupMirrorInfo;
 
@@ -81,20 +85,39 @@ public class WorkgroupMirrorDAOImpl extends DAOSupport implements WorkgroupMirro
 	}
 
 	@Override
-	public int update(WorkgroupMirrorInfo info) {
+	public int update(WorkgroupMirrorInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_workgroup_mirror set ")
-		.append("workgroup_id = ?,source_id = ? ,")
-		.append("mirror_state = ?,mirror_owm = ?,last_sync_time = ?,")
-		.append("modifier = ?, last_modified = ? ")
-		.append("where mirror_id = ? ");
+		SQL.append("update gp_workgroup_mirror set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getSourceId(),
-				info.getState(),info.getOwm(),info.getLastSyncDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("mirror_state")){
+			SQL.append("mirror_state = ?,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("mirror_owm")){
+			SQL.append("mirror_owm = ?,");
+			params.add(info.getOwm());
+		}
+		if(!cols.contains("last_sync_time")){
+			SQL.append("last_sync_time = ?,");
+			params.add(info.getLastSyncDate());
+		}
+
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where mirror_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
@@ -102,7 +125,7 @@ public class WorkgroupMirrorDAOImpl extends DAOSupport implements WorkgroupMirro
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		int rtv = -1;
 
-			rtv = jtemplate.update(SQL.toString(), params);
+			rtv = jtemplate.update(SQL.toString(), params.toArray());
 
 		return rtv;
 	}

@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachDAO;
 import com.gp.info.AttachInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("attachDAO")
@@ -82,30 +86,74 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 	}
 
 	@Override
-	public int update(AttachInfo info) {
+	public int update(AttachInfo info, FlatColLocator ...cols) {
 
+		Set<String> exclcols = FlatColumns.toColumnSet(cols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_attachments set ")
-			.append("workgroup_id = ?,attachment_name =?,source_id = ? ,")
-			.append("size = ?,owner = ? , state = ?,binary_id=?,")
-			.append("hash_code= ?, owm = ?, format = ?, creator=?, create_time=? ,")
-			.append("modifier = ?, last_modified = ? ")
+		SQL.append("update gp_attachments set ");
+		
+		if(!exclcols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!exclcols.contains("attachment_name")){
+			SQL.append("attachment_name =?,");
+			params.add(info.getAttachName());
+		}
+		if(!exclcols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!exclcols.contains("size")){
+			SQL.append("size = ?,");
+			params.add(info.getSize());
+		}
+		if(!exclcols.contains("owner")){
+			SQL.append("owner = ? , ");
+			params.add(info.getOwner());
+		}
+		if(!exclcols.contains("state")){
+			SQL.append("state = ?,");
+			params.add(info.getState());
+		}
+		if(!exclcols.contains("binary_id")){
+			SQL.append("binary_id=?,");
+			params.add(info.getBinaryId());
+		}
+		if(!exclcols.contains("hash_code")){
+			SQL.append("hash_code= ?,");
+			params.add(info.getHashCode());
+		}
+		if(!exclcols.contains("owm")){
+			SQL.append(" owm = ?,");
+			params.add(info.getOwm());
+		}
+		if(!exclcols.contains("format")){
+			SQL.append(" format = ?,"); 
+			params.add(info.getFormat());
+		}
+		if(!exclcols.contains("creator")){
+			SQL.append("creator=?,"); 
+			params.add(info.getCreator());
+		}
+		if(!exclcols.contains("create_time")){
+			SQL.append("create_time=? ,");
+			params.add(info.getCreateDate());
+		}
+		
+		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where attachment_id = ? ");
-		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getAttachName(),info.getSourceId(),
-				info.getSize(),info.getOwner(),info.getState(),info.getBinaryId(),
-				info.getHashCode(), info.getOwm(),info.getFormat(),info.getCreator(),info.getCreateDate(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
-		
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

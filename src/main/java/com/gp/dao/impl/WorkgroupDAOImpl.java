@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,9 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.WorkgroupInfo;
 
@@ -88,32 +92,117 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	}
 
 	@Override
-	public int update( WorkgroupInfo info) {
+	public int update( WorkgroupInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("UPDATE gp_workgroups SET ")
-			.append("workgroup_name = ?,org_id = ?,storage_id = ?,source_id = ?, mbr_group_id = ?,")
-			.append("descr = ?,state = ? ,admin = ?,creator = ?,hash_code = ?, manager=?, ")
-			.append("create_time = ?,modifier = ?, last_modified = ?,avatar_id = ?,workgroup_pid=?,")
-			.append("publish_cab_id = ?,netdisk_cab_id = ? ,owm = ? ,publish_enable = ? ,task_enable = ? ,")
-			.append("share_enable = ? , link_enable = ? ,post_enable = ? ,netdisk_enable = ? ")
+		SQL.append("UPDATE gp_workgroups SET ");
+		if(!cols.contains("workgroup_name")){
+			SQL.append("workgroup_name = ?,");
+			params.add(info.getWorkgroupName());
+		}
+		if(!cols.contains("org_id")){
+			SQL.append("org_id = ?,");
+			params.add(info.getOrgId());
+		}
+		if(!cols.contains("storage_id")){
+			SQL.append("storage_id = ?,");
+			params.add(info.getStorageId());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ?, ");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("mbr_group_id")){
+			SQL.append("mbr_group_id = ?,");
+			params.add(info.getMemberGroupId());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ? ,");
+			params.add(info.getState());
+		}
+		if(!cols.contains("admin")){
+			SQL.append("admin = ?,");
+			params.add(info.getAdmin());
+		}
+		if(!cols.contains("creator")){
+			SQL.append("creator = ?,");
+			params.add(info.getCreator());
+		}
+		if(!cols.contains("hash_code")){
+			SQL.append("hash_code = ?, ");
+			params.add(info.getHashCode());
+		}
+		if(!cols.contains("manager")){
+			SQL.append("manager=?, ");
+			params.add(info.getManager());
+		}
+		if(!cols.contains("create_time")){
+			SQL.append("create_time = ?,");
+			params.add(info.getCreateDate());
+		}
+		if(!cols.contains("avatar_id")){
+			SQL.append("avatar_id = ?,");
+			params.add(info.getAvatarId());
+		}
+		if(!cols.contains("workgroup_pid")){
+			SQL.append("workgroup_pid=?,");
+			params.add(info.getParentId());
+		}
+		if(!cols.contains("publish_cab_id")){
+			SQL.append("publish_cab_id = ?,");
+			params.add(info.getPublishCabinet());
+		}
+		if(!cols.contains("netdisk_cab_id")){
+			SQL.append("netdisk_cab_id = ? ,");
+			params.add(info.getNetdiskCabinet());
+		}
+		if(!cols.contains("owm")){
+			SQL.append("owm = ? ,");
+			params.add(info.getOwm());
+		}
+		if(!cols.contains("publish_enable")){
+			SQL.append("publish_enable = ? ,");
+			params.add(info.getPublishEnable());
+		}
+		if(!cols.contains("task_enable")){
+			SQL.append("task_enable = ? ,");
+			params.add(info.getTaskEnable());
+		}
+		if(!cols.contains("share_enable")){
+			SQL.append("share_enable = ? , ");
+			params.add(info.getShareEnable());
+		}
+		if(!cols.contains("link_enable")){
+			SQL.append("link_enable = ? ,");
+			params.add(info.getLinkEnable());
+		}
+		if(!cols.contains("post_enable")){
+			SQL.append("post_enable = ? ,");
+			params.add(info.getPostEnable());
+		}
+		if(!cols.contains("netdisk_enable")){
+			SQL.append("netdisk_enable = ? ");
+			params.add(info.getNetdiskEnable());
+		}
+
+		SQL.append("modifier = ?, last_modified = ?,")
 			.append("WHERE workgroup_id = ?  ");
-		
-		Object[] params = new Object[]{
-				info.getWorkgroupName(),info.getOrgId(),info.getStorageId(),info.getSourceId(),info.getMemberGroupId(),
-				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getHashCode(),info.getManager(),
-				info.getCreateDate(),info.getModifier(),info.getModifyDate(),info.getAvatarId(),info.getParentId(),
-				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),
-				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),
-				info.getInfoId().getId()
-		};
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		int rtv = -1;
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		rtv = jtemplate.update(SQL.toString(), params);
+		rtv = jtemplate.update(SQL.toString(), params.toArray());
 
 		return rtv;
 	}

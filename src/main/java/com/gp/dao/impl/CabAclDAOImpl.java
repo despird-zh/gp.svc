@@ -2,6 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -14,10 +17,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAclDAO;
 import com.gp.info.CabAclInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
 @Component("cabAclDAO")
@@ -71,11 +76,12 @@ public class CabAclDAOImpl extends DAOSupport implements CabAclDAO{
 	}
 
 	@Override
-	public int update(CabAclInfo info) {
+	public int update(CabAclInfo info, FlatColLocator ...exclcols) {
+		
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_cab_acl set ")
-		.append("acl_hash = ?,")
-		.append("modifier = ?,last_modified = ? ")
+		SQL.append("update gp_cab_acl set ");
+		SQL.append("acl_hash = ?,");
+		SQL.append("modifier = ?,last_modified = ? ")
 		.append("where acl_id = ? ");
 		
 		Object[] params = new Object[]{

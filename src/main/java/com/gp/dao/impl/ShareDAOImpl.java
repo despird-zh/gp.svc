@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -15,9 +17,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.ShareInfo;
 
@@ -83,31 +87,69 @@ public class ShareDAOImpl extends DAOSupport implements ShareDAO{
 	}
 
 	@Override
-	public int update( ShareInfo info) {
+	public int update( ShareInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 	
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_shares set ")
-			.append("workgroup_id = ?,source_id = ? ,")
-			.append("sharer = ? , target = ?, owm = ?,")
-			.append("share_key = ?, share_time = ?, expire_time = ?, access_limit = ?,")
-			.append("share_name = ?, descr = ?,")
-			.append("access_times = ?, modifier = ?, last_modified = ? ")
-			.append("where share_id = ? and ");
+		SQL.append("update gp_shares set ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getSourceId(),
-				info.getSharer(),info.getTarget(),info.getOwm(),
-				info.getShareKey(),info.getShareDate(),info.getExpireDate(),info.getAccessLimit(),
-				info.getShareName(),info.getDescription(),
-				info.getAccessTimes(),info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("sharer")){
+			SQL.append("sharer = ? , ");
+			params.add(info.getSharer());
+		}
+		if(!cols.contains("target")){
+			SQL.append("target = ?, ");
+			params.add(info.getTarget());
+		}
+		if(!cols.contains("owm")){
+		SQL.append("owm = ?,");
+		params.add(info.getOwm());
+		}
+		if(!cols.contains("share_key")){
+			SQL.append("share_key = ?, ");
+			params.add(info.getShareKey());
+		}
+		if(!cols.contains("share_time")){
+			SQL.append("share_time = ?, ");
+			params.add(info.getShareDate());
+		}
+		if(!cols.contains("expire_time")){
+			SQL.append("expire_time = ?, ");
+			params.add(info.getExpireDate());
+		}
+		if(!cols.contains("access_limit")){
+			SQL.append("access_limit = ?,");
+			params.add(info.getAccessLimit());
+		}
+		if(!cols.contains("share_name")){
+			SQL.append("share_name = ?, ");
+			params.add(info.getShareName());
+		}
+		if(!cols.contains("descr")){
+			SQL.append("descr = ?,");
+			params.add(info.getDescription());
+		}
+		
+		SQL.append("access_times = ?, modifier = ?, last_modified = ? ")
+			.append("where share_id = ? and ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

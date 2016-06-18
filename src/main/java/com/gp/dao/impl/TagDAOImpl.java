@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -17,9 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TagDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.TagInfo;
 
@@ -79,26 +82,41 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 	}
 
 	@Override
-	public int update( TagInfo info) {
+	public int update( TagInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_tags set ")
-			.append("tag_name = ?,tag_color,")
-			.append("category = ?,tag_type = ? , ")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where tag_id = ? ");
 		
-		Object[] params = new Object[]{
-				info.getTagName(),info.getTagColor(),
-				info.getCategory(),info.getTagType(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		SQL.append("update gp_tags set ");
+		
+		if(!cols.contains("tag_name")){
+			SQL.append("tag_name = ?,");
+			params.add(info.getTagName());
+		}
+		if(!cols.contains("tag_color")){
+			SQL.append("tag_color,");
+			params.add(info.getTagColor());
+		}
+		if(!cols.contains("category")){
+			SQL.append("category = ?,");
+			params.add(info.getCategory());
+		}
+		if(!cols.contains("tag_type")){
+			SQL.append("tag_type = ? , ");
+			params.add(info.getTagType());
+		}
+		
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where tag_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

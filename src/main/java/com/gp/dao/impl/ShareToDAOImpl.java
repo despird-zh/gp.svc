@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -13,9 +15,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareToDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.ShareToInfo;
 
@@ -75,28 +79,69 @@ public class ShareToDAOImpl extends DAOSupport implements ShareToDAO{
 	}
 
 	@Override
-	public int update(ShareToInfo info) {
+	public int update(ShareToInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_share_to set ")
-			.append("workgroup_id = ?,share_id = ?,source_id = ?, ")
-			.append("share_name = ?,to_account = ?,to_global_account = ?,to_email = ?,")
-			.append("share_mode = ?,owm = ?,share_token = ?,access_count = ?,")
-			.append("modifier = ?, last_modified = ?")
+		SQL.append("update gp_share_to set ");
+		
+		if(!cols.contains("workgroup_id")){
+			SQL.append("workgroup_id = ?,");
+			params.add(info.getWorkgroupId());
+		}
+		if(!cols.contains("share_id")){
+			SQL.append("share_id = ?,");
+			params.add(info.getShareId());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ?, ");
+			params.add(info.getShareId());
+		}
+		if(!cols.contains("share_name")){
+			SQL.append("share_name = ?,");
+			params.add(info.getShareName());
+		}
+		if(!cols.contains("to_account")){
+			SQL.append("to_account = ?,");
+			params.add(info.getToAccount());
+		}
+		if(!cols.contains("to_global_account")){
+			SQL.append("to_global_account = ?,");
+			params.add(info.getToGlobalAccount());
+		}
+		if(!cols.contains("to_email")){
+			SQL.append("to_email = ?,");
+			params.add(info.getToEmail());
+		}
+		if(!cols.contains("share_mode")){
+			SQL.append("share_mode = ?,");
+			params.add(info.getShareMode());
+		}
+		if(!cols.contains("owm")){
+			SQL.append("owm = ?,");
+			params.add(info.getOwm());
+		}
+		if(!cols.contains("share_token")){
+			SQL.append("share_token = ?,");
+			params.add(info.getShareToken());
+		}
+		if(!cols.contains("access_count")){
+			SQL.append("access_count = ?,");
+			params.add(info.getAccessCount());
+		}
+		
+		SQL.append("modifier = ?, last_modified = ?")
 			.append("where share_to_id = ? ");
 		
-		Object[] params = new Object[]{
-				info.getWorkgroupId(),info.getShareId(),info.getSourceId(),
-				info.getShareName(),info.getToAccount(),info.getToGlobalAccount(),info.getToEmail(),
-				info.getShareMode(),info.getOwm(),info.getShareToken(),info.getAccessCount(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 

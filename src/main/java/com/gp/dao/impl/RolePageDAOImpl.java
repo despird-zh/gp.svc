@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
@@ -88,16 +90,24 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 	}
 
 	@Override
-	public int update(RolePageInfo info) {
-		
-		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page SET page_id=?, role_id=?");
-
+	public int update(RolePageInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
-		params.add(info.getPageId());
-		params.add(info.getRoleId());
-
+		
+		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page SET ");
+		
+		if(!cols.contains("page_id")){
+			SQL.append("page_id=?,");
+			params.add(info.getPageId());
+		}
+		if(!cols.contains("role_id")){
+			SQL.append(" role_id=?,");
+			params.add(info.getRoleId());
+		}
 		
 		for(Map.Entry<FlatColLocator, Boolean> entry: info.getPermMap().entrySet()){
+			if(cols.contains(entry.getKey().getColumn())) continue;
+			
 			SQL.append(entry.getKey().getColumn()).append(" = ?,");
 			params.add(entry.getValue());
 		}

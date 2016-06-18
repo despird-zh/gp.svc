@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -18,9 +19,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.UserInfo;
 
@@ -96,27 +99,100 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 	}
 
 	@Override
-	public int update( UserInfo info) {
+	public int update( UserInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_users set ")
-		.append("account = ?,global_account = ?,source_id = ? ,")
-		.append("type = ?,mobile = ?,phone = ?,full_name = ?,")
-		.append("email = ?, password = ?, state = ?, create_time = ?,")
-		.append("extra_info = ?, retry_times = ?, last_logon = ?,classsification=?,")
-		.append("language = ?, timezone = ?, publish_cabinet_id = ?, netdisk_cabinet_id = ?,")
-		.append("storage_id = ?,modifier = ?,last_modified = ? ")
+		SQL.append("update gp_users set ");
+		
+		if(!cols.contains("account")){
+			SQL.append("account = ?,");
+			params.add(info.getAccount());
+		}
+		if(!cols.contains("global_account")){
+			SQL.append("global_account = ?,");
+			params.add(info.getGlobalAccount());
+		}
+		if(!cols.contains("source_id")){
+			SQL.append("source_id = ? ,");
+			params.add(info.getSourceId());
+		}
+		if(!cols.contains("type")){
+			SQL.append("type = ?,");
+			params.add(info.getType());
+		}
+		if(!cols.contains("mobile")){
+			SQL.append("mobile = ?,");
+			params.add(info.getMobile());
+		}
+		if(!cols.contains("phone")){
+			SQL.append("phone = ?,");
+			params.add(info.getPhone());
+		}
+		if(!cols.contains("full_name")){
+			SQL.append("full_name = ?,");
+			params.add(info.getFullName());
+		}
+		if(!cols.contains("email")){
+			SQL.append("email = ?, ");
+			params.add(info.getEmail());
+		}
+		if(!cols.contains("password")){
+			SQL.append("password = ?, ");
+			params.add(info.getPassword());
+		}
+		if(!cols.contains("state")){
+			SQL.append("state = ?, ");
+			params.add(info.getState());
+		}
+		if(!cols.contains("create_time")){
+			SQL.append("create_time = ?,");
+			params.add(info.getCreateDate());
+		}
+		if(!cols.contains("extra_info")){
+			SQL.append("extra_info = ?, ");
+			params.add(info.getExtraInfo());
+		}
+		if(!cols.contains("retry_times")){
+			SQL.append("retry_times = ?, ");
+			params.add(info.getRetryTimes());
+		}
+		if(!cols.contains("last_logon")){
+			SQL.append("last_logon = ?,");
+			params.add(info.getLastLogonDate());
+		}
+		if(!cols.contains("classsification")){
+			SQL.append("classsification=?,");
+			params.add(info.getClassification());
+		}
+		if(!cols.contains("language")){
+			SQL.append("language = ?, ");
+			params.add(info.getLanguage());
+		}
+		if(!cols.contains("timezone")){
+			SQL.append("timezone = ?, ");
+			params.add(info.getTimeZone());
+		}
+		if(!cols.contains("publish_cabinet_id")){
+			SQL.append("publish_cabinet_id = ?, ");
+			params.add(info.getPublishCabinet());
+		}
+		if(!cols.contains("netdisk_cabinet_id")){
+			SQL.append("netdisk_cabinet_id = ?,");
+			params.add(info.getNetdiskCabinet());
+		}
+		if(!cols.contains("storage_id")){
+			SQL.append("storage_id = ?,");
+			params.add(info.getStorageId());
+		}
+		
+		SQL.append("modifier = ?,last_modified = ? ")
 		.append("where user_id = ? ");
-
-		Object[] params = new Object[]{
-				info.getAccount(),info.getGlobalAccount(),info.getSourceId(),
-				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
-				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
-				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),info.getClassification(),
-				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
-				info.getStorageId(),info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+		
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
@@ -124,7 +200,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		int rtv = -1;
 
-		rtv = jtemplate.update(SQL.toString(), params);
+		rtv = jtemplate.update(SQL.toString(), params.toArray());
 
 		return rtv;
 	}

@@ -2,7 +2,9 @@ package com.gp.dao.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -16,9 +18,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
+import com.gp.info.FlatColLocator;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 
@@ -79,26 +83,32 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public int update(GroupUserInfo info) {
+	public int update(GroupUserInfo info, FlatColLocator ...exclcols) {
+		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_group_user set ")
-			.append("group_id = ?,")
-			.append("account = ?,")
-			.append("modifier = ?, last_modified = ? ")
-			.append("where rel_id = ? ");
+		SQL.append("update gp_group_user set ");
 		
-		Object[] params = new Object[]{
-				info.getGroupId(),
-				info.getAccount(),
-				info.getModifier(),info.getModifyDate(),
-				info.getInfoId().getId()
-		};
+		if(!cols.contains("group_id")){
+			SQL.append("group_id = ?,");
+			params.add(info.getGroupId());
+		}
+		if(!cols.contains("group_id")){
+			SQL.append("account = ?,");
+			params.add(info.getAccount());
+		}
+		SQL.append("modifier = ?, last_modified = ? ")
+			.append("where rel_id = ? ");
+		params.add(info.getModifier());
+		params.add(info.getModifyDate());
+		params.add(info.getInfoId().getId());
+		
 		if(LOGGER.isDebugEnabled()){
 			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		int rtv = jtemplate.update(SQL.toString(),params);
+		int rtv = jtemplate.update(SQL.toString(),params.toArray());
 		return rtv;
 	}
 
