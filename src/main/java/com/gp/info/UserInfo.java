@@ -66,6 +66,8 @@ public class UserInfo extends TraceableInfo<Long>{
 	
 	private String classification;
 	
+	private String signature;
+	
 	public String getAccount() {
 		return account;
 	}
@@ -224,6 +226,14 @@ public class UserInfo extends TraceableInfo<Long>{
 
 	public void setClassification(String classification) {
 		this.classification = classification;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 		
 }
