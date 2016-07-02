@@ -4,8 +4,6 @@ import java.util.Date;
 
 public class WorkgroupLite{
 
-	private static final long serialVersionUID = -5788108460179216377L;
-
 	private String imageFormat;
 	
 	private String imageExt;

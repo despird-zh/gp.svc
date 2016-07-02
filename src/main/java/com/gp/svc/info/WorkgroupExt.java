@@ -2,8 +2,6 @@ package com.gp.svc.info;
 
 public class WorkgroupExt{
 	
-	private static final long serialVersionUID = -8823921041371521351L;
-
 	private String entityCode;
 	
 	private String nodeCode;

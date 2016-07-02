@@ -2,8 +2,6 @@ package com.gp.svc.info;
 
 public class UserExt{
 
-	private static final long serialVersionUID = 1L;
-
 	private String instanceName;
 	
 	private String shortName;
