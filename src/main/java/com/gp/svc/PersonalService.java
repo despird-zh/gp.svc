@@ -11,9 +11,9 @@ import com.gp.svc.info.GroupMemberInfo;
 
 public interface PersonalService {
 
-	public List<WorkgroupInfo> getWorkgroups(ServiceContext svcctx, InfoId<Long> ids)throws ServiceException;
+	public List<WorkgroupInfo> getWorkgroups(ServiceContext svcctx, InfoId<?>... ids)throws ServiceException;
 	
-	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<Long> ids)throws ServiceException;
+	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... ids)throws ServiceException;
 	
 	public List<GroupMemberInfo> getGroupMembers(ServiceContext svcctx, String account, String ... grpTypes) throws ServiceException;
 }

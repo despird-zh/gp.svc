@@ -70,6 +70,8 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 	
 	private Long memberGroupId;
 	
+	private Boolean postAcceptable;
+	
 	private Long avatarId;
 	
 	public Boolean getShareEnable() {
@@ -258,6 +260,14 @@ public class WorkgroupInfo extends TraceableInfo<Long>{
 
 	public void setParentId(Long parentId) {
 		this.parentId = parentId;
+	}
+	
+	public Boolean getPostAcceptable() {
+		return postAcceptable;
+	}
+
+	public void setPostAcceptable(Boolean postAcceptable) {
+		this.postAcceptable = postAcceptable;
 	}
 
 }

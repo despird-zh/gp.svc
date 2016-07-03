@@ -3,7 +3,9 @@ package com.gp.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
@@ -43,18 +46,18 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		SQL.append("insert into gp_org_hier (")
 			.append("org_pid,org_id,mbr_group_id,admin,")
 			.append("org_level,org_name,descr,manager,")
-			.append("email, modifier, last_modified")
+			.append("mbr_post_acpt, email, modifier, last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,?)");
+			.append("?,?,?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		
 		Object[] params = new Object[]{
 				info.getParentOrg(),key.getId(),info.getMemberGroupId(),info.getAdmin(),
 				info.getLevel(),info.getOrgName(),info.getDescription(),info.getManager(),
-				info.getEmail(),info.getModifier(),info.getModifyDate()
+				info.getPostAcceptable(),info.getEmail(),info.getModifier(),info.getModifyDate()
 		};
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -120,6 +123,10 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}
+		if(!cols.contains("mbr_post_acpt")){
+			SQL.append("mbr_post_acpt = ?,");
+			params.add(info.getPostAcceptable());
+		}
 			
 		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where org_id = ? ");
@@ -174,6 +181,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 			info.setEmail(rs.getString("email"));
 			info.setManager(rs.getString("manager"));
 			info.setDescription(rs.getString("descr"));
+			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
@@ -184,7 +192,28 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 
 	@Override
 	public RowMapper<OrgHierInfo> getRowMapper() {
-		// TODO Auto-generated method stub
+		
 		return OrgHierMapper;
+	}
+
+	@Override
+	public List<OrgHierInfo> queryByIds(InfoId<?>... ids) {
+
+		List<Long> oids = new ArrayList<Long>();
+		
+		for(InfoId<?> id : ids){
+			oids.add((Long)id.getId());
+		}
+		StringBuffer SQL = new StringBuffer("select * from gp_org_hier ");
+		SQL.append("where org_id IN (:org_ids)");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("org_ids", oids);
+		
+		NamedParameterJdbcTemplate jtemplate = super.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + oids.toString());
+		}
+		
+		return jtemplate.query(SQL.toString(), params, OrgHierMapper);
 	}
 }

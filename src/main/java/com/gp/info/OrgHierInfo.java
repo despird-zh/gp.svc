@@ -20,6 +20,8 @@ public class OrgHierInfo extends TraceableInfo<Long>{
 	
 	private String description;
 
+	private Boolean postAcceptable;
+	
 	public Long getParentOrg() {
 		return parentOrg;
 	}
@@ -82,6 +84,14 @@ public class OrgHierInfo extends TraceableInfo<Long>{
 
 	public void setMemberGroupId(Long memberGroupId) {
 		this.memberGroupId = memberGroupId;
+	}
+
+	public Boolean getPostAcceptable() {
+		return postAcceptable;
+	}
+
+	public void setPostAcceptable(Boolean postAcceptable) {
+		this.postAcceptable = postAcceptable;
 	}
 	
 	

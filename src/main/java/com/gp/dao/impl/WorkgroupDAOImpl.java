@@ -3,7 +3,9 @@ package com.gp.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
@@ -44,13 +47,13 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			.append("source_id,workgroup_id,workgroup_name,hash_code,storage_id,manager,")
 			.append("descr,state,admin,creator,org_id,mbr_group_id,")
 			.append("publish_cab_id, netdisk_cab_id,owm,publish_enable,task_enable,workgroup_pid,")
-			.append("share_enable, link_enable,post_enable,netdisk_enable,avatar_id,")
+			.append("share_enable, link_enable,post_enable,netdisk_enable,avatar_id,mbr_post_acpt,")
 			.append("create_time,modifier, last_modified")
 			.append(")values(")
 			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,?,")
-			.append("?,?,?,?,?,")
+			.append("?,?,?,?,?,?,")
 			.append("?,?,?)");
 
 		InfoId<Long> key = info.getInfoId();
@@ -58,7 +61,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getHashCode(),info.getStorageId(),info.getManager(),
 				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),info.getMemberGroupId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),info.getParentId(),
-				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),
+				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),info.getPostAcceptable(),
 				info.getCreateDate(),info.getModifier(),info.getModifyDate()
 		};
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -190,7 +193,11 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			SQL.append("netdisk_enable = ? ");
 			params.add(info.getNetdiskEnable());
 		}
-
+		if(!cols.contains("mbr_post_acpt")){
+			SQL.append("mbr_post_acpt = ?,");
+			params.add(info.getPostAcceptable());
+		}
+		
 		SQL.append("modifier = ?, last_modified = ?,")
 			.append("WHERE workgroup_id = ?  ");
 		params.add(info.getModifier());
@@ -262,6 +269,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			info.setAvatarId(rs.getLong("avatar_id"));
 			info.setMemberGroupId(rs.getLong("mbr_group_id"));
 			info.setParentId(rs.getLong("workgroup_pid"));
+			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
@@ -275,6 +283,29 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	public RowMapper<WorkgroupInfo> getRowMapper() {
 
 		return WorkgroupMapper;
+	}
+
+	@Override
+	public List<WorkgroupInfo> queryByIds(InfoId<?>... ids) {
+		
+		List<Long> oids = new ArrayList<Long>();
+		
+		for(InfoId<?> id : ids){
+			oids.add((Long)id.getId());
+		}
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_workgroups ");
+		SQL.append("where workgroup_id IN (:wgroup_ids)");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("wgroup_ids", oids);
+		
+		NamedParameterJdbcTemplate jtemplate = super.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + oids.toString());
+		}
+		
+		List<WorkgroupInfo> infos = jtemplate.query(SQL.toString(), params, WorkgroupMapper);
+		
+		return infos;
 	}
 
 }
