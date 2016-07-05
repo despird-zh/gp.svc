@@ -45,7 +45,7 @@ public enum IdKey implements Identifier{
 	CAB_ACE("gp_cab_ace","ace_id", Long.class),
 	CAB_VERSION("gp_cab_versions","version_id", Long.class),
 	CAB_FOLDER("gp_cab_folders","folder_id", Long.class),
-	CAB_SUMMARY("gp_cab_summary","rel_id", Long.class),
+	
 	CAB_COMMENT("gp_cab_comments","comment_id", Long.class),
 	STORAGE("gp_storages","storage_id", Integer.class),
 	BINARY("gp_binaries","binary_id", Long.class),
@@ -68,6 +68,10 @@ public enum IdKey implements Identifier{
 	USER_ROLE("gp_user_role","rel_id", Long.class),
 	FAVORITE("gp_favorites","favorite_id", Long.class),
 	MBR_SETTING("gp_mbr_setting","rel_id", Long.class),
+	/** the summary tables */
+	CAB_SUM("gp_cab_summary","rel_id", Long.class),
+	USER_SUM("gp_user_summary","rel_id", Long.class),
+	WORKGROUP_SUM("gp_workgroup_summary","rel_id", Long.class),
 	ACT_LOG("gp_activity_log","log_id", Long.class);
 
 	/**
