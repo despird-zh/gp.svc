@@ -204,8 +204,9 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		for(InfoId<?> id : ids){
 			oids.add((Long)id.getId());
 		}
-		StringBuffer SQL = new StringBuffer("select * from gp_org_hier ");
-		SQL.append("where org_id IN (:org_ids)");
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_org_hier ");
+		SQL.append("WHERE org_id IN (:org_ids) ");
+		SQL.append("ORDER BY org_id asc");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("org_ids", oids);
 		

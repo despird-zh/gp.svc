@@ -14,15 +14,19 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
+import com.gp.dao.UserSumDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
+import com.gp.info.UserSumInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.svc.PersonalService;
 import com.gp.svc.info.GroupMemberInfo;
@@ -41,6 +45,10 @@ public class PersonalServiceImpl implements PersonalService{
 	@Autowired
 	WorkgroupDAO workgroupdao;
 	
+	@Autowired
+	UserSumDAO usersumdao;
+	
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<WorkgroupInfo> getWorkgroups(ServiceContext svcctx, InfoId<?>... ids) throws ServiceException {
 		
@@ -51,6 +59,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... ids) throws ServiceException {
 
@@ -61,6 +70,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<GroupMemberInfo> getGroupMembers(ServiceContext svcctx, String account, String... grpTypes)
 			throws ServiceException {
@@ -105,5 +115,17 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Override
+	public UserSumInfo getUserSummary(ServiceContext svcctx, String account) throws ServiceException {
+		
+		try{
+			
+			return usersumdao.queryByAccount(account);
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae, "user sumamry", account);
+		}
+	}
+
 }

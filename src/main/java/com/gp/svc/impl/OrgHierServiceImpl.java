@@ -2,6 +2,7 @@ package com.gp.svc.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -263,6 +267,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public Map<Long, Integer> getOrgHierGrandNodeCount(ServiceContext svcctx, InfoId<Long> orgid)
 			throws ServiceException {
@@ -295,4 +300,40 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 		return result;
 	}
+
+	@Override
+	public String getOrgHierRoute(ServiceContext svcctx, InfoId<Long> orgid) throws ServiceException {
+		
+		SqlParameterSource in = new MapSqlParameterSource()
+                .addValue("p_org_id", orgid.getId());
+		
+	    SimpleJdbcCall jdbcCall = pseudodao.getJdbcCall("proc_org_route");
+	    String routes = null;
+	    try{
+			Map<String, Object> out = jdbcCall.execute(in);
+			routes = (String)out.get("route_ids");
+	    }catch(DataAccessException dae){
+	    	throw new ServiceException("excp.proc.with",dae, "proc_org_route", orgid);
+	    }
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("call procedure: proc_org_route / params : p_org_id-{}", orgid.getId());
+		}
+		return routes;
+	}
+
+	@Override
+	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... orgids) throws ServiceException {
+		
+		try{
+			
+			return orghierdao.queryByIds(orgids);
+			
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query", dae, "org hier");
+		}
+
+	}
+
 }

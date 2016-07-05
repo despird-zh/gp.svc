@@ -4,4 +4,5 @@ import com.gp.info.UserSumInfo;
 
 public interface UserSumDAO extends BaseDAO<UserSumInfo>{
 
+	UserSumInfo queryByAccount(String account);
 }
