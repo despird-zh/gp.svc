@@ -469,8 +469,8 @@ public class SecurityServiceImpl implements SecurityService{
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
-				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
+				.append("LEFT JOIN ( SELECT source_id, source_name,short_name, abbr FROM gp_sources) b ")
+				.append("ON a.source_id = b.source_id WHERE 1 = 1 ");
 		Map<String,Object> params = new HashMap<String,Object>();
 		// account or name condition
 		if(StringUtils.isNotBlank(accountname)){
@@ -614,7 +614,7 @@ public class SecurityServiceImpl implements SecurityService{
 			}
 			ext.setAbbr(rs.getString("abbr"));
 			ext.setShortName(rs.getString("short_name"));
-			ext.setInstanceName(rs.getString("instance_name"));
+			ext.setSourceName(rs.getString("source_name"));
 	
 			cinfo.setPrimary(info);
 			cinfo.setExtended(ext);

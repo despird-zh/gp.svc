@@ -64,18 +64,18 @@ public interface SecurityService {
 	 * @param type the types condition
 	 * @param state the states condition
 	 **/
-	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type,String[] state) throws ServiceException;
+	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
 
 	/**
 	 * Query the account list per page support pagination request
 	 * 
 	 * @param accountname the account or name as query condition
-	 * @param instanceId the id of instance
+	 * @param sourceId the id of source entity
 	 * @param type the types condition
 	 * @param pagequery the page query condition
 	 *  
 	 **/
-	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer sourceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Query Roles of account in Greoupress System

@@ -2,21 +2,15 @@ package com.gp.svc.info;
 
 public class UserExt{
 
-	private String instanceName;
+	private String sourceName;
 	
 	private String shortName;
 	
 	private String abbr;
 
 	private String storageName;
-	
-	public String getInstanceName() {
-		return instanceName;
-	}
 
-	public void setInstanceName(String instanceName) {
-		this.instanceName = instanceName;
-	}
+	
 
 	public String getShortName() {
 		return shortName;
@@ -40,5 +34,13 @@ public class UserExt{
 
 	public void setStorageName(String storageName) {
 		this.storageName = storageName;
+	}
+
+	public String getSourceName() {
+		return sourceName;
+	}
+
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
 	}	
 }
