@@ -19,17 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
+import com.gp.dao.GroupUserDAO;
 import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserSumDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.exception.ServiceException;
+import com.gp.info.GroupMemberInfo;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.UserSumInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.svc.PersonalService;
-import com.gp.svc.info.GroupMemberInfo;
 
 @Service("personalService")
 public class PersonalServiceImpl implements PersonalService{
@@ -89,25 +90,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 
 		try{
-			return jtemplate.query(SQL.toString(), params, new RowMapper<GroupMemberInfo>(){
-
-				@Override
-				public GroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-					GroupMemberInfo gminfo = new GroupMemberInfo();
-					Long relid = rs.getLong("mbr_rel_id");
-					InfoId<Long> rid = IdKey.GROUP_USER.getInfoId(relid);
-					gminfo.setInfoId(rid);
-					gminfo.setAccount(rs.getString("account"));
-					gminfo.setDescription(rs.getString("group_descr"));
-					gminfo.setRole(rs.getString("role"));
-					gminfo.setGroupId(rs.getLong("group_id"));
-					gminfo.setGroupName(rs.getString("group_name"));
-					gminfo.setGroupType(rs.getString("group_type"));
-					gminfo.setManageId(rs.getLong("manage_id"));
-					
-					return gminfo;
-				}
-			});
+			return jtemplate.query(SQL.toString(), params, GroupUserDAO.GroupMemberMapper);
 		
 		}catch(DataAccessException dae){
 			

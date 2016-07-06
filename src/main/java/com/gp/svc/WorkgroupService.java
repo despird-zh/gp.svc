@@ -5,11 +5,11 @@ import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.GroupInfo;
+import com.gp.info.GroupMemberInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupInfo;
-import com.gp.info.WorkgroupMemberInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.UserExt;
@@ -43,11 +43,11 @@ public interface WorkgroupService {
 
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account) throws ServiceException;
 	
-	public List<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
+	public List<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId) throws ServiceException;
 	
 	
-	public PageWrapper<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
+	public PageWrapper<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, String uname , 
 			InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException;
 	
 	/**

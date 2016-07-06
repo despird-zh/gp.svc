@@ -43,6 +43,7 @@ import com.gp.info.CabinetInfo;
 import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.GroupInfo;
+import com.gp.info.GroupMemberInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
@@ -50,7 +51,6 @@ import com.gp.info.SysOptionInfo;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.svc.info.WorkgroupLite;
-import com.gp.info.WorkgroupMemberInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -306,32 +306,27 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
+	public List<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();
 		
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.source_name,c.source_id,a.full_name,a.type,a.email,a.user_id ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_mbrs ");
 		
-		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
-				.append("  ON b.account = a.account ")
-				.append("LEFT JOIN (select source_name, source_id FROM gp_sources) c ")
-				.append("  ON a.source_id = c.source_id ")
-				.append("WHERE b.group_id = :group_id");
-		
+		SQL_FROM.append("WHERE group_id = :group_id");
 		params.put("group_id", memberGroupId);
 		
 		if(StringUtils.isNotBlank(uname)){
 			
-			SQL_FROM.append("AND (a.account like :uname OR a.email like :uname OR a.full_name like :uname) ");
+			SQL_FROM.append("AND (account like :uname OR email like :uname OR full_name like :uname) ");
 			params.put("uname", "%" + StringUtils.trim(uname) + "%");
 		}
 		if(InfoId.isValid(sourceId)){
 			
-			SQL_FROM.append("AND c.source_id = :source_id ");
+			SQL_FROM.append("AND source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
 		}
 		
@@ -341,9 +336,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupMemberInfo> result = null;
+		List<GroupMemberInfo> result = null;
 		try{
-			result = jtemplate.query(querysql, params, WGroupMemberMapper);
+			result = jtemplate.query(querysql, params, GroupUserDAO.GroupMemberMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "workgroup members", wkey);
 		}
@@ -353,39 +348,33 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<WorkgroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
+	public PageWrapper<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException {
 	
 		Map<String,Object> params = new HashMap<String,Object>();
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.source_name,c.source_id,a.full_name,a.type,a.email,a.user_id ");
-		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.user_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
+		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(user_id) ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_mbrs ");
 		
-		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
-				.append("  ON b.account = a.account ")
-				.append("LEFT JOIN (select source_name, source_id FROM gp_sources) c ")
-				.append("  ON a.source_id = c.source_id ")
-				.append("WHERE b.group_id = :group_id ")
-				.append("ORDER BY b.rel_id");
-		
+		SQL_FROM.append("WHERE b.group_id = :group_id ");
 		params.put("group_id", memberGroupId);
 		
 		if(StringUtils.isNotBlank(uname)){
 			
-			SQL_FROM.append("AND (a.account like :uname OR a.email like :uname OR a.full_name like :uname) ");
+			SQL_FROM.append("AND (account like :uname OR email like :uname OR full_name like :uname) ");
 			params.put("uname", "%" + StringUtils.trim(uname) + "%");
 		}
 		if(InfoId.isValid(sourceId)){
 			
-			SQL_FROM.append("AND c.source_id = :source_id ");
+			SQL_FROM.append("AND source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
 		}
-		
+		SQL_FROM.append("ORDER BY mbr_rel_id");
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<WorkgroupMemberInfo> pwrapper = new PageWrapper<WorkgroupMemberInfo>();
+		PageWrapper<GroupMemberInfo> pwrapper = new PageWrapper<GroupMemberInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -403,9 +392,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupMemberInfo> result = null;
+		List<GroupMemberInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, WGroupMemberMapper);
+			result = jtemplate.query(pagesql, params, GroupUserDAO.GroupMemberMapper);
 			pwrapper.setRows(result);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "workgroup members", wkey);
@@ -470,34 +459,6 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			throw new ServiceException("excp.remove.mbr", dae, account, wkey);
 		}
 	}
-
-	public static RowMapper<WorkgroupMemberInfo> WGroupMemberMapper = new RowMapper<WorkgroupMemberInfo>(){
-
-		@Override
-		public WorkgroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			
-			WorkgroupMemberInfo info = new WorkgroupMemberInfo();
-			InfoId<Long> id = IdKey.GROUP_USER.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-
-			info.setAccount(rs.getString("account"));
-			info.setRole(rs.getString("role"));
-
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			info.setEmail(rs.getString("email"));
-			info.setUserName(rs.getString("full_name"));
-			info.setUserType(rs.getString("type"));
-			info.setSourceName(rs.getString("source_name"));
-			InfoId<Long> uid = IdKey.USER.getInfoId(rs.getLong("user_id"));
-			
-			info.setSourceId(rs.getInt("source_id"));
-			info.setUserId(uid);
-			
-			return info;
-		}
-	};
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override

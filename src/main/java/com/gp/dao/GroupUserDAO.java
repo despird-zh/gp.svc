@@ -1,5 +1,12 @@
 package com.gp.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import com.gp.common.IdKey;
+import com.gp.info.GroupMemberInfo;
 import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 
@@ -11,4 +18,31 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 	
 	public int deleteByGroup(InfoId<Long> membergroupId);
 	
+	public static RowMapper<GroupMemberInfo> GroupMemberMapper = new RowMapper<GroupMemberInfo>(){
+
+		@Override
+		public GroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			GroupMemberInfo gminfo = new GroupMemberInfo();
+			Long relid = rs.getLong("mbr_rel_id");
+			InfoId<Long> rid = IdKey.GROUP_USER.getInfoId(relid);
+			gminfo.setInfoId(rid);
+			gminfo.setAccount(rs.getString("account"));
+			gminfo.setDescription(rs.getString("group_descr"));
+			gminfo.setRole(rs.getString("role"));
+			gminfo.setGroupId(rs.getLong("group_id"));
+			gminfo.setGroupName(rs.getString("group_name"));
+			gminfo.setGroupType(rs.getString("group_type"));
+			gminfo.setManageId(rs.getLong("manage_id"));
+			gminfo.setUserId(rs.getLong("user_id"));
+			gminfo.setSourceId(rs.getInt("source_id"));
+			gminfo.setEmail(rs.getString("email"));
+			gminfo.setUserName(rs.getString("full_name"));
+			gminfo.setUserType(rs.getString("user_type"));
+			gminfo.setSourceName(rs.getString("source_name"));
+			gminfo.setClassification(rs.getString("classification"));
+			gminfo.setCreateTime(rs.getTimestamp("create_time"));
+			
+			return gminfo;
+		}
+	};
 }
