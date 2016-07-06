@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.NotBlank;
 /**
  * instance_id to be the primary key 
  **/
-public class InstanceInfo extends TraceableInfo<Integer>{
+public class SourceInfo extends TraceableInfo<Integer>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,7 +14,7 @@ public class InstanceInfo extends TraceableInfo<Integer>{
 	private String nodeCode;
 	
 	@NotBlank
-	private String instanceName;
+	private String sourceName;
 	
 	private String hashKey;
 	
@@ -55,12 +55,12 @@ public class InstanceInfo extends TraceableInfo<Integer>{
 		this.nodeCode = nodeCode;
 	}
 
-	public String getInstanceName() {
-		return instanceName;
+	public String getSourceName() {
+		return sourceName;
 	}
 
-	public void setInstanceName(String instanceName) {
-		this.instanceName = instanceName;
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
 	}
 
 	public String getShortName() {

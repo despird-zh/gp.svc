@@ -19,8 +19,8 @@ import com.gp.info.FlatColLocator;
 
 public enum Measures implements FlatColLocator {
 	
-	WG_MEAS_DOC(1),
-	WG_MEAS_TOPIC(2),
+	WG_MEAS_FILE(1),
+	WG_MEAS_POST(2),
 	WG_MEAS_MEMBER(3),
 	WG_MEAS_EXT_MBR(4),
 	WG_MEAS_SUB_GRP(5)

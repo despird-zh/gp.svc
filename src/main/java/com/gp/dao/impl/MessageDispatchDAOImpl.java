@@ -28,7 +28,7 @@ import com.gp.info.MessageDispatchInfo;
 @Component("messageDispatchDAO")
 public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatchDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(InstanceDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
 	public MessageDispatchDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {

@@ -95,7 +95,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 		CabinetInfo pubinfo = new CabinetInfo();
 		pubinfo.setInfoId(pubkey);
-		pubinfo.setSourceId(GeneralConstants.LOCAL_INSTANCE);
+		pubinfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 		pubinfo.setWorkgroupId(GeneralConstants.PERSON_WORKGROUP);
 		pubinfo.setCabinetName(uinfo.getAccount());
 		pubinfo.setCabinetType(Cabinets.CabinetType.PUBLISH.name());
@@ -119,7 +119,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 		CabinetInfo priinfo = new CabinetInfo();
 		priinfo.setInfoId(prikey);
-		priinfo.setSourceId(GeneralConstants.LOCAL_INSTANCE);
+		priinfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 		priinfo.setWorkgroupId(GeneralConstants.PERSON_WORKGROUP);
 		priinfo.setCabinetName(uinfo.getAccount());
 		priinfo.setCabinetType(Cabinets.CabinetType.NETDISK.name());
@@ -369,8 +369,8 @@ public class SecurityServiceImpl implements SecurityService{
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
 				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
 				.append("ON a.storage_id = c.storage_id ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
-				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
+				.append("LEFT JOIN ( SELECT source_id, source_name,short_name, abbr FROM gp_sources) b ")
+				.append("ON a.source_id = b.source_id WHERE 1 = 1 ");
 		Map<String,Object> params = new HashMap<String,Object>();
 		// account or name condition
 		if(StringUtils.isNotBlank(account)){
@@ -418,8 +418,8 @@ public class SecurityServiceImpl implements SecurityService{
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
 				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
 				.append("ON a.storage_id = c.storage_id ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) b ")
-				.append("ON a.source_id = b.instance_id WHERE 1 = 1 ");
+				.append("LEFT JOIN ( SELECT source_id, source_name,short_name, abbr FROM gp_sources) b ")
+				.append("ON a.source_id = b.source_id WHERE 1 = 1 ");
 		Map<String,Object> params = new HashMap<String,Object>();
 		// account or name condition
 		if(StringUtils.isNotBlank(accountname)){

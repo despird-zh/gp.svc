@@ -29,7 +29,7 @@ import com.gp.info.MemberSettingInfo;
 @Component("memberSettingDAO")
 public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO{
 
-	static Logger LOGGER = LoggerFactory.getLogger(InstanceDAOImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
 	public MemberSettingDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {

@@ -28,7 +28,7 @@ public enum IdKey implements Identifier{
 	WORKGROUP_MIRROR("gp_workgroup_mirror","mirror_id", Long.class),
 	CABINET("gp_cabinets","cabinet_id", Long.class),
 	ORG_HIER("gp_org_hier","org_id", Long.class),
-	INSTANCE("gp_instances","instance_id", Integer.class),
+	SOURCE("gp_sources","source_id", Integer.class),
 	USER("gp_users","user_id", Long.class),
 	GROUP("gp_groups","group_id", Long.class),
 	GROUP_USER("gp_group_user","rel_id", Long.class),

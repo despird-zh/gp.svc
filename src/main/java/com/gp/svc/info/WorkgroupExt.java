@@ -6,38 +6,40 @@ public class WorkgroupExt{
 	
 	private String nodeCode;
 	
-	private String instanceName;
+	private String sourceName;
 	
-	private String instanceAbbr;
+	private String sourceAbbr;
 	
-	private String instanceShort;
+	private String sourceShort;
 	
 	private String adminName;
 
 	private String managerName;
 	
-	public String getInstanceName() {
-		return instanceName;
+	
+
+	public String getSourceName() {
+		return sourceName;
 	}
 
-	public void setInstanceName(String instanceName) {
-		this.instanceName = instanceName;
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
 	}
 
-	public String getInstanceAbbr() {
-		return instanceAbbr;
+	public String getSourceAbbr() {
+		return sourceAbbr;
 	}
 
-	public void setInstanceAbbr(String instanceAbbr) {
-		this.instanceAbbr = instanceAbbr;
+	public void setSourceAbbr(String sourceAbbr) {
+		this.sourceAbbr = sourceAbbr;
 	}
 
-	public String getInstanceShort() {
-		return instanceShort;
+	public String getSourceShort() {
+		return sourceShort;
 	}
 
-	public void setInstanceShort(String instanceShort) {
-		this.instanceShort = instanceShort;
+	public void setSourceShort(String sourceShort) {
+		this.sourceShort = sourceShort;
 	}
 
 	public String getAdminName() {

@@ -35,10 +35,10 @@ public class MeasureServiceImpl implements MeasureService{
 			
 			MeasureInfo minfo = measuredao.queryLatest(wid, 
 					Measures.MEAS_TYPE_WG_SUM, 
-					Measures.WG_MEAS_DOC,
+					Measures.WG_MEAS_FILE,
 					Measures.WG_MEAS_EXT_MBR,
 					Measures.WG_MEAS_MEMBER,
-					Measures.WG_MEAS_TOPIC,
+					Measures.WG_MEAS_POST,
 					Measures.WG_MEAS_SUB_GRP);
 			
 			return minfo;

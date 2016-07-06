@@ -17,81 +17,81 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.common.Instances.State;
+import com.gp.common.Sources.State;
 import com.gp.config.ServiceConfigurer;
 import com.gp.common.ServiceContext;
-import com.gp.dao.InstanceDAO;
+import com.gp.dao.SourceDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.InstanceInfo;
+import com.gp.info.SourceInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
-import com.gp.svc.InstanceService;
+import com.gp.svc.SourceService;
 
 @Service("instanceService")
-public class InstanceServiceImpl implements InstanceService{
+public class SourceServiceImpl implements SourceService{
 
-	Logger LOGGER = LoggerFactory.getLogger(InstanceServiceImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(SourceServiceImpl.class);
 	
 	@Autowired
-	private InstanceDAO instancedao;
+	private SourceDAO sourcedao;
 
 	@Autowired
 	private PseudoDAO pseudodao;
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public InstanceInfo getInstnaceInfo(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
+	public SourceInfo getSource(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
 		
 		try{
 			
-			return instancedao.query(id);
+			return sourcedao.query(id);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("excp.query.with", dae, "instance", id);
+			throw new ServiceException("excp.query.with", dae, "source", id);
 		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public InstanceInfo getInstnace(ServiceContext svcctx, String entity, String node) throws ServiceException {
+	public SourceInfo getSource(ServiceContext svcctx, String entity, String node) throws ServiceException {
 		
 		try{
 			
-			return instancedao.queryByCodes(entity, node);
+			return sourcedao.queryByCodes(entity, node);
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("excp.query.with", dae, "instance", "entity:"+entity+"/node:"+node);
+			throw new ServiceException("excp.query.with", dae, "source", "entity:"+entity+"/node:"+node);
 		}
 	}
 	
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean saveInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException {
+	public boolean saveSource(ServiceContext svcctx, SourceInfo instance) throws ServiceException {
 
 		try{
 			svcctx.setTraceInfo(instance);
-			int cnt = instancedao.update(instance);
+			int cnt = sourcedao.update(instance);
 			return cnt > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("excp.update", dae, "instance");
+			throw new ServiceException("excp.update", dae, "source");
 		}
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<InstanceInfo> getInstances(ServiceContext svcctx, String instancename)
+	public List<SourceInfo> getSources(ServiceContext svcctx, String instancename)
 			throws ServiceException {
 		
-		List<InstanceInfo> rtv = null;
-		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_instances where instance_id > 0 ");
+		List<SourceInfo> rtv = null;
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sources where source_id > 0 ");
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(StringUtils.isNotBlank(instancename)){
-			SQL.append(" and (instance_name like :inst_name or abbr like :abbr or short_name like :short_name) ");
+			SQL.append(" and (source_name like :inst_name or abbr like :abbr or short_name like :short_name) ");
 			
 			String likeconds = "%" + StringUtils.trim(instancename) + "%";
 		    params.put("inst_name", likeconds);
@@ -106,11 +106,11 @@ public class InstanceServiceImpl implements InstanceService{
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(SQL.toString(), params, instancedao.getRowMapper());	
+			rtv = jtemplate.query(SQL.toString(), params, sourcedao.getRowMapper());	
 			
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("excp.query", dae, "instance");
+			throw new ServiceException("excp.query", dae, "source");
 		}
 
 		return rtv;
@@ -118,15 +118,15 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public PageWrapper<InstanceInfo> getInstances(ServiceContext svcctx, String instancename, PageQuery pagequery)
+	public PageWrapper<SourceInfo> getSources(ServiceContext svcctx, String instancename, PageQuery pagequery)
 			throws ServiceException {
 		
-		List<InstanceInfo> rtv = null;
-		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_instances where instance_id > 0 ");
+		List<SourceInfo> rtv = null;
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sources where source_id > 0 ");
 
 		Map<String,Object> params = new HashMap<String,Object>();
 		if(StringUtils.isNotBlank(instancename)){
-			SQL.append(" and (instance_name like :inst_name or abbr like :abbr or short_name like :short_name) ");
+			SQL.append(" and (source_name like :inst_name or abbr like :abbr or short_name like :short_name) ");
 			
 			String likeconds = "%" + StringUtils.trim(instancename) + "%";
 		    params.put("inst_name", likeconds);
@@ -136,7 +136,7 @@ public class InstanceServiceImpl implements InstanceService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<InstanceInfo> pwrapper = new PageWrapper<InstanceInfo>();
+		PageWrapper<SourceInfo> pwrapper = new PageWrapper<SourceInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = StringUtils.replaceOnce(SQL.toString(), "SELECT * FROM", "SELECT COUNT(*) FROM");
@@ -156,11 +156,11 @@ public class InstanceServiceImpl implements InstanceService{
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(pagesql, params, instancedao.getRowMapper());	
+			rtv = jtemplate.query(pagesql, params, sourcedao.getRowMapper());	
 			pwrapper.setRows(rtv);
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("excp.query", dae, "instance");
+			throw new ServiceException("excp.query", dae, "source");
 		}
 
 		return pwrapper;
@@ -168,39 +168,39 @@ public class InstanceServiceImpl implements InstanceService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean changeInstanceState(ServiceContext svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
+	public boolean changeSourceState(ServiceContext svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
 
 		try{
 			
-			return instancedao.updateState(instanceId, state.name()) > 0;
+			return sourcedao.updateState(instanceId, state.name()) > 0;
 		}catch(DataAccessException dae){
 			
-			throw new ServiceException("excp.update.with", dae, "instance state", instanceId);
+			throw new ServiceException("excp.update.with", dae, "source state", instanceId);
 		}
 
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addExtInstnace(ServiceContext svcctx, InstanceInfo instance) throws ServiceException {
+	public boolean addExtSource(ServiceContext svcctx, SourceInfo instance) throws ServiceException {
 		try{
 			svcctx.setTraceInfo(instance);
-			int cnt = instancedao.create(instance);
+			int cnt = sourcedao.create(instance);
 			return cnt > 0;
 		}catch(DataAccessException dae){
-			throw new ServiceException("excp.create", dae, "external instance");
+			throw new ServiceException("excp.create", dae, "external source");
 		}
 	}
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public Map<String, InstanceInfo> getAccountSources(ServiceContext svcctx, List<String> accounts) throws ServiceException {
+	public Map<String, SourceInfo> getAccountSources(ServiceContext svcctx, List<String> accounts) throws ServiceException {
 		
-		final Map<String, InstanceInfo> rtv = new HashMap<String, InstanceInfo>();
+		final Map<String, SourceInfo> rtv = new HashMap<String, SourceInfo>();
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.account ,b.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
-				.append("LEFT JOIN gp_instances b ON a.source_id = b.instance_id ")
+				.append("LEFT JOIN gp_sources b ON a.source_id = b.source_id ")
 				.append("WHERE 1 = 1 ");
 		Map<String,Object> params = new HashMap<String,Object>();
 
@@ -218,14 +218,14 @@ public class InstanceServiceImpl implements InstanceService{
 			jtemplate.query(querysql, params, new RowCallbackHandler(){
 				@Override
 				public void processRow(ResultSet arg0) throws SQLException {
-					InstanceInfo inst = instancedao.getRowMapper().mapRow(arg0, 0);
+					SourceInfo inst = sourcedao.getRowMapper().mapRow(arg0, 0);
 					String account = arg0.getString("account");
 					
 					rtv.put(account, inst);
 				}});
 			
 		}catch(DataAccessException dae){
-			throw new ServiceException("excp.query", dae, "account's instance");
+			throw new ServiceException("excp.query", dae, "account's source");
 		}
 
 		return rtv;

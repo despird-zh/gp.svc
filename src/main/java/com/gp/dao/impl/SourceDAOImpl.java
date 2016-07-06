@@ -21,27 +21,27 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.InstanceDAO;
-import com.gp.info.InstanceInfo;
+import com.gp.dao.SourceDAO;
+import com.gp.info.SourceInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("instanceDAO")
-public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
+@Component("sourceDAO")
+public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 
-	static Logger LOGGER = LoggerFactory.getLogger(InstanceDAOImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
-	public InstanceDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public SourceDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create( InstanceInfo info) {
+	public int create( SourceInfo info) {
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("insert into gp_instances (")
-			.append("instance_id,entity_code,node_code,instance_name,")
+		SQL.append("insert into gp_sources (")
+			.append("source_id,entity_code,node_code,source_name,")
 			.append("abbr,short_name,descr,email,state,")
 			.append("service_url,binary_url,admin,hash_key,")
 			.append("modifier, last_modified")
@@ -52,7 +52,7 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 			.append("?,?)");
 		
 		Object[] params = new Object[]{
-				info.getInfoId().getId(), info.getEntityCode(),info.getNodeCode(),info.getInstanceName(),
+				info.getInfoId().getId(), info.getEntityCode(),info.getNodeCode(),info.getSourceName(),
 				info.getAbbr(),info.getShortName(),info.getDescription(),info.getEmail(),info.getState(),
 				info.getServiceUrl(),info.getBinaryUrl(),info.getAdmin(),info.getHashKey(),
 				info.getModifier(),info.getModifyDate()
@@ -70,8 +70,8 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	public int delete( InfoId<?> id) {
 
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_instances ")
-			.append("where instance_id = ?");
+		SQL.append("delete from gp_sources ")
+			.append("where source_id = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -85,11 +85,11 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	}
 
 	@Override
-	public int update(InstanceInfo info, FlatColLocator ...exclcols) {
+	public int update(SourceInfo info, FlatColLocator ...exclcols) {
 		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_instances set ");
+		SQL.append("update gp_sources set ");
 		
 		if(!cols.contains("entity_code")){
 			SQL.append("entity_code = ?,");
@@ -99,9 +99,9 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 			SQL.append("node_code = ?,");
 			params.add(info.getNodeCode());
 		}
-		if(!cols.contains("instance_name")){
-			SQL.append("instance_name = ?,");
-			params.add(info.getInstanceName());
+		if(!cols.contains("source_name")){
+			SQL.append("source_name = ?,");
+			params.add(info.getSourceName());
 		}
 		if(!cols.contains("abbr")){
 			SQL.append("abbr = ?,");
@@ -141,7 +141,7 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 		}
 	
 		SQL.append("modifier = ?, last_modified = ? ")
-			.append("where instance_id = ?");
+			.append("where source_id = ?");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
@@ -155,9 +155,9 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	}
 
 	@Override
-	public InstanceInfo query( InfoId<?> id) {
-		String SQL = "select * from gp_instances "
-				+ "where instance_id = ?";
+	public SourceInfo query( InfoId<?> id) {
+		String SQL = "select * from gp_sources "
+				+ "where source_id = ?";
 		
 		Object[] params = new Object[]{				
 				id.getId()
@@ -166,7 +166,7 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		InstanceInfo ainfo = jtemplate.queryForObject(SQL, params, InstanceMapper);
+		SourceInfo ainfo = jtemplate.queryForObject(SQL, params, SourceMapper);
 		return ainfo;
 	}
 
@@ -177,18 +177,18 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 		
 	}
 
-	public static RowMapper<InstanceInfo> InstanceMapper = new RowMapper<InstanceInfo>(){
+	public static RowMapper<SourceInfo> SourceMapper = new RowMapper<SourceInfo>(){
 
 		@Override
-		public InstanceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			InstanceInfo info = new InstanceInfo();
-			InfoId<Integer> id = IdKey.INSTANCE.getInfoId(rs.getInt("instance_id"));
+		public SourceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			SourceInfo info = new SourceInfo();
+			InfoId<Integer> id = IdKey.SOURCE.getInfoId(rs.getInt("source_id"));
 			info.setInfoId(id);
 
 			info.setEntityCode(rs.getString("entity_code"));
 			info.setNodeCode(rs.getString("node_code"));
 			
-			info.setInstanceName(rs.getString("instance_name"));
+			info.setSourceName(rs.getString("source_name"));
 			info.setDescription(rs.getString("descr"));
 			info.setState(rs.getString("state"));
 			info.setAbbr(rs.getString("abbr"));
@@ -206,14 +206,14 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	};
 
 	@Override
-	public RowMapper<InstanceInfo> getRowMapper() {
+	public RowMapper<SourceInfo> getRowMapper() {
 		
-		return InstanceMapper;
+		return SourceMapper;
 	}
 
 	@Override
-	public InstanceInfo queryByHashKey(String hashKey) {
-		String SQL = "select * from gp_instances "
+	public SourceInfo queryByHashKey(String hashKey) {
+		String SQL = "select * from gp_sources "
 				+ "where hash_key = ?";
 		
 		Object[] params = new Object[]{				
@@ -223,19 +223,19 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		InstanceInfo ainfo = jtemplate.queryForObject(SQL, params, InstanceMapper);
+		SourceInfo ainfo = jtemplate.queryForObject(SQL, params, SourceMapper);
 		return ainfo;
 	}
 
 	@Override
-	public int updateState(InfoId<Integer> instanceId, String state) {
+	public int updateState(InfoId<Integer> sourceId, String state) {
 		
-		String SQL = "UPDATE gp_instances SET state = ? "
-				+ "WHERE instance_id = ?";
+		String SQL = "UPDATE gp_sources SET state = ? "
+				+ "WHERE source_id = ?";
 		
 		Object[] params = new Object[]{				
 				state,
-				instanceId.getId()
+				sourceId.getId()
 			};
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
@@ -247,9 +247,9 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 	}
 
 	@Override
-	public InstanceInfo queryByCodes(String entity, String node) {
+	public SourceInfo queryByCodes(String entity, String node) {
 		
-		String SQL = "select * from gp_instances "
+		String SQL = "select * from gp_sources "
 				+ "where entity_code = ? and node_code =?";
 		
 		Object[] params = new Object[]{				
@@ -260,7 +260,7 @@ public class InstanceDAOImpl extends DAOSupport implements InstanceDAO{
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
-		List<InstanceInfo> ainfo = jtemplate.query(SQL, params, InstanceMapper);
+		List<SourceInfo> ainfo = jtemplate.query(SQL, params, SourceMapper);
 		return (ainfo != null && ainfo.size() > 0) ? ainfo.get(0) : null;
 	}
 

@@ -17,9 +17,9 @@ package com.gp.common;
 
 import com.gp.info.InfoId;
 
-public class Instances {
+public class Sources {
 
-	public static final InfoId<Integer> LOCAL_INST_ID = IdKey.INSTANCE.getInfoId(GeneralConstants.LOCAL_INSTANCE);
+	public static final InfoId<Integer> LOCAL_INST_ID = IdKey.SOURCE.getInfoId(GeneralConstants.LOCAL_SOURCE);
 	
 	public static enum State{
 		

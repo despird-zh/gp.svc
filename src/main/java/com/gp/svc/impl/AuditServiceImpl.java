@@ -111,11 +111,7 @@ public class AuditServiceImpl implements AuditService{
 		
 		List<Object> parmlist = new ArrayList<Object>();
 		StringBuffer sqlbuf = new StringBuffer();
-		sqlbuf.append("DELETE FROM gp_audits WHERE 1=1 ")
-			.append("and instance_id = ? ");
-		
-		// query principal related data only.
-		parmlist.add(svcctx.getPrincipal().getSourceId());
+		sqlbuf.append("DELETE FROM gp_audits WHERE 1=1 ");
 		
 		if(StringUtils.isNotBlank(subject)){
 			

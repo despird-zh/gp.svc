@@ -13,8 +13,8 @@ import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
-import com.gp.dao.InstanceDAO;
-import com.gp.info.InstanceInfo;
+import com.gp.dao.SourceDAO;
+import com.gp.info.SourceInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 
@@ -24,7 +24,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 	Principal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	@Autowired
-    private InstanceDAO entitydao;
+    private SourceDAO entitydao;
 	
 	@Autowired
     private CommonService idService;
@@ -33,14 +33,14 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Integer> id = IdKey.INSTANCE.getInfoId(-9999);
+		InfoId<Integer> id = IdKey.SOURCE.getInfoId(-9999);
 		
-		InstanceInfo info = new InstanceInfo();
+		SourceInfo info = new SourceInfo();
 		info.setInfoId(id);
 		
 		info.setEntityCode("E00001");
 		info.setNodeCode("N00002");
-		info.setInstanceName("demo entity");
+		info.setSourceName("demo entity");
 		info.setDescription("description bla...");
 		info.setAbbr("AB01");
 		info.setAdmin("admin slsls");
@@ -56,7 +56,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		int c = entitydao.update( info);
 		System.out.println("--- update done:"+c);
 		
-		InstanceInfo info2= entitydao.query( id);
+		SourceInfo info2= entitydao.query( id);
 		System.out.println("--- query done:"+info2.toString());
 		
 		int d = entitydao.delete( id);
@@ -68,13 +68,13 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		principal.setAccount("acc001");
 		for(int i = 0;i<20;i++){
-			InfoId<Integer> id = idService.generateId(IdKey.INSTANCE, Integer.class);
+			InfoId<Integer> id = idService.generateId(IdKey.SOURCE, Integer.class);
 			
-			InstanceInfo info = new InstanceInfo();
+			SourceInfo info = new SourceInfo();
 			info.setInfoId(id);
 			info.setEntityCode("E00001");
 			info.setNodeCode("N0000"+(i+3));
-			info.setInstanceName("demo entity"+i);
+			info.setSourceName("demo entity"+i);
 			info.setDescription("description bla...");
 			info.setAbbr("AB01");
 			info.setAdmin("admin slsls");

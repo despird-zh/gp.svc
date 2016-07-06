@@ -6,7 +6,7 @@ public class WorkgroupMemberInfo extends GroupUserInfo{
 	
 	private InfoId<Long> userKey;
 	
-	private int instanceId;
+	private int sourceId;
 	
 	private String userName;
 	
@@ -14,7 +14,7 @@ public class WorkgroupMemberInfo extends GroupUserInfo{
 	
 	private String userType;
 
-	private String instanceName;
+	private String sourceName;
 	
 	public InfoId<Long> getUserId() {
 		return userKey;
@@ -48,20 +48,21 @@ public class WorkgroupMemberInfo extends GroupUserInfo{
 		this.userType = userType;
 	}
 
-	public String getInstanceName() {
-		return instanceName;
+	public int getSourceId() {
+		return sourceId;
 	}
 
-	public void setInstanceName(String instanceName) {
-		this.instanceName = instanceName;
+	public void setSourceId(int sourceId) {
+		this.sourceId = sourceId;
 	}
 
-	public int getInstanceId() {
-		return instanceId;
+	public String getSourceName() {
+		return sourceName;
 	}
 
-	public void setInstanceId(int instanceId) {
-		this.instanceId = instanceId;
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
 	}
-	
+
+
 }

@@ -313,13 +313,13 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.source_name,c.source_id,a.full_name,a.type,a.email,a.user_id ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
 		
 		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
 				.append("  ON b.account = a.account ")
-				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
-				.append("  ON a.source_id = c.instance_id ")
+				.append("LEFT JOIN (select source_name, source_id FROM gp_sources) c ")
+				.append("  ON a.source_id = c.source_id ")
 				.append("WHERE b.group_id = :group_id");
 		
 		params.put("group_id", memberGroupId);
@@ -331,7 +331,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		if(InfoId.isValid(sourceId)){
 			
-			SQL_FROM.append("AND c.instance_id = :source_id ");
+			SQL_FROM.append("AND c.source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
 		}
 		
@@ -359,14 +359,14 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		Map<String,Object> params = new HashMap<String,Object>();
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.instance_name,c.instance_id,a.full_name,a.type,a.email,a.user_id ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT b.*,c.source_name,c.source_id,a.full_name,a.type,a.email,a.user_id ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.user_id) ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_user b ");
 		
 		SQL_FROM.append("LEFT JOIN (SELECT user_id,source_id,account,email,full_name,type FROM gp_users) a ")
 				.append("  ON b.account = a.account ")
-				.append("LEFT JOIN (select instance_name, instance_id FROM gp_instances) c ")
-				.append("  ON a.source_id = c.instance_id ")
+				.append("LEFT JOIN (select source_name, source_id FROM gp_sources) c ")
+				.append("  ON a.source_id = c.source_id ")
 				.append("WHERE b.group_id = :group_id ")
 				.append("ORDER BY b.rel_id");
 		
@@ -379,7 +379,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		if(InfoId.isValid(sourceId)){
 			
-			SQL_FROM.append("AND c.instance_id = :source_id ");
+			SQL_FROM.append("AND c.source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
 		}
 		
@@ -489,10 +489,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			info.setEmail(rs.getString("email"));
 			info.setUserName(rs.getString("full_name"));
 			info.setUserType(rs.getString("type"));
-			info.setInstanceName(rs.getString("instance_name"));
+			info.setSourceName(rs.getString("source_name"));
 			InfoId<Long> uid = IdKey.USER.getInfoId(rs.getLong("user_id"));
 			
-			info.setInstanceId(rs.getInt("instance_id"));
+			info.setSourceId(rs.getInt("source_id"));
 			info.setUserId(uid);
 			
 			return info;
@@ -511,8 +511,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ");
 		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id from gp_group_user WHERE group_id = :group_id ) b ")
 				.append("ON b.account= a.account ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) c ")
-				.append("ON a.source_id = c.instance_id ")
+				.append("LEFT JOIN ( SELECT source_id, source_name,short_name, abbr FROM gp_sources) c ")
+				.append("ON a.source_id = c.source_id ")
 				.append("WHERE b.rel_id IS NULL ");
 
 		params.put("group_id", memberGroupId);
@@ -551,8 +551,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ");
 		SQL_FROM.append("LEFT JOIN (SELECT account,rel_id from gp_group_user WHERE group_id = :group_id ) b ")
 				.append("ON b.account= a.account ")
-				.append("LEFT JOIN ( SELECT instance_id, instance_name,short_name, abbr FROM gp_instances) c ")
-				.append("ON a.source_id = c.instance_id ")
+				.append("LEFT JOIN ( SELECT source_id, source_name,short_name, abbr FROM gp_sources) c ")
+				.append("ON a.source_id = c.source_id ")
 				.append("WHERE b.rel_id IS NULL ");
 
 		params.put("group_id", memberGroupId);
@@ -764,10 +764,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
-				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
+				.append("LEFT JOIN ( SELECT source_id,source_name,abbr,short_name,entity_code,node_code FROM gp_sources) b ON a.source_id = b.source_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
 				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
-				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE);
+				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_SOURCE);
 		
 		if(StringUtils.isNotBlank(gname)){
 			
@@ -802,10 +802,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
-				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
+				.append("LEFT JOIN ( SELECT source_id,source_name,abbr,short_name,entity_code,node_code FROM gp_sources) b ON a.source_id = b.source_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
 				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
-				.append("WHERE a.source_id <> ").append(GeneralConstants.LOCAL_INSTANCE);
+				.append("WHERE a.source_id <> ").append(GeneralConstants.LOCAL_SOURCE);
 		
 		if(StringUtils.isNotBlank(gname)){
 			
@@ -838,10 +838,10 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
 
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
-				.append("LEFT JOIN ( SELECT instance_id,instance_name,abbr,short_name,entity_code,node_code FROM gp_instances) b ON a.source_id = b.instance_id ")
+				.append("LEFT JOIN ( SELECT source_id,source_name,abbr,short_name,entity_code,node_code FROM gp_sources) b ON a.source_id = b.source_id ")
 				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
 				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
-				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE)
+				.append("WHERE a.source_id = ").append(GeneralConstants.LOCAL_SOURCE)
 				.append(" AND workgroup_id = ?");
 				
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
@@ -879,7 +879,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				.append("    ON a.avatar_id = b.image_id ")
 				.append(" LEFT JOIN (SELECT account, full_name FROM gp_users WHERE source_id = -9999) c")
 				.append("    ON c.account = a.admin")
-				.append(" WHERE a.source_id = ").append(GeneralConstants.LOCAL_INSTANCE)
+				.append(" WHERE a.source_id = ").append(GeneralConstants.LOCAL_SOURCE)
 				.append("  AND (a.workgroup_name LIKE :wgname OR a.descr LIKE :wgname) ");		
 		params.put("wgname", gname+"%");
 		
@@ -955,9 +955,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			WorkgroupExt ext = new WorkgroupExt();
 			ext.setEntityCode(rs.getString("entity_code"));
 			ext.setNodeCode(rs.getString("node_code"));
-			ext.setInstanceAbbr(rs.getString("abbr"));
-			ext.setInstanceName(rs.getString("instance_name"));
-			ext.setInstanceShort(rs.getString("short_name"));
+			ext.setSourceAbbr(rs.getString("abbr"));
+			ext.setSourceName(rs.getString("source_name"));
+			ext.setSourceShort(rs.getString("short_name"));
 			ext.setAdminName(rs.getString("full_name"));
 			ext.setManagerName(rs.getString("mgr_name"));
 			
