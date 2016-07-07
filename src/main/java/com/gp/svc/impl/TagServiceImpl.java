@@ -106,7 +106,7 @@ public class TagServiceImpl implements TagService{
 			if(LOGGER.isDebugEnabled()){
 				LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramap.toString());
 			}
-			result = jtemplate.query(SQL.toString(), paramap, tagdao.getRowMapper());
+			result = jtemplate.query(SQL.toString(), paramap, TagDAO.TagMapper);
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query",dae, "tags");
@@ -150,7 +150,7 @@ public class TagServiceImpl implements TagService{
 			if(LOGGER.isDebugEnabled()){
 				LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramap.toString());
 			}
-			final RowMapper<TagInfo> TAG_MAPPER = tagdao.getRowMapper();
+			final RowMapper<TagInfo> TAG_MAPPER = TagDAO.TagMapper;
 			jtemplate.query(SQL.toString(), paramap, new RowCallbackHandler(){
 				
 				/**

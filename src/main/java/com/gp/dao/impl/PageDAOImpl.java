@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,21 +9,17 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.info.PageInfo;
 
@@ -155,42 +149,6 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 		
 		return CollectionUtils.isEmpty(pinfos)? null : pinfos.get(0);
 	}
-
-	@Override
-	public RowMapper<PageInfo> getRowMapper() {
-		
-		return PAGE_MAPPER;
-	}
-	
-	public static RowMapper<PageInfo> PAGE_MAPPER = new RowMapper<PageInfo>(){
-
-		@Override
-		public PageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			PageInfo page = new PageInfo();
-			
-			InfoId<Integer> mid = IdKey.PAGE.getInfoId(rs.getInt("page_id"));
-			page.setInfoId(mid);
-			
-			page.setDescription(rs.getString("descr"));
-			page.setModule(rs.getString("module"));
-			page.setPageName(rs.getString("page_name"));
-			page.setPageAbbr(rs.getString("page_abbr"));
-			
-			for(int i = 1; i <= COLUMN_COUNT ; i++){
-				String val = rs.getString("act_abbr_"+i);
-				if(StringUtils.isNotBlank(val)){
-					FlatColumn col = new FlatColumn("act_abbr_", i);
-					page.putColValue(col, val);
-				}
-				
-			}
-			
-			page.setModifier(rs.getString("modifier"));
-			page.setModifyDate(rs.getTimestamp("last_modified"));
-			return page;
-		}
-		
-	};
 
 	
 	@Override

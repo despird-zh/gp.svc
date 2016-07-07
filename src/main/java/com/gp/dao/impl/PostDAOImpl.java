@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostDAO;
 import com.gp.info.FlatColLocator;
@@ -190,39 +186,5 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 		
 	}
 
-	public static RowMapper<PostInfo> PostMapper = new RowMapper<PostInfo>(){
 
-		@Override
-		public PostInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			PostInfo info = new PostInfo();
-			InfoId<Long> id = IdKey.POST.getInfoId(rs.getLong("post_id"));
-			
-			info.setInfoId(id);
-			info.setSourceId(rs.getInt("source_id"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setOwner(rs.getString("owner"));
-			info.setContent(rs.getString("content"));
-			info.setExcerpt(rs.getString("excerpt"));
-			info.setTitle(rs.getString("title"));
-			info.setState(rs.getString("state"));
-			info.setCommentOn(rs.getBoolean("comment_on"));
-			info.setPostType(rs.getString("post_type"));
-			info.setCommentCount(rs.getInt("comment_count"));
-			info.setUpvoteCount(rs.getInt("upvote_count"));
-			info.setDownvoteCount(rs.getInt("downvote_count"));
-			info.setPostDate(rs.getDate("post_time"));
-			info.setHashCode(rs.getString("hash_code"));
-			info.setOwm(rs.getLong("owm"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<PostInfo> getRowMapper() {
-		// TODO Auto-generated method stub
-		return PostMapper;
-	}
 }

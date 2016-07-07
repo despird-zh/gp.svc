@@ -45,4 +45,22 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 			return gminfo;
 		}
 	};
+	
+	public static RowMapper<GroupUserInfo> GroupUserMapper = new RowMapper<GroupUserInfo>(){
+
+		@Override
+		public GroupUserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			GroupUserInfo info = new GroupUserInfo();
+			InfoId<Long> id = IdKey.GROUP_USER.getInfoId(rs.getLong("rel_id"));
+			info.setInfoId(id);
+			
+			info.setAccount(rs.getString("account"));
+			info.setGroupId(rs.getLong("group_id"));
+			info.setRole(rs.getString("role"));
+			
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			return info;
+		}
+	};
 }

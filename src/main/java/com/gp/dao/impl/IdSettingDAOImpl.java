@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 
 import javax.sql.DataSource;
@@ -12,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.config.ServiceConfigurer;
@@ -65,21 +62,4 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<IdSettingInfo> IdSettringMapper = new RowMapper<IdSettingInfo>(){
-
-		@Override
-		public IdSettingInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			IdSettingInfo idsetting = new IdSettingInfo();
-			idsetting.setIdKey(rs.getString("id_key"));
-			idsetting.setIdName(rs.getString("id_name"));
-			idsetting.setCurrValue(rs.getLong("curr_val"));
-			idsetting.setStepIncrement(rs.getInt("step_inc"));
-			idsetting.setLength(rs.getInt("length"));
-			idsetting.setPrefix(rs.getString("prefix"));
-			idsetting.setPadChar(rs.getString("pad_char"));
-			idsetting.setModifier(rs.getString("modifier"));
-			idsetting.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return idsetting;
-		}};
 }

@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OrgHierDAO;
 import com.gp.info.FlatColLocator;
@@ -164,37 +160,8 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<OrgHierInfo> OrgHierMapper = new RowMapper<OrgHierInfo>(){
 
-		@Override
-		public OrgHierInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			
-			OrgHierInfo info = new OrgHierInfo();
-			InfoId<Long> id = IdKey.ORG_HIER.getInfoId(rs.getLong("org_id"));
-			info.setInfoId(id);
-			
-			info.setMemberGroupId(rs.getLong("mbr_group_id"));
-			info.setLevel(rs.getString("org_level"));
-			info.setParentOrg(rs.getLong("org_pid"));
-			info.setOrgName(rs.getString("org_name"));
-			info.setAdmin(rs.getString("admin"));
-			info.setEmail(rs.getString("email"));
-			info.setManager(rs.getString("manager"));
-			info.setDescription(rs.getString("descr"));
-			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}
-	};
 
-	@Override
-	public RowMapper<OrgHierInfo> getRowMapper() {
-		
-		return OrgHierMapper;
-	}
 
 	@Override
 	public List<OrgHierInfo> queryByIds(InfoId<?>... ids) {

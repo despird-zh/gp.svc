@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SourceDAO;
 import com.gp.info.SourceInfo;
@@ -177,39 +173,7 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 		
 	}
 
-	public static RowMapper<SourceInfo> SourceMapper = new RowMapper<SourceInfo>(){
 
-		@Override
-		public SourceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			SourceInfo info = new SourceInfo();
-			InfoId<Integer> id = IdKey.SOURCE.getInfoId(rs.getInt("source_id"));
-			info.setInfoId(id);
-
-			info.setEntityCode(rs.getString("entity_code"));
-			info.setNodeCode(rs.getString("node_code"));
-			
-			info.setSourceName(rs.getString("source_name"));
-			info.setDescription(rs.getString("descr"));
-			info.setState(rs.getString("state"));
-			info.setAbbr(rs.getString("abbr"));
-			info.setEmail(rs.getString("email"));
-			info.setShortName(rs.getString("short_name"));
-			info.setBinaryUrl(rs.getString("binary_url"));
-			info.setServiceUrl(rs.getString("service_url"));
-			info.setAdmin(rs.getString("admin"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<SourceInfo> getRowMapper() {
-		
-		return SourceMapper;
-	}
 
 	@Override
 	public SourceInfo queryByHashKey(String hashKey) {

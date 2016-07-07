@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabSumDAO;
 import com.gp.info.CabSumInfo;
@@ -155,31 +151,6 @@ public class CabSumDAOImpl extends DAOSupport implements CabSumDAO{
 		return CollectionUtils.isEmpty(ainfo) ? null : ainfo.get(0);
 	}
 
-	@Override
-	public RowMapper<CabSumInfo> getRowMapper() {
-		
-		return CabSumMapper;
-	}
-
-	public static RowMapper<CabSumInfo> CabSumMapper = new RowMapper<CabSumInfo>(){
-
-		@Override
-		public CabSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			CabSumInfo info = new CabSumInfo();
-			InfoId<Long> id = IdKey.USER_SUM.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setResourceType(rs.getString("resource_type"));
-			info.setFileSummary(rs.getInt("file_sum"));
-			info.setFolderSummary(rs.getInt("folder_sum"));
-			info.setTotalSize(rs.getLong("total_size"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}};
 		
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {

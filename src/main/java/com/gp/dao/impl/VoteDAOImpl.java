@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.VoteDAO;
 import com.gp.info.FlatColLocator;
@@ -143,29 +139,5 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<VoteInfo> VoteMapper = new RowMapper<VoteInfo>(){
 
-		@Override
-		public VoteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			VoteInfo info = new VoteInfo();
-			InfoId<Long> id = IdKey.VOTE.getInfoId(rs.getLong("vote_id"));
-			info.setInfoId(id);
-			
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setResourceType(rs.getString("resource_type"));
-			info.setVoter(rs.getString("voter"));
-			info.setOpinion(rs.getString("opinion"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<VoteInfo> getRowMapper() {
-		
-		return VoteMapper;
-	}
 }

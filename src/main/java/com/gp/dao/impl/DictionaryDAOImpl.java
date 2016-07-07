@@ -168,38 +168,5 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);		
 	}
 
-	public static RowMapper<DictionaryInfo> DictionaryMapper = new RowMapper<DictionaryInfo>(){
 
-		@Override
-		public DictionaryInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			DictionaryInfo info = new DictionaryInfo();
-			InfoId<Long> id = IdKey.DICTIONARY.getInfoId(rs.getLong("dict_id"));
-			info.setInfoId(id);
-
-			info.setGroup(rs.getString("dict_group"));
-			info.setKey(rs.getString("dict_key"));
-			info.setValue(rs.getString("dict_value"));
-			info.setDefaultLang(rs.getString("default_lang"));
-		
-			Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
-			labelMap.put(FlatColumns.DICT_DE_DE, rs.getString(FlatColumns.DICT_DE_DE.getColumn()));
-			labelMap.put(FlatColumns.DICT_EN_US, rs.getString(FlatColumns.DICT_EN_US.getColumn()));
-			labelMap.put(FlatColumns.DICT_FR_FR, rs.getString(FlatColumns.DICT_ZH_CN.getColumn()));
-			labelMap.put(FlatColumns.DICT_ZH_CN, rs.getString(FlatColumns.DICT_ZH_CN.getColumn()));
-			labelMap.put(FlatColumns.DICT_RU_RU, rs.getString(FlatColumns.DICT_RU_RU.getColumn()));
-			
-			info.setLabelMap(labelMap);
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}
-	};
-	
-	@Override
-	public RowMapper<DictionaryInfo> getRowMapper() {
-		
-		return DictionaryMapper;
-	}
 }

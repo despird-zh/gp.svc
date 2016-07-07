@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabFileDAO;
 import com.gp.info.CabFileInfo;
@@ -216,47 +212,6 @@ public class CabFileDAOImpl extends DAOSupport implements CabFileDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<CabFileInfo> CabFileMapper = new RowMapper<CabFileInfo>(){
-
-		@Override
-		public CabFileInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			CabFileInfo info = new CabFileInfo();
-			InfoId<Long> id = IdKey.CAB_FILE.getInfoId(rs.getLong("file_id"));
-			info.setInfoId(id);
-	
-			info.setSourceId(rs.getInt("source_id"));
-			info.setCabinetId(rs.getLong("cabinet_id"));
-			info.setParentId(rs.getLong("folder_id"));
-			info.setEntryName(rs.getString("file_name"));
-			info.setDescription(rs.getString("descr"));
-			info.setProfile(rs.getString("profile"));
-			info.setProperties(rs.getString("properties"));
-			info.setAclId(rs.getLong("acl_id"));
-			info.setSize(rs.getLong("size"));
-			info.setOwner(rs.getString("owner"));
-			info.setCommentOn(rs.getBoolean("comment_on"));
-			info.setVersion(rs.getString("version"));
-			info.setState(rs.getString("state"));
-			info.setBinaryId(rs.getLong("binary_id"));
-			info.setFormat(rs.getString("format"));
-			info.setCreator(rs.getString("creator"));
-			info.setCreateDate(rs.getTimestamp("create_time"));
-			info.setHashCode(rs.getString("hash_code"));
-			info.setClassification(rs.getString("classification"));
-			info.setOwm(rs.getLong("owm"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-
-	@Override
-	public RowMapper<CabFileInfo> getRowMapper() {
-		
-		return CabFileMapper;
-	}
 
 	@Override
 	public List<CabFileInfo> queryByParent(Long parentFolderId) {

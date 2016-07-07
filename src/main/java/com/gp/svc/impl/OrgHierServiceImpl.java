@@ -80,7 +80,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 		try{
 			
-			orglist = jtemplate.query(SQL.toString(), new Object[]{parentNodeId.getId()}, orghierdao.getRowMapper());
+			orglist = jtemplate.query(SQL.toString(), new Object[]{parentNodeId.getId()}, OrgHierDAO.OrgHierMapper);
 		
 		}catch(DataAccessException dae){
 			
@@ -257,7 +257,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			LOGGER.debug("SQL : " + SQL.toString() + " / PARAMS : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(SQL.toString(), params, userdao.getRowMapper());	
+			rtv = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);	
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "org hierarchy", orgid);
 		}

@@ -579,7 +579,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		List<GroupInfo> result = null;
 		try{
-			result = jtemplate.query(SQL.toString(), params, groupdao.getRowMapper());
+			result = jtemplate.query(SQL.toString(), params, GroupDAO.GroupMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "workgroup groups");
 		}
@@ -693,7 +693,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 		List<UserInfo> result = null;
 		try{
-			result = jtemplate.query(SQL.toString(), params, userdao.getRowMapper());
+			result = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "workgroup group members");
 		}
@@ -883,50 +883,5 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 		return pwrapper;
 	}
-	
-	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> WorkgroupLiteMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>(){
 
-		@Override
-		public CombineInfo<WorkgroupInfo,WorkgroupLite> mapRow(ResultSet rs, int rowNum) throws SQLException {
-			
-			CombineInfo<WorkgroupInfo,WorkgroupLite> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupLite>();
-			WorkgroupInfo info = WorkgroupDAOImpl.WorkgroupMapper.mapRow(rs, rowNum);
-			
-			WorkgroupLite lite = new WorkgroupLite();
-			lite.setAdminName(rs.getString("full_name"));
-			lite.setImageExt(rs.getString("image_ext"));
-			lite.setImageFormat(rs.getString("image_format"));
-			lite.setImageTouch(rs.getTimestamp("touch_time"));
-			
-			cinfo.setPrimary(info);
-			cinfo.setExtended(lite);
-			
-			return cinfo;
-		}
-	};
-
-	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>> WorkgroupExMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>>(){
-
-		public CombineInfo<WorkgroupInfo,WorkgroupExt> mapRow(ResultSet rs, int rowNum) throws SQLException {
-		
-			CombineInfo<WorkgroupInfo,WorkgroupExt> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupExt>();
-			
-			WorkgroupInfo info = WorkgroupDAOImpl.WorkgroupMapper.mapRow(rs, rowNum);
-			
-			WorkgroupExt ext = new WorkgroupExt();
-			ext.setEntityCode(rs.getString("entity_code"));
-			ext.setNodeCode(rs.getString("node_code"));
-			ext.setSourceAbbr(rs.getString("abbr"));
-			ext.setSourceName(rs.getString("source_name"));
-			ext.setSourceShort(rs.getString("short_name"));
-			ext.setAdminName(rs.getString("full_name"));
-			ext.setManagerName(rs.getString("mgr_name"));
-			
-			cinfo.setPrimary(info);
-			cinfo.setExtended(ext);
-			
-			return cinfo;
-		}
-		
-	};
 }

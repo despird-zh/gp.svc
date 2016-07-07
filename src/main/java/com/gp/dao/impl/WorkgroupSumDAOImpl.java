@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupSumDAO;
 import com.gp.info.FlatColLocator;
@@ -159,33 +155,6 @@ public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{
 
 		return CollectionUtils.isEmpty(ainfo) ? null : ainfo.get(0);
 	}
-
-	@Override
-	public RowMapper<WorkgroupSumInfo> getRowMapper() {
-		
-		return WorkgroupSumMapper;
-	}
-
-	public static RowMapper<WorkgroupSumInfo> WorkgroupSumMapper = new RowMapper<WorkgroupSumInfo>(){
-
-		@Override
-		public WorkgroupSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			WorkgroupSumInfo info = new WorkgroupSumInfo();
-			InfoId<Long> id = IdKey.WORKGROUP_SUM.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setFileSummary(rs.getInt("file_sum"));
-			info.setMemberSummary(rs.getInt("member_sum"));
-			info.setNetdiskSummary(rs.getInt("netdisk_sum"));
-			info.setPublishSummary(rs.getInt("publish_sum"));
-			info.setPostSummary(rs.getInt("post_sum"));
-			info.setTaskSummary(rs.getInt("task_sum"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}};
 	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {

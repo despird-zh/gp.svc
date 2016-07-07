@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.AbstractLobCreatingPreparedStatementCallback;
 import org.springframework.jdbc.core.support.AbstractLobStreamingResultSetExtractor;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
@@ -36,7 +35,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.info.FlatColLocator;
@@ -236,30 +234,6 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<ImageInfo> ImageMapper = new RowMapper<ImageInfo>(){
-		
-		@Override
-		public ImageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			ImageInfo info = new ImageInfo();
-			InfoId<Long> id = IdKey.IMAGE.getInfoId(rs.getLong("image_id"));
-			info.setInfoId(id);
-			
-			info.setImageName(rs.getString("image_name"));
-			info.setFormat(rs.getString("image_format"));
-			info.setExtension(rs.getString("image_ext"));
-			info.setTouchTime(rs.getTimestamp("touch_time"));
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}
-	};
-	
-	@Override
-	public RowMapper<ImageInfo> getRowMapper() {
-		
-		return ImageMapper;
-	}
 
 	@Override
 	public ImageInfo query(InfoId<Long> infoid, String parentPath) {

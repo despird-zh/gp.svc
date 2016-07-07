@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
@@ -135,29 +132,6 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		
 	}
 
-	public static RowMapper<GroupUserInfo> GroupUserMapper = new RowMapper<GroupUserInfo>(){
-
-		@Override
-		public GroupUserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			GroupUserInfo info = new GroupUserInfo();
-			InfoId<Long> id = IdKey.GROUP_USER.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setAccount(rs.getString("account"));
-			info.setGroupId(rs.getLong("group_id"));
-			info.setRole(rs.getString("role"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<GroupUserInfo> getRowMapper() {
-	
-		return GroupUserMapper;
-	}
 
 	@Override
 	public int deleteByAccount(InfoId<Long> groupId, String account) {

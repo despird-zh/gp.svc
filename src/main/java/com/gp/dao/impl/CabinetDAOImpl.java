@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.info.CabinetInfo;
@@ -169,39 +165,6 @@ public class CabinetDAOImpl extends DAOSupport implements CabinetDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<CabinetInfo> CabinetMapper = new RowMapper<CabinetInfo>(){
-
-		@Override
-		public CabinetInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-
-			CabinetInfo info = new CabinetInfo();
-			InfoId<Long> id = IdKey.CABINET.getInfoId(	rs.getLong("cabinet_id"));
-			
-			info.setInfoId(id);
-			info.setSourceId(rs.getInt("source_id"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setCabinetName(rs.getString("cabinet_name"));
-			info.setDescription(rs.getString("descr"));
-			info.setVersionable(rs.getBoolean("version_enable"));
-			info.setCapacity(rs.getLong("capacity"));
-			info.setStorageId(rs.getInt("storage_id"));
-			info.setCreateDate(rs.getTimestamp("create_time"));
-			info.setCreator(rs.getString("creator"));
-			info.setCabinetType(rs.getString("cabinet_type"));
-			info.setUsed(rs.getLong("used"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-
-	@Override
-	public RowMapper<CabinetInfo> getRowMapper() {
-		
-		return CabinetMapper;
-	}
 
 	@Override
 	public int updateCabCapacity(InfoId<Long> cabinet, Long capacity) {

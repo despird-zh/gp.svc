@@ -1,7 +1,5 @@
 package com.gp.dao;
 
-import org.springframework.jdbc.core.RowMapper;
-
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
@@ -50,8 +48,4 @@ public interface BaseDAO <T> {
 	 **/
 	public T query(InfoId<?> id);
 
-	/**
-	 * Get the row wrapper.
-	 **/
-	public RowMapper<T> getRowMapper();
 }

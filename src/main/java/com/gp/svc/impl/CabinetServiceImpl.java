@@ -120,7 +120,7 @@ public class CabinetServiceImpl implements CabinetService{
 			if(LOGGER.isDebugEnabled())
 				LOGGER.debug("SQL : {} / Params : {}",SQL.toString(),params.toString() );
 			
-			result = jdbctemplate.query(SQL.toString(), params, cabfolderdao.getRowMapper());
+			result = jdbctemplate.query(SQL.toString(), params, CabFolderDAO.CabFolderMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -196,7 +196,7 @@ public class CabinetServiceImpl implements CabinetService{
 		List<CabFolderInfo> result = null;
 		try{
 			
-			result = jtemplate.query(pagesql, params, cabfolderdao.getRowMapper());
+			result = jtemplate.query(pagesql, params, CabFolderDAO.CabFolderMapper);
 			
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "Cabinet Folder", ckey);
@@ -257,7 +257,7 @@ public class CabinetServiceImpl implements CabinetService{
 			if(LOGGER.isDebugEnabled())
 				LOGGER.debug("SQL : {} / Params : {}",SQL.toString(), params.toString() );
 			
-			result = jdbctemplate.query(SQL.toString(), params, cabfiledao.getRowMapper());
+			result = jdbctemplate.query(SQL.toString(), params, CabFileDAO.CabFileMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -335,7 +335,7 @@ public class CabinetServiceImpl implements CabinetService{
 		List<CabFileInfo> result = null;
 		try{
 			
-			result = jtemplate.query(pagesql.toString(), params, cabfiledao.getRowMapper());
+			result = jtemplate.query(pagesql.toString(), params, CabFileDAO.CabFileMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -440,7 +440,7 @@ public class CabinetServiceImpl implements CabinetService{
 		
 		
 		JdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		RowMapper<CabinetInfo> mapper = cabinetdao.getRowMapper();
+		RowMapper<CabinetInfo> mapper = CabinetDAO.CabinetMapper;
 		
 		Object[] parms = new Object[]{GeneralConstants.PERSON_WORKGROUP, account};
 		if(LOGGER.isDebugEnabled())

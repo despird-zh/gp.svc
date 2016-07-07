@@ -304,12 +304,6 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 		
 		return CollectionUtils.isEmpty(minfos) ? null : minfos.get(0);
 	}
-
-	@Override
-	public RowMapper<MeasureInfo> getRowMapper() {
-		
-		return getRowMapper(new FlatColLocator[0]);
-	}
 	
 	public RowMapper<MeasureInfo> getRowMapper(final FlatColLocator... columns) {
 		

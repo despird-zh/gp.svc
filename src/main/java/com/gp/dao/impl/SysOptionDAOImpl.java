@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SysOptionDAO;
 import com.gp.info.FlatColLocator;
@@ -150,23 +146,6 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<SysOptionInfo> SysOptionMapper = new RowMapper<SysOptionInfo>(){
-
-		@Override
-		public SysOptionInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			SysOptionInfo info = new SysOptionInfo();
-			InfoId<Integer> id = IdKey.SYS_OPTION.getInfoId(rs.getInt("sys_opt_id"));
-			info.setInfoId(id);
-
-			info.setOptionGroup(rs.getString("opt_group"));
-			info.setOptionKey(rs.getString("opt_key"));
-			info.setOptionValue(rs.getString("opt_value"));
-			info.setDescription(rs.getString("descr"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}};
 
 	@Override
 	public List<SysOptionInfo> queryAll() {
@@ -224,12 +203,6 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 		option = jtemplate.queryForObject(SQL, params, SysOptionMapper);
 
 		return option;
-	}
-
-	@Override
-	public RowMapper<SysOptionInfo> getRowMapper() {
-		// TODO Auto-generated method stub
-		return SysOptionMapper;
 	}
 
 	@Override

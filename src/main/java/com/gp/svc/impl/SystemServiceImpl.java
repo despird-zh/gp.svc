@@ -96,7 +96,7 @@ public class SystemServiceImpl implements SystemService{
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			List<SysOptionInfo> rows = jdbctemplate.query(SQL.toString(), params, sysoptiondao.getRowMapper());	
+			List<SysOptionInfo> rows = jdbctemplate.query(SQL.toString(), params, SysOptionDAO.SysOptionMapper);	
 			return rows;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "system options", groupKey);
@@ -139,7 +139,7 @@ public class SystemServiceImpl implements SystemService{
 		}
 		
 		try{
-			rows = jdbctemplate.query(pagesql, params, sysoptiondao.getRowMapper());	
+			rows = jdbctemplate.query(pagesql, params, SysOptionDAO.SysOptionMapper);	
 			pwrapper.setRows(rows);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "system options");

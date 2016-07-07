@@ -67,7 +67,7 @@ public class ActLogServiceImpl implements ActLogService{
 		}
 		List<ActLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, actlogdao.getRowMapper());
+			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -109,7 +109,7 @@ public class ActLogServiceImpl implements ActLogService{
 		}
 		List<ActLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, actlogdao.getRowMapper());
+			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -152,7 +152,7 @@ public class ActLogServiceImpl implements ActLogService{
 		}
 		List<ActLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, actlogdao.getRowMapper());
+			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){

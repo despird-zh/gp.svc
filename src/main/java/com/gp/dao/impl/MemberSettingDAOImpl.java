@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MemberSettingDAO;
 import com.gp.info.FlatColLocator;
@@ -133,32 +129,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 		MemberSettingInfo ainfo = jtemplate.queryForObject(SQL, params, MemberSettingMapper);
 		return ainfo;
 	}
-
-	@Override
-	public RowMapper<MemberSettingInfo> getRowMapper() {
-		
-		return MemberSettingMapper;
-	}
-
-	static RowMapper<MemberSettingInfo> MemberSettingMapper = new RowMapper<MemberSettingInfo>(){
-
-		@Override
-		public MemberSettingInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			MemberSettingInfo info = new MemberSettingInfo();
-			InfoId<Long> id = IdKey.MBR_SETTING.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setAccount(rs.getString("account"));
-			info.setGroupType(rs.getString("group_type"));
-			info.setManageId(rs.getLong("manage_id"));
-			info.setPostVisible(rs.getBoolean("post_visible"));
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}
-		
-	};
+	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 

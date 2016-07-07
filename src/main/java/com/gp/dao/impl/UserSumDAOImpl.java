@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserSumDAO;
 import com.gp.info.FlatColLocator;
@@ -150,33 +146,7 @@ public class UserSumDAOImpl extends DAOSupport implements UserSumDAO{
 
 		return CollectionUtils.isEmpty(ainfo) ? null : ainfo.get(0);
 	}
-	
-	@Override
-	public RowMapper<UserSumInfo> getRowMapper() {
-		
-		return UserSumMapper;
-	}
 
-	public static RowMapper<UserSumInfo> UserSumMapper = new RowMapper<UserSumInfo>(){
-
-		@Override
-		public UserSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			UserSumInfo info = new UserSumInfo();
-			InfoId<Long> id = IdKey.USER_SUM.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setAccount(rs.getString("account"));
-			info.setFileSummary(rs.getInt("file_sum"));
-			info.setPostSummary(rs.getInt("post_sum"));
-			info.setShareSummary(rs.getInt("share_sum"));
-			info.setTaskSummary(rs.getInt("task_sum"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			
-			return info;
-		}};
-		
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);

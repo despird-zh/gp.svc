@@ -58,7 +58,7 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		try{
-			return jtemplate.query(SQL.toString(), params, rolepagedao.getRowMapper());
+			return jtemplate.query(SQL.toString(), params, RolePageDAO.RolePageMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae,"RolePage", roleId);
 		}

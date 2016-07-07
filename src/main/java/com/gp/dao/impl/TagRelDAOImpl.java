@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TagRelDAO;
 import com.gp.info.FlatColLocator;
@@ -140,30 +136,6 @@ public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<TagRelInfo> TagRelMapper = new RowMapper<TagRelInfo>(){
-
-		@Override
-		public TagRelInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			TagRelInfo info = new TagRelInfo();
-			InfoId<Long> id = IdKey.TAG_REL.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-			
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setTagName(rs.getString("tag_name"));
-			info.setResourceType(rs.getString("resource_type"));
-			info.setCategory(rs.getString("category"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<TagRelInfo> getRowMapper() {
-		
-		return TagRelMapper;
-	}
 
 	@Override
 	public TagRelInfo query( InfoId<?> resId, String tagName) {

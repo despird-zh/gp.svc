@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachRelDAO;
 import com.gp.info.AttachRelInfo;
@@ -147,33 +143,4 @@ public class AttachRelDAOImpl extends DAOSupport implements AttachRelDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<AttachRelInfo> AttachRelMapper = new RowMapper<AttachRelInfo>(){
-
-		@Override
-		public AttachRelInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			
-			AttachRelInfo info = new AttachRelInfo();
-			InfoId<Long> id = IdKey.ATTACH_REL.getInfoId(rs.getLong("rel_id"));
-			
-			info.setInfoId(id);
-
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setAttachId(rs.getLong("atta_id"));
-			info.setAttachName(rs.getString("atta_name"));
-			info.setAttachType(rs.getString("atta_type"));
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setResourceType(rs.getString("resource_type"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-		
-	};
-		
-	@Override
-	public RowMapper<AttachRelInfo> getRowMapper() {
-		
-		return AttachRelMapper;
-	}
 }

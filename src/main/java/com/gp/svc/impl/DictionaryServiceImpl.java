@@ -44,7 +44,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		RowMapper<DictionaryInfo> rmapper = dictionarydao.getRowMapper();
+		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 		
 		try{
 			List<DictionaryInfo> result = template.query(SQL.toString(), rmapper);
@@ -64,7 +64,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		RowMapper<DictionaryInfo> rmapper = dictionarydao.getRowMapper();
+		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 		
 		Object[] parms = new Object[]{				
 				dictGroup
@@ -113,7 +113,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		RowMapper<DictionaryInfo> rmapper = dictionarydao.getRowMapper();
+		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 		
 		Object[] parms = new Object[]{				
 				dictKey
@@ -140,7 +140,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 			SQL.append(" AND dict_group = 'info_prop'");
 		}
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		RowMapper<DictionaryInfo> rmapper = dictionarydao.getRowMapper();
+		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 		Object[] parms = new Object[]{				
 				dictKey
 			};
@@ -165,7 +165,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 		SQL.append("select * from gp_dictionary where dict_group = ?");
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		RowMapper<DictionaryInfo> rmapper = dictionarydao.getRowMapper();
+		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 		
 		Object[] parms = new Object[]{				
 				dictGroup

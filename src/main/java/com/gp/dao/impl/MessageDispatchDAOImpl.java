@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MessageDispatchDAO;
 import com.gp.info.FlatColLocator;
@@ -150,30 +146,4 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<MessageDispatchInfo> MessageDispatchMapper = new RowMapper<MessageDispatchInfo>(){
-
-		@Override
-		public MessageDispatchInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			MessageDispatchInfo info = new MessageDispatchInfo();
-			InfoId<Long> id = IdKey.MESSAGE.getInfoId(rs.getLong("rel_id"));
-			info.setInfoId(id);
-
-			info.setMessageId(rs.getLong("message_id"));
-			info.setMessageContent(rs.getString("msg_content"));
-			info.setAccount(rs.getString("account"));
-			info.setGlobalAccount(rs.getString("global_account"));
-			info.setTouchFlag(rs.getBoolean("touch_flag"));
-			info.setTouchTime(rs.getDate("touch_time"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<MessageDispatchInfo> getRowMapper() {
-		
-		return MessageDispatchMapper;
-	}
 }

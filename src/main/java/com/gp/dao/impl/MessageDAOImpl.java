@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MessageDAO;
 import com.gp.info.FlatColLocator;
@@ -176,36 +172,6 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-	public static RowMapper<MessageInfo> MessageMapper = new RowMapper<MessageInfo>(){
 
-		@Override
-		public MessageInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			MessageInfo info = new MessageInfo();
-			InfoId<Long> id = IdKey.MESSAGE.getInfoId(rs.getLong("message_id"));
-			info.setInfoId(id);
-			
-			info.setSourceId(rs.getInt("source_id"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setCabinetId(rs.getLong("cabinet_id"));
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setResourceType(rs.getString("resource_type"));
-			info.setOperation(rs.getString("operation"));
-			info.setSendAccount(rs.getString("send_account"));
-			info.setReplyEnable(rs.getBoolean("reply_enable"));
-			info.setCategory(rs.getString("category"));
-			info.setMsgDictKey(rs.getString("msg_dict_key"));
-			info.setMsgParams(rs.getString("msg_params_json"));
-			info.setSendGlobalAccount(rs.getString("send_global_account"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
 
-	@Override
-	public RowMapper<MessageInfo> getRowMapper() {
-		// TODO Auto-generated method stub
-		return MessageMapper;
-	}
 }

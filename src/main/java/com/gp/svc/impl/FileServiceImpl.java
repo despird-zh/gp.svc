@@ -299,7 +299,7 @@ public class FileServiceImpl implements FileService{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, ArrayUtils.toString(params));
 		}
 		try{
-			List<StorageInfo> storages = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());
+			List<StorageInfo> storages = jtemplate.query(SQL.toString(), params, StorageDAO.StorageMapper);
 		
 			return CollectionUtils.isEmpty(storages)? null : storages.get(0);
 		}catch(DataAccessException dae){
@@ -325,7 +325,7 @@ public class FileServiceImpl implements FileService{
 			LOGGER.debug("SQL : {} / params : {}", qbuf.toString(), ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
+			rtv = jtemplate.queryForObject(qbuf.toString(), params, CabinetDAO.CabinetMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with",dae, "cabinet", fileid);
 		}

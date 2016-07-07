@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,16 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.PageDAO;
 import com.gp.dao.RolePageDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.info.RolePageInfo;
 
@@ -141,43 +135,11 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		
-		List<RolePageInfo> pinfos = jtemplate.query(SQL, params, ROLEPAGE_MAPPER);
+		List<RolePageInfo> pinfos = jtemplate.query(SQL, params, RolePageMapper);
 		
 		return CollectionUtils.isEmpty(pinfos)? null : pinfos.get(0);
 	}
-
-	@Override
-	public RowMapper<RolePageInfo> getRowMapper() {
-		
-		return ROLEPAGE_MAPPER;
-	}
 	
-	public static RowMapper<RolePageInfo> ROLEPAGE_MAPPER = new RowMapper<RolePageInfo>(){
-
-		@Override
-		public RolePageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			RolePageInfo rpage = new RolePageInfo();
-			
-			InfoId<Integer> mid = IdKey.PAGE.getInfoId(rs.getInt("rel_id"));
-			rpage.setInfoId(mid);
-			
-			rpage.setPageId(rs.getInt("page_id"));
-			rpage.setRoleId(rs.getInt("role_id"));
-			
-			for(int i = 1; i <= PageDAO.COLUMN_COUNT ; i++){
-				Boolean val = rs.getBoolean("act_perm_"+i);
-				
-				FlatColumn col = new FlatColumn("act_perm_", i);
-				rpage.putColValue(col, val);			
-				
-			}
-			
-			rpage.setModifier(rs.getString("modifier"));
-			rpage.setModifyDate(rs.getTimestamp("last_modified"));
-			return rpage;
-		}
-		
-	};
 	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {

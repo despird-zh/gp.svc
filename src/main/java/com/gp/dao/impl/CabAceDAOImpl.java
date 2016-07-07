@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
@@ -142,34 +138,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-	}
-
-	public static RowMapper<CabAceInfo> CabAceMapper = new RowMapper<CabAceInfo>(){
-
-		@Override
-		public CabAceInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			CabAceInfo info = new CabAceInfo();
-			InfoId<Long> id = IdKey.CAB_ACE.getInfoId(rs.getLong("ace_id"));
-			
-			info.setInfoId(id);
-			info.setAclId(rs.getLong("acl_id"));
-			info.setSubject(rs.getString("subject"));
-			info.setSubjectType(rs.getString("subject_type"));
-			info.setPrivilege(rs.getInt("privilege"));
-			info.setPermissions(rs.getString("perm_json"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}};
-		
-
-
-	@Override
-	public RowMapper<CabAceInfo> getRowMapper() {
-		
-		return CabAceMapper;
-	}
+	}		
 
 	@Override
 	public CabAceInfo queryBySubject(Long aclid, String type, String subject) {

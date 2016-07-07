@@ -251,7 +251,7 @@ public class FolderServiceImpl implements FolderService{
 			LOGGER.debug("SQL : {} / params : {}", qbuf.toString(), ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.queryForObject(qbuf.toString(), params, cabinetdao.getRowMapper());
+			rtv = jtemplate.queryForObject(qbuf.toString(), params, CabinetDAO.CabinetMapper);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with",dae, "cabinet", folderid);
 		}

@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -129,29 +128,7 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 		List<FavoriteInfo> infos = jtemplate.query(SQL, params, FavMapper);
 		return CollectionUtils.isEmpty(infos)? null : infos.get(0);
 	}
-
-	@Override
-	public RowMapper<FavoriteInfo> getRowMapper() {
 	
-		return FavMapper;
-	}
-
-	public static RowMapper<FavoriteInfo> FavMapper = new RowMapper<FavoriteInfo>(){
-
-		@Override
-		public FavoriteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			FavoriteInfo info = new FavoriteInfo();
-			InfoId<Long> id = IdKey.FAVORITE.getInfoId(rs.getLong("favorite_id"));
-			info.setInfoId(id);
-			info.setFavoriter(rs.getString("favoriter"));
-			info.setResourceId(rs.getLong("resource_id"));
-			info.setResourceType(rs.getString("resource_type"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
 	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {

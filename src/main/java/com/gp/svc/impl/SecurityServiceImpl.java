@@ -224,7 +224,7 @@ public class SecurityServiceImpl implements SecurityService{
 				Object[] parms = new Object[]{account, type};
 				
 				JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-				uinfo = jtemplate.queryForObject(SQL.toString(), parms, userdao.getRowMapper());
+				uinfo = jtemplate.queryForObject(SQL.toString(), parms, UserDAO.UserMapper);
 			}
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "Account lite information");
@@ -253,7 +253,7 @@ public class SecurityServiceImpl implements SecurityService{
 				LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), ArrayUtils.toString(params));
 			
 			JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-			List<GroupUserInfo> gulist = jtemplate.query(SQL.toString(), params, groupuserdao.getRowMapper());
+			List<GroupUserInfo> gulist = jtemplate.query(SQL.toString(), params, GroupUserDAO.GroupUserMapper);
 			role = CollectionUtils.isEmpty(gulist)? null : gulist.get(0).getRole();
 		
 		}catch(DataAccessException dae){

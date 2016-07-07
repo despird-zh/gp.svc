@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AuditDAO;
 import com.gp.info.AuditInfo;
@@ -183,42 +179,5 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 	
-	public static RowMapper<AuditInfo> AuditMapper = new RowMapper<AuditInfo>(){
 
-		@Override
-		public AuditInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-		
-			AuditInfo info = new AuditInfo();
-
-			InfoId<Long> id = IdKey.AUDIT.getInfoId(rs.getLong("audit_id"));
-			info.setInfoId(id);
-			
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
-
-			info.setClient(rs.getString("client"));
-			info.setHost(rs.getString("host"));
-			info.setApp(rs.getString("app"));
-			info.setVersion(rs.getString("version"));
-			
-			info.setVerb(rs.getString("verb"));
-			info.setSubject(rs.getString("subject"));
-			info.setPredicates(rs.getString("predicate_json"));
-			info.setTarget(rs.getString("object"));
-			info.setState(rs.getString("state"));
-			info.setMessage(rs.getString("message"));
-			info.setAuditDate(rs.getTimestamp("audit_time"));
-			info.setElapseTime(rs.getLong("elapse_time"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-		
-	};
-	
-	@Override
-	public RowMapper<AuditInfo> getRowMapper() {
-		
-		return AuditMapper;
-	}
 }

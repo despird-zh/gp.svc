@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,15 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserRoleDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.info.UserRoleInfo;
 
@@ -129,41 +124,9 @@ public class UserRoleDAOImple extends DAOSupport implements UserRoleDAO{
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		
-		List<UserRoleInfo> pinfos = jtemplate.query(SQL, params, USERROLE_MAPPER);
+		List<UserRoleInfo> pinfos = jtemplate.query(SQL, params, UserRoleMapper);
 		
 		return CollectionUtils.isEmpty(pinfos)? null : pinfos.get(0);
-	}
-	
-	public static RowMapper<UserRoleInfo> USERROLE_MAPPER = new RowMapper<UserRoleInfo>(){
-
-		@Override
-		public UserRoleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			UserRoleInfo ur = new UserRoleInfo();
-			
-			InfoId<Long> mid = IdKey.USER_ROLE.getInfoId(rs.getLong("rel_id"));
-			ur.setInfoId(mid);
-			
-			ur.setUserId(rs.getLong("user_id"));
-		
-			for(int i = 1; i <= COLUMN_COUNT ; i++){
-				Integer val = rs.getInt("role_"+i);
-				if(val > 0){
-					FlatColumn col = new FlatColumn("role_", i);
-					ur.putColValue(col, val);
-				}				
-			}
-			
-			ur.setModifier(rs.getString("modifier"));
-			ur.setModifyDate(rs.getTimestamp("last_modified"));
-			return ur;
-		}
-		
-	};
-	
-	@Override
-	public RowMapper<UserRoleInfo> getRowMapper() {
-		
-		return USERROLE_MAPPER;
 	}
 
 	@Override

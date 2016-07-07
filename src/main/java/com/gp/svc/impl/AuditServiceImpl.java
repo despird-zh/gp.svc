@@ -66,7 +66,7 @@ public class AuditServiceImpl implements AuditService{
 		
 		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = parmlist.toArray();
-		RowMapper<AuditInfo> mapper = auditdao.getRowMapper();
+		RowMapper<AuditInfo> mapper = AuditDAO.AuditMapper;
 		
 		if(LOGGER.isDebugEnabled()){
 			

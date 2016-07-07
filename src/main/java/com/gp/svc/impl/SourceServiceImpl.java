@@ -106,7 +106,7 @@ public class SourceServiceImpl implements SourceService{
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(SQL.toString(), params, sourcedao.getRowMapper());	
+			rtv = jtemplate.query(SQL.toString(), params, SourceDAO.SourceMapper);	
 			
 		}catch(DataAccessException dae){
 			
@@ -156,7 +156,7 @@ public class SourceServiceImpl implements SourceService{
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(pagesql, params, sourcedao.getRowMapper());	
+			rtv = jtemplate.query(pagesql, params, SourceDAO.SourceMapper);	
 			pwrapper.setRows(rtv);
 		}catch(DataAccessException dae){
 			
@@ -218,7 +218,7 @@ public class SourceServiceImpl implements SourceService{
 			jtemplate.query(querysql, params, new RowCallbackHandler(){
 				@Override
 				public void processRow(ResultSet arg0) throws SQLException {
-					SourceInfo inst = sourcedao.getRowMapper().mapRow(arg0, 0);
+					SourceInfo inst = SourceDAO.SourceMapper.mapRow(arg0, 0);
 					String account = arg0.getString("account");
 					
 					rtv.put(account, inst);

@@ -173,7 +173,7 @@ public class StorageServiceImpl implements StorageService{
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(SQL.toString(), params, storagedao.getRowMapper());	
+			rtv = jtemplate.query(SQL.toString(), params, StorageDAO.StorageMapper);	
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "storage");
 		}
@@ -212,7 +212,7 @@ public class StorageServiceImpl implements StorageService{
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(pagesql, params, storagedao.getRowMapper());	
+			rtv = jtemplate.query(pagesql, params, StorageDAO.StorageMapper);	
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "storage");
 		}

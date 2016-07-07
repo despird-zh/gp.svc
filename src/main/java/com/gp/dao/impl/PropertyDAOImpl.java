@@ -1,7 +1,5 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.FlatColLocator;
@@ -141,29 +137,5 @@ public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 		
 	}
 
-	public static RowMapper<PropertyInfo> PropertyMapper = new RowMapper<PropertyInfo>(){
 
-		@Override
-		public PropertyInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			PropertyInfo info = new PropertyInfo();
-			InfoId<Long> id = IdKey.PROPERTY.getInfoId(rs.getLong("prop_id"));
-			info.setInfoId(id);
-
-			info.setLabel(rs.getString("prop_label"));
-			info.setType(rs.getString("type"));
-			info.setDefaultValue(rs.getString("default_value"));
-			info.setEnumValues(rs.getString("enums"));
-			info.setFormat(rs.getString("format"));
-			
-			info.setModifier(rs.getString("modifier"));
-			info.setModifyDate(rs.getTimestamp("last_modified"));
-			return info;
-		}
-	};
-
-	@Override
-	public RowMapper<PropertyInfo> getRowMapper() {
-		
-		return PropertyMapper;
-	}
 }
