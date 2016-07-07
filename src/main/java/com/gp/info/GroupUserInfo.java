@@ -7,7 +7,7 @@ public class GroupUserInfo extends TraceableInfo<Long>{
 	private static final long serialVersionUID = 1L;
 
 	private Long groupId;
-	
+
 	@NotEmpty
 	private String account;
 
