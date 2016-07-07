@@ -359,7 +359,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(user_id) ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_mbrs ");
 		
-		SQL_FROM.append("WHERE b.group_id = :group_id ");
+		SQL_FROM.append("WHERE group_id = :group_id ");
 		params.put("group_id", memberGroupId);
 		
 		if(StringUtils.isNotBlank(uname)){
