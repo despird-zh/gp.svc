@@ -1,9 +1,6 @@
 package com.gp.dao.impl;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,11 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
