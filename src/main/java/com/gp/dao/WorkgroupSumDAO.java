@@ -11,6 +11,8 @@ import com.gp.info.WorkgroupSumInfo;
 
 public interface WorkgroupSumDAO extends BaseDAO<WorkgroupSumInfo>{
 
+	public WorkgroupSumInfo queryByWId(InfoId<Long> wgroupId);
+	
 	public static RowMapper<WorkgroupSumInfo> WorkgroupSumMapper = new RowMapper<WorkgroupSumInfo>(){
 
 		@Override

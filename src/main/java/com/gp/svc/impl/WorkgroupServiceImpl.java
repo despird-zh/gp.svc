@@ -1,8 +1,6 @@
 package com.gp.svc.impl;
 
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +34,7 @@ import com.gp.dao.ImageDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.dao.WorkgroupDAO;
-import com.gp.dao.impl.WorkgroupDAOImpl;
+import com.gp.dao.WorkgroupSumDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.CabinetInfo;
 import com.gp.info.CombineInfo;
@@ -50,6 +47,7 @@ import com.gp.info.InfoId;
 import com.gp.info.SysOptionInfo;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupInfo;
+import com.gp.info.WorkgroupSumInfo;
 import com.gp.svc.info.WorkgroupLite;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -96,6 +94,9 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Autowired 
 	SystemService systemservice;
+	
+	@Autowired
+	WorkgroupSumDAO workgroupsumdao;
 	
 	@Autowired
 	ImageDAO imagedao;
@@ -882,6 +883,18 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 
 		return pwrapper;
+	}
+
+	@Override
+	public WorkgroupSumInfo getWorkgroupSummary(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
+		
+		try{
+			
+			return workgroupsumdao.queryByWId(wkey);
+			
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query", dae ,"workgroup summary");
+		}
 	}
 
 }

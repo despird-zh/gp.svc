@@ -161,4 +161,24 @@ public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
+	@Override
+	public WorkgroupSumInfo queryByWId(InfoId<Long> wgroupId) {
+		
+		String SQL = "select * from gp_user_summary "
+				+ "where workgroup_id = ? ";
+		
+		Object[] params = new Object[]{				
+				wgroupId.getId()
+			};
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+
+		List<WorkgroupSumInfo>	ainfo = jtemplate.query(SQL, params, WorkgroupSumMapper);
+
+		return CollectionUtils.isEmpty(ainfo) ? null : ainfo.get(0);
+	}
+
 }

@@ -16,6 +16,7 @@ import com.gp.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.UserInfo;
 import com.gp.info.WorkgroupInfo;
+import com.gp.info.WorkgroupSumInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.UserExt;
@@ -86,6 +87,7 @@ public interface WorkgroupService {
 	
 	public List<CombineInfo<WorkgroupInfo,WorkgroupExt>> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 
+	public WorkgroupSumInfo getWorkgroupSummary(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException ;
 	
 	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> WorkgroupLiteMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>(){
 
