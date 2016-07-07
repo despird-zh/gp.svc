@@ -164,7 +164,7 @@ public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{
 	@Override
 	public WorkgroupSumInfo queryByWId(InfoId<Long> wgroupId) {
 		
-		String SQL = "select * from gp_user_summary "
+		String SQL = "select * from gp_workgroup_summary "
 				+ "where workgroup_id = ? ";
 		
 		Object[] params = new Object[]{				
