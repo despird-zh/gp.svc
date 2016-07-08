@@ -16,39 +16,36 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.MessageDispatchDAO;
+import com.gp.dao.ChatMessageDispatchDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.MessageDispatchInfo;
+import com.gp.info.ChatMessageDispatchInfo;
 
 @Component("messageDispatchDAO")
-public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatchDAO{
+public class ChatMessageDispatchDAOImpl extends DAOSupport implements ChatMessageDispatchDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
-	public MessageDispatchDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ChatMessageDispatchDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create( MessageDispatchInfo info) {
+	public int create( ChatMessageDispatchInfo info) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("insert into gp_message_dispatch (")
-			.append("rel_id, message_id, ")
-			.append("msg_content, account, global_account, ")
+		SQL.append("INSERT INTO gp_chat_dispatch (")
+			.append("rel_id, message_id, receiver,")
 			.append("touch_flag, touch_time, ")
 			.append("modifier, last_modified")
-			.append(")values(")
-			.append("?,?,")
+			.append(") VALUES (")
 			.append("?,?,?,")
 			.append("?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				key.getId(),info.getMessageId(),
-				info.getMessageContent(),info.getAccount(),info.getGlobalAccount(),
+				key.getId(),info.getMessageId(), info.getReceiver(),
 				info.getTouchFlag(),info.getTouchTime(),
 				info.getModifier(),info.getModifyDate()
 		};
@@ -64,8 +61,8 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 	@Override
 	public int delete( InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_message_dispatch ")
-			.append("where rel_id = ? ");
+		SQL.append("DELETE FROM gp_chat_dispatch ")
+			.append("WHERE rel_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -79,27 +76,21 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 	}
 
 	@Override
-	public int update( MessageDispatchInfo info, FlatColLocator ...exclcols) {
+	public int update( ChatMessageDispatchInfo info, FlatColLocator ...exclcols) {
 		StringBuffer SQL = new StringBuffer();
 		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
-		SQL.append("update gp_message_dispatch set ");
+		SQL.append("UPDATE gp_chat_dispatch SET ");
+		
 		if(!cols.contains("message_id")){
 			SQL.append("message_id = ?,");
 			params.add(info.getMessageId());
 		}
-		if(!cols.contains("msg_content")){
-			SQL.append("msg_content = ?,");
-			params.add(info.getMessageContent());
+		if(!cols.contains("receiver")){
+			SQL.append("receiver = ?,");
+			params.add(info.getReceiver());
 		}
-		if(!cols.contains("account")){
-			SQL.append("account = ?,");
-			params.add(info.getAccount());
-		}
-		if(!cols.contains("global_account")){
-			SQL.append("global_account = ?, ");
-			params.add(info.getGlobalAccount());
-		}
+
 		if(!cols.contains("touch_flag")){
 			SQL.append("touch_flag = ?,");
 			params.add(info.getTouchFlag());
@@ -110,12 +101,11 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 		}
 		
 		SQL.append("modifier = ?,last_modified = ? ")
-		.append("where rel_id = ? ");
+		.append("WHERE rel_id = ? ");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
 	
-		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
@@ -125,9 +115,9 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 	}
 
 	@Override
-	public MessageDispatchInfo query( InfoId<?> id) {
-		String SQL = "select * from gp_message_dispatch "
-				+ "where rel_id = ?";
+	public ChatMessageDispatchInfo query( InfoId<?> id) {
+		String SQL = "SELECT * FROM gp_chat_dispatch "
+				+ "WHERE rel_id = ?";
 		
 		Object[] params = new Object[]{				
 				id.getId()
@@ -137,7 +127,7 @@ public class MessageDispatchDAOImpl extends DAOSupport implements MessageDispatc
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
 		}
-		MessageDispatchInfo ainfo = jtemplate.queryForObject(SQL, params, MessageDispatchMapper);
+		ChatMessageDispatchInfo ainfo = jtemplate.queryForObject(SQL, params, MessageDispatchMapper);
 		return ainfo;
 	}
 

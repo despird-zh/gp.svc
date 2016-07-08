@@ -17,11 +17,11 @@ import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.dao.MeasureDAO;
-import com.gp.dao.MessageDAO;
+import com.gp.dao.ChatMessageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.MeasureInfo;
-import com.gp.info.MessageInfo;
+import com.gp.info.ChatMessageInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

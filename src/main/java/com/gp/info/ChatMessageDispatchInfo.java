@@ -2,18 +2,14 @@ package com.gp.info;
 
 import java.util.Date;
 
-public class MessageDispatchInfo extends TraceableInfo<Long>{
+public class ChatMessageDispatchInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = 1L;
 
 	private Long messageId;
-	
-	private String messageContent;
-	
-	private String account;
-	
-	private String globalAccount;
-	
+
+	private String receiver;
+
 	private Boolean touchFlag;
 	
 	private Date touchTime;
@@ -26,28 +22,12 @@ public class MessageDispatchInfo extends TraceableInfo<Long>{
 		this.messageId = messageId;
 	}
 
-	public String getMessageContent() {
-		return messageContent;
+	public String getReceiver() {
+		return receiver;
 	}
 
-	public void setMessageContent(String messageContent) {
-		this.messageContent = messageContent;
-	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
-	public String getGlobalAccount() {
-		return globalAccount;
-	}
-
-	public void setGlobalAccount(String globalAccount) {
-		this.globalAccount = globalAccount;
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
 	}
 
 	public Boolean getTouchFlag() {

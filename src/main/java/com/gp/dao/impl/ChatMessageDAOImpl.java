@@ -16,43 +16,37 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.MessageDAO;
+import com.gp.dao.ChatMessageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.MessageInfo;
+import com.gp.info.ChatMessageInfo;
 
 @Component("messageDAO")
-public class MessageDAOImpl extends DAOSupport implements MessageDAO{
+public class ChatMessageDAOImpl extends DAOSupport implements ChatMessageDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(MessageDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(ChatMessageDAOImpl.class);
 	
 	@Autowired
-	public MessageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ChatMessageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create( MessageInfo info) {
+	public int create( ChatMessageInfo info) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("insert into gp_messages (")
-			.append("source_id,workgroup_id,message_id,")
-			.append("cabinet_id,resource_id,resource_type,operation,")
-			.append("msg_dict_key, msg_params_json,  category,")
-			.append("send_global_account, send_account,  reply_enable,")
+		SQL.append("INSERT INTO gp_chat_msgs (")
+			.append("message_id,chat_id,msg_type, msg_content,")
+			.append("resource_id,resource_type,sender,send_time,")
 			.append("modifier,last_modified")
-			.append(")values(")
-			.append("?,?,?,")
+			.append(") VALUES (")
 			.append("?,?,?,?,")
-			.append("?,?,?,")
-			.append("?,?,?,")
+			.append("?,?,?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getSourceId(),info.getWorkgroupId(),key.getId(),
-				info.getCabinetId(),info.getResourceId(),info.getResourceType(),info.getOperation(),
-				info.getMsgDictKey(),info.getMsgParams(),info.getCategory(),
-				info.getSendGlobalAccount(),info.getSendAccount(),info.getReplyEnable(),
+				key.getId(), info.getChatId(),info.getMessageType(),info.getMessageContent(),
+				info.getResourceId(),info.getResourceType(),info.getSender(),info.getSendTime(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -67,7 +61,7 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 	@Override
 	public int delete( InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_messages ")
+		SQL.append("delete from gp_chat_msgs ")
 			.append("where message_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -82,18 +76,19 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 	}
 
 	@Override
-	public int update(MessageInfo info, FlatColLocator ...exclcols) {
+	public int update(ChatMessageInfo info, FlatColLocator ...exclcols) {
 		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_messages set ");
-		if(!cols.contains("workgroup_id")){
-			SQL.append("workgroup_id = ?,");
-			params.add(info.getWorkgroupId());
+		SQL.append("UPDATE gp_chat_msgs SET ");
+		
+		if(!cols.contains("chat_id")){
+			SQL.append("chat_id = ?,");
+			params.add(info.getChatId());
 		}
-		if(!cols.contains("cabinet_id")){
-			SQL.append("cabinet_id = ?,");
-			params.add(info.getCabinetId());
+		if(!cols.contains("msg_type")){
+			SQL.append("msg_type = ?,");
+			params.add(info.getMessageType());
 		}
 		if(!cols.contains("resource_id")){
 			SQL.append("resource_id = ?,");
@@ -103,41 +98,21 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}
-		if(!cols.contains("operation")){
-			SQL.append("operation = ?,");
-			params.add(info.getOperation());
+		if(!cols.contains("msg_content")){
+			SQL.append("msg_content = ?,");
+			params.add(info.getMessageContent());
 		}
-		if(!cols.contains("msg_dict_key")){
-			SQL.append("msg_dict_key = ?, ");
-			params.add(info.getMsgDictKey());
+		if(!cols.contains("sender")){
+			SQL.append("sender = ?, ");
+			params.add(info.getSender());
 		}
-		if(!cols.contains("msg_params_json")){
-			SQL.append("msg_params_json = ?,  ");
-			params.add(info.getMsgParams());
-		}
-		if(!cols.contains("category")){
-			SQL.append("category = ?,");
-			params.add(info.getCategory());
-		}
-		if(!cols.contains("source_id")){
-			SQL.append("source_id = ?, ");
-			params.add(info.getSourceId());
-		}
-		if(!cols.contains("send_global_account")){
-		SQL.append("send_global_account = ?, ");
-		params.add(info.getSendGlobalAccount());
-		}
-		if(!cols.contains("send_account")){
-		SQL.append("send_account = ?,  ");
-		params.add(info.getSendAccount());
-		}
-		if(!cols.contains("reply_enable")){
-		SQL.append("reply_enable = ?,");
-		params.add(info.getReplyEnable());
+		if(!cols.contains("send_time")){
+			SQL.append("send_time = ?,  ");
+			params.add(info.getSendTime());
 		}
 		
 		SQL.append("modifier = ?,last_modified = ? ")
-			.append("where message_id = ? ");
+			.append("WHERE message_id = ? ");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
@@ -151,9 +126,9 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 	}
 
 	@Override
-	public MessageInfo query( InfoId<?> id) {
-		String SQL = "select * from gp_messages "
-				+ "where message_id = ? ";
+	public ChatMessageInfo query( InfoId<?> id) {
+		String SQL = "SELECT * FROM gp_chat_msgs "
+				+ "WHERE message_id = ? ";
 		
 		Object[] params = new Object[]{				
 				id.getId()
@@ -163,7 +138,7 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
-		MessageInfo ainfo = jtemplate.queryForObject(SQL, params, MessageMapper);
+		ChatMessageInfo ainfo = jtemplate.queryForObject(SQL, params, MessageMapper);
 		return ainfo;
 	}
 
@@ -171,7 +146,5 @@ public class MessageDAOImpl extends DAOSupport implements MessageDAO{
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-
-
 
 }

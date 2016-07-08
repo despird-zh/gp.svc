@@ -12,11 +12,11 @@ import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
-import com.gp.dao.MessageDAO;
-import com.gp.dao.MessageDispatchDAO;
+import com.gp.dao.ChatMessageDAO;
+import com.gp.dao.ChatMessageDispatchDAO;
 import com.gp.info.InfoId;
-import com.gp.info.MessageDispatchInfo;
-import com.gp.info.MessageInfo;
+import com.gp.info.ChatMessageDispatchInfo;
+import com.gp.info.ChatMessageInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})
@@ -25,7 +25,7 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 	Principal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	@Autowired
-    private MessageDispatchDAO msgdao;
+    private ChatMessageDispatchDAO msgdao;
 	
 	@Autowired
     private CommonService idService;
@@ -37,12 +37,9 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		InfoId<Long> id = idService.generateId( IdKey.MESSAGE_DISPATCH,Long.class);
 			
-		MessageDispatchInfo info = new MessageDispatchInfo();
+		ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
 		info.setInfoId(id);
 		
-		info.setAccount("acc");
-		info.setGlobalAccount("gacc");
-		info.setMessageContent("xxxxx");
 		info.setMessageId(123l);
 		info.setTouchFlag(false);
 		info.setTouchTime(new Date(System.currentTimeMillis()));
@@ -56,7 +53,7 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		int c = msgdao.update( info);
 		System.out.println("--- update done:"+c);
 		
-		MessageDispatchInfo info2= msgdao.query( id);
+		ChatMessageDispatchInfo info2= msgdao.query( id);
 		System.out.println("--- query done:"+info2.toString());
 		
 		int d = msgdao.delete( id);
@@ -71,12 +68,9 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		for(int i = 0;i<5;i++){
 			InfoId<Long> id = idService.generateId( IdKey.MESSAGE_DISPATCH,Long.class);
 			
-			MessageDispatchInfo info = new MessageDispatchInfo();
+			ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
 			info.setInfoId(id);
 			
-			info.setAccount("acc" + i);
-			info.setGlobalAccount("gacc" +i);
-			info.setMessageContent("xxxxx" + i);
 			info.setMessageId(123l);
 			info.setTouchFlag(false);
 			info.setTouchTime(new Date(System.currentTimeMillis()));

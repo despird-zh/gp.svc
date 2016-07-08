@@ -7,22 +7,20 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.MessageDispatchInfo;
+import com.gp.info.ChatMessageDispatchInfo;
 
-public interface MessageDispatchDAO extends BaseDAO<MessageDispatchInfo>{
+public interface ChatMessageDispatchDAO extends BaseDAO<ChatMessageDispatchInfo>{
 
-	public static RowMapper<MessageDispatchInfo> MessageDispatchMapper = new RowMapper<MessageDispatchInfo>(){
+	public static RowMapper<ChatMessageDispatchInfo> MessageDispatchMapper = new RowMapper<ChatMessageDispatchInfo>(){
 
 		@Override
-		public MessageDispatchInfo mapRow(ResultSet rs, int arg1) throws SQLException {
-			MessageDispatchInfo info = new MessageDispatchInfo();
+		public ChatMessageDispatchInfo mapRow(ResultSet rs, int arg1) throws SQLException {
+			ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
 			InfoId<Long> id = IdKey.MESSAGE.getInfoId(rs.getLong("rel_id"));
 			info.setInfoId(id);
 
 			info.setMessageId(rs.getLong("message_id"));
-			info.setMessageContent(rs.getString("msg_content"));
-			info.setAccount(rs.getString("account"));
-			info.setGlobalAccount(rs.getString("global_account"));
+			info.setReceiver(rs.getString("receiver"));
 			info.setTouchFlag(rs.getBoolean("touch_flag"));
 			info.setTouchTime(rs.getDate("touch_time"));
 			
