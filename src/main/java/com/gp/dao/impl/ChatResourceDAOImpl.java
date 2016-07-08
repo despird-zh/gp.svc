@@ -16,38 +16,34 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.ChatDAO;
-import com.gp.info.ChatInfo;
+import com.gp.dao.ChatResourceDAO;
+import com.gp.info.ChatResourceInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("chatDAO")
-public class ChatDAOImpl extends DAOSupport implements ChatDAO{
+@Component("chatresourceDAO")
+public class ChatResourceDAOImpl extends DAOSupport implements ChatResourceDAO{
 
-	Logger LOGGER = LoggerFactory.getLogger(ChatDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(ChatResourceDAOImpl.class);
 	
 	@Autowired
-	public ChatDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ChatResourceDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create(ChatInfo info) {
+	public int create(ChatResourceInfo info) {
 		StringBuffer SQL = new StringBuffer();
-		
-		SQL.append("INSERT INTO gp_chats (")
-			.append("chat_id,chat_type, sponsor,topic,")
-			.append("mbr_group_id,create_time,")
+		SQL.append("INSERT INTO gp_chat_resc (")
+			.append("rel_id,chat_id,resource_id,resource_type,")
 			.append("modifier,last_modified")
 			.append(") VALUES (")
 			.append("?,?,?,?,")
-			.append("?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				key.getId(), info.getChatType(),info.getSponsor(),info.getTopic(),
-				info.getMemberGroupId(),info.getCreateTime(),
+				key.getId(), info.getChatId(),info.getResourceId(),info.getResourceType(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -61,8 +57,8 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 	@Override
 	public int delete(InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("DELETE FROM gp_chats ")
-			.append("WHERE chat_id = ? ");
+		SQL.append("DELETE FROM gp_chat_resc ")
+			.append("WHERE rel_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -76,35 +72,27 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 	}
 
 	@Override
-	public int update(ChatInfo info, FlatColLocator... excludeCols) {
+	public int update(ChatResourceInfo info, FlatColLocator... excludeCols) {
 		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("UPDATE gp_chats SET ");
+		SQL.append("UPDATE gp_chat_resc SET ");
 		
-		if(!cols.contains("chat_type")){
-			SQL.append("chat_type = ?,  ");
-			params.add(info.getChatType());
+		if(!cols.contains("chat_id")){
+			SQL.append("chat_id = ?,");
+			params.add(info.getChatId());
 		}
-		if(!cols.contains("sponsor")){
-			SQL.append("sponsor = ?,  ");
-			params.add(info.getSponsor());
+		if(!cols.contains("resource_id")){
+			SQL.append("resource_id = ?,");
+			params.add(info.getResourceId());
 		}
-		if(!cols.contains("topic")){
-			SQL.append("topic = ?,  ");
-			params.add(info.getTopic());
-		}
-		if(!cols.contains("mbr_group_id")){
-			SQL.append("mbr_group_id = ?,  ");
-			params.add(info.getMemberGroupId());
-		}
-		if(!cols.contains("create_time")){
-			SQL.append("create_time = ?,  ");
-			params.add(info.getCreateTime());
+		if(!cols.contains("resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
 		}
 		
 		SQL.append("modifier = ?,last_modified = ? ")
-		.append("WHERE chat_id = ? ");
+			.append("WHERE rel_id = ? ");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
@@ -118,9 +106,9 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 	}
 
 	@Override
-	public ChatInfo query(InfoId<?> id) {
-		String SQL = "SELECT * FROM gp_chats "
-				+ "WHERE chat_id = ? ";
+	public ChatResourceInfo query(InfoId<?> id) {
+		String SQL = "SELECT * FROM gp_chat_resc "
+				+ "WHERE rel_id = ? ";
 		
 		Object[] params = new Object[]{				
 				id.getId()
@@ -130,7 +118,7 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 		if(LOGGER.isDebugEnabled()){
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
-		ChatInfo ainfo = jtemplate.queryForObject(SQL, params, ChatMapper);
+		ChatResourceInfo ainfo = jtemplate.queryForObject(SQL, params, ChatResourceMapper);
 		return ainfo;
 	}
 
