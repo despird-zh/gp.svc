@@ -1,5 +1,7 @@
 package com.gp.info;
 
+import java.util.Date;
+
 public class NotificationInfo extends TraceableInfo<Long>{
 	
 	private static final long serialVersionUID = 1L;
@@ -20,7 +22,7 @@ public class NotificationInfo extends TraceableInfo<Long>{
 
 	private String sender;
 	
-	private String sendTime;
+	private Date sendTime;
 
 	public Long getWorkgroupId() {
 		return workgroupId;
@@ -86,11 +88,11 @@ public class NotificationInfo extends TraceableInfo<Long>{
 		this.sender = sender;
 	}
 
-	public String getSendTime() {
+	public Date getSendTime() {
 		return sendTime;
 	}
 
-	public void setSendTime(String sendTime) {
+	public void setSendTime(Date sendTime) {
 		this.sendTime = sendTime;
 	}
 		

@@ -62,6 +62,10 @@ public enum IdKey implements Identifier{
 	CHAT_RESC("gp_chat_resc","rel_id", Long.class),
 	MESSAGE("gp_chat_msgs","message_id", Long.class),
 	MESSAGE_DISPATCH("gp_chat_dispatch","rel_id", Long.class),
+	
+	NOTIF("gp_notifications","notification_id", Long.class),
+	NOTIF_DISPATCH("gp_notification_dispatch","rel_id", Long.class),
+	
 	IMAGE("gp_images","image_id", Long.class),
 	MEASURE("gp_measures","measure_id", Long.class),
 	PAGE("gp_pages","page_id", Integer.class),
