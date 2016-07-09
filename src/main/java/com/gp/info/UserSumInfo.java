@@ -12,7 +12,7 @@ public class UserSumInfo extends TraceableInfo<Long>{
 	private static final long serialVersionUID = 5728500858516252991L;
 
 	private String account;
-	
+
 	private Integer fileSummary;
 	
 	private Integer taskSummary;
@@ -20,7 +20,7 @@ public class UserSumInfo extends TraceableInfo<Long>{
 	private Integer shareSummary;
 	
 	private Integer postSummary;
-
+	
 	public String getAccount() {
 		return account;
 	}

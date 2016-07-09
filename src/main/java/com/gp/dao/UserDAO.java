@@ -62,6 +62,7 @@ public interface UserDAO extends BaseDAO<UserInfo>{
 			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));
 			info.setStorageId(rs.getInt("storage_id"));
+			info.setAvatarId(rs.getLong("avatar_id"));
 			info.setClassification(rs.getString("classification"));
 			info.setSignature(rs.getString("signature"));
 			

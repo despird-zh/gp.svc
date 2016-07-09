@@ -43,14 +43,14 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			.append("email, password, state, create_time,")
 			.append("extra_info, retry_times, last_logon,classification,")
 			.append("language, timezone, publish_cabinet_id, netdisk_cabinet_id,")
-			.append("signature,storage_id,modifier,last_modified")
+			.append("signature,storage_id,avatar_id,modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,?,?)");
+			.append("?,?,?,?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
@@ -59,7 +59,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
 				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),info.getClassification(),
 				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
-				info.getSignature(),info.getStorageId(),info.getModifier(),info.getModifyDate()
+				info.getSignature(),info.getStorageId(),info.getAvatarId(),info.getModifier(),info.getModifyDate()
 		};
 		if(LOGGER.isDebugEnabled()){
 			
@@ -182,6 +182,10 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			SQL.append("storage_id = ?,");
 			params.add(info.getStorageId());
 		}
+		if(!cols.contains("avatar_id")){
+			SQL.append("avatar_id = ?,");
+			params.add(info.getAvatarId());
+		}
 		if(!cols.contains("signature")){
 			SQL.append("signature = ?,");
 			params.add(info.getSignature());
@@ -294,19 +298,19 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		// account or name condition
 		if(StringUtils.isNotBlank(accountname)){
 			
-			SQL.append(" and (account like ? or full_name like ? ) ");
+			SQL.append(" AND (account like ? or full_name like ? ) ");
 			parmlist.add("%" + StringUtils.trim(accountname) + "%");
 			parmlist.add("%" + StringUtils.trim(accountname) + "%");
 		}
 		// entity condition
 		if(StringUtils.isNotBlank(instance)){
 			
-			SQL.append(" and source_id = ? ");
+			SQL.append(" AND source_id = ? ");
 			parmlist.add(instance);
 		}
 		// user type condition
 		if(!ArrayUtils.isEmpty(type)){
-			SQL.append(" and type in ("); 
+			SQL.append(" AND type in ("); 
 			for (int i=0; i< type.length; i++) { 
 				if (i!=0) SQL.append(", "); 
 				SQL.append("?"); 

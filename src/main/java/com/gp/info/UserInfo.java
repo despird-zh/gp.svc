@@ -54,6 +54,8 @@ public class UserInfo extends TraceableInfo<Long>{
 
 	private Integer storageId;
 	
+	private Long avatarId;
+	
 	@NotNull
 	private String language;
 	
@@ -234,6 +236,14 @@ public class UserInfo extends TraceableInfo<Long>{
 
 	public void setSignature(String signature) {
 		this.signature = signature;
+	}
+
+	public Long getAvatarId() {
+		return avatarId;
+	}
+
+	public void setAvatarId(Long avatarId) {
+		this.avatarId = avatarId;
 	}
 		
 }
