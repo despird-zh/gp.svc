@@ -25,7 +25,7 @@ public interface GroupDAO extends BaseDAO<GroupInfo>{
 			
 			info.setInfoId(id);
 
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
+			info.setManageId(rs.getLong("manage_id"));
 			info.setGroupName(rs.getString("group_name"));
 			info.setGroupType(rs.getString("group_type"));
 			info.setDescription(rs.getString("descr"));

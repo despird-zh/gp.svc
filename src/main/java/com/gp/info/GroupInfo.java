@@ -10,7 +10,7 @@ public class GroupInfo extends TraceableInfo<Long>{
 
 	@NotNull
 	@Min(value=1)
-	private Long workgroupId;
+	private Long manageId;
 	
 	@NotNull
 	@Size(min=1, max=16)
@@ -30,12 +30,12 @@ public class GroupInfo extends TraceableInfo<Long>{
 
 	private String description;
 
-	public Long getWorkgroupId() {
-		return workgroupId;
+	public Long getManageId() {
+		return manageId;
 	}
 
-	public void setWorkgroupId(Long workgroupId) {
-		this.workgroupId = workgroupId;
+	public void setManageId(Long manageId) {
+		this.manageId = manageId;
 	}
 
 	public String getGroupName() {

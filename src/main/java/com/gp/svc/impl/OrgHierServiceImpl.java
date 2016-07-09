@@ -99,8 +99,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		GroupInfo ginfo = new GroupInfo();
 		InfoId<Long> gid = idservice.generateId(IdKey.GROUP, Long.class);
 		ginfo.setInfoId(gid);
-		// org group with fixed workgroup ORGHIER_WORKGROUP=-998
-		ginfo.setWorkgroupId(GeneralConstants.ORGHIER_WORKGROUP);
+		
 		ginfo.setGroupName(orginfo.getOrgName() + "'s group");
 		ginfo.setDescription(orginfo.getDescription());
 		ginfo.setGroupType(GroupUsers.GroupType.ORG_HIER_MBR.name());
@@ -114,7 +113,9 @@ public class OrgHierServiceImpl implements OrgHierService{
 		mbrinfo.setGroupId(gid.getId());
 		mbrinfo.setRole(GroupUsers.OrgHierMemberRole.MANAGER.name());
 		svcctx.setTraceInfo(mbrinfo);
-		try{	
+		try{
+			// org group with orghier id
+			ginfo.setManageId(orginfo.getInfoId().getId());
 			// create group
 			groupdao.create(ginfo);
 			// create group user

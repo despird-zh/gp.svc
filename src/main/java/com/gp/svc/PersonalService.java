@@ -6,7 +6,6 @@ import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.GroupMemberInfo;
 import com.gp.info.InfoId;
-import com.gp.info.ChatMessageInfo;
 import com.gp.info.OrgHierInfo;
 import com.gp.info.UserSumInfo;
 import com.gp.info.WorkgroupInfo;
@@ -17,7 +16,20 @@ public interface PersonalService {
 	
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... ids)throws ServiceException;
 	
-	public List<GroupMemberInfo> getGroupMembers(ServiceContext svcctx, String account, String ... grpTypes) throws ServiceException;
+	/**
+	 * Get the work group member belonging relationship by account.
+	 * this helps to find the work group belongs of a user.
+	 * 
+	 * @param account the account information
+	 **/
+	public List<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, String account) throws ServiceException;
+	/**
+	 * Get the org hier member belonging relationship by account
+	 * this helps to find the org hier belongs of a user.
+	 * 
+	 * @param account the account information
+	 **/
+	public List<GroupMemberInfo> getOrgHierMembers(ServiceContext svcctx, String account) throws ServiceException;
 	
 	public UserSumInfo getUserSummary(ServiceContext svcctx, String account) throws ServiceException;
 

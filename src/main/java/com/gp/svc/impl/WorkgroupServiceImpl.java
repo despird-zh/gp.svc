@@ -180,7 +180,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		group.setInfoId(grpid);
 		group.setGroupName("Workgroup's Member Group");
 		group.setGroupType(GroupUsers.GroupType.WORKGROUP_MBR.name());
-		group.setWorkgroupId(winfo.getInfoId().getId());
+		group.setManageId(winfo.getInfoId().getId());
 		winfo.setMemberGroupId(grpid.getId());
 		svcctx.setTraceInfo(group);
 		// create group user record
@@ -315,7 +315,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_mbrs ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroup_mbrs ");
 		
 		SQL_FROM.append("WHERE group_id = :group_id");
 		params.put("group_id", memberGroupId);
@@ -357,7 +357,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(user_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_group_mbrs ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroup_mbrs ");
 		
 		SQL_FROM.append("WHERE group_id = :group_id ");
 		params.put("group_id", memberGroupId);
@@ -597,7 +597,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		try{		
 			ginfo.setGroupType(GroupUsers.GroupType.WORKGROUP_GRP.name());
-			InfoId<Long> wgoupId = IdKey.WORKGROUP.getInfoId(ginfo.getWorkgroupId());
+			InfoId<Long> wgoupId = IdKey.WORKGROUP.getInfoId(ginfo.getManageId());
 			GroupInfo orig = groupdao.queryByName(wgoupId,GroupUsers.GroupType.WORKGROUP_GRP.name(), ginfo.getGroupName());
 			if(null != orig){
 				

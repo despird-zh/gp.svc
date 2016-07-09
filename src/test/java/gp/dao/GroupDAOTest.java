@@ -39,7 +39,7 @@ public class GroupDAOTest extends AbstractJUnit4SpringContextTests{
 		GroupInfo info = new GroupInfo();
 		info.setInfoId(id);
 			
-		info.setWorkgroupId(123l);
+		info.setManageId(123l);
 		info.setGroupName("g name");
 		info.setDescription("descr");
 		
@@ -72,7 +72,7 @@ public class GroupDAOTest extends AbstractJUnit4SpringContextTests{
 			GroupInfo info = new GroupInfo();
 			info.setInfoId(id);
 						
-			info.setWorkgroupId(123l);
+			info.setManageId(123l);
 			info.setGroupName("g name");
 			info.setDescription("descr");
 						

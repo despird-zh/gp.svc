@@ -37,7 +37,7 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_groups (")
-			.append("workgroup_id,group_id,group_type,")
+			.append("manage_id,group_id,group_type,")
 			.append("group_name,descr,")
 			.append("modifier, last_modified")
 			.append(")values(")
@@ -47,7 +47,7 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getWorkgroupId(),key.getId(),info.getGroupType(),
+				info.getManageId(),key.getId(),info.getGroupType(),
 				info.getGroupName(),info.getDescription(),
 				info.getModifier(),info.getModifyDate()
 		};
@@ -83,10 +83,11 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		Set<String> cols = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_groups set ");
-		if(!cols.contains("workgroup_id")){
-			SQL.append("workgroup_id = ?,");
-			params.add(info.getWorkgroupId());
+		SQL.append("UPDATE gp_groups SET ");
+		
+		if(!cols.contains("manage_id")){
+			SQL.append("manage_id = ?,");
+			params.add(info.getManageId());
 		}
 		if(!cols.contains("group_type")){
 			SQL.append("group_type = ?,");
@@ -137,16 +138,15 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 		
 	}
 
-
 	@Override
-	public int deleteByName(InfoId<Long> workgroupId,String type, String group) {
+	public int deleteByName(InfoId<Long> manageId,String type, String group) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("DELETE FROM gp_groups ")
-			.append("WHERE workgroup_id = ? AND group_name = ? AND group_type = ?");
+			.append("WHERE manage_id = ? AND group_name = ? AND group_type = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-				workgroupId.getId(),
+				manageId.getId(),
 				group,
 				type
 		};
@@ -157,14 +157,14 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public GroupInfo queryByName(InfoId<Long> workgroupId, String type, String group) {
+	public GroupInfo queryByName(InfoId<Long> manageId, String type, String group) {
 		
 		String SQL = "SELECT * FROM gp_groups "
-				+ "WHERE group_name = ? AND workgroup_id = ? AND group_type = ?";
+				+ "WHERE group_name = ? AND manage_id = ? AND group_type = ?";
 		
 		Object[] params = new Object[]{				
 				group,
-				workgroupId.getId(),
+				manageId.getId(),
 				type
 			};
 		
