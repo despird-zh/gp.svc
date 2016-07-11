@@ -315,7 +315,7 @@ public class SecurityServiceImpl implements SecurityService{
 				info = userdao.queryByAccount( account);
 			}
 			InfoId<Long> uid = info.getInfoId();
-			svcctx.setAuditObject(uid);
+			svcctx.setOperationObject(uid);
 	
 			cnt = userdao.delete( info.getInfoId());			
 			// get personal public cabinet id.

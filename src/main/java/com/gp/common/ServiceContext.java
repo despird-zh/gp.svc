@@ -82,14 +82,12 @@ public class ServiceContext extends GeneralContext {
 	/**
 	 * begin operation auditing of service context
 	 * @param operation
-	 * @param verb
 	 * @param object
 	 * @param predicates
 	 **/
-	public void beginAudit(String verb, InfoId<?> object, Object predicates){
-		
-		if(isAuditable())
-			beginAudit(principal.getAccount(), verb, object, predicates);
+	public void beginOperation(String operation, InfoId<?> object, Object predicates){
+
+		beginOperation(principal.getAccount(), operation, object, predicates);
 	}
 
 
