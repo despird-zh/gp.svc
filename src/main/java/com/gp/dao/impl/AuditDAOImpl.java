@@ -89,6 +89,7 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_audits set ");
+		
 		if(!cols.contains("workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
