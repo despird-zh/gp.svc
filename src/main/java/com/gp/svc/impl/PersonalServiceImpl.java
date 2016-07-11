@@ -181,7 +181,7 @@ public class PersonalServiceImpl implements PersonalService{
 	@Override
 	public List<ChatMessageInfo> getChatMessages(ServiceContext svcctx, String account, PageQuery pquery)
 			throws ServiceException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
