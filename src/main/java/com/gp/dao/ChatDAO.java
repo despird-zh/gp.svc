@@ -23,6 +23,7 @@ public interface ChatDAO extends BaseDAO<ChatInfo>{
 			info.setCreateTime(rs.getTimestamp("create_time"));
 			info.setMemberGroupId(rs.getLong("mbr_group_id"));
 			info.setSponsor(rs.getString("sponsor"));
+			info.setEphemeral(rs.getBoolean("is_ephemeral"));
 			info.setTopic(rs.getString("topic"));
 			
 			info.setModifier(rs.getString("modifier"));

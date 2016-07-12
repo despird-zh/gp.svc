@@ -12,6 +12,8 @@ public class ChatInfo extends TraceableInfo<Long>{
 	
 	private String topic;
 	
+	private boolean ephemeral;
+	
 	private Long memberGroupId;
 	
 	private Date createTime;
@@ -54,6 +56,14 @@ public class ChatInfo extends TraceableInfo<Long>{
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public boolean isEphemeral() {
+		return ephemeral;
+	}
+
+	public void setEphemeral(boolean ephemeral) {
+		this.ephemeral = ephemeral;
 	}
 	
 	

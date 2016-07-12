@@ -37,17 +37,17 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 		
 		SQL.append("INSERT INTO gp_chats (")
 			.append("chat_id,chat_type, sponsor,topic,")
-			.append("mbr_group_id,create_time,")
+			.append("mbr_group_id,create_time,is_ephemeral,")
 			.append("modifier,last_modified")
 			.append(") VALUES (")
 			.append("?,?,?,?,")
-			.append("?,?,")
+			.append("?,?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				key.getId(), info.getChatType(),info.getSponsor(),info.getTopic(),
-				info.getMemberGroupId(),info.getCreateTime(),
+				info.getMemberGroupId(),info.getCreateTime(),info.isEphemeral(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -93,6 +93,10 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 		if(!cols.contains("topic")){
 			SQL.append("topic = ?,  ");
 			params.add(info.getTopic());
+		}
+		if(!cols.contains("is_ephemeral")){
+			SQL.append("is_ephemeral = ?,  ");
+			params.add(info.isEphemeral());
 		}
 		if(!cols.contains("mbr_group_id")){
 			SQL.append("mbr_group_id = ?,  ");
