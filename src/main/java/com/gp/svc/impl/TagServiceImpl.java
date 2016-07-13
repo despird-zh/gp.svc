@@ -241,7 +241,7 @@ public class TagServiceImpl implements TagService{
 			TagRelInfo rel = new TagRelInfo();
 			InfoId<Long> rid = idservice.generateId(IdKey.TAG_REL, Long.class);
 			rel.setInfoId(rid);
-			rel.setResourceId((long)objectId.getId());
+			rel.setResourceId((Long)objectId.getId());
 			rel.setResourceType(objectId.getIdKey());
 			rel.setTagName(tagName);
 			if(tags.get(0) != null)
