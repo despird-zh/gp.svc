@@ -1,5 +1,6 @@
 package com.gp.dao;
 
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
@@ -38,7 +39,7 @@ public interface BaseDAO <T> {
 	 * 
 	 * @return int the row count of updated.
 	 **/
-	public int update(T info, FlatColLocator ... excludeCols);
+	public int update(T info,FilterMode mode, FlatColLocator ... excludeCols);
 
 	/**
 	 * Query row by id

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabFileDAO;
 import com.gp.info.CabFileInfo;
@@ -86,92 +87,93 @@ public class CabFileDAOImpl extends DAOSupport implements CabFileDAO{
 	}
 
 	@Override
-	public int update(CabFileInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(CabFileInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_cab_files set ");
-		if(!cols.contains("cabinet_id")){
+		
+		if(columnCheck(mode, colset, "cabinet_id")){
 			SQL.append("cabinet_id = ? ,");
 			params.add(info.getCabinetId());
 		}
-		if(!cols.contains("folder_id")){
+		if(columnCheck(mode, colset, "folder_id")){
 			SQL.append("folder_id = ? ,");
 			params.add(info.getParentId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("file_name")){
+		if(columnCheck(mode, colset, "file_name")){
 			SQL.append("file_name = ? ,");
 			params.add(info.getEntryName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ? ,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("profile")){
+		if(columnCheck(mode, colset, "profile")){
 			SQL.append("profile = ? ,");
 			params.add(info.getProfile());
 		}
-		if(!cols.contains("properties")){
+		if(columnCheck(mode, colset, "properties")){
 			SQL.append("properties = ? ,");
 			params.add(info.getProperties());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code=?,");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("acl_id")){
+		if(columnCheck(mode, colset, "acl_id")){
 			SQL.append("acl_id = ? ,");
 			params.add(info.getAclId());
 		}
-		if(!cols.contains("size")){
+		if(columnCheck(mode, colset, "size")){
 			SQL.append("size = ? ,");
 			params.add(info.getSize());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ? ,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("comment_on")){
+		if(columnCheck(mode, colset, "comment_on")){
 			SQL.append("comment_on = ? ,");
 			params.add(info.isCommentOn());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("version")){
+		if(columnCheck(mode, colset, "version")){
 			SQL.append("version = ? ,");
 			params.add(info.getVersion());
 		}
-		if(!cols.contains("version_label")){
+		if(columnCheck(mode, colset, "version_label")){
 			SQL.append("version_label=?,");
 			params.add(info.getVersionLabel());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ? ,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("binary_id")){
+		if(columnCheck(mode, colset, "binary_id")){
 			SQL.append("binary_id = ? ,");
 			params.add(info.getBinaryId());
 		}
-		if(!cols.contains("format")){
+		if(columnCheck(mode, colset, "format")){
 			SQL.append("format = ? ,");
 			params.add(info.getFormat());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ? ,");
 			params.add(info.getCreateDate());
 		}
-		if(!cols.contains("creator")){
+		if(columnCheck(mode, colset, "creator")){
 			SQL.append("creator = ? ,");
 			params.add(info.getCreator());
 		}
-		if(!cols.contains("classification")){
+		if(columnCheck(mode, colset, "classification")){
 			SQL.append("classification = ?,");
 			params.add(info.getClassification());
 		}

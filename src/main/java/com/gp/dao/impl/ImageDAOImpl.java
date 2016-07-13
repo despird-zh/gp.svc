@@ -35,6 +35,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.info.FlatColLocator;
@@ -125,22 +126,23 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	}
 
 	@Override
-	public int update(final ImageInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(final ImageInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		final File binaryFile = info.getImageFile();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_images SET ");
-		if(!cols.contains("image_name")){
+		
+		if(columnCheck(mode, colset, "image_name")){
 			SQL.append("image_name = ?, ");
 			params.add(info.getImageName());
 		}
 		if(null != binaryFile && binaryFile.exists()){
-			if(!cols.contains("image_format")){
+			if(columnCheck(mode, colset, "image_format")){
 				SQL.append("image_format =? ,");
 				params.add(info.getFormat());
 			}
-			if(!cols.contains("image_ext")){
+			if(columnCheck(mode, colset, "image_ext")){
 				SQL.append("image_ext = ?,");
 				params.add(info.getExtension());
 			}

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabFolderDAO;
 import com.gp.info.CabFolderInfo;
@@ -86,80 +87,80 @@ public class CabFolderDAOImpl extends DAOSupport implements CabFolderDAO{
 	}
 
 	@Override
-	public int update(CabFolderInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(CabFolderInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_cab_folders set ");
-		if(!cols.contains("cabinet_id")){
+		if(columnCheck(mode, colset, "cabinet_id")){
 			SQL.append("cabinet_id = ? ,");
 			params.add(info.getCabinetId());
 		}
-		if(!cols.contains("folder_pid")){
+		if(columnCheck(mode, colset, "folder_pid")){
 			SQL.append("folder_pid = ? ,");
 			params.add(info.getParentId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("folder_name")){
+		if(columnCheck(mode, colset, "folder_name")){
 			SQL.append("folder_name = ? ,");
 			params.add(info.getEntryName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ? ,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("profile")){
+		if(columnCheck(mode, colset, "profile")){
 			SQL.append("profile = ? ,");
 			params.add(info.getProfile());
 		}
-		if(!cols.contains("properties")){
+		if(columnCheck(mode, colset, "properties")){
 			SQL.append("properties = ? ,");
 			params.add(info.getProperties());
 		}
-		if(!cols.contains("acl_id")){
+		if(columnCheck(mode, colset, "acl_id")){
 			SQL.append("acl_id = ? ,");
 			params.add(info.getAclId());
 		}
-		if(!cols.contains("total_size")){
+		if(columnCheck(mode, colset, "total_size")){
 			SQL.append("total_size = ? ,");
 			params.add(info.getTotalSize());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ? ,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("folder_count")){
+		if(columnCheck(mode, colset, "folder_count")){
 			SQL.append("folder_count = ? ,");
 			params.add(info.getFolderCount());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ? ,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ? ,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ? ,");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("file_count")){
+		if(columnCheck(mode, colset, "file_count")){
 			SQL.append("file_count = ? ,");
 			params.add(info.getFileCount());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ? ,");
 			params.add(info.getCreateDate());
 		}
-		if(!cols.contains("creator")){
+		if(columnCheck(mode, colset, "creator")){
 			SQL.append("creator = ? ,");
 			params.add(info.getCreator());
 		}
-		if(!cols.contains("classification")){
+		if(columnCheck(mode, colset, "classification")){
 			SQL.append("classification = ?,");
 			params.add(info.getClassification());
 		}

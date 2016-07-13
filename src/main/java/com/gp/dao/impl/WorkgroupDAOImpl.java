@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.info.FlatColLocator;
@@ -91,105 +92,105 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	}
 
 	@Override
-	public int update( WorkgroupInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( WorkgroupInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_workgroups SET ");
-		if(!cols.contains("workgroup_name")){
+		if(columnCheck(mode, colset, "workgroup_name")){
 			SQL.append("workgroup_name = ?,");
 			params.add(info.getWorkgroupName());
 		}
-		if(!cols.contains("org_id")){
+		if(columnCheck(mode, colset, "org_id")){
 			SQL.append("org_id = ?,");
 			params.add(info.getOrgId());
 		}
-		if(!cols.contains("storage_id")){
+		if(columnCheck(mode, colset, "storage_id")){
 			SQL.append("storage_id = ?,");
 			params.add(info.getStorageId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ?, ");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("mbr_group_id")){
+		if(columnCheck(mode, colset, "mbr_group_id")){
 			SQL.append("mbr_group_id = ?,");
 			params.add(info.getMemberGroupId());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ? ,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("admin")){
+		if(columnCheck(mode, colset, "admin")){
 			SQL.append("admin = ?,");
 			params.add(info.getAdmin());
 		}
-		if(!cols.contains("creator")){
+		if(columnCheck(mode, colset, "creator")){
 			SQL.append("creator = ?,");
 			params.add(info.getCreator());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?, ");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("manager")){
+		if(columnCheck(mode, colset, "manager")){
 			SQL.append("manager=?, ");
 			params.add(info.getManager());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ?,");
 			params.add(info.getCreateDate());
 		}
-		if(!cols.contains("avatar_id")){
+		if(columnCheck(mode, colset, "avatar_id")){
 			SQL.append("avatar_id = ?,");
 			params.add(info.getAvatarId());
 		}
-		if(!cols.contains("workgroup_pid")){
+		if(columnCheck(mode, colset, "workgroup_pid")){
 			SQL.append("workgroup_pid=?,");
 			params.add(info.getParentId());
 		}
-		if(!cols.contains("publish_cab_id")){
+		if(columnCheck(mode, colset, "publish_cab_id")){
 			SQL.append("publish_cab_id = ?,");
 			params.add(info.getPublishCabinet());
 		}
-		if(!cols.contains("netdisk_cab_id")){
+		if(columnCheck(mode, colset, "netdisk_cab_id")){
 			SQL.append("netdisk_cab_id = ? ,");
 			params.add(info.getNetdiskCabinet());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ? ,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("publish_enable")){
+		if(columnCheck(mode, colset, "publish_enable")){
 			SQL.append("publish_enable = ? ,");
 			params.add(info.getPublishEnable());
 		}
-		if(!cols.contains("task_enable")){
+		if(columnCheck(mode, colset, "task_enable")){
 			SQL.append("task_enable = ? ,");
 			params.add(info.getTaskEnable());
 		}
-		if(!cols.contains("share_enable")){
+		if(columnCheck(mode, colset, "share_enable")){
 			SQL.append("share_enable = ? , ");
 			params.add(info.getShareEnable());
 		}
-		if(!cols.contains("link_enable")){
+		if(columnCheck(mode, colset, "link_enable")){
 			SQL.append("link_enable = ? ,");
 			params.add(info.getLinkEnable());
 		}
-		if(!cols.contains("post_enable")){
+		if(columnCheck(mode, colset, "post_enable")){
 			SQL.append("post_enable = ? ,");
 			params.add(info.getPostEnable());
 		}
-		if(!cols.contains("netdisk_enable")){
+		if(columnCheck(mode, colset, "netdisk_enable")){
 			SQL.append("netdisk_enable = ? ");
 			params.add(info.getNetdiskEnable());
 		}
-		if(!cols.contains("mbr_post_acpt")){
+		if(columnCheck(mode, colset, "mbr_post_acpt")){
 			SQL.append("mbr_post_acpt = ?,");
 			params.add(info.getPostAcceptable());
 		}

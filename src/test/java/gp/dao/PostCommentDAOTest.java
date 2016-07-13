@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.PostCommentDAO;
 import com.gp.info.InfoId;
@@ -55,7 +56,7 @@ public class PostCommentDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setContent("sub0001");
-		int c = commentdao.update(  info);
+		int c = commentdao.update(  info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		PostCommentInfo info2= commentdao.query( id);

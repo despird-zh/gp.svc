@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OrgHierDAO;
 import com.gp.info.FlatColLocator;
@@ -82,44 +83,44 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 	}
 
 	@Override
-	public int update(OrgHierInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(OrgHierInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_org_hier set ");
-		if(!cols.contains("org_pid")){
+		if(columnCheck(mode, colset, "org_pid")){
 			SQL.append("org_pid = ?,");
 			params.add(info.getParentOrg());
 		}
-		if(!cols.contains("mbr_group_id")){
+		if(columnCheck(mode, colset, "mbr_group_id")){
 			SQL.append("mbr_group_id = ?,");
 			params.add(info.getMemberGroupId());
 		}
-		if(!cols.contains("admin")){
+		if(columnCheck(mode, colset, "admin")){
 			SQL.append("admin = ?,");
 			params.add(info.getAdmin());
 		}
-		if(!cols.contains("org_level")){
+		if(columnCheck(mode, colset, "org_level")){
 			SQL.append("org_level = ? ,");
 			params.add(info.getLevel());
 		}
-		if(!cols.contains("org_name")){
+		if(columnCheck(mode, colset, "org_name")){
 			SQL.append("org_name = ?,");
 			params.add(info.getOrgName());
 		}
-		if(!cols.contains("manager")){
+		if(columnCheck(mode, colset, "manager")){
 			SQL.append("manager = ?, ");
 			params.add(info.getManager());
 		}
-		if(!cols.contains("email")){
+		if(columnCheck(mode, colset, "email")){
 			SQL.append("email = ?,");
 			params.add(info.getEmail());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("mbr_post_acpt")){
+		if(columnCheck(mode, colset, "mbr_post_acpt")){
 			SQL.append("mbr_post_acpt = ?,");
 			params.add(info.getPostAcceptable());
 		}

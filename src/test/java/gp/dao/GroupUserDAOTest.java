@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.GroupUserInfo;
@@ -48,7 +49,7 @@ public class GroupUserDAOTest extends AbstractJUnit4SpringContextTests{
 		groupdao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = groupdao.update( info);
+		int c = groupdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		GroupUserInfo info2= groupdao.query( id);

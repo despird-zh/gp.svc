@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ActLogDAO;
 import com.gp.info.ActLogInfo;
@@ -83,57 +84,55 @@ public class ActLogDAOImpl extends DAOSupport implements ActLogDAO{
 	}
 
 	@Override
-	public int update(ActLogInfo info, FlatColLocator ...cols) {
+	public int update(ActLogInfo info, FilterMode mode, FlatColLocator ...cols) {
 		
 		StringBuffer SQL = new StringBuffer();
-		Set<String> exclcols = FlatColumns.toColumnSet(cols);
+		Set<String> colset = FlatColumns.toColumnSet(cols);
 		List<Object> params = new ArrayList<Object>();
 		SQL.append("update gp_activity_log set ");
-		if(!exclcols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!exclcols.contains("account")){
+		if(columnCheck(mode, colset, "account")){
 			SQL.append("account = ?,");
 			params.add(info.getAccount());
 		}
-		if(!exclcols.contains("user_name")){
+		if(columnCheck(mode, colset, "user_name")){
 			SQL.append("user_name = ?,");
 			params.add(info.getUserName());
 		}
-		if(!exclcols.contains("audit_id")){
+		if(columnCheck(mode, colset, "audit_id")){
 			SQL.append("audit_id = ?,");
 			params.add(info.getAuditId());
 		}
-		if(!exclcols.contains("activity_date")){
+		if(columnCheck(mode, colset, "activity_date")){
 			SQL.append("activity_date = ?,");
 			params.add(info.getActivityDate());
 		}
-		if(!exclcols.contains("activity")){
+		if(columnCheck(mode, colset, "activity")){
 			SQL.append("activity = ?,");
 			params.add(info.getActivity());
 		}
-		if(!exclcols.contains("object_id")){
+		if(columnCheck(mode, colset, "object_id")){
 			SQL.append("object_id = ?,");
 			params.add(info.getObjectId());
 		}
-		if(!exclcols.contains("object_excerpt")){
+		if(columnCheck(mode, colset, "object_excerpt")){
 			SQL.append("object_excerpt = ?,");
 			params.add(info.getObjectExcerpt());
 		}
-		if(!exclcols.contains("predicate_id")){
+		if(columnCheck(mode, colset, "predicate_id")){
 			SQL.append("predicate_id = ?,");
 			params.add(info.getPredicateId());
 		}
-		if(!exclcols.contains("predicate_excerpt")){
+		if(columnCheck(mode, colset, "predicate_excerpt")){
 			SQL.append("predicate_excerpt = ?,");
 			params.add(info.getPredicateExcerpt());
 		}
 		
 		SQL.append("modifier = ?,");
 		params.add(info.getModifier());
-	
-
 		SQL.append("last_modified = ? ");
 		params.add(info.getModifyDate());
 

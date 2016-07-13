@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
 import com.gp.dao.PseudoDAO;
@@ -85,7 +86,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 
 		try{
 			svcctx.setTraceInfo(dictinfo);
-			return dictionarydao.update(dictinfo) > 0;
+			return dictionarydao.update(dictinfo,FilterMode.NONE) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "Dictionary", dictinfo);
 		}

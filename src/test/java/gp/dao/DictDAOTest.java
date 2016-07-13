@@ -14,6 +14,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
@@ -60,7 +61,7 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setValue("sub00011");
-		int c = dictdao.update( info);
+		int c = dictdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		DictionaryInfo info2= dictdao.query( id);

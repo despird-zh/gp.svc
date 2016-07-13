@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RolePageDAO;
 import com.gp.info.FlatColLocator;
@@ -84,23 +85,23 @@ public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 	}
 
 	@Override
-	public int update(RolePageInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(RolePageInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		
 		StringBuffer SQL = new StringBuffer("UPDATE gp_role_page SET ");
 		
-		if(!cols.contains("page_id")){
+		if(columnCheck(mode, colset, "page_id")){
 			SQL.append("page_id=?,");
 			params.add(info.getPageId());
 		}
-		if(!cols.contains("role_id")){
+		if(columnCheck(mode, colset, "role_id")){
 			SQL.append(" role_id=?,");
 			params.add(info.getRoleId());
 		}
 		
 		for(Map.Entry<FlatColLocator, Boolean> entry: info.getPermMap().entrySet()){
-			if(cols.contains(entry.getKey().getColumn())) continue;
+			if(!columnCheck(mode, colset, entry.getKey().getColumn())) continue;
 			
 			SQL.append(entry.getKey().getColumn()).append(" = ?,");
 			params.add(entry.getValue());

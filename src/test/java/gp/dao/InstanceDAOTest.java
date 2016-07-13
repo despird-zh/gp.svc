@@ -12,6 +12,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.SourceDAO;
 import com.gp.info.SourceInfo;
@@ -53,7 +54,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setDescription("sub00011");
-		int c = entitydao.update( info);
+		int c = entitydao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		SourceInfo info2= entitydao.query( id);

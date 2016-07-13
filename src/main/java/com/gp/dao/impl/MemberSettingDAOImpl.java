@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MemberSettingDAO;
 import com.gp.info.FlatColLocator;
@@ -76,25 +77,25 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	}
 
 	@Override
-	public int update(MemberSettingInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(MemberSettingInfo info, FilterMode mode, FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_member_setting set ");
 		
-		if(!cols.contains("manage_id")){
+		if(columnCheck(mode, colset, "manage_id")){
 			SQL.append("manage_id = ?,");
 			params.add(info.getManageId());
 		}
-		if(!cols.contains("account")){
+		if(columnCheck(mode, colset, "account")){
 			SQL.append("account = ?,");
 			params.add(info.getAccount());
 		}
-		if(!cols.contains("group_type")){
+		if(columnCheck(mode, colset, "group_type")){
 			SQL.append("group_type = ?,");
 			params.add(info.getGroupType());
 		}
-		if(!cols.contains("post_visible")){
+		if(columnCheck(mode, colset, "post_visible")){
 			SQL.append("post_visible = ?,");
 			params.add(info.getPostVisible());
 		}

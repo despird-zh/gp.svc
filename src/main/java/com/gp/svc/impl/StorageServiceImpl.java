@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.BinaryDAO;
 import com.gp.dao.PseudoDAO;
@@ -227,7 +228,7 @@ public class StorageServiceImpl implements StorageService{
 		
 		try{
 			svcctx.setTraceInfo(storage);
-			storagedao.update(storage);
+			storagedao.update(storage,FilterMode.NONE);
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.update", dae, "storage");
 		}

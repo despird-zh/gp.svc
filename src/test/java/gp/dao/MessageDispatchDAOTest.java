@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ChatMessageDAO;
 import com.gp.dao.ChatMessageDispatchDAO;
@@ -50,7 +51,7 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		msgdao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = msgdao.update( info);
+		int c = msgdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		ChatMessageDispatchInfo info2= msgdao.query( id);

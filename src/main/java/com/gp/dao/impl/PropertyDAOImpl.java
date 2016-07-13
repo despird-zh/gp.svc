@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.FlatColLocator;
@@ -74,28 +75,28 @@ public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 	}
 
 	@Override
-	public int update(PropertyInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(PropertyInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_properties set ");
-		if(!cols.contains("")){
+		if(columnCheck(mode, colset, "")){
 			SQL.append("prop_label = ?,");
 			params.add(info.getLabel());
 		}
-		if(!cols.contains("type")){
+		if(columnCheck(mode, colset, "type")){
 			SQL.append("type = ?,");
 			params.add(info.getType());
 		}
-		if(!cols.contains("default_value")){
+		if(columnCheck(mode, colset, "default_value")){
 			SQL.append("default_value = ?,");
 			params.add(info.getDefaultValue());
 		}
-		if(!cols.contains("enums")){
+		if(columnCheck(mode, colset, "enums")){
 			SQL.append("enums = ?,");
 			params.add(info.getEnumValues());
 		}
-		if(!cols.contains("format")){
+		if(columnCheck(mode, colset, "format")){
 			SQL.append("format = ?,");
 			params.add(info.getFormat());
 		}

@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserDAO;
 import com.gp.info.FlatColLocator;
@@ -95,98 +96,98 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 	}
 
 	@Override
-	public int update( UserInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( UserInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_users set ");
 		
-		if(!cols.contains("account")){
+		if(columnCheck(mode, colset, "account")){
 			SQL.append("account = ?,");
 			params.add(info.getAccount());
 		}
-		if(!cols.contains("global_account")){
+		if(columnCheck(mode, colset, "global_account")){
 			SQL.append("global_account = ?,");
 			params.add(info.getGlobalAccount());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("type")){
+		if(columnCheck(mode, colset, "type")){
 			SQL.append("type = ?,");
 			params.add(info.getType());
 		}
-		if(!cols.contains("mobile")){
+		if(columnCheck(mode, colset, "mobile")){
 			SQL.append("mobile = ?,");
 			params.add(info.getMobile());
 		}
-		if(!cols.contains("phone")){
+		if(columnCheck(mode, colset, "phone")){
 			SQL.append("phone = ?,");
 			params.add(info.getPhone());
 		}
-		if(!cols.contains("full_name")){
+		if(columnCheck(mode, colset, "full_name")){
 			SQL.append("full_name = ?,");
 			params.add(info.getFullName());
 		}
-		if(!cols.contains("email")){
+		if(columnCheck(mode, colset, "email")){
 			SQL.append("email = ?, ");
 			params.add(info.getEmail());
 		}
-		if(!cols.contains("password")){
+		if(columnCheck(mode, colset, "password")){
 			SQL.append("password = ?, ");
 			params.add(info.getPassword());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?, ");
 			params.add(info.getState());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ?,");
 			params.add(info.getCreateDate());
 		}
-		if(!cols.contains("extra_info")){
+		if(columnCheck(mode, colset, "extra_info")){
 			SQL.append("extra_info = ?, ");
 			params.add(info.getExtraInfo());
 		}
-		if(!cols.contains("retry_times")){
+		if(columnCheck(mode, colset, "retry_times")){
 			SQL.append("retry_times = ?, ");
 			params.add(info.getRetryTimes());
 		}
-		if(!cols.contains("last_logon")){
+		if(columnCheck(mode, colset, "last_logon")){
 			SQL.append("last_logon = ?,");
 			params.add(info.getLastLogonDate());
 		}
-		if(!cols.contains("classsification")){
+		if(columnCheck(mode, colset, "classsification")){
 			SQL.append("classsification=?,");
 			params.add(info.getClassification());
 		}
-		if(!cols.contains("language")){
+		if(columnCheck(mode, colset, "language")){
 			SQL.append("language = ?, ");
 			params.add(info.getLanguage());
 		}
-		if(!cols.contains("timezone")){
+		if(columnCheck(mode, colset, "timezone")){
 			SQL.append("timezone = ?, ");
 			params.add(info.getTimeZone());
 		}
-		if(!cols.contains("publish_cabinet_id")){
+		if(columnCheck(mode, colset, "publish_cabinet_id")){
 			SQL.append("publish_cabinet_id = ?, ");
 			params.add(info.getPublishCabinet());
 		}
-		if(!cols.contains("netdisk_cabinet_id")){
+		if(columnCheck(mode, colset, "netdisk_cabinet_id")){
 			SQL.append("netdisk_cabinet_id = ?,");
 			params.add(info.getNetdiskCabinet());
 		}
-		if(!cols.contains("storage_id")){
+		if(columnCheck(mode, colset, "storage_id")){
 			SQL.append("storage_id = ?,");
 			params.add(info.getStorageId());
 		}
-		if(!cols.contains("avatar_id")){
+		if(columnCheck(mode, colset, "avatar_id")){
 			SQL.append("avatar_id = ?,");
 			params.add(info.getAvatarId());
 		}
-		if(!cols.contains("signature")){
+		if(columnCheck(mode, colset, "signature")){
 			SQL.append("signature = ?,");
 			params.add(info.getSignature());
 		}

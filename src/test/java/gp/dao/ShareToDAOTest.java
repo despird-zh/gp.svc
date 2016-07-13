@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ShareDAO;
 import com.gp.dao.ShareToDAO;
@@ -57,7 +58,7 @@ public class ShareToDAOTest extends AbstractJUnit4SpringContextTests{
 		sharetodao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = sharetodao.update( info);
+		int c = sharetodao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		ShareToInfo info2= sharetodao.query( id);

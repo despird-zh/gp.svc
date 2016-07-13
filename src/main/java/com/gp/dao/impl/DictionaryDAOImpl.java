@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
 import com.gp.info.DictionaryInfo;
@@ -94,31 +95,31 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	}
 
 	@Override
-	public int update(DictionaryInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(DictionaryInfo info, FilterMode mode,FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> plist = new ArrayList<Object>();
 		Map<FlatColLocator, String> labelMap = info.getLabelMap();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_dictionary SET ");
-		if(!cols.contains("dict_group")){
+		if(columnCheck(mode, colset, "dict_group")){
 			SQL.append("dict_group = ?,");
 			plist.add(info.getGroup());
 		}
-		if(!cols.contains("dict_key")){
+		if(columnCheck(mode, colset, "dict_key")){
 			SQL.append("dict_key = ?,");
 			plist.add(info.getKey());
 		}
-		if(!cols.contains("dict_value")){
+		if(columnCheck(mode, colset, "dict_value")){
 			SQL.append("dict_value = ?,");
 			plist.add(info.getValue());
 		}
-		if(!cols.contains("default_lang")){
+		if(columnCheck(mode, colset, "default_lang")){
 			SQL.append("default_lang = ?,");
 			plist.add(info.getDefaultLang());
 		}
 		
 		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){
-			if(cols.contains(entry.getKey().getColumn())) continue;
+			if(!columnCheck(mode, colset, entry.getKey().getColumn())) continue;
 			
 			SQL.append(entry.getKey().getColumn()).append("= ?,");
 			plist.add(entry.getValue());

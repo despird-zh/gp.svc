@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
@@ -80,17 +81,17 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	}
 
 	@Override
-	public int update(GroupUserInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(GroupUserInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_group_user set ");
 		
-		if(!cols.contains("group_id")){
+		if(columnCheck(mode, colset, "group_id")){
 			SQL.append("group_id = ?,");
 			params.add(info.getGroupId());
 		}
-		if(!cols.contains("group_id")){
+		if(columnCheck(mode, colset, "group_id")){
 			SQL.append("account = ?,");
 			params.add(info.getAccount());
 		}

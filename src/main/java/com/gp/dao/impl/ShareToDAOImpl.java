@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareToDAO;
 import com.gp.info.FlatColLocator;
@@ -75,53 +76,53 @@ public class ShareToDAOImpl extends DAOSupport implements ShareToDAO{
 	}
 
 	@Override
-	public int update(ShareToInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(ShareToInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_share_to set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("share_id")){
+		if(columnCheck(mode, colset, "share_id")){
 			SQL.append("share_id = ?,");
 			params.add(info.getShareId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ?, ");
 			params.add(info.getShareId());
 		}
-		if(!cols.contains("share_name")){
+		if(columnCheck(mode, colset, "share_name")){
 			SQL.append("share_name = ?,");
 			params.add(info.getShareName());
 		}
-		if(!cols.contains("to_account")){
+		if(columnCheck(mode, colset, "to_account")){
 			SQL.append("to_account = ?,");
 			params.add(info.getToAccount());
 		}
-		if(!cols.contains("to_global_account")){
+		if(columnCheck(mode, colset, "to_global_account")){
 			SQL.append("to_global_account = ?,");
 			params.add(info.getToGlobalAccount());
 		}
-		if(!cols.contains("to_email")){
+		if(columnCheck(mode, colset, "to_email")){
 			SQL.append("to_email = ?,");
 			params.add(info.getToEmail());
 		}
-		if(!cols.contains("share_mode")){
+		if(columnCheck(mode, colset, "share_mode")){
 			SQL.append("share_mode = ?,");
 			params.add(info.getShareMode());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("share_token")){
+		if(columnCheck(mode, colset, "share_token")){
 			SQL.append("share_token = ?,");
 			params.add(info.getShareToken());
 		}
-		if(!cols.contains("access_count")){
+		if(columnCheck(mode, colset, "access_count")){
 			SQL.append("access_count = ?,");
 			params.add(info.getAccessCount());
 		}

@@ -6,6 +6,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -19,6 +20,7 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.support.JdbcUtils;
 import org.springframework.jdbc.support.MetaDataAccessException;
 
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GeneralConfig;
 import com.gp.common.SystemOptions;
 import com.gp.pagination.PageQuery;
@@ -291,5 +293,18 @@ public abstract class DAOSupport{
 	        }
 	    }
 	    return false;
+	}
+	
+	/**
+	 * check if the column need update.
+	 * @param mode the file mode include or exclude
+	 * @param colset the set of columns
+	 * @param column the column name  
+	 **/
+	protected boolean columnCheck(FilterMode mode, Set<String> colset, String column){
+		
+		return FilterMode.EXCLUDE == mode && !colset.contains("workgroup_id") || 
+				   FilterMode.INCLUDE == mode && colset.contains("workgroup_id")||
+				   FilterMode.NONE == mode;
 	}
 }

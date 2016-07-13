@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.VoteDAO;
 import com.gp.info.FlatColLocator;
@@ -75,30 +76,30 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 	}
 
 	@Override
-	public int update( VoteInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( VoteInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_votes set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ?,");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}
-		if(!cols.contains("voter")){
+		if(columnCheck(mode, colset, "voter")){
 			SQL.append("voter = ?,");
 			params.add(info.getVoter());
 		}
-		if(!cols.contains("opinion")){
+		if(columnCheck(mode, colset, "opinion")){
 			SQL.append("opinion = ?,");
 			params.add(info.getOpinion());
 		}

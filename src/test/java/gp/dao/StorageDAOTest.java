@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ShareDAO;
 import com.gp.dao.ShareToDAO;
@@ -54,7 +55,7 @@ public class StorageDAOTest extends AbstractJUnit4SpringContextTests{
 		storagedao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = storagedao.update( info);
+		int c = storagedao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		StorageInfo info2= storagedao.query( id);

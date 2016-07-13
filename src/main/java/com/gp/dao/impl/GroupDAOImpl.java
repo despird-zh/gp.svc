@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
 import com.gp.info.FlatColLocator;
@@ -79,25 +80,25 @@ public class GroupDAOImpl extends DAOSupport implements GroupDAO{
 	}
 
 	@Override
-	public int update(GroupInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(GroupInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_groups SET ");
 		
-		if(!cols.contains("manage_id")){
+		if(columnCheck(mode, colset, "manage_id")){
 			SQL.append("manage_id = ?,");
 			params.add(info.getManageId());
 		}
-		if(!cols.contains("group_type")){
+		if(columnCheck(mode, colset, "group_type")){
 			SQL.append("group_type = ?,");
 			params.add(info.getGroupType());
 		}
-		if(!cols.contains("group_name")){
+		if(columnCheck(mode, colset, "group_name")){
 			SQL.append("group_name = ?,");
 			params.add(info.getGroupName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ? ,");
 			params.add(info.getDescription());
 		}

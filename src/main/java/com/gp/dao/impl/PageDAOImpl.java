@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
@@ -87,30 +88,30 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 	}
 
 	@Override
-	public int update(PageInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(PageInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer("UPDATE gp_pages SET page_name=?,");
 	
-		if(!cols.contains("page_name")){
+		if(columnCheck(mode, colset, "page_name")){
 			SQL.append("page_name=?,");
 			params.add(info.getPageName());
 		}
-		if(!cols.contains("module")){
+		if(columnCheck(mode, colset, "module")){
 			SQL.append("module=?,");
 			params.add(info.getModule());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr=?,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("page_abbr")){
+		if(columnCheck(mode, colset, "page_abbr")){
 			SQL.append("page_abbr=?,");
 			params.add(info.getPageAbbr());
 		}
 		
 		for(Map.Entry<FlatColLocator, String> entry: info.getActionMap().entrySet()){
-			if(cols.contains(entry.getKey().getColumn())) continue;
+			if(!columnCheck(mode, colset,entry.getKey().getColumn())) continue;
 			
 			SQL.append(entry.getKey().getColumn()).append("=?,");
 			params.add(entry.getValue());

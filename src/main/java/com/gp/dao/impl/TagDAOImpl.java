@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TagDAO;
 import com.gp.info.FlatColLocator;
@@ -78,26 +79,26 @@ public class TagDAOImpl extends DAOSupport implements TagDAO{
 	}
 
 	@Override
-	public int update( TagInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( TagInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_tags set ");
 		
-		if(!cols.contains("tag_name")){
+		if(columnCheck(mode, colset, "tag_name")){
 			SQL.append("tag_name = ?,");
 			params.add(info.getTagName());
 		}
-		if(!cols.contains("tag_color")){
+		if(columnCheck(mode, colset, "tag_color")){
 			SQL.append("tag_color,");
 			params.add(info.getTagColor());
 		}
-		if(!cols.contains("category")){
+		if(columnCheck(mode, colset, "category")){
 			SQL.append("category = ?,");
 			params.add(info.getCategory());
 		}
-		if(!cols.contains("tag_type")){
+		if(columnCheck(mode, colset, "tag_type")){
 			SQL.append("tag_type = ? , ");
 			params.add(info.getTagType());
 		}

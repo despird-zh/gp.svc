@@ -13,6 +13,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.AttachDAO;
 import com.gp.info.AttachInfo;
@@ -57,7 +58,7 @@ public class AttachDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setAttachName("another name");
-		int c = attachdao.update(info);
+		int c = attachdao.update(info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		AttachInfo info2= attachdao.query( id);

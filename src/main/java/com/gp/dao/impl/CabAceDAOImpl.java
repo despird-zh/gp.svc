@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
@@ -77,28 +78,29 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	}
 
 	@Override
-	public int update( CabAceInfo info,FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( CabAceInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_cab_ace set ");
-		if(!cols.contains("acl_id")){
+		
+		if(columnCheck(mode, colset, "acl_id")){
 		SQL.append("acl_id = ?,");
 		params.add(info.getAclId());
 		}
-		if(!cols.contains("subject")){
+		if(columnCheck(mode, colset, "subject")){
 		SQL.append("subject = ?,");
 		params.add(info.getSubject());
 		}
-		if(!cols.contains("subject_type")){
+		if(columnCheck(mode, colset, "subject_type")){
 		SQL.append("subject_type = ?,");
 		params.add(info.getSubjectType());
 		}
-		if(!cols.contains("privilege")){
+		if(columnCheck(mode, colset, "privilege")){
 		SQL.append("privilege = ?,");
 		params.add(info.getPrivilege());
 		}
-		if(!cols.contains("perm_json")){
+		if(columnCheck(mode, colset, "perm_json")){
 			SQL.append("perm_json = ?,");
 			params.add(info.getPermissions());
 		}

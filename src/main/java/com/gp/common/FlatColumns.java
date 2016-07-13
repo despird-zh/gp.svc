@@ -10,6 +10,12 @@ import com.gp.info.FlatColumn;
 
 public class FlatColumns {
 
+	public static enum FilterMode{
+		INCLUDE,
+		EXCLUDE,
+		NONE
+	}
+	
 	public static final FlatColumn ACL_ID = new FlatColumn("acl_id");
 	public static final FlatColumn FOLDER_ID = new FlatColumn("folder_id");
 	public static final FlatColumn FOLDER_PID = new FlatColumn("folder_pid");
@@ -27,8 +33,10 @@ public class FlatColumns {
 	public static final FlatColumn DICT_FR_FR = new FlatColumn("lbl_fr_fr");
 	public static final FlatColumn DICT_DE_DE = new FlatColumn("lbl_de_de");
 	public static final FlatColumn DICT_RU_RU = new FlatColumn("lbl_ru_ru");
-	
+
 	public static final FlatColumn IMG_NAME = new FlatColumn("image_name");
+	
+	public static final FlatColumn STATE = new FlatColumn("state");
 	
 	/**
 	 * Convert the Columns to string set for easy check existence.

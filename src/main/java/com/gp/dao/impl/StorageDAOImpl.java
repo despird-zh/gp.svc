@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.StorageDAO;
 import com.gp.info.FlatColLocator;
@@ -79,39 +80,42 @@ public class StorageDAOImpl extends DAOSupport implements StorageDAO{
 	}
 
 	@Override
-	public int update(StorageInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(StorageInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_storages set ");
 		
-		if(!cols.contains("storage_name")){
+		if(columnCheck(mode, colset, "storage_name")){
 			SQL.append("storage_name = ?,");
 			params.add(info.getStorageName());
 		}
-		if(!cols.contains("capacity")){
+		if(columnCheck(mode, colset, "capacity")){
 			SQL.append("capacity = ?,");
 			params.add(info.getCapacity());
 		}
-		if(!cols.contains("used")){
+		if(columnCheck(mode, colset, "used")){
 			SQL.append("used = ?,");
 			params.add(info.getUsed());
 		}
-		if(!cols.contains("setting_json")){
+		if(columnCheck(mode, colset, "setting_json")){
 			SQL.append("setting_json = ?,");
 			params.add(info.getSettingJson());
 		}
-		if(!cols.contains("storage_type")){
+		if(columnCheck(mode, colset, "storage_type")){
 			SQL.append("storage_type = ?,");
 			params.add(info.getStorageType());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		
-		SQL.append("description = ?, modifier = ?, last_modified = ? ")
+		if(columnCheck(mode, colset, "description")){
+			SQL.append("description = ?,");
+			params.add(info.getState());
+		}
+		SQL.append(" modifier = ?, last_modified = ? ")
 			.append("where storage_id = ?");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());

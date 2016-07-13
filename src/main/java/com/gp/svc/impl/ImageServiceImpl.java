@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.dao.PseudoDAO;
@@ -122,7 +123,7 @@ public class ImageServiceImpl implements ImageService{
 	public boolean updateImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
 			svcctx.setTraceInfo(info);
-			int cnt = imagedao.update(info);
+			int cnt = imagedao.update(info,FilterMode.NONE);
 			return cnt > 0;
 			
 		}catch(DataAccessException dae){

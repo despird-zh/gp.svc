@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.SysOptionDAO;
@@ -157,7 +158,7 @@ public class SystemServiceImpl implements SystemService{
 		opt.setModifier(svcctx.getPrincipal().getAccount());
 		opt.setModifyDate(DateTimeUtils.now());
 		try{
-			boolean m = sysoptiondao.update( opt) > 0;
+			boolean m = sysoptiondao.update( opt,FilterMode.NONE) > 0;
 			if(null != cache){
 				cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + optKey, opt);
 			}
@@ -175,7 +176,7 @@ public class SystemServiceImpl implements SystemService{
 		opt.setOptionValue(value);
 		svcctx.setTraceInfo(opt);
 		try{
-			boolean m = sysoptiondao.update(opt) > 0;
+			boolean m = sysoptiondao.update(opt,FilterMode.NONE) > 0;
 			
 			if(null != cache){
 				cache.put(IdKey.SYS_OPTION.name() + ":" + opt.getOptionKey(), opt);

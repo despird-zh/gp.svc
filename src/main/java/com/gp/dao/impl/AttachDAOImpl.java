@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachDAO;
 import com.gp.info.AttachInfo;
@@ -82,58 +83,58 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 	}
 
 	@Override
-	public int update(AttachInfo info, FlatColLocator ...cols) {
+	public int update(AttachInfo info,FilterMode mode, FlatColLocator ...cols) {
 
-		Set<String> exclcols = FlatColumns.toColumnSet(cols);
+		Set<String> colset = FlatColumns.toColumnSet(cols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_attachments set ");
 		
-		if(!exclcols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!exclcols.contains("attachment_name")){
+		if(columnCheck(mode, colset, "attachment_name")){
 			SQL.append("attachment_name =?,");
 			params.add(info.getAttachName());
 		}
-		if(!exclcols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!exclcols.contains("size")){
+		if(columnCheck(mode, colset, "size")){
 			SQL.append("size = ?,");
 			params.add(info.getSize());
 		}
-		if(!exclcols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ? , ");
 			params.add(info.getOwner());
 		}
-		if(!exclcols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!exclcols.contains("binary_id")){
+		if(columnCheck(mode, colset, "binary_id")){
 			SQL.append("binary_id=?,");
 			params.add(info.getBinaryId());
 		}
-		if(!exclcols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code= ?,");
 			params.add(info.getHashCode());
 		}
-		if(!exclcols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append(" owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!exclcols.contains("format")){
+		if(columnCheck(mode, colset, "format")){
 			SQL.append(" format = ?,"); 
 			params.add(info.getFormat());
 		}
-		if(!exclcols.contains("creator")){
+		if(columnCheck(mode, colset, "creator")){
 			SQL.append("creator=?,"); 
 			params.add(info.getCreator());
 		}
-		if(!exclcols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time=? ,");
 			params.add(info.getCreateDate());
 		}

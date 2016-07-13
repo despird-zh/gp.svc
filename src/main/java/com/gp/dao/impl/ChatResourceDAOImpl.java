@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ChatResourceDAO;
 import com.gp.info.ChatResourceInfo;
@@ -72,21 +73,21 @@ public class ChatResourceDAOImpl extends DAOSupport implements ChatResourceDAO{
 	}
 
 	@Override
-	public int update(ChatResourceInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(ChatResourceInfo info, FilterMode mode,FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_chat_resc SET ");
 		
-		if(!cols.contains("chat_id")){
+		if(columnCheck(mode, colset, "chat_id")){
 			SQL.append("chat_id = ?,");
 			params.add(info.getChatId());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ?,");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}

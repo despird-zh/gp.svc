@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TaskRouteDAO;
 import com.gp.info.FlatColLocator;
@@ -78,41 +79,41 @@ public class TaskRouteDAOImpl extends DAOSupport implements TaskRouteDAO{
 	}
 
 	@Override
-	public int update(TaskRouteInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(TaskRouteInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_task_route set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("task_chronical_id")){
+		if(columnCheck(mode, colset, "task_chronical_id")){
 			SQL.append("task_chronical_id = ?,");
 			params.add(info.getChronicalTaskId());
 		}
-		if(!cols.contains("task_id")){
+		if(columnCheck(mode, colset, "task_id")){
 			SQL.append("task_id = ?,");
 			params.add(info.getTaskId());
 		}
-		if(!cols.contains("task_forward_id")){
+		if(columnCheck(mode, colset, "task_forward_id")){
 			SQL.append("task_forward_id = ?,");
 			params.add(info.getForwardTaskId());
 		}
-		if(!cols.contains("executor")){
+		if(columnCheck(mode, colset, "executor")){
 			SQL.append("executor = ?,");
 			params.add(info.getExecutor());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ?,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("forward_time")){
+		if(columnCheck(mode, colset, "forward_time")){
 			SQL.append("forward_time = ?,");
 			params.add(info.getFordwardDate());
 		}
