@@ -1,10 +1,13 @@
 package com.gp.svc.impl;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +17,28 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gp.common.FlatColumns;
 import com.gp.common.GroupUsers.GroupType;
 import com.gp.common.IdKey;
+import com.gp.common.Images;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
+import com.gp.dao.ImageDAO;
 import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
+import com.gp.dao.UserDAO;
 import com.gp.dao.UserSumDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.ChatMessageInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.GroupMemberInfo;
+import com.gp.info.ImageInfo;
 import com.gp.info.InfoId;
 import com.gp.info.OrgHierInfo;
+import com.gp.info.UserInfo;
 import com.gp.info.UserSumInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.pagination.PageQuery;
@@ -49,6 +60,12 @@ public class PersonalServiceImpl implements PersonalService{
 	
 	@Autowired
 	UserSumDAO usersumdao;
+	
+	@Autowired
+	UserDAO userdao;
+	
+	@Autowired
+	ImageDAO imagedao;
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
@@ -183,6 +200,52 @@ public class PersonalServiceImpl implements PersonalService{
 			throws ServiceException {
 		
 		return null;
+	}
+
+	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Override
+	public boolean updateBasicSetting(ServiceContext svcctx, UserInfo uinfo, String avatarImg) throws ServiceException {
+		
+		FlatColLocator[] cols = new FlatColLocator[]{
+			FlatColumns.AVATAR_ID,
+			FlatColumns.PHONE,
+			FlatColumns.TYPE,
+			FlatColumns.EMAIL,
+			FlatColumns.MOBILE,
+			FlatColumns.FULL_NAME,
+			FlatColumns.STATE,
+			FlatColumns.SIGNATURE,
+		};
+		
+		svcctx.setTraceInfo(uinfo);
+		
+		try{
+			// create image firstly.
+			String filename = FilenameUtils.getName(avatarImg);
+			Long imgid = Images.parseImageId(filename);
+			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
+			// check if the image exists
+			if(imginfo == null){ // save the image
+				Date createDate = Images.parseTouchDate(filename);
+				String extension = FilenameUtils.getExtension(filename);
+				
+				imginfo = new ImageInfo(avatarImg.substring(0, avatarImg.lastIndexOf(File.separator) + 1));
+				imginfo.setTouchTime(createDate);
+				imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
+				imginfo.setImageFile(new File(avatarImg));
+				imginfo.setExtension(extension);
+				imginfo.setFormat(extension);
+				svcctx.setTraceInfo(imginfo);
+				imagedao.create(imginfo);
+			}
+			uinfo.setAvatarId(imgid);
+			int cnt = userdao.update(uinfo, FilterMode.INCLUDE, cols);
+			
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update", dae, "user setting");
+		}
+		
 	}
 
 }

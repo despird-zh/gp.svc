@@ -37,6 +37,13 @@ public class FlatColumns {
 	public static final FlatColumn IMG_NAME = new FlatColumn("image_name");
 	
 	public static final FlatColumn STATE = new FlatColumn("state");
+	public static final FlatColumn TYPE = new FlatColumn("type");
+	public static final FlatColumn MOBILE = new FlatColumn("mobile");
+	public static final FlatColumn PHONE = new FlatColumn("phone");
+	public static final FlatColumn FULL_NAME = new FlatColumn("full_name");
+	public static final FlatColumn EMAIL = new FlatColumn("email");
+	public static final FlatColumn AVATAR_ID = new FlatColumn("avatar_id");
+	public static final FlatColumn SIGNATURE = new FlatColumn("signature");
 	
 	/**
 	 * Convert the Columns to string set for easy check existence.

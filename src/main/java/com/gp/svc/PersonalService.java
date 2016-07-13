@@ -7,6 +7,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.ChatMessageInfo;
 import com.gp.info.GroupMemberInfo;
 import com.gp.info.OrgHierInfo;
+import com.gp.info.UserInfo;
 import com.gp.info.UserSumInfo;
 import com.gp.info.WorkgroupInfo;
 import com.gp.pagination.PageQuery;
@@ -50,4 +51,7 @@ public interface PersonalService {
 	 * @param account the account information 
 	 **/
 	public List<ChatMessageInfo> getChatMessages(ServiceContext svcctx, String account, PageQuery pquery)throws ServiceException;
+
+	
+	public boolean updateBasicSetting(ServiceContext svcctx, UserInfo uinfo, String avatarImg)throws ServiceException;
 }

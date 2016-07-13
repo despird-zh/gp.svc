@@ -303,8 +303,8 @@ public abstract class DAOSupport{
 	 **/
 	protected boolean columnCheck(FilterMode mode, Set<String> colset, String column){
 		
-		return FilterMode.EXCLUDE == mode && !colset.contains("workgroup_id") || 
-				   FilterMode.INCLUDE == mode && colset.contains("workgroup_id")||
+		return FilterMode.EXCLUDE == mode && !colset.contains(column) || 
+				   FilterMode.INCLUDE == mode && colset.contains(column)||
 				   FilterMode.NONE == mode;
 	}
 }
