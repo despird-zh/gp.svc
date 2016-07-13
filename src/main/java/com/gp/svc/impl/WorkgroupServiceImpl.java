@@ -25,6 +25,7 @@ import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.Images;
 import com.gp.common.SystemOptions;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.common.ServiceContext;
 import com.gp.dao.CabinetDAO;
@@ -284,7 +285,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			}
 			
 			// update work group, exclude the member group id 
-			cnt = workgroupdao.update( winfo, FlatColumns.MBR_GRP_ID);
+			cnt = workgroupdao.update( winfo,FilterMode.EXCLUDE, FlatColumns.MBR_GRP_ID);
 			
 		}catch(DataAccessException dae){
 
@@ -605,7 +606,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				orig.setDescription(ginfo.getDescription());
 				svcctx.setTraceInfo(orig);
 				
-				cnt = groupdao.update(orig);
+				cnt = groupdao.update(orig,FilterMode.NONE);
 			}else{
 				
 				svcctx.setTraceInfo(ginfo);

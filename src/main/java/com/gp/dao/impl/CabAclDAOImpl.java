@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAclDAO;
 import com.gp.info.CabAclInfo;
@@ -67,11 +68,13 @@ public class CabAclDAOImpl extends DAOSupport implements CabAclDAO{
 	}
 
 	@Override
-	public int update(CabAclInfo info, FlatColLocator ...exclcols) {
+	public int update(CabAclInfo info,FilterMode mode, FlatColLocator ...exclcols) {
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_cab_acl set ");
+		
 		SQL.append("acl_hash = ?,");
+		
 		SQL.append("modifier = ?,last_modified = ? ")
 		.append("where acl_id = ? ");
 		

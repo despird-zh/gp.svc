@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareItemDAO;
 import com.gp.info.FlatColLocator;
@@ -77,30 +78,30 @@ public class ShareItemDAOImpl extends DAOSupport implements ShareItemDAO{
 	}
 
 	@Override
-	public int update(ShareItemInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(ShareItemInfo info, FilterMode mode,FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_share_item set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("share_id")){
+		if(columnCheck(mode, colset, "share_id")){
 			SQL.append("share_id =?,");
 			params.add(info.getShareId());
 		}
-		if(!cols.contains("cabinet_id")){
+		if(columnCheck(mode, colset, "cabinet_id")){
 			SQL.append("cabinet_id = ?,");
 			params.add(info.getCabinetId());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ? , ");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}

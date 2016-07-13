@@ -23,6 +23,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
@@ -80,21 +81,21 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 	}
 
 	@Override
-	public int update(FavoriteInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(FavoriteInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_favorites set ");
 		
-		if(!cols.contains("favoriter")){
+		if(columnCheck(mode, colset, "favoriter")){
 			SQL.append("favoriter = ? ,");
 			params.add(info.getFavoriter());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ?,");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append(" resource_type = ?,");
 			params.add(info.getResourceType());
 		}

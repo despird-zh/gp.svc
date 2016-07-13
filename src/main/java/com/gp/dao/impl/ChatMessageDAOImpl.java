@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ChatMessageDAO;
 import com.gp.info.FlatColLocator;
@@ -76,37 +77,37 @@ public class ChatMessageDAOImpl extends DAOSupport implements ChatMessageDAO{
 	}
 
 	@Override
-	public int update(ChatMessageInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(ChatMessageInfo info, FilterMode mode,FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_chat_msgs SET ");
 		
-		if(!cols.contains("chat_id")){
+		if(columnCheck(mode, colset, "chat_id")){
 			SQL.append("chat_id = ?,");
 			params.add(info.getChatId());
 		}
-		if(!cols.contains("msg_type")){
+		if(columnCheck(mode, colset, "msg_type")){
 			SQL.append("msg_type = ?,");
 			params.add(info.getMessageType());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ?,");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}
-		if(!cols.contains("msg_content")){
+		if(columnCheck(mode, colset, "msg_content")){
 			SQL.append("msg_content = ?,");
 			params.add(info.getMessageContent());
 		}
-		if(!cols.contains("sender")){
+		if(columnCheck(mode, colset, "sender")){
 			SQL.append("sender = ?, ");
 			params.add(info.getSender());
 		}
-		if(!cols.contains("send_time")){
+		if(columnCheck(mode, colset, "send_time")){
 			SQL.append("send_time = ?,  ");
 			params.add(info.getSendTime());
 		}

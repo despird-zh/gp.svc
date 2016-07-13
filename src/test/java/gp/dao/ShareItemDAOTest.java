@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ShareItemDAO;
 import com.gp.info.InfoId;
@@ -50,7 +51,7 @@ public class ShareItemDAOTest extends AbstractJUnit4SpringContextTests{
 		orgdao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = orgdao.update( info);
+		int c = orgdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		ShareItemInfo info2= orgdao.query( id);

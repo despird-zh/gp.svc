@@ -22,6 +22,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MeasureDAO;
@@ -247,25 +248,25 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	}
 
 	@Override
-	public int update(MeasureInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(MeasureInfo info, FilterMode mode,FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer("UPDATE gp_measures SET ");
-		if(!cols.contains("measure_time")){
+		if(columnCheck(mode, colset, "measure_time")){
 			SQL.append("measure_time = ?, ");
 			params.add(info.getMeasureTime());
 		}
-		if(!cols.contains("measure_type")){
+		if(columnCheck(mode, colset, "measure_type")){
 			SQL.append("measure_type = ?, ");
 			params.add(info.getMeasureType());
 		}
-		if(!cols.contains("trace_src_id")){
+		if(columnCheck(mode, colset, "trace_src_id")){
 			SQL.append("trace_src_id = ?,");
 			params.add(info.getTraceSourceId());
 		}
 		
 		for(Map.Entry<FlatColLocator, String> entry : info.getFlatColMap().entrySet()){
-			if(cols.contains(entry.getKey().getColumn())) continue;
+			if(!columnCheck(mode, colset, entry.getKey().getColumn())) continue;
 			
 			SQL.append(entry.getKey().getColumn()).append(" = ?,");
 			params.add(entry.getValue());

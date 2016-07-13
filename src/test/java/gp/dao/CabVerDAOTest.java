@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.CabVersionDAO;
 import com.gp.info.CabVersionInfo;
@@ -63,7 +64,7 @@ public class CabVerDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setDescription("sub0001");
-		int c = filedao.update(info);
+		int c = filedao.update(info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		CabVersionInfo info2= filedao.query( id);

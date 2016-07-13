@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ChatMessageDispatchDAO;
 import com.gp.info.FlatColLocator;
@@ -76,26 +77,26 @@ public class ChatMessageDispatchDAOImpl extends DAOSupport implements ChatMessag
 	}
 
 	@Override
-	public int update( ChatMessageDispatchInfo info, FlatColLocator ...exclcols) {
+	public int update( ChatMessageDispatchInfo info, FilterMode mode,FlatColLocator ...exclcols) {
 		StringBuffer SQL = new StringBuffer();
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		SQL.append("UPDATE gp_chat_dispatch SET ");
 		
-		if(!cols.contains("message_id")){
+		if(columnCheck(mode, colset, "message_id")){
 			SQL.append("message_id = ?,");
 			params.add(info.getMessageId());
 		}
-		if(!cols.contains("receiver")){
+		if(columnCheck(mode, colset, "receiver")){
 			SQL.append("receiver = ?,");
 			params.add(info.getReceiver());
 		}
 
-		if(!cols.contains("touch_flag")){
+		if(columnCheck(mode, colset, "touch_flag")){
 			SQL.append("touch_flag = ?,");
 			params.add(info.getTouchFlag());
 		}
-		if(!cols.contains("touch_time")){
+		if(columnCheck(mode, colset, "touch_time")){
 			SQL.append("touch_time = ?, ");
 			params.add(info.getTouchTime());
 		}

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.BinaryDAO;
 import com.gp.info.BinaryInfo;
@@ -81,44 +82,45 @@ public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 	}
 
 	@Override
-	public int update(BinaryInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(BinaryInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_binaries set ");
-		if(!cols.contains("size")){
+		
+		if(columnCheck(mode, colset, "size")){
 			SQL.append("size = ?,");
 			params.add(info.getSize());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("storage_id")){
+		if(columnCheck(mode, colset, "storage_id")){
 			SQL.append("storage_id = ?,");
 			params.add(info.getStorageId());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?,");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("store_location")){
+		if(columnCheck(mode, colset, "store_location")){
 			SQL.append("store_location = ?,");
 			params.add(info.getStoreLocation());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("format")){
+		if(columnCheck(mode, colset, "format")){
 			SQL.append("format = ?, ");
 			params.add(info.getFormat());
 		}
-		if(!cols.contains("creator")){
+		if(columnCheck(mode, colset, "creator")){
 			SQL.append("creator = ?,");
 			params.add(info.getCreator());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ?,");
 			params.add(info.getCreateDate());
 		}

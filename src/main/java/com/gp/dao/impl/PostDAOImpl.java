@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostDAO;
 import com.gp.info.FlatColLocator;
@@ -82,69 +83,69 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 	}
 
 	@Override
-	public int update( PostInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( PostInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_posts set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?, ");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ?, ");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ? ,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("content")){
+		if(columnCheck(mode, colset, "content")){
 			SQL.append("content = ? ,");
 			params.add(info.getContent());
 		}
-		if(!cols.contains("excerpt")){
+		if(columnCheck(mode, colset, "excerpt")){
 			SQL.append("excerpt = ? ,");
 			params.add(info.getExcerpt());
 		}
-		if(!cols.contains("title")){
+		if(columnCheck(mode, colset, "title")){
 			SQL.append("title = ? , ");
 			params.add(info.getTitle());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ? ,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("comment_on")){
+		if(columnCheck(mode, colset, "comment_on")){
 			SQL.append("comment_on = ? ,");
 			params.add(info.isCommentOn());
 		}
-		if(!cols.contains("post_type")){
+		if(columnCheck(mode, colset, "post_type")){
 			SQL.append("post_type = ? ,");
 			params.add(info.getPostType());
 		}
-		if(!cols.contains("comment_count")){
+		if(columnCheck(mode, colset, "comment_count")){
 			SQL.append("comment_count = ? ,");
 			params.add(info.getCommentCount());
 		}
-		if(!cols.contains("upvote_count")){
+		if(columnCheck(mode, colset, "upvote_count")){
 			SQL.append("upvote_count = ? ,");
 			params.add(info.getUpvoteCount());
 		}
-		if(!cols.contains("downvote_count")){
+		if(columnCheck(mode, colset, "downvote_count")){
 			SQL.append("downvote_count = ? ,");
 			params.add(info.getDownvoteCount());
 		}
-		if(!cols.contains("post_time")){
+		if(columnCheck(mode, colset, "post_time")){
 			SQL.append("post_time = ? ,");
 			params.add(info.getPostDate());
 		}

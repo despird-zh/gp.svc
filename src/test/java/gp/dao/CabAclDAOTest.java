@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
@@ -50,7 +51,7 @@ public class CabAclDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setAclHash("sub0001");
-		int c = acldao.update(  info);
+		int c = acldao.update(  info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		CabAclInfo info2= acldao.query(id);

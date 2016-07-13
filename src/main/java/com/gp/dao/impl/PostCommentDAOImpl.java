@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostCommentDAO;
 import com.gp.info.FlatColLocator;
@@ -79,53 +80,53 @@ public class PostCommentDAOImpl extends DAOSupport implements PostCommentDAO{
 	}
 
 	@Override
-	public int update( PostCommentInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( PostCommentInfo info, FilterMode mode,FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_post_comments set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("comment_pid")){
+		if(columnCheck(mode, colset, "comment_pid")){
 			SQL.append("comment_pid = ?,");
 			params.add(info.getParentId());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("post_id")){
+		if(columnCheck(mode, colset, "post_id")){
 			SQL.append("post_id = ?,");
 			params.add(info.getPostId());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?,");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("author")){
+		if(columnCheck(mode, colset, "author")){
 			SQL.append("author = ?,");
 			params.add(info.getAuthor());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ?,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("content")){
+		if(columnCheck(mode, colset, "content")){
 			SQL.append("content = ?,");
 			params.add(info.getContent());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("comment_time")){
+		if(columnCheck(mode, colset, "comment_time")){
 			SQL.append("comment_time = ?,");
 			params.add(info.getCommentDate());
 		}

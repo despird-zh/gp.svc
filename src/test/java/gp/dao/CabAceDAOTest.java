@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.CabAceDAO;
 import com.gp.info.CabAceInfo;
@@ -52,7 +53,7 @@ public class CabAceDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setSubject("sub0001");
-		int c = acedao.update(  info);
+		int c = acedao.update(  info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		CabAceInfo info2= acedao.query( id);

@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RoleDAO;
 import com.gp.info.FlatColLocator;
@@ -74,17 +75,17 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 	}
 
 	@Override
-	public int update(RoleInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(RoleInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_roles set ");
-		if(!cols.contains("role_name")){
+		if(columnCheck(mode, colset, "role_name")){
 			SQL.append("role_name = ?,");
 			params.add(info.getRoleName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}

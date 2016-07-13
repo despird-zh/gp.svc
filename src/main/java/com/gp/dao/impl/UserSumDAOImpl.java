@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserSumDAO;
 import com.gp.info.FlatColLocator;
@@ -82,30 +83,30 @@ public class UserSumDAOImpl extends DAOSupport implements UserSumDAO{
 	}
 
 	@Override
-	public int update(UserSumInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(UserSumInfo info,FilterMode mode, FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_user_summary set ");
 		
-		if(!cols.contains("account")){
+		if(columnCheck(mode, colset, "account")){
 			SQL.append("account = ?,");
 			params.add(info.getAccount());
 		}
-		if(!cols.contains("task_sum")){
+		if(columnCheck(mode, colset, "task_sum")){
 			SQL.append("task_sum = ?,");
 			params.add(info.getTaskSummary());
 		}
-		if(!cols.contains("share_sum")){
+		if(columnCheck(mode, colset, "share_sum")){
 			SQL.append("share_sum = ?,");
 			params.add(info.getShareSummary());
 		}
-		if(!cols.contains("post_sum")){
+		if(columnCheck(mode, colset, "post_sum")){
 			SQL.append("post_sum = ?,");
 			params.add(info.getPostSummary());
 		}
-		if(!cols.contains("file_sum")){
+		if(columnCheck(mode, colset, "file_sum")){
 			SQL.append("file_sum = ?,");
 			params.add(info.getFileSummary());
 		}

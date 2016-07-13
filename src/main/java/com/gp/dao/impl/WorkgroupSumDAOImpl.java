@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupSumDAO;
 import com.gp.info.FlatColLocator;
@@ -83,38 +84,38 @@ public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{
 	}
 
 	@Override
-	public int update(WorkgroupSumInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(WorkgroupSumInfo info, FilterMode mode, FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_workgroup_summary set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("file_sum")){
+		if(columnCheck(mode, colset, "file_sum")){
 			SQL.append("file_sum = ?,");
 			params.add(info.getFileSummary());
 		}
-		if(!cols.contains("task_sum")){
+		if(columnCheck(mode, colset, "task_sum")){
 			SQL.append("task_sum = ?,");
 			params.add(info.getTaskSummary());
 		}
-		if(!cols.contains("post_sum")){
+		if(columnCheck(mode, colset, "post_sum")){
 			SQL.append("post_sum = ?,");
 			params.add(info.getPostSummary());
 		}
-		if(!cols.contains("member_sum")){
+		if(columnCheck(mode, colset, "member_sum")){
 			SQL.append("member_sum = ?,");
 			params.add(info.getMemberSummary());
 		}
-		if(!cols.contains("publish_sum")){
+		if(columnCheck(mode, colset, "publish_sum")){
 			SQL.append("publish_sum = ?,");
 			params.add(info.getPublishSummary());
 		}
-		if(!cols.contains("netdisk_sum")){
+		if(columnCheck(mode, colset, "netdisk_sum")){
 			SQL.append("netdisk_sum = ?,");
 			params.add(info.getNetdiskSummary());
 		}

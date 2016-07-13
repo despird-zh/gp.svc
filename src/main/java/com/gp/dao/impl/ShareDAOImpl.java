@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareDAO;
 import com.gp.info.FlatColLocator;
@@ -83,54 +84,54 @@ public class ShareDAOImpl extends DAOSupport implements ShareDAO{
 	}
 
 	@Override
-	public int update( ShareInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( ShareInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 	
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_shares set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("sharer")){
+		if(columnCheck(mode, colset, "sharer")){
 			SQL.append("sharer = ? , ");
 			params.add(info.getSharer());
 		}
-		if(!cols.contains("target")){
+		if(columnCheck(mode, colset, "target")){
 			SQL.append("target = ?, ");
 			params.add(info.getTarget());
 		}
-		if(!cols.contains("owm")){
+		if(columnCheck(mode, colset, "owm")){
 		SQL.append("owm = ?,");
 		params.add(info.getOwm());
 		}
-		if(!cols.contains("share_key")){
+		if(columnCheck(mode, colset, "share_key")){
 			SQL.append("share_key = ?, ");
 			params.add(info.getShareKey());
 		}
-		if(!cols.contains("share_time")){
+		if(columnCheck(mode, colset, "share_time")){
 			SQL.append("share_time = ?, ");
 			params.add(info.getShareDate());
 		}
-		if(!cols.contains("expire_time")){
+		if(columnCheck(mode, colset, "expire_time")){
 			SQL.append("expire_time = ?, ");
 			params.add(info.getExpireDate());
 		}
-		if(!cols.contains("access_limit")){
+		if(columnCheck(mode, colset, "access_limit")){
 			SQL.append("access_limit = ?,");
 			params.add(info.getAccessLimit());
 		}
-		if(!cols.contains("share_name")){
+		if(columnCheck(mode, colset, "share_name")){
 			SQL.append("share_name = ?, ");
 			params.add(info.getShareName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}

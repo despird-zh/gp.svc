@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.TaskDAO;
 import com.gp.dao.TaskRouteDAO;
@@ -55,7 +56,7 @@ public class TaskRouteDAOTest extends AbstractJUnit4SpringContextTests{
 		orgdao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = orgdao.update(  info);
+		int c = orgdao.update(  info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		TaskRouteInfo info2= orgdao.query( id);

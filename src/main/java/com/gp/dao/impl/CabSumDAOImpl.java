@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabSumDAO;
 import com.gp.info.CabSumInfo;
@@ -82,34 +83,34 @@ public class CabSumDAOImpl extends DAOSupport implements CabSumDAO{
 	}
 
 	@Override
-	public int update(CabSumInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(CabSumInfo info,FilterMode mode, FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_cab_summary set ");
 		
-		if(!cols.contains("cabinet_id")){
+		if(columnCheck(mode, colset, "cabinet_id")){
 			SQL.append("cabinet_id = ?,");
 			params.add(info.getCabinetId());
 		}
-		if(!cols.contains("file_sum")){
+		if(columnCheck(mode, colset, "file_sum")){
 			SQL.append("file_sum = ?,");
 			params.add(info.getFileSummary());
 		}
-		if(!cols.contains("folder_sum")){
+		if(columnCheck(mode, colset, "folder_sum")){
 			SQL.append("folder_sum = ?,");
 			params.add(info.getFolderSummary());
 		}
-		if(!cols.contains("total_size")){
+		if(columnCheck(mode, colset, "total_size")){
 			SQL.append("total_size = ?,");
 			params.add(info.getTotalSize());
 		}
-		if(!cols.contains("resource_id")){
+		if(columnCheck(mode, colset, "resource_id")){
 			SQL.append("resource_id = ?,");
 			params.add(info.getResourceId());
 		}
-		if(!cols.contains("resource_type")){
+		if(columnCheck(mode, colset, "resource_type")){
 			SQL.append("resource_type = ?,");
 			params.add(info.getResourceType());
 		}

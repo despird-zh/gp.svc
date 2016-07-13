@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TaskDAO;
 import com.gp.info.FlatColLocator;
@@ -81,68 +82,68 @@ public class TaskDAOImpl extends DAOSupport implements TaskDAO{
 	}
 
 	@Override
-	public int update(TaskInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(TaskInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_tasks set ");
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("hash_code")){
+		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?,");
 			params.add(info.getHashCode());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("task_chronical_id")){
+		if(columnCheck(mode, colset, "task_chronical_id")){
 			SQL.append("task_chronical_id = ?,");
 			params.add(info.getTaskChronicalId());
 		}
-		if(!cols.contains("task_name")){
+		if(columnCheck(mode, colset, "task_name")){
 			SQL.append("task_name = ?,");
 			params.add(info.getTaskName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("weight")){
+		if(columnCheck(mode, colset, "weight")){
 			SQL.append("weight = ?,");
 			params.add(info.getWeight());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("due_time")){
+		if(columnCheck(mode, colset, "due_time")){
 			SQL.append("due_time = ?,");
 			params.add(info.getDueDate());
 		}
-		if(!cols.contains("exec_opinion")){
+		if(columnCheck(mode, colset, "exec_opinion")){
 			SQL.append("exec_opinion = ?,");
 			params.add(info.getOpinion());
 		}
-		if(!cols.contains("exec_time")){
+		if(columnCheck(mode, colset, "exec_time")){
 			SQL.append("exec_time = ?,");
 			params.add(info.getExecuteDate());
 		}
-		if(!cols.contains("complete_time")){
+		if(columnCheck(mode, colset, "complete_time")){
 			SQL.append("complete_time = ?,");
 			params.add(info.getCompleteDate());
 		}
-		if(!cols.contains("assignee_json")){
+		if(columnCheck(mode, colset, "assignee_json")){
 			SQL.append("assignee_json = ?,");
 			params.add(info.getAsignee());
 		}
-		if(!cols.contains("owner")){
+		if(columnCheck(mode, colset, "owner")){
 			SQL.append("owner = ?,");
 			params.add(info.getOwner());
 		}
-		if(!cols.contains("executor")){
+		if(columnCheck(mode, colset, "executor")){
 			SQL.append("executor = ?,");
 			params.add(info.getExecutor());
 		}

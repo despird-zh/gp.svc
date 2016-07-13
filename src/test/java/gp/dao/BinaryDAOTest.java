@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.BinaryDAO;
 import com.gp.info.BinaryInfo;
@@ -54,7 +55,7 @@ public class BinaryDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setHashCode("ss");
-		int c = binarydao.update(  info);
+		int c = binarydao.update(  info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		BinaryInfo info2= binarydao.query( id);

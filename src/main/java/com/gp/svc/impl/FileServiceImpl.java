@@ -19,6 +19,7 @@ import com.gp.common.Cabinets;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
@@ -224,7 +225,7 @@ public class FileServiceImpl implements FileService{
 				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
 				svcctx.setTraceInfo(aceinfo);
 				
-				acedao.update(aceinfo);
+				acedao.update(aceinfo,FilterMode.NONE);
 			}
 		}catch(DataAccessException dae){
 			

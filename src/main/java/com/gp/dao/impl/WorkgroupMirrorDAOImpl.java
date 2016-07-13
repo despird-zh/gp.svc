@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupMirrorDAO;
 import com.gp.info.FlatColLocator;
@@ -81,29 +82,29 @@ public class WorkgroupMirrorDAOImpl extends DAOSupport implements WorkgroupMirro
 	}
 
 	@Override
-	public int update(WorkgroupMirrorInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(WorkgroupMirrorInfo info,FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_workgroup_mirror set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("source_id")){
+		if(columnCheck(mode, colset, "source_id")){
 			SQL.append("source_id = ? ,");
 			params.add(info.getSourceId());
 		}
-		if(!cols.contains("mirror_state")){
+		if(columnCheck(mode, colset, "mirror_state")){
 			SQL.append("mirror_state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("mirror_owm")){
+		if(columnCheck(mode, colset, "mirror_owm")){
 			SQL.append("mirror_owm = ?,");
 			params.add(info.getOwm());
 		}
-		if(!cols.contains("last_sync_time")){
+		if(columnCheck(mode, colset, "last_sync_time")){
 			SQL.append("last_sync_time = ?,");
 			params.add(info.getLastSyncDate());
 		}

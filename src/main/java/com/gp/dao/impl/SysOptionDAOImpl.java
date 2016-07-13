@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SysOptionDAO;
 import com.gp.info.FlatColLocator;
@@ -80,25 +81,25 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 	}
 
 	@Override
-	public int update( SysOptionInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update( SysOptionInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_sys_options set ");
-		if(!cols.contains("opt_group")){
+		if(columnCheck(mode, colset, "opt_group")){
 			SQL.append("opt_group = ?,");
 			params.add(info.getOptionGroup());
 		}
-		if(!cols.contains("opt_key")){
+		if(columnCheck(mode, colset, "opt_key")){
 			SQL.append("opt_key = ?,");
 			params.add(info.getOptionKey());
 		}
-		if(!cols.contains("opt_value")){
+		if(columnCheck(mode, colset, "opt_value")){
 			SQL.append("opt_value = ? , ");
 			params.add(info.getOptionValue());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}

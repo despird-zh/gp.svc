@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SourceDAO;
 import com.gp.info.SourceInfo;
@@ -81,57 +82,57 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 	}
 
 	@Override
-	public int update(SourceInfo info, FlatColLocator ...exclcols) {
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(SourceInfo info, FilterMode mode, FlatColLocator ...exclcols) {
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_sources set ");
 		
-		if(!cols.contains("entity_code")){
+		if(columnCheck(mode, colset, "entity_code")){
 			SQL.append("entity_code = ?,");
 			params.add(info.getEntityCode());
 		}
-		if(!cols.contains("node_code")){
+		if(columnCheck(mode, colset, "node_code")){
 			SQL.append("node_code = ?,");
 			params.add(info.getNodeCode());
 		}
-		if(!cols.contains("source_name")){
+		if(columnCheck(mode, colset, "source_name")){
 			SQL.append("source_name = ?,");
 			params.add(info.getSourceName());
 		}
-		if(!cols.contains("abbr")){
+		if(columnCheck(mode, colset, "abbr")){
 			SQL.append("abbr = ?,");
 			params.add(info.getAbbr());
 		}
-		if(!cols.contains("short_name")){
+		if(columnCheck(mode, colset, "short_name")){
 			SQL.append("short_name = ? ,");
 			params.add(info.getShortName());
 		}
-		if(!cols.contains("descr")){
+		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");
 			params.add(info.getDescription());
 		}
-		if(!cols.contains("email")){
+		if(columnCheck(mode, colset, "email")){
 			SQL.append("email = ?,");
 			params.add(info.getEmail());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("service_url")){
+		if(columnCheck(mode, colset, "service_url")){
 		SQL.append("service_url = ?,");
 		params.add(info.getServiceUrl());
 		}
-		if(!cols.contains("binary_url")){
+		if(columnCheck(mode, colset, "binary_url")){
 		SQL.append("binary_url = ?,");
 		params.add(info.getBinaryUrl());
 		}
-		if(!cols.contains("admin")){
+		if(columnCheck(mode, colset, "admin")){
 		SQL.append("admin = ?,");
 		params.add(info.getAdmin());
 		}
-		if(!cols.contains("hash_key")){
+		if(columnCheck(mode, colset, "hash_key")){
 		SQL.append("hash_key = ?,");
 		params.add(info.getHashKey());
 		}

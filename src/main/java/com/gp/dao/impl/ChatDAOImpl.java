@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ChatDAO;
 import com.gp.info.ChatInfo;
@@ -76,33 +77,33 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 	}
 
 	@Override
-	public int update(ChatInfo info, FlatColLocator... excludeCols) {
-		Set<String> cols = FlatColumns.toColumnSet(excludeCols);
+	public int update(ChatInfo info, FilterMode mode,FlatColLocator... excludeCols) {
+		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_chats SET ");
 		
-		if(!cols.contains("chat_type")){
+		if(columnCheck(mode, colset, "chat_type")){
 			SQL.append("chat_type = ?,  ");
 			params.add(info.getChatType());
 		}
-		if(!cols.contains("sponsor")){
+		if(columnCheck(mode, colset, "sponsor")){
 			SQL.append("sponsor = ?,  ");
 			params.add(info.getSponsor());
 		}
-		if(!cols.contains("topic")){
+		if(columnCheck(mode, colset, "topic")){
 			SQL.append("topic = ?,  ");
 			params.add(info.getTopic());
 		}
-		if(!cols.contains("is_ephemeral")){
+		if(columnCheck(mode, colset, "is_ephemeral")){
 			SQL.append("is_ephemeral = ?,  ");
 			params.add(info.isEphemeral());
 		}
-		if(!cols.contains("mbr_group_id")){
+		if(columnCheck(mode, colset, "mbr_group_id")){
 			SQL.append("mbr_group_id = ?,  ");
 			params.add(info.getMemberGroupId());
 		}
-		if(!cols.contains("create_time")){
+		if(columnCheck(mode, colset, "create_time")){
 			SQL.append("create_time = ?,  ");
 			params.add(info.getCreateTime());
 		}

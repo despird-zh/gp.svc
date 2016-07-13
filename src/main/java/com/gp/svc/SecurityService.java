@@ -7,6 +7,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.info.UserInfo;
@@ -120,4 +121,7 @@ public interface SecurityService {
 	 * @param resetRetry flag to resetRetry :true - reset to normal ; false count retry times
 	 **/
 	public boolean updateLogonTrace(ServiceContext svcctx, InfoId<Long> userId,boolean resetRetry)throws ServiceException;
+
+	
+	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
 }

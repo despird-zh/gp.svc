@@ -11,6 +11,7 @@ import com.config.TestConfig;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.CabinetDAO;
 import com.gp.info.CabinetInfo;
@@ -57,7 +58,7 @@ public class CabDAOTest extends AbstractJUnit4SpringContextTests{
 		System.out.println("--- create done:"+id.toString());
 		
 		info.setDescription("sub0001");
-		int c = cabinetdao.update( info);
+		int c = cabinetdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		CabinetInfo info2= cabinetdao.query( id);

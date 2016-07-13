@@ -15,6 +15,7 @@ import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.SystemOptions;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.dao.ImageDAO;
 import com.gp.dao.TaskDAO;
 import com.gp.dao.TaskRouteDAO;
@@ -57,7 +58,7 @@ public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
 		imgdao.create( info);
 		System.out.println("--- create done:"+id.toString());
 		
-		int c = imgdao.update( info);
+		int c = imgdao.update( info,FilterMode.NONE);
 		System.out.println("--- update done:"+c);
 		
 		ImageInfo info2= imgdao.query( id);

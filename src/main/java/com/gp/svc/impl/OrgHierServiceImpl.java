@@ -26,6 +26,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
@@ -137,7 +138,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			
 			svcctx.setTraceInfo(orginfo);
-			return orghierdao.update(orginfo) > 0;
+			return orghierdao.update(orginfo,FilterMode.NONE) > 0;
 		
 		}catch(DataAccessException dae){
 			

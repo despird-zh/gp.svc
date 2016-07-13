@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AuditDAO;
 import com.gp.info.AuditInfo;
@@ -83,62 +84,62 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 	}
 
 	@Override
-	public int update(AuditInfo info ,  FlatColLocator ...exclcols){
-		Set<String> cols = FlatColumns.toColumnSet(exclcols);
+	public int update(AuditInfo info , FilterMode mode, FlatColLocator ...exclcols){
+		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_audits set ");
 		
-		if(!cols.contains("workgroup_id")){
+		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(!cols.contains("verb")){
+		if(columnCheck(mode, colset, "verb")){
 			SQL.append("verb = ?, ");
 			params.add(info.getVerb());
 		}
-		if(!cols.contains("subject")){
+		if(columnCheck(mode, colset, "subject")){
 			SQL.append("subject = ?,");
 			params.add(info.getSubject());
 		}
-		if(!cols.contains("client")){
+		if(columnCheck(mode, colset, "client")){
 			SQL.append("client = ?,");
 			params.add(info.getClient());
 		}
-		if(!cols.contains("host")){
+		if(columnCheck(mode, colset, "host")){
 			SQL.append(" host = ?, ");
 			params.add(info.getHost());
 		}
-		if(!cols.contains("app")){
+		if(columnCheck(mode, colset, "app")){
 			SQL.append("app = ?, ");
 			params.add(info.getApp());
 		}
-		if(!cols.contains("version")){
+		if(columnCheck(mode, colset, "version")){
 			SQL.append("version = ?,");
 			params.add(info.getVersion());
 		}
-		if(!cols.contains("predicate_json")){
+		if(columnCheck(mode, colset, "predicate_json")){
 			SQL.append("predicate_json = ?,");
 			params.add(info.getPredicates());
 		}
-		if(!cols.contains("object")){
+		if(columnCheck(mode, colset, "object")){
 			SQL.append("object = ?,");
 			params.add(info.getTarget());
 		}
-		if(!cols.contains("state")){
+		if(columnCheck(mode, colset, "state")){
 			SQL.append("state = ?,");
 			params.add(info.getState());
 		}
-		if(!cols.contains("message")){
+		if(columnCheck(mode, colset, "message")){
 		SQL.append("message=?,");
 		params.add(info.getMessage());
 		}
-		if(!cols.contains("audit_time")){
+		if(columnCheck(mode, colset, "audit_time")){
 		SQL.append("audit_time=?,");
 		params.add(info.getAuditDate());
 		}
-		if(!cols.contains("elapse_time")){
+		if(columnCheck(mode, colset, "elapse_time")){
 		SQL.append("elapse_time = ?,");
 		params.add(info.getElapseTime());
 		}
