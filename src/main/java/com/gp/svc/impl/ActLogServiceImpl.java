@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.ActLogDAO;
+import com.gp.dao.OperationLogDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.ActLogInfo;
+import com.gp.info.OperationLogInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -32,12 +32,12 @@ public class ActLogServiceImpl implements ActLogService{
 	PseudoDAO pseudodao;
 	
 	@Autowired
-	ActLogDAO actlogdao;
+	OperationLogDAO actlogdao;
 	
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getWorkgroupActivityLogs(ServiceContext svcctx, InfoId<Long> wid,
-			PageQuery pagequery) throws ServiceException {
+	public PageWrapper<OperationLogInfo> getWorkgroupActivityLogs(ServiceContext svcctx, InfoId<Long> wid,
+																  PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.log_id) ");
@@ -46,7 +46,7 @@ public class ActLogServiceImpl implements ActLogService{
 		Object[] params = new Object[]{wid.getId()};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<ActLogInfo> pwrapper = new PageWrapper<ActLogInfo>();
+		PageWrapper<OperationLogInfo> pwrapper = new PageWrapper<OperationLogInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -65,9 +65,9 @@ public class ActLogServiceImpl implements ActLogService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<ActLogInfo> result = null;
+		List<OperationLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -79,7 +79,7 @@ public class ActLogServiceImpl implements ActLogService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getAccountActivityLogs(ServiceContext svcctx, String account, PageQuery pagequery)
+	public PageWrapper<OperationLogInfo> getAccountActivityLogs(ServiceContext svcctx, String account, PageQuery pagequery)
 			throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
@@ -89,7 +89,7 @@ public class ActLogServiceImpl implements ActLogService{
 		Object[] params = new Object[]{account};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<ActLogInfo> pwrapper = new PageWrapper<ActLogInfo>();
+		PageWrapper<OperationLogInfo> pwrapper = new PageWrapper<OperationLogInfo>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -107,9 +107,9 @@ public class ActLogServiceImpl implements ActLogService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<ActLogInfo> result = null;
+		List<OperationLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -121,8 +121,8 @@ public class ActLogServiceImpl implements ActLogService{
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<ActLogInfo> getObjectActivityLogs(ServiceContext svcctx, InfoId<?> objectId,
-			PageQuery pagequery) throws ServiceException {
+	public PageWrapper<OperationLogInfo> getObjectActivityLogs(ServiceContext svcctx, InfoId<?> objectId,
+															   PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.log_id) ");
@@ -131,7 +131,7 @@ public class ActLogServiceImpl implements ActLogService{
 		Object[] params = new Object[]{objectId.toString()};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<ActLogInfo> pwrapper = new PageWrapper<ActLogInfo>();
+		PageWrapper<OperationLogInfo> pwrapper = new PageWrapper<OperationLogInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -150,9 +150,9 @@ public class ActLogServiceImpl implements ActLogService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<ActLogInfo> result = null;
+		List<OperationLogInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, ActLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationLogDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -163,7 +163,7 @@ public class ActLogServiceImpl implements ActLogService{
 	}
 
 	@Override
-	public void addActivityLog(ServiceContext svcctx, ActLogInfo activitylog) throws ServiceException {
+	public void addActivityLog(ServiceContext svcctx, OperationLogInfo activitylog) throws ServiceException {
 
 		try{
 			actlogdao.create(activitylog);
