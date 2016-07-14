@@ -107,7 +107,7 @@ public enum Operations {
 	NEW_BIN,
 	REMOVE_BIN,
 	/** activity log */
-	FIND_ACT_LOGS,
+	FIND_OPER_LOGS,
 	/** system measure */
 	FIND_MEASURE,
 	FIND_MEASURES,
