@@ -10,8 +10,6 @@ public class UserExt{
 
 	private String storageName;
 
-	
-
 	public String getShortName() {
 		return shortName;
 	}
