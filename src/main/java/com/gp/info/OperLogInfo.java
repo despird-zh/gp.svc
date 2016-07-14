@@ -2,7 +2,7 @@ package com.gp.info;
 
 import java.util.Date;
 
-public class OperationLogInfo extends TraceableInfo<Long>{
+public class OperLogInfo extends TraceableInfo<Long>{
 
 	private static final long serialVersionUID = 1L;
 

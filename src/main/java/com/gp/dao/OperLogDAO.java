@@ -7,23 +7,23 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.OperationLogInfo;
+import com.gp.info.OperLogInfo;
 import com.gp.info.InfoId;
 
-public interface OperationLogDAO extends BaseDAO<OperationLogInfo>{
+public interface OperLogDAO extends BaseDAO<OperLogInfo>{
 
-	public List<OperationLogInfo> queryByAccount(String account);
+	public List<OperLogInfo> queryByAccount(String account);
 	
-	public List<OperationLogInfo> queryByWorkgroup(InfoId<Long> wid);
+	public List<OperLogInfo> queryByWorkgroup(InfoId<Long> wid);
 	
-	public List<OperationLogInfo> queryByObject(InfoId<Long> objectid);
+	public List<OperLogInfo> queryByObject(InfoId<Long> objectid);
 	
 
-	public static RowMapper<OperationLogInfo> ActLogMapper = new RowMapper<OperationLogInfo>(){
+	public static RowMapper<OperLogInfo> ActLogMapper = new RowMapper<OperLogInfo>(){
 
 		@Override
-		public OperationLogInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-			OperationLogInfo actlog = new OperationLogInfo();
+		public OperLogInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			OperLogInfo actlog = new OperLogInfo();
 			
 			InfoId<Long> logid = IdKey.ACT_LOG.getInfoId(rs.getLong("log_id"));
 			actlog.setInfoId(logid);

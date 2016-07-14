@@ -17,22 +17,22 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.OperationLogDAO;
-import com.gp.info.OperationLogInfo;
+import com.gp.dao.OperLogDAO;
+import com.gp.info.OperLogInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 @Component("activitylogDAO")
-public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
+public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 
-	Logger LOGGER = LoggerFactory.getLogger(OperationLogDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(OperLogDAOImpl.class);
 	
 	@Autowired
-	public OperationLogDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public OperLogDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create(OperationLogInfo info) {
+	public int create(OperLogInfo info) {
 
 		StringBuffer SQL = new StringBuffer();
 		
@@ -84,7 +84,7 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 	}
 
 	@Override
-	public int update(OperationLogInfo info, FilterMode mode, FlatColLocator ...cols) {
+	public int update(OperLogInfo info, FilterMode mode, FlatColLocator ...cols) {
 		
 		StringBuffer SQL = new StringBuffer();
 		Set<String> colset = FlatColumns.toColumnSet(cols);
@@ -149,7 +149,7 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 	}
 
 	@Override
-	public OperationLogInfo query(InfoId<?> id) {
+	public OperLogInfo query(InfoId<?> id) {
 		String SQL = "SELECT * FROM aq_actibity_log WHERE log_id = ?";
 		Object[] params = new Object[]{				
 				id.getId()
@@ -159,7 +159,7 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperationLogInfo> ainfo = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperLogInfo> ainfo = jtemplate.query(SQL, params, ActLogMapper);
 		return ainfo.size()>0 ? ainfo.get(0):null;
 	}
 	
@@ -169,7 +169,7 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 	}
 
 	@Override
-	public List<OperationLogInfo> queryByAccount(String account) {
+	public List<OperLogInfo> queryByAccount(String account) {
 		String SQL = "SELECT * FROM aq_operation_log WHERE account = ? ORDER BY log_id desc";
 		Object[] params = new Object[]{				
 				account
@@ -179,12 +179,12 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperationLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 
 	@Override
-	public List<OperationLogInfo> queryByWorkgroup(InfoId<Long> wid) {
+	public List<OperLogInfo> queryByWorkgroup(InfoId<Long> wid) {
 		String SQL = "SELECT * FROM aq_operation_log WHERE account = ? ORDER BY log_id desc";
 		Object[] params = new Object[]{				
 				wid.getId()
@@ -194,12 +194,12 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperationLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 
 	@Override
-	public List<OperationLogInfo> queryByObject(InfoId<Long> objectid) {
+	public List<OperLogInfo> queryByObject(InfoId<Long> objectid) {
 		String SQL = "SELECT * FROM aq_operation_log WHERE object_id = ? ORDER BY log_id desc";
 		Object[] params = new Object[]{				
 				objectid.toString()
@@ -209,7 +209,7 @@ public class OperationLogDAOImpl extends DAOSupport implements OperationLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperationLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 
