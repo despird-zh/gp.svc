@@ -89,7 +89,7 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		StringBuffer SQL = new StringBuffer();
 		Set<String> colset = FlatColumns.toColumnSet(cols);
 		List<Object> params = new ArrayList<Object>();
-		SQL.append("update gp_activity_log set ");
+		SQL.append("update gp_operation_log set ");
 		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());

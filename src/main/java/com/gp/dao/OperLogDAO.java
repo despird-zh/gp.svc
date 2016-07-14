@@ -25,7 +25,7 @@ public interface OperLogDAO extends BaseDAO<OperLogInfo>{
 		public OperLogInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			OperLogInfo actlog = new OperLogInfo();
 			
-			InfoId<Long> logid = IdKey.ACT_LOG.getInfoId(rs.getLong("log_id"));
+			InfoId<Long> logid = IdKey.OPER_LOG.getInfoId(rs.getLong("log_id"));
 			actlog.setInfoId(logid);
 			actlog.setAccount(rs.getString("account"));
 			actlog.setOperation(rs.getString("operation"));

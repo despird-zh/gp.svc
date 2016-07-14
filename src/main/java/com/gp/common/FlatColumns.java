@@ -44,7 +44,9 @@ public class FlatColumns {
 	public static final FlatColumn EMAIL = new FlatColumn("email");
 	public static final FlatColumn AVATAR_ID = new FlatColumn("avatar_id");
 	public static final FlatColumn SIGNATURE = new FlatColumn("signature");
-	
+	public static final FlatColumn LANGUAGE = new FlatColumn("language");
+	public static final FlatColumn TIMEZONE = new FlatColumn("timezone");
+	public static final FlatColumn PASSWORD = new FlatColumn("password");
 	/**
 	 * Convert the Columns to string set for easy check existence.
 	 * @param cols the columns source

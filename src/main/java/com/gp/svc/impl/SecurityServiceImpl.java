@@ -29,6 +29,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.SystemOptions;
+import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers.UserState;
 import com.gp.config.ServiceConfigurer;
@@ -41,6 +42,7 @@ import com.gp.dao.impl.UserDAOImpl;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.CabinetInfo;
 import com.gp.info.CombineInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
@@ -177,8 +179,19 @@ public class SecurityServiceImpl implements SecurityService{
 				cabinetdao.updateCabCapacity(pricab, pricapacity);
 			}
 			cabinetdao.changeStorage(pricab, storageId);
-			
-			int cnt = userdao.updateAsNeed(uinfo);		
+			// define the columns to be updated.
+			FlatColLocator[] cols = new FlatColLocator[]{
+				FlatColumns.TYPE,
+				FlatColumns.STATE,
+				FlatColumns.EMAIL,
+				FlatColumns.FULL_NAME,
+				FlatColumns.MOBILE,
+				FlatColumns.PHONE,
+				FlatColumns.PASSWORD,
+				FlatColumns.LANGUAGE,
+				FlatColumns.TIMEZONE
+			};
+			int cnt = userdao.update(uinfo,FilterMode.INCLUDE, cols);		
 			
 			return cnt ;
 		}catch(DataAccessException dae){

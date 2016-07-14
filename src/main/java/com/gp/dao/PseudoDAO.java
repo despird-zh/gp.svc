@@ -97,10 +97,12 @@ public interface PseudoDAO {
 	 * 
 	 * @param id the id of row
 	 * @param col the flat column locator 
+	 * @param clazz the class object
+	 * 
 	 * @return Object the column value
 	 **/
 	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz);
-	
+
 	/**
 	 * Query table in flat mode
 	 * 
@@ -109,4 +111,5 @@ public interface PseudoDAO {
 	 * @return Map<String, Object> the map key is FlatColLocator.getColumn() i.e. column name
 	 **/
 	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols);
+	
 }

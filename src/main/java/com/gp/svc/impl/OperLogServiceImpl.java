@@ -14,8 +14,10 @@ import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OperLogDAO;
 import com.gp.dao.PseudoDAO;
+import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.OperLogInfo;
+import com.gp.dao.info.UserInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -33,6 +35,9 @@ public class OperLogServiceImpl implements OperLogService {
 	
 	@Autowired
 	OperLogDAO actlogdao;
+	
+	@Autowired
+	UserDAO userdao;
 	
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
@@ -162,11 +167,14 @@ public class OperLogServiceImpl implements OperLogService {
 		return pwrapper;
 	}
 
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addOperLog(ServiceContext svcctx, OperLogInfo activitylog) throws ServiceException {
+	public void addOperLog(ServiceContext svcctx, OperLogInfo operlog) throws ServiceException {
 
 		try{
-			actlogdao.create(activitylog);
+			UserInfo uinfo = userdao.queryByAccount(operlog.getAccount());
+			operlog.setUserName(uinfo.getFullName());
+			actlogdao.create(operlog);
 
 		}catch(DataAccessException dae){
 

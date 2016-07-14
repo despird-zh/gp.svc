@@ -78,7 +78,7 @@ public enum IdKey implements Identifier{
 	CAB_SUM("gp_cab_summary","rel_id", Long.class),
 	USER_SUM("gp_user_summary","rel_id", Long.class),
 	WORKGROUP_SUM("gp_workgroup_summary","rel_id", Long.class),
-	ACT_LOG("gp_activity_log","log_id", Long.class);
+	OPER_LOG("gp_operation_log","log_id", Long.class);
 
 	/**
 	 * the custom Identifier set 

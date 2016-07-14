@@ -333,8 +333,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 	}
 
 
-	@Override
-	public int updateAsNeed(UserInfo info) {
+	public int updateAsNeed1(UserInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		
 		SQL.append("update gp_users set ")
