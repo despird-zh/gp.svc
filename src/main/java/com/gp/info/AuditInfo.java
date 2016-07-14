@@ -16,7 +16,7 @@ public class AuditInfo extends TraceableInfo<Long>{
 	
 	private String version;
 
-	private String verb;	
+	private String operation;
 
 	private String subject;
 	
@@ -40,12 +40,12 @@ public class AuditInfo extends TraceableInfo<Long>{
 		this.workgroupId = workgroupId;
 	}
 
-	public String getVerb() {
-		return verb;
+	public String getOperation() {
+		return operation;
 	}
 
-	public void setVerb(String verb) {
-		this.verb = verb;
+	public void setOperation(String operation) {
+		this.operation = operation;
 	}
 
 	public String getSubject() {

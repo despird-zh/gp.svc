@@ -32,4 +32,9 @@ public interface ActLogService {
 	public PageWrapper<ActLogInfo> getObjectActivityLogs(ServiceContext svcctx, 
 			InfoId<?> objectId, 
 			PageQuery pagequery) throws ServiceException;
+
+	/**
+	 * Add the activity log into database
+	 **/
+	public void addActivityLog(ServiceContext svcctx, ActLogInfo activitylog) throws ServiceException;
 }

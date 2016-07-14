@@ -162,4 +162,16 @@ public class ActLogServiceImpl implements ActLogService{
 		return pwrapper;
 	}
 
+	@Override
+	public void addActivityLog(ServiceContext svcctx, ActLogInfo activitylog) throws ServiceException {
+
+		try{
+			actlogdao.create(activitylog);
+
+		}catch(DataAccessException dae){
+
+			throw new ServiceException("excp.create", dae, "Activity log");
+		}
+	}
+
 }

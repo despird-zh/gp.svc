@@ -40,7 +40,7 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 		SQL.append("insert into gp_audits (")
 			.append(" workgroup_id, audit_id,")
 			.append("client, host, app, version, ")
-			.append(" verb, subject,")
+			.append(" operation, subject,")
 			.append("predicate_json,object,state,message,")
 			.append("audit_time,elapse_time,modifier,last_modified) values (")
 			.append("?,?,")
@@ -54,7 +54,7 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 		Object[] params = new Object[]{
 			info.getWorkgroupId(),key.getId(),
 			info.getClient(), info.getHost(), info.getApp(), info.getVersion(),
-			info.getVerb(),info.getSubject(),
+			info.getOperation(),info.getSubject(),
 			info.getPredicates(),info.getTarget(),info.getState(),info.getMessage(),
 			info.getAuditDate(),info.getElapseTime(),info.getModifier(),new Date(System.currentTimeMillis())
 		};
@@ -95,9 +95,9 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(columnCheck(mode, colset, "verb")){
-			SQL.append("verb = ?, ");
-			params.add(info.getVerb());
+		if(columnCheck(mode, colset, "operation")){
+			SQL.append("operation = ?, ");
+			params.add(info.getOperation());
 		}
 		if(columnCheck(mode, colset, "subject")){
 			SQL.append("subject = ?,");
@@ -132,16 +132,16 @@ public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 			params.add(info.getState());
 		}
 		if(columnCheck(mode, colset, "message")){
-		SQL.append("message=?,");
-		params.add(info.getMessage());
+			SQL.append("message=?,");
+			params.add(info.getMessage());
 		}
 		if(columnCheck(mode, colset, "audit_time")){
-		SQL.append("audit_time=?,");
-		params.add(info.getAuditDate());
+			SQL.append("audit_time=?,");
+			params.add(info.getAuditDate());
 		}
 		if(columnCheck(mode, colset, "elapse_time")){
-		SQL.append("elapse_time = ?,");
-		params.add(info.getElapseTime());
+			SQL.append("elapse_time = ?,");
+			params.add(info.getElapseTime());
 		}
 		
 		SQL.append("modifier = ?,last_modified = ? ");

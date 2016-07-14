@@ -48,7 +48,7 @@ public class AuditDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setApp("web");
 		info.setVersion("0.1");
 		
-		info.setVerb("add audit");
+		info.setOperation("add audit");
 		info.setSubject("demosub user");
 		info.setPredicates("{\"a\":\"bv\"}");
 		info.setTarget("target");

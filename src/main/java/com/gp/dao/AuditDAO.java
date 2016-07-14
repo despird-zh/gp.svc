@@ -29,7 +29,7 @@ public interface AuditDAO extends BaseDAO<AuditInfo>{
 			info.setApp(rs.getString("app"));
 			info.setVersion(rs.getString("version"));
 			
-			info.setVerb(rs.getString("verb"));
+			info.setOperation(rs.getString("operation"));
 			info.setSubject(rs.getString("subject"));
 			info.setPredicates(rs.getString("predicate_json"));
 			info.setTarget(rs.getString("object"));
