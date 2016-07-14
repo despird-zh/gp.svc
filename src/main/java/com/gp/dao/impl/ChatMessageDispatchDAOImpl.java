@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ChatMessageDispatchDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.ChatMessageDispatchInfo;
+import com.gp.dao.info.ChatMessageDispatchInfo;
 
 @Component("messageDispatchDAO")
 public class ChatMessageDispatchDAOImpl extends DAOSupport implements ChatMessageDispatchDAO{

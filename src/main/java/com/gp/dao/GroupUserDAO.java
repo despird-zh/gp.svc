@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.GroupMemberInfo;
-import com.gp.info.GroupUserInfo;
+import com.gp.dao.info.GroupMemberInfo;
+import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 
 public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{

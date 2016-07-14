@@ -15,7 +15,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.FavoriteInfo;
+import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.FavoriteService;
 

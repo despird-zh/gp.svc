@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -34,11 +33,11 @@ import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.GroupInfo;
-import com.gp.info.GroupUserInfo;
+import com.gp.dao.info.GroupInfo;
+import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
-import com.gp.info.OrgHierInfo;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.OrgHierInfo;
+import com.gp.dao.info.UserInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
 

@@ -10,23 +10,14 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
 import com.gp.common.GeneralConfig;
-import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.dao.ImageDAO;
-import com.gp.dao.TaskDAO;
-import com.gp.dao.TaskRouteDAO;
-import com.gp.dao.VoteDAO;
-import com.gp.dao.WorkgroupDAO;
-import com.gp.info.ImageInfo;
+import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
-import com.gp.info.TaskInfo;
-import com.gp.info.TaskRouteInfo;
-import com.gp.info.VoteInfo;
-import com.gp.info.WorkgroupInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

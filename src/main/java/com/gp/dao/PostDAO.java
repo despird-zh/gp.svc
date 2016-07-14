@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.PostInfo;
+import com.gp.dao.info.PostInfo;
 
 public interface PostDAO extends BaseDAO<PostInfo>{
 

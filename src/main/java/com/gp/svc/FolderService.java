@@ -4,8 +4,8 @@ import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.CabFolderInfo;
-import com.gp.info.CabinetInfo;
+import com.gp.dao.info.CabFolderInfo;
+import com.gp.dao.info.CabinetInfo;
 import com.gp.info.InfoId;
 
 public interface FolderService {

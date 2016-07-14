@@ -7,7 +7,7 @@ import java.util.Set;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.TagInfo;
+import com.gp.dao.info.TagInfo;
 
 public interface TagService {
 

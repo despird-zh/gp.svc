@@ -10,7 +10,7 @@ import com.gp.common.IdKey;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
-import com.gp.info.RolePageInfo;
+import com.gp.dao.info.RolePageInfo;
 
 public interface RolePageDAO extends BaseDAO<RolePageInfo>{
 

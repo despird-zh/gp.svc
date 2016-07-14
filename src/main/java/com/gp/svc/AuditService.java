@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.AuditInfo;
+import com.gp.dao.info.AuditInfo;
 import com.gp.info.InfoId;
 
 public interface AuditService {

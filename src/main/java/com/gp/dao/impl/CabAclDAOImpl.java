@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabAclDAO;
-import com.gp.info.CabAclInfo;
+import com.gp.dao.info.CabAclInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

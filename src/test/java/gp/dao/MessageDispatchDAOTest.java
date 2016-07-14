@@ -13,11 +13,9 @@ import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
-import com.gp.dao.ChatMessageDAO;
 import com.gp.dao.ChatMessageDispatchDAO;
 import com.gp.info.InfoId;
-import com.gp.info.ChatMessageDispatchInfo;
-import com.gp.info.ChatMessageInfo;
+import com.gp.dao.info.ChatMessageDispatchInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

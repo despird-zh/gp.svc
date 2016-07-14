@@ -27,7 +27,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
-import com.gp.info.FavoriteInfo;
+import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

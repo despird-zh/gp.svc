@@ -2,7 +2,7 @@ package com.gp.svc;
 
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.MeasureInfo;
+import com.gp.dao.info.MeasureInfo;
 
 public interface MeasureService {
 

@@ -14,9 +14,9 @@ import com.gp.common.Storages;
 import com.gp.dao.BinaryDAO;
 import com.gp.dao.StorageDAO;
 import com.gp.exception.StorageException;
-import com.gp.info.BinaryInfo;
+import com.gp.dao.info.BinaryInfo;
 import com.gp.info.InfoId;
-import com.gp.info.StorageInfo;
+import com.gp.dao.info.StorageInfo;
 
 /**
  * Binary manager provides the method to interact with binary storage.

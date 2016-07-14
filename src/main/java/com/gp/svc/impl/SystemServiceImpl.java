@@ -27,7 +27,7 @@ import com.gp.dao.SysOptionDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.SysOptionInfo;
+import com.gp.dao.info.SysOptionInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;

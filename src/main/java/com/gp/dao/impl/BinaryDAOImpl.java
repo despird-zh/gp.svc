@@ -18,7 +18,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.BinaryDAO;
-import com.gp.info.BinaryInfo;
+import com.gp.dao.info.BinaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

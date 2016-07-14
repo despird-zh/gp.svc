@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.BinaryInfo;
+import com.gp.dao.info.BinaryInfo;
 import com.gp.info.InfoId;
-import com.gp.info.StorageInfo;
+import com.gp.dao.info.StorageInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 

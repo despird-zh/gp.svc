@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.ShareItemInfo;
+import com.gp.dao.info.ShareItemInfo;
 
 public interface ShareItemDAO extends BaseDAO<ShareItemInfo>{
 

@@ -18,7 +18,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabCommentDAO;
-import com.gp.info.CabCommentInfo;
+import com.gp.dao.info.CabCommentInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

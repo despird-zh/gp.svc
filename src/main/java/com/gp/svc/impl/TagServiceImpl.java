@@ -30,8 +30,8 @@ import com.gp.dao.TagRelDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
-import com.gp.info.TagInfo;
-import com.gp.info.TagRelInfo;
+import com.gp.dao.info.TagInfo;
+import com.gp.dao.info.TagRelInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.TagService;
 

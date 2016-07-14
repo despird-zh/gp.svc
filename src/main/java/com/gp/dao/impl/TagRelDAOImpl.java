@@ -21,7 +21,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.TagRelDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.TagRelInfo;
+import com.gp.dao.info.TagRelInfo;
 
 @Component("tagRelDAO")
 public class TagRelDAOImpl extends DAOSupport implements TagRelDAO{

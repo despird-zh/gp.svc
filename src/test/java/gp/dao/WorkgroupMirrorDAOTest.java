@@ -12,17 +12,9 @@ import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.dao.TaskDAO;
-import com.gp.dao.TaskRouteDAO;
-import com.gp.dao.VoteDAO;
-import com.gp.dao.WorkgroupDAO;
 import com.gp.dao.WorkgroupMirrorDAO;
 import com.gp.info.InfoId;
-import com.gp.info.TaskInfo;
-import com.gp.info.TaskRouteInfo;
-import com.gp.info.VoteInfo;
-import com.gp.info.WorkgroupInfo;
-import com.gp.info.WorkgroupMirrorInfo;
+import com.gp.dao.info.WorkgroupMirrorInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

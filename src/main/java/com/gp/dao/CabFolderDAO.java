@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.CabFolderInfo;
+import com.gp.dao.info.CabFolderInfo;
 import com.gp.info.InfoId;
 
 public interface CabFolderDAO extends BaseDAO<CabFolderInfo>{

@@ -6,8 +6,8 @@ import java.util.Map;
 import com.gp.exception.ServiceException;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.RoleInfo;
-import com.gp.info.RolePageInfo;
+import com.gp.dao.info.RoleInfo;
+import com.gp.dao.info.RolePageInfo;
 
 public interface AuthorizeService {
 

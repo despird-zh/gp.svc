@@ -1,7 +1,6 @@
 package gp.svc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,16 +12,12 @@ import com.config.TestConfig;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.common.GeneralConstants;
-import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
-import com.gp.info.CabAceInfo;
-import com.gp.info.InfoId;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.CabAceInfo;
 import com.gp.svc.AclService;
 import com.gp.svc.CommonService;
-import com.gp.svc.SecurityService;
 
 @ContextConfiguration(classes={TestConfig.class})
 public class AclTest extends AbstractJUnit4SpringContextTests{

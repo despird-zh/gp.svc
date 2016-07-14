@@ -6,7 +6,7 @@ import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.CabAceInfo;
+import com.gp.dao.info.CabAceInfo;
 import com.gp.info.InfoId;
 
 public interface AclService {

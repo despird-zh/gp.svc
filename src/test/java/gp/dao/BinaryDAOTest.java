@@ -14,7 +14,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.BinaryDAO;
-import com.gp.info.BinaryInfo;
+import com.gp.dao.info.BinaryInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 

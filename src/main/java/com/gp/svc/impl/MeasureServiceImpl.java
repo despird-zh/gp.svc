@@ -13,7 +13,7 @@ import com.gp.dao.MeasureDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.MeasureInfo;
+import com.gp.dao.info.MeasureInfo;
 import com.gp.svc.MeasureService;
 
 @Service("measureService")

@@ -19,7 +19,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SourceDAO;
-import com.gp.info.SourceInfo;
+import com.gp.dao.info.SourceInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

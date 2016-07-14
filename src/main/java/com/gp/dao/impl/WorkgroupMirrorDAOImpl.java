@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupMirrorDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.WorkgroupMirrorInfo;
+import com.gp.dao.info.WorkgroupMirrorInfo;
 
 @Component("workgroupMirrorDAO")
 public class WorkgroupMirrorDAOImpl extends DAOSupport implements WorkgroupMirrorDAO{

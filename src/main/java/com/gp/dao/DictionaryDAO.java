@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
-import com.gp.info.DictionaryInfo;
+import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.PropertyInfo;
+import com.gp.dao.info.PropertyInfo;
 
 public interface PropertyDAO extends BaseDAO<PropertyInfo>{
 

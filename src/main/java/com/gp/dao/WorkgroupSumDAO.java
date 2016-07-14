@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.WorkgroupSumInfo;
+import com.gp.dao.info.WorkgroupSumInfo;
 
 public interface WorkgroupSumDAO extends BaseDAO<WorkgroupSumInfo>{
 

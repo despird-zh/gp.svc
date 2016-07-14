@@ -22,7 +22,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.ImageInfo;
+import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.ImageService;
 

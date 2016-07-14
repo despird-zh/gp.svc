@@ -23,7 +23,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RolePageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.RolePageInfo;
+import com.gp.dao.info.RolePageInfo;
 
 @Component("rolepagedao")
 public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{

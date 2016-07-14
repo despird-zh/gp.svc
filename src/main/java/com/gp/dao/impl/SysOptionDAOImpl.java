@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.SysOptionDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.SysOptionInfo;
+import com.gp.dao.info.SysOptionInfo;
 
 @Component("sysOptionDAO")
 public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{

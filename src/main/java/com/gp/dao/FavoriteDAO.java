@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.FavoriteInfo;
+import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.InfoId;
 
 public interface FavoriteDAO extends BaseDAO<FavoriteInfo>{

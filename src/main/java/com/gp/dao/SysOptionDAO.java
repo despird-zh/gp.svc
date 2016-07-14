@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.SysOptionInfo;
+import com.gp.dao.info.SysOptionInfo;
 
 public interface SysOptionDAO extends BaseDAO<SysOptionInfo>{
 

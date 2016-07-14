@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.BinaryInfo;
+import com.gp.dao.info.BinaryInfo;
 import com.gp.info.InfoId;
 
 public interface BinaryDAO extends BaseDAO<BinaryInfo>{

@@ -13,13 +13,9 @@ import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
-import com.gp.dao.ShareDAO;
-import com.gp.dao.ShareToDAO;
 import com.gp.dao.StorageDAO;
 import com.gp.info.InfoId;
-import com.gp.info.ShareInfo;
-import com.gp.info.ShareToInfo;
-import com.gp.info.StorageInfo;
+import com.gp.dao.info.StorageInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

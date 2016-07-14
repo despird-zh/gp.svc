@@ -15,7 +15,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ShareDAO;
 import com.gp.info.InfoId;
-import com.gp.info.ShareInfo;
+import com.gp.dao.info.ShareInfo;
 import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class ShareDAOTest extends AbstractJUnit4SpringContextTests{

@@ -6,11 +6,11 @@ import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.CabFileInfo;
-import com.gp.info.CabVersionInfo;
-import com.gp.info.CabinetInfo;
+import com.gp.dao.info.CabFileInfo;
+import com.gp.dao.info.CabVersionInfo;
+import com.gp.dao.info.CabinetInfo;
 import com.gp.info.InfoId;
-import com.gp.info.StorageInfo;
+import com.gp.dao.info.StorageInfo;
 
 public interface FileService {
 

@@ -18,7 +18,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareToDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.ShareToInfo;
+import com.gp.dao.info.ShareToInfo;
 
 @Component("shareToDAO")
 public class ShareToDAOImpl extends DAOSupport implements ShareToDAO{

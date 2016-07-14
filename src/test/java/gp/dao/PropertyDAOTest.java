@@ -15,7 +15,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.InfoId;
-import com.gp.info.PropertyInfo;
+import com.gp.dao.info.PropertyInfo;
 import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class PropertyDAOTest extends AbstractJUnit4SpringContextTests{

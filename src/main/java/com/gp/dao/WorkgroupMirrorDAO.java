@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.WorkgroupMirrorInfo;
+import com.gp.dao.info.WorkgroupMirrorInfo;
 
 public interface WorkgroupMirrorDAO extends BaseDAO<WorkgroupMirrorInfo>{
 

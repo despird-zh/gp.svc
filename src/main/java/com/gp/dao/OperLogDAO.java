@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.OperLogInfo;
+import com.gp.dao.info.OperLogInfo;
 import com.gp.info.InfoId;
 
 public interface OperLogDAO extends BaseDAO<OperLogInfo>{

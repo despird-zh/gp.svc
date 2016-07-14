@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.NotificationDispatchInfo;
+import com.gp.dao.info.NotificationDispatchInfo;
 
 public interface NotificationDispatchDAO extends BaseDAO<NotificationDispatchInfo>{
 

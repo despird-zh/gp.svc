@@ -20,7 +20,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.GroupInfo;
+import com.gp.dao.info.GroupInfo;
 import com.gp.info.InfoId;
 
 @Component("groupDAO")

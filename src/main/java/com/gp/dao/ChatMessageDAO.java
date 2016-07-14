@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.ChatMessageInfo;
+import com.gp.dao.info.ChatMessageInfo;
 
 public interface ChatMessageDAO extends BaseDAO<ChatMessageInfo>{
 

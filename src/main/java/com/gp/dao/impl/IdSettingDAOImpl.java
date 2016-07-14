@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.IdSettingDAO;
-import com.gp.info.IdSettingInfo;
+import com.gp.dao.info.IdSettingInfo;
 import com.gp.info.Identifier;
 
 @Component("idSettingDao")

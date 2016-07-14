@@ -7,8 +7,8 @@ import com.gp.common.ServiceContext;
 import com.gp.common.Tasks;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.TaskInfo;
-import com.gp.info.TaskRouteInfo;
+import com.gp.dao.info.TaskInfo;
+import com.gp.dao.info.TaskRouteInfo;
 
 public interface TaskService {
 	

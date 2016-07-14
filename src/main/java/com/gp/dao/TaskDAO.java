@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.TaskInfo;
+import com.gp.dao.info.TaskInfo;
 
 public interface TaskDAO extends BaseDAO<TaskInfo>{
 

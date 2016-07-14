@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.StorageInfo;
+import com.gp.dao.info.StorageInfo;
 
 public interface StorageDAO extends BaseDAO<StorageInfo>{
 

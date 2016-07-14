@@ -14,7 +14,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.dao.UserDAO;
 import com.gp.info.InfoId;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.UserInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

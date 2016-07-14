@@ -15,7 +15,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.ChatMessageDAO;
 import com.gp.info.InfoId;
-import com.gp.info.ChatMessageInfo;
+import com.gp.dao.info.ChatMessageInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

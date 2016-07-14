@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.ChatResourceInfo;
+import com.gp.dao.info.ChatResourceInfo;
 import com.gp.info.InfoId;
 
 public interface ChatResourceDAO extends BaseDAO<ChatResourceInfo>{

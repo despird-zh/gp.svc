@@ -8,14 +8,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
-import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.AuditDAO;
-import com.gp.info.AuditInfo;
+import com.gp.dao.info.AuditInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 

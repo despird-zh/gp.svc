@@ -18,7 +18,7 @@ import com.gp.dao.IdSettingDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.FlatColLocator;
-import com.gp.info.IdSettingInfo;
+import com.gp.dao.info.IdSettingInfo;
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;

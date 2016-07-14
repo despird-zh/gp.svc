@@ -13,10 +13,8 @@ import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
-import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
-import com.gp.info.CabAceInfo;
-import com.gp.info.CabAclInfo;
+import com.gp.dao.info.CabAclInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 

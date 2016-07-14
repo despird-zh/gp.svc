@@ -22,7 +22,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.PageInfo;
+import com.gp.dao.info.PageInfo;
 
 @Component("pagedao")
 public class PageDAOImpl extends DAOSupport implements PageDAO {

@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PropertyDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.PropertyInfo;
+import com.gp.dao.info.PropertyInfo;
 
 @Component("propertyDAO")
 public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.FavoriteInfo;
+import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.InfoId;
 
 public interface FavoriteService {

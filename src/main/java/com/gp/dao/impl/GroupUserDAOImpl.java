@@ -21,7 +21,7 @@ import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.GroupUserInfo;
+import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 
 @Component("groupUserDAO")

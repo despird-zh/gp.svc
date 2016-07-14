@@ -14,7 +14,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.CabVersionDAO;
-import com.gp.info.CabVersionInfo;
+import com.gp.dao.info.CabVersionInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 

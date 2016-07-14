@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.OrgHierInfo;
+import com.gp.dao.info.OrgHierInfo;
 
 public interface OrgHierDAO extends BaseDAO<OrgHierInfo>{
 

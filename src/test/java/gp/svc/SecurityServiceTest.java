@@ -12,7 +12,7 @@ import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.info.InfoId;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.UserInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 

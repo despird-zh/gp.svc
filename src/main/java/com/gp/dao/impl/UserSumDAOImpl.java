@@ -21,7 +21,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.UserSumDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.UserSumInfo;
+import com.gp.dao.info.UserSumInfo;
 
 @Component("usersumDAO")
 public class UserSumDAOImpl extends DAOSupport implements UserSumDAO{

@@ -21,7 +21,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupSumDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.WorkgroupSumInfo;
+import com.gp.dao.info.WorkgroupSumInfo;
 
 @Component("workgroupsumDAO")
 public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{

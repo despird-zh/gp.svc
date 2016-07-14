@@ -1,7 +1,6 @@
 package gp.svc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,21 +15,18 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
 import com.gp.exception.ServiceException;
-import com.gp.info.CabAceInfo;
-import com.gp.info.CabEntryInfo;
-import com.gp.info.CabFileInfo;
-import com.gp.info.CabFolderInfo;
+import com.gp.dao.info.CabAceInfo;
+import com.gp.dao.info.CabEntryInfo;
+import com.gp.dao.info.CabFileInfo;
+import com.gp.dao.info.CabFolderInfo;
 import com.gp.info.InfoId;
-import com.gp.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.AclService;
 import com.gp.svc.CabinetService;
 import com.gp.svc.FolderService;
 import com.gp.svc.CommonService;
-import com.gp.svc.SecurityService;
 
 @ContextConfiguration(classes={TestConfig.class})
 public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{

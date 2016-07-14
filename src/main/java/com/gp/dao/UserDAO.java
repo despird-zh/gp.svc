@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.UserInfo;
 
 public interface UserDAO extends BaseDAO<UserInfo>{
 

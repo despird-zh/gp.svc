@@ -15,7 +15,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.TagDAO;
 import com.gp.info.InfoId;
-import com.gp.info.TagInfo;
+import com.gp.dao.info.TagInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

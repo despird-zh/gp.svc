@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ShareDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.ShareInfo;
+import com.gp.dao.info.ShareInfo;
 
 @Component("shareDAO")
 public class ShareDAOImpl extends DAOSupport implements ShareDAO{

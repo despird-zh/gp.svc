@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.gp.common.IdKey;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
-import com.gp.info.UserRoleInfo;
+import com.gp.dao.info.UserRoleInfo;
 
 public interface UserRoleDAO extends BaseDAO<UserRoleInfo>{
 

@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.MemberSettingInfo;
+import com.gp.dao.info.MemberSettingInfo;
 
 public interface MemberSettingDAO extends BaseDAO<MemberSettingInfo>{
 

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.AttachRelInfo;
+import com.gp.dao.info.AttachRelInfo;
 import com.gp.info.InfoId;
 
 public interface AttachRelDAO extends BaseDAO<AttachRelInfo>{

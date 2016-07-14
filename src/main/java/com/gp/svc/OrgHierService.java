@@ -6,8 +6,8 @@ import java.util.Map;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
-import com.gp.info.OrgHierInfo;
-import com.gp.info.UserInfo;
+import com.gp.dao.info.OrgHierInfo;
+import com.gp.dao.info.UserInfo;
 
 public interface OrgHierService {
 

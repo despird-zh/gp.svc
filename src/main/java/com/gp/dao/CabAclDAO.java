@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
-import com.gp.info.CabAclInfo;
+import com.gp.dao.info.CabAclInfo;
 import com.gp.info.InfoId;
 
 public interface CabAclDAO extends BaseDAO<CabAclInfo>{

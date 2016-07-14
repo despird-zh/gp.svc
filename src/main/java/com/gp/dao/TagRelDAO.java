@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.TagRelInfo;
+import com.gp.dao.info.TagRelInfo;
 
 public interface TagRelDAO extends BaseDAO<TagRelInfo>{
 

@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AuditDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.AuditInfo;
+import com.gp.dao.info.AuditInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.AuditService;
 

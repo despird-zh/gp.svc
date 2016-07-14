@@ -1,7 +1,5 @@
 package gp.dao;
 
-import static org.junit.Assert.*;
-
 import java.util.Date;
 
 import org.junit.Test;
@@ -16,7 +14,7 @@ import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.AttachRelDAO;
-import com.gp.info.AttachRelInfo;
+import com.gp.dao.info.AttachRelInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 

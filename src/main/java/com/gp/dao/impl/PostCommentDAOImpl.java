@@ -20,7 +20,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PostCommentDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.PostCommentInfo;
+import com.gp.dao.info.PostCommentInfo;
 
 @Component("postCommentDAO")
 public class PostCommentDAOImpl extends DAOSupport implements PostCommentDAO{

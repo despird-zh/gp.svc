@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.CabEntryInfo;
-import com.gp.info.CabFileInfo;
-import com.gp.info.CabFolderInfo;
-import com.gp.info.CabinetInfo;
+import com.gp.dao.info.CabEntryInfo;
+import com.gp.dao.info.CabFileInfo;
+import com.gp.dao.info.CabFolderInfo;
+import com.gp.dao.info.CabinetInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;

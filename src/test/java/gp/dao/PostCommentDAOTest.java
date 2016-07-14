@@ -15,7 +15,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.dao.PostCommentDAO;
 import com.gp.info.InfoId;
-import com.gp.info.PostCommentInfo;
+import com.gp.dao.info.PostCommentInfo;
 import com.gp.svc.CommonService;
 
 @ContextConfiguration(classes={TestConfig.class})

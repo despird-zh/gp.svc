@@ -20,7 +20,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.DictionaryDAO;
-import com.gp.info.DictionaryInfo;
+import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 

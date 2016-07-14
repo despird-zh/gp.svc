@@ -15,7 +15,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.OperLogDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
-import com.gp.info.OperLogInfo;
+import com.gp.dao.info.OperLogInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;

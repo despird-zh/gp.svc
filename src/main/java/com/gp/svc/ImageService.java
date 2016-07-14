@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.ImageInfo;
+import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
 
 public interface ImageService {

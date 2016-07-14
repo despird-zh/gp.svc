@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.MeasureInfo;
+import com.gp.dao.info.MeasureInfo;
 
 public interface MeasureDAO extends BaseDAO<MeasureInfo>{
 	

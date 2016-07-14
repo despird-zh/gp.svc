@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.VoteInfo;
+import com.gp.dao.info.VoteInfo;
 
 public interface VoteDAO extends BaseDAO<VoteInfo>{
 

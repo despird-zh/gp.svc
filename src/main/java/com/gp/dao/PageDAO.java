@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.gp.common.IdKey;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
-import com.gp.info.PageInfo;
+import com.gp.dao.info.PageInfo;
 
 public interface PageDAO extends BaseDAO<PageInfo>{
 	

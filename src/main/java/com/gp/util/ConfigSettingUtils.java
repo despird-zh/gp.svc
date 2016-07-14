@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.gp.common.GeneralConfig;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.info.SysOptionInfo;
+import com.gp.dao.info.SysOptionInfo;
 import com.gp.svc.SystemService;
 
 /**

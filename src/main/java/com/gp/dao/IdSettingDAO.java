@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.gp.info.IdSettingInfo;
+import com.gp.dao.info.IdSettingInfo;
 import com.gp.info.Identifier;
 
 public interface IdSettingDAO{

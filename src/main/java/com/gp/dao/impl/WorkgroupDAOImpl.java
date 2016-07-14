@@ -24,7 +24,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.WorkgroupInfo;
+import com.gp.dao.info.WorkgroupInfo;
 
 @Component("workgroupDAO")
 public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{

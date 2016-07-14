@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
 import com.gp.info.InfoId;
-import com.gp.info.UserSumInfo;
+import com.gp.dao.info.UserSumInfo;
 
 public interface UserSumDAO extends BaseDAO<UserSumInfo>{
 

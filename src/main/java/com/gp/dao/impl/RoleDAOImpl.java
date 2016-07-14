@@ -21,7 +21,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.RoleDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.RoleInfo;
+import com.gp.dao.info.RoleInfo;
 
 @Component("roledao")
 public class RoleDAOImpl extends DAOSupport implements RoleDAO{

@@ -39,7 +39,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ImageDAO;
 import com.gp.info.FlatColLocator;
-import com.gp.info.ImageInfo;
+import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
 
 @Component("imageDAO")
