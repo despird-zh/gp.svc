@@ -278,6 +278,7 @@ public class PersonalServiceImpl implements PersonalService{
 				else if(IdKey.WORKGROUP.getSchema().equals(manageId.getIdKey()))
 					type = GroupUsers.GroupType.WORKGROUP_MBR.name();
 				
+				mbrinfo.setAccount(account);
 				mbrinfo.setGroupType(type);
 				mbrinfo.setPostVisible(postVisible);
 				
