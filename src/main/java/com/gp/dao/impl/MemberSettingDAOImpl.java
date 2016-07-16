@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
+import com.gp.common.GroupUsers;
+import com.gp.common.IdKey;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MemberSettingDAO;
 import com.gp.info.FlatColLocator;
@@ -37,7 +40,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	public int create(MemberSettingInfo info) {
 		
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("INSERT INTO gp_member_setting (")
+		SQL.append("INSERT INTO gp_mbr_setting (")
 			.append("rel_id, manage_id, account, group_type,")
 			.append("post_visible, modifier, last_modified")
 			.append(")VALUES(")
@@ -62,7 +65,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	public int delete(InfoId<?> id) {
 		
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_member_setting ")
+		SQL.append("delete from gp_mbr_setting ")
 			.append("where rel_id = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -81,7 +84,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 		Set<String> colset = FlatColumns.toColumnSet(excludeCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_member_setting set ");
+		SQL.append("update gp_mbr_setting set ");
 		
 		if(columnCheck(mode, colset, "manage_id")){
 			SQL.append("manage_id = ?,");
@@ -117,7 +120,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 
 	@Override
 	public MemberSettingInfo query(InfoId<?> id) {
-		String SQL = "select * from gp_member_setting "
+		String SQL = "select * from gp_mbr_setting "
 				+ "where rel_id = ?";
 		
 		Object[] params = new Object[]{				
@@ -135,6 +138,29 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	protected void initialJdbcTemplate(DataSource dataSource) {
 
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public MemberSettingInfo queryByMember(InfoId<Long> manageId, String account) {
+		String SQL = "SELECT * FROM gp_mbr_setting WHERE manage_id = ? AND group_type = ? AND account = ?";
+		String type = null;
+		if(IdKey.ORG_HIER.getSchema().equals(manageId.getIdKey()))
+			type = GroupUsers.GroupType.ORG_HIER_MBR.name();
+		else if(IdKey.WORKGROUP.getSchema().equals(manageId.getIdKey()))
+			type = GroupUsers.GroupType.WORKGROUP_MBR.name();
+		
+		Object[] params = new Object[]{
+			manageId.getId(),
+			type,
+			account
+		};
+		
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
+		}
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		List<MemberSettingInfo> infos = jtemplate.query(SQL, params, MemberSettingMapper);
+		return CollectionUtils.isEmpty(infos)? null : infos.get(0);
 	}
 
 }

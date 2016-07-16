@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
+import com.gp.info.InfoId;
 import com.gp.dao.info.ChatMessageInfo;
 import com.gp.dao.info.GroupMemberInfo;
 import com.gp.dao.info.OrgHierInfo;
@@ -54,4 +55,6 @@ public interface PersonalService {
 
 	
 	public boolean updateBasicSetting(ServiceContext svcctx, UserInfo uinfo, String avatarImg)throws ServiceException;
+
+	public boolean updateBelongSetting(ServiceContext svcctx, InfoId<Long> manageId, String account , boolean postVisible)throws ServiceException;
 }

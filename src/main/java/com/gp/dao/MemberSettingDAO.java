@@ -11,6 +11,8 @@ import com.gp.dao.info.MemberSettingInfo;
 
 public interface MemberSettingDAO extends BaseDAO<MemberSettingInfo>{
 
+	public MemberSettingInfo queryByMember(InfoId<Long> manageId, String account);
+	
 	static RowMapper<MemberSettingInfo> MemberSettingMapper = new RowMapper<MemberSettingInfo>(){
 
 		@Override

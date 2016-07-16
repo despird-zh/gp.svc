@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.GroupUsers;
 import com.gp.common.GroupUsers.GroupType;
 import com.gp.common.IdKey;
 import com.gp.common.Images;
@@ -26,6 +27,7 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.ImageDAO;
+import com.gp.dao.MemberSettingDAO;
 import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
@@ -36,12 +38,14 @@ import com.gp.dao.info.ChatMessageInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupMemberInfo;
 import com.gp.dao.info.ImageInfo;
+import com.gp.dao.info.MemberSettingInfo;
 import com.gp.info.InfoId;
 import com.gp.dao.info.OrgHierInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.dao.info.UserSumInfo;
 import com.gp.dao.info.WorkgroupInfo;
 import com.gp.pagination.PageQuery;
+import com.gp.svc.CommonService;
 import com.gp.svc.PersonalService;
 
 @Service("personalService")
@@ -66,6 +70,12 @@ public class PersonalServiceImpl implements PersonalService{
 	
 	@Autowired
 	ImageDAO imagedao;
+	
+	@Autowired
+	MemberSettingDAO mbrsettingdao;
+	
+	@Autowired
+	CommonService idService;
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
@@ -246,6 +256,44 @@ public class PersonalServiceImpl implements PersonalService{
 			throw new ServiceException("excp.update", dae, "user setting");
 		}
 		
+	}
+
+	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Override
+	public boolean updateBelongSetting(ServiceContext svcctx, InfoId<Long> manageId, String account,
+			boolean postVisible) throws ServiceException {
+		
+		try{
+			int cnt = 0;
+			MemberSettingInfo mbrinfo = mbrsettingdao.queryByMember(manageId, account);
+			if(null == mbrinfo){
+				
+				mbrinfo = new MemberSettingInfo();
+				InfoId<Long> relid = idService.generateId(IdKey.MBR_SETTING, Long.class);
+				mbrinfo.setInfoId(relid);
+				mbrinfo.setManageId(manageId.getId());
+				String type = null;
+				if(IdKey.ORG_HIER.getSchema().equals(manageId.getIdKey()))
+					type = GroupUsers.GroupType.ORG_HIER_MBR.name();
+				else if(IdKey.WORKGROUP.getSchema().equals(manageId.getIdKey()))
+					type = GroupUsers.GroupType.WORKGROUP_MBR.name();
+				
+				mbrinfo.setGroupType(type);
+				mbrinfo.setPostVisible(postVisible);
+				
+				svcctx.setTraceInfo(mbrinfo);
+				
+				cnt = mbrsettingdao.create(mbrinfo);
+				
+			}else{
+				
+				cnt = pseudodao.update(mbrinfo.getInfoId(), FlatColumns.POST_VISIBLE, postVisible);
+			}
+			
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update",dae,"member setting");
+		}
 	}
 
 }
