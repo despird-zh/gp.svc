@@ -1,12 +1,15 @@
 package com.gp.svc;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
+import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.dao.info.ChatMessageInfo;
 import com.gp.dao.info.GroupMemberInfo;
+import com.gp.dao.info.MemberSettingInfo;
 import com.gp.dao.info.OrgHierInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.dao.info.UserSumInfo;
@@ -16,16 +19,16 @@ import com.gp.pagination.PageQuery;
 public interface PersonalService {
 
 	/**
-	 * Get the work groups which user joined
+	 * Get the work groups which user joined, and the personal setting on workgroup
 	 * @param account the account information
 	 **/
-	public List<WorkgroupInfo> getWorkgroups(ServiceContext svcctx, String account)throws ServiceException;
+	public List<CombineInfo<WorkgroupInfo, Boolean>> getWorkgroups(ServiceContext svcctx, String account)throws ServiceException;
 	
 	/**
 	 * Get the orghier which user joined
 	 * @param account the account information
 	 **/
-	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, String account)throws ServiceException;
+	public List<CombineInfo<OrgHierInfo, Boolean>> getOrgHierNodes(ServiceContext svcctx, String account)throws ServiceException;
 	
 	/**
 	 * Get the work group member belonging relationship by account.
@@ -53,8 +56,14 @@ public interface PersonalService {
 	 **/
 	public List<ChatMessageInfo> getChatMessages(ServiceContext svcctx, String account, PageQuery pquery)throws ServiceException;
 
-	
+	/**
+	 * Update the user basic setting 
+	 **/
 	public boolean updateBasicSetting(ServiceContext svcctx, UserInfo uinfo, String avatarImg)throws ServiceException;
 
-	public boolean updateBelongSetting(ServiceContext svcctx, InfoId<Long> manageId, String account , boolean postVisible)throws ServiceException;
+	/**
+	 * Update the belong setting 
+	 **/
+	public boolean updateBelongSetting(ServiceContext svcctx, String account,Map<InfoId<Long>, Boolean> settings)throws ServiceException;
+	
 }

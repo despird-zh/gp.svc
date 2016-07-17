@@ -1,6 +1,7 @@
 package com.gp.svc.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import com.gp.dao.UserSumDAO;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.ChatMessageInfo;
+import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupMemberInfo;
 import com.gp.dao.info.ImageInfo;
@@ -79,7 +81,7 @@ public class PersonalServiceImpl implements PersonalService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<WorkgroupInfo> getWorkgroups(ServiceContext svcctx, String account) throws ServiceException {
+	public List<CombineInfo<WorkgroupInfo, Boolean>> getWorkgroups(ServiceContext svcctx, String account) throws ServiceException {
 		
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_workgroup_mbrs ");
 		SQL.append("WHERE account = ? AND group_type = '").append(GroupType.WORKGROUP_MBR.name()).append("'");
@@ -91,18 +93,30 @@ public class PersonalServiceImpl implements PersonalService{
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("SQL : {} / PARAMS : {}",SQL.toString(), params.toString());
+			LOGGER.debug("SQL : {} / PARAMS : {}",SQL.toString(), Arrays.toString(params));
 		}
 		InfoId<?>[] ids = null;
+		List<CombineInfo<WorkgroupInfo, Boolean>> result = new ArrayList<CombineInfo<WorkgroupInfo, Boolean>>();
 		try{
 			List<GroupMemberInfo> members = jtemplate.query(SQL.toString(), params, GroupUserDAO.GroupMemberMapper);
 			ids = new InfoId<?>[members.size()];
 			int count = 0;
+			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
 				ids[count] = IdKey.WORKGROUP.getInfoId(minfo.getManageId());
+				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
-			return workgroupdao.queryByIds(ids);
+			
+			List<WorkgroupInfo> winfos =  workgroupdao.queryByIds(ids);
+			for(WorkgroupInfo winfo: winfos){
+				CombineInfo<WorkgroupInfo, Boolean> cinfo = new CombineInfo<WorkgroupInfo, Boolean>();
+				cinfo.setPrimary(winfo);
+				cinfo.setExtended(settings.get(winfo.getInfoId()));
+				result.add(cinfo);
+			}
+			
+			return result;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "workgroup", Arrays.toString(ids));
 		}
@@ -110,7 +124,7 @@ public class PersonalServiceImpl implements PersonalService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, String account) throws ServiceException {
+	public List<CombineInfo<OrgHierInfo, Boolean>> getOrgHierNodes(ServiceContext svcctx, String account) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_orghier_mbrs ");
 		SQL.append("WHERE account = ? AND group_type = '").append(GroupType.ORG_HIER_MBR.name()).append("'");
 		
@@ -121,19 +135,29 @@ public class PersonalServiceImpl implements PersonalService{
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
 		if(LOGGER.isDebugEnabled()){
-			LOGGER.debug("SQL : {} / PARAMS : {}",SQL.toString(), params.toString());
+			LOGGER.debug("SQL : {} / PARAMS : {}",SQL.toString(), Arrays.toString(params));
 		}
+		List<CombineInfo<OrgHierInfo, Boolean>> result = new ArrayList<CombineInfo<OrgHierInfo, Boolean>>();
 		InfoId<?>[] ids = null;
 		try{
 			List<GroupMemberInfo> members = jtemplate.query(SQL.toString(), params, GroupUserDAO.GroupMemberMapper);
 			ids = new InfoId<?>[members.size()];
 			int count = 0;
+			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
-				ids[count] = IdKey.WORKGROUP.getInfoId(minfo.getManageId());
+				ids[count] = IdKey.ORG_HIER.getInfoId(minfo.getManageId());
+				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
 			
-			return orghierdao.queryByIds(ids);
+			List<OrgHierInfo> oinfos = orghierdao.queryByIds(ids);
+			for(OrgHierInfo oinfo: oinfos){
+				CombineInfo<OrgHierInfo, Boolean> cinfo = new CombineInfo<OrgHierInfo, Boolean>();
+				cinfo.setPrimary(oinfo);
+				cinfo.setExtended(settings.get(oinfo.getInfoId()));
+				result.add(cinfo);
+			}
+			return result;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "orghier", Arrays.toString(ids));
 		}
@@ -260,37 +284,37 @@ public class PersonalServiceImpl implements PersonalService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean updateBelongSetting(ServiceContext svcctx, InfoId<Long> manageId, String account,
-			boolean postVisible) throws ServiceException {
+	public boolean updateBelongSetting(ServiceContext svcctx, String account,Map<InfoId<Long>, Boolean> settings) throws ServiceException {
 		
 		try{
 			int cnt = 0;
-			MemberSettingInfo mbrinfo = mbrsettingdao.queryByMember(manageId, account);
-			if(null == mbrinfo){
-				
-				mbrinfo = new MemberSettingInfo();
-				InfoId<Long> relid = idService.generateId(IdKey.MBR_SETTING, Long.class);
-				mbrinfo.setInfoId(relid);
-				mbrinfo.setManageId(manageId.getId());
-				String type = null;
-				if(IdKey.ORG_HIER.getSchema().equals(manageId.getIdKey()))
-					type = GroupUsers.GroupType.ORG_HIER_MBR.name();
-				else if(IdKey.WORKGROUP.getSchema().equals(manageId.getIdKey()))
-					type = GroupUsers.GroupType.WORKGROUP_MBR.name();
-				
-				mbrinfo.setAccount(account);
-				mbrinfo.setGroupType(type);
-				mbrinfo.setPostVisible(postVisible);
-				
-				svcctx.setTraceInfo(mbrinfo);
-				
-				cnt = mbrsettingdao.create(mbrinfo);
-				
-			}else{
-				
-				cnt = pseudodao.update(mbrinfo.getInfoId(), FlatColumns.POST_VISIBLE, postVisible);
+			for(Map.Entry<InfoId<Long>, Boolean> entry : settings.entrySet()){
+				// check the record existence
+				MemberSettingInfo mbrinfo = mbrsettingdao.queryByMember(entry.getKey(), account);
+				if(null == mbrinfo){
+					
+					mbrinfo = new MemberSettingInfo();
+					InfoId<Long> relid = idService.generateId(IdKey.MBR_SETTING, Long.class);
+					mbrinfo.setInfoId(relid);
+					mbrinfo.setManageId(entry.getKey().getId());
+					String type = null;
+					if(IdKey.ORG_HIER.getSchema().equals(entry.getKey().getIdKey()))
+						type = GroupUsers.GroupType.ORG_HIER_MBR.name();
+					else if(IdKey.WORKGROUP.getSchema().equals(entry.getKey().getIdKey()))
+						type = GroupUsers.GroupType.WORKGROUP_MBR.name();
+					
+					mbrinfo.setAccount(account);
+					mbrinfo.setGroupType(type);
+					mbrinfo.setPostVisible(entry.getValue());
+					svcctx.setTraceInfo(mbrinfo);
+					
+					cnt += mbrsettingdao.create(mbrinfo);
+					
+				}else{
+					
+					cnt += pseudodao.update(mbrinfo.getInfoId(), FlatColumns.POST_VISIBLE, entry.getValue());
+				}
 			}
-			
 			return cnt > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.update",dae,"member setting");

@@ -41,6 +41,8 @@ public class GroupMemberInfo implements BaseInfo<Long>{
 	
 	private Date createTime;
 	
+	private boolean postVisible;
+	
 	public void setInfoId(InfoId<Long> relid){
 		this.relid = relid;
 	}
@@ -157,6 +159,14 @@ public class GroupMemberInfo implements BaseInfo<Long>{
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public boolean getPostVisible() {
+		return postVisible;
+	}
+
+	public void setPostVisible(boolean postVisible) {
+		this.postVisible = postVisible;
 	}
 
 }

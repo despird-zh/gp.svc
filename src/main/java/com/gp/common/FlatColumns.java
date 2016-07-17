@@ -48,6 +48,8 @@ public class FlatColumns {
 	public static final FlatColumn TIMEZONE = new FlatColumn("timezone");
 	public static final FlatColumn PASSWORD = new FlatColumn("password");
 	
+	public static final FlatColumn ACCOUNT = new FlatColumn("account");
+	
 	public static final FlatColumn POST_VISIBLE = new FlatColumn("post_visible");
 	/**
 	 * Convert the Columns to string set for easy check existence.

@@ -41,6 +41,7 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 			gminfo.setSourceName(rs.getString("source_name"));
 			gminfo.setClassification(rs.getString("classification"));
 			gminfo.setCreateTime(rs.getTimestamp("create_time"));
+			gminfo.setPostVisible(rs.getBoolean("post_visible"));
 			
 			return gminfo;
 		}
