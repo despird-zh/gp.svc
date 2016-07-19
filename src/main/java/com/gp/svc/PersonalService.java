@@ -66,4 +66,8 @@ public interface PersonalService {
 	 **/
 	public boolean updateBelongSetting(ServiceContext svcctx, String account,Map<InfoId<Long>, Boolean> settings)throws ServiceException;
 	
+	/**
+	 * Update the belong setting 
+	 **/
+	public boolean updateStorageSetting(ServiceContext svcctx, InfoId<Long> userid, Long storageId, Long publishcap, Long netdiskcap)throws ServiceException;
 }

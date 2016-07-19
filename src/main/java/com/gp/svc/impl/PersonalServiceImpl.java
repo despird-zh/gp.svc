@@ -75,7 +75,7 @@ public class PersonalServiceImpl implements PersonalService{
 	
 	@Autowired
 	MemberSettingDAO mbrsettingdao;
-	
+
 	@Autowired
 	CommonService idService;
 	
@@ -319,6 +319,34 @@ public class PersonalServiceImpl implements PersonalService{
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.update",dae,"member setting");
 		}
+	}
+
+	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Override
+	public boolean updateStorageSetting(ServiceContext svcctx,InfoId<Long> userid, Long storageId, Long publishcap, Long netdiskcap)
+			throws ServiceException {
+		
+		try{
+			int cnt = 0;
+			// update the storage id
+			cnt = pseudodao.update(userid, FlatColumns.STORAGE_ID, storageId);
+			UserInfo uinfo = userdao.query(userid);
+			InfoId<Long> pubcabid = IdKey.CABINET.getInfoId(uinfo.getPublishCabinet());
+			Map<FlatColLocator, Object> fields = new HashMap<FlatColLocator, Object>();
+			fields.put(FlatColumns.STORAGE_ID, storageId);
+			fields.put(FlatColumns.CAPACITY, publishcap);
+			cnt += pseudodao.update(pubcabid, fields);
+			InfoId<Long> pricabid = IdKey.CABINET.getInfoId(uinfo.getNetdiskCabinet());
+			// replace the capacity with netdisk's setting
+			fields.put(FlatColumns.CAPACITY, netdiskcap);
+			cnt += pseudodao.update(pubcabid, fields);
+			if(cnt > 2)
+				throw new ServiceException("excp.demo");
+			return cnt == 3; 
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update",dae,"user's storage setting");
+		}
+		
 	}
 
 }

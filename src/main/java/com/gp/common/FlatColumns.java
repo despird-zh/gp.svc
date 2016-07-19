@@ -47,9 +47,13 @@ public class FlatColumns {
 	public static final FlatColumn LANGUAGE = new FlatColumn("language");
 	public static final FlatColumn TIMEZONE = new FlatColumn("timezone");
 	public static final FlatColumn PASSWORD = new FlatColumn("password");
+	public static final FlatColumn STORAGE_ID = new FlatColumn("storage_id");
+	public static final FlatColumn PUBLISH_CAB_ID = new FlatColumn("publish_cab_id");
+	public static final FlatColumn NETDISK_CAB_ID = new FlatColumn("netdisk_cab_id");
 	
 	public static final FlatColumn ACCOUNT = new FlatColumn("account");
 	
+	public static final FlatColumn CAPACITY = new FlatColumn("capacity");
 	public static final FlatColumn POST_VISIBLE = new FlatColumn("post_visible");
 	/**
 	 * Convert the Columns to string set for easy check existence.
