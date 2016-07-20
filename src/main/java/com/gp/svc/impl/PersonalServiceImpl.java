@@ -339,14 +339,33 @@ public class PersonalServiceImpl implements PersonalService{
 			InfoId<Long> pricabid = IdKey.CABINET.getInfoId(uinfo.getNetdiskCabinet());
 			// replace the capacity with netdisk's setting
 			fields.put(FlatColumns.CAPACITY, netdiskcap);
-			cnt += pseudodao.update(pubcabid, fields);
-			if(cnt > 2)
-				throw new ServiceException("excp.demo");
+			cnt += pseudodao.update(pricabid, fields);
+		
 			return cnt == 3; 
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.update",dae,"user's storage setting");
 		}
 		
+	}
+
+	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Override
+	public boolean updateRegionSetting(ServiceContext svcctx, InfoId<Long> userid, String timezone, String language)
+			throws ServiceException {
+		
+		try{
+			int cnt = 0;
+			
+			Map<FlatColLocator, Object> fields = new HashMap<FlatColLocator, Object>();
+			fields.put(FlatColumns.TIMEZONE, timezone);
+			fields.put(FlatColumns.LANGUAGE, language);
+			
+			cnt = pseudodao.update(userid, fields);
+		
+			return cnt >0 ; 
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update",dae,"user's region setting");
+		}
 	}
 
 }
