@@ -11,14 +11,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.sql.DataSource;
 
+import com.gp.common.IdKey;
+import com.gp.common.Images;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -278,5 +278,27 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 			}
 		}
 		return CollectionUtils.isEmpty(list) ? null : list.get(0);
+	}
+
+
+	/**
+	 * Parse the image info out of the image path string
+	 * @param  imagePath the path of image file
+	 **/
+	public static ImageInfo parseImageInfo(String imagePath){
+
+		String filename = FilenameUtils.getName(imagePath);
+		Long imgid = Images.parseImageId(filename);
+		Date createDate = Images.parseTouchDate(filename);
+		String extension = FilenameUtils.getExtension(filename);
+
+		ImageInfo imginfo = new ImageInfo(imagePath.substring(0, imagePath.lastIndexOf(File.separator) + 1));
+		imginfo.setTouchTime(createDate);
+		imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
+		imginfo.setImageFile(new File(imagePath));
+		imginfo.setExtension(extension);
+		imginfo.setFormat(extension);
+
+		return imginfo;
 	}
 }

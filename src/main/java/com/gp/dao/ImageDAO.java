@@ -32,4 +32,5 @@ public interface ImageDAO extends BaseDAO<ImageInfo>{
 			return info;
 		}
 	};
+
 }

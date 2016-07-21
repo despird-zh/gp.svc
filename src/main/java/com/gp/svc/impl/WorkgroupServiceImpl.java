@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.gp.dao.impl.ImageDAOImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -202,15 +204,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
-				Date createDate = Images.parseTouchDate(filename);
-				String extension = FilenameUtils.getExtension(filename);
-				
-				imginfo = new ImageInfo(imgpath.substring(0, imgpath.lastIndexOf(File.separator) + 1));
-				imginfo.setTouchTime(createDate);
-				imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
-				imginfo.setImageFile(new File(imgpath));
-				imginfo.setExtension(extension);
-				imginfo.setFormat(extension);
+				imginfo = ImageDAOImpl.parseImageInfo(imgpath);
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}
@@ -247,15 +241,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
-				Date createDate = Images.parseTouchDate(filename);
-				String extension = FilenameUtils.getExtension(filename);
-				
-				imginfo = new ImageInfo(imgpath.substring(0, imgpath.lastIndexOf(File.separator) + 1));
-				imginfo.setTouchTime(createDate);
-				imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
-				imginfo.setImageFile(new File(imgpath));
-				imginfo.setExtension(extension);
-				imginfo.setFormat(extension);
+				imginfo = ImageDAOImpl.parseImageInfo(imgpath);
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}

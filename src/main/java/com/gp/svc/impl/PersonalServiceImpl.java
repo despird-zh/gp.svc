@@ -1,13 +1,14 @@
 package com.gp.svc.impl;
 
-import java.io.File;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gp.dao.impl.ImageDAOImpl;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,15 +261,8 @@ public class PersonalServiceImpl implements PersonalService{
 			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
-				Date createDate = Images.parseTouchDate(filename);
-				String extension = FilenameUtils.getExtension(filename);
-				
-				imginfo = new ImageInfo(avatarImg.substring(0, avatarImg.lastIndexOf(File.separator) + 1));
-				imginfo.setTouchTime(createDate);
-				imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
-				imginfo.setImageFile(new File(avatarImg));
-				imginfo.setExtension(extension);
-				imginfo.setFormat(extension);
+
+				imginfo = ImageDAOImpl.parseImageInfo(avatarImg);
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}
