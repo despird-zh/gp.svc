@@ -43,13 +43,11 @@ public class ServiceException  extends BaseException{
 			svc_bundles.put(locale, rb);
 		}
 		String messagePattern = null;
-		if(rb == null || !rb.containsKey(errorcode)){ 
-			messagePattern = errorcode ;
+		if(rb == null || !rb.containsKey(errorcode)){
 			matched = false;
-			// try to find from super class.
 			return super.findMessage(locale, errorcode, param);
-		}else{ 
-			rb.getString(errorcode);
+		}else{
+			messagePattern = rb.getString(errorcode);
 			matched = true;
 		}
 		
