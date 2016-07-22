@@ -102,11 +102,23 @@ public class GroupUsers {
 	 * Organization hierarchy member role
 	 * <ol>
 	 * <li>MANAGER - org. node manager</li>
-	 * <li>MANAGER - org. node member</li>
+	 * <li>MEMBER - org. node member</li>
 	 * </ol> 
 	 **/
 	public static enum OrgHierMemberRole{
 		MANAGER,
 		MEMBER
+	}
+
+	/**
+	 * Post member role
+	 * <ol>
+	 * <li>HOST - post host</li>
+	 * <li>ATTENDEE - host attendee</li>
+	 * </ol>
+	 **/
+	public static enum PostMemberRole{
+		HOST,
+		ATTENDEE
 	}
 }

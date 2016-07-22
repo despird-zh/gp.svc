@@ -10,7 +10,7 @@ import com.gp.dao.info.UserInfo;
 
 public interface PostService {
 
-	public InfoId<Long> newPost(ServiceContext svcctx, PostInfo postinfo, String[] attendees) throws ServiceException;
+	public boolean newPost(ServiceContext svcctx, PostInfo postinfo, String[] attendees) throws ServiceException;
 	
 	public void addPostUser(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException;
 	

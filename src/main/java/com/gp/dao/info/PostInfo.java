@@ -11,7 +11,9 @@ public class PostInfo extends TraceableInfo<Long> {
 	private int sourceId;
 	
 	private Long workgroupId;
-	
+
+	private Long memberGroupId;
+
 	private String hashCode;
 	
 	private String owner;
@@ -44,6 +46,14 @@ public class PostInfo extends TraceableInfo<Long> {
 
 	public void setWorkgroupId(Long workgroupId) {
 		this.workgroupId = workgroupId;
+	}
+
+	public Long getMemberGroupId() {
+		return memberGroupId;
+	}
+
+	public void setMemberGroupId(Long memberGroupId) {
+		this.memberGroupId = memberGroupId;
 	}
 
 	public String getOwner() {
