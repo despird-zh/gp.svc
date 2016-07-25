@@ -24,6 +24,8 @@ public class PostInfo extends TraceableInfo<Long> {
 	
 	private String title;
 	
+	private String scope ;
+	
 	private String state;
 	
 	private Long owm;
@@ -166,6 +168,14 @@ public class PostInfo extends TraceableInfo<Long> {
 
 	public void setSourceId(int sourceId) {
 		this.sourceId = sourceId;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 	
 	

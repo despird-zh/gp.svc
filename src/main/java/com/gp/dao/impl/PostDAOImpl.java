@@ -39,13 +39,13 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			.append("source_id,workgroup_id,post_id,hash_code,")
 			.append("owner,content,excerpt,title,owm,")
 			.append("state,comment_on,post_type,comment_count,")
-			.append("upvote_count,downvote_count,post_time,")
+			.append("upvote_count,downvote_count,post_time,scope,")
 			.append("modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,?,")
+			.append("?,?,?,?,")
 			.append("?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
@@ -149,7 +149,10 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			SQL.append("post_time = ? ,");
 			params.add(info.getPostDate());
 		}
-		
+		if(columnCheck(mode, colset, "scope")){
+			SQL.append("scope = ? ,");
+			params.add(info.getScope());
+		}
 		SQL.append("modifier = ?,last_modified = ? ")
 		.append("where post_id = ? ");
 		params.add(info.getModifier());
