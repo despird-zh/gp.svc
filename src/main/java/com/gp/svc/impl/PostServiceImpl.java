@@ -119,10 +119,14 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, InfoId<Long> wgroupId) throws ServiceException {
+    public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, String account, 
+			String state, 
+			String type,
+			String scope) throws ServiceException {
 
         StringBuffer SQL = new StringBuffer();
-        SQL.append("SELECT * FROM ")
+        SQL.append("SELECT * FROM gp_personal_posts ");
+        SQL.append("WHERE ");
         return null;
     }
 

@@ -42,6 +42,14 @@ public interface PostService {
 
 	/**
 	 * Find the combined post base and ext information
+	 * @param account the user account
+	 * @param state the state of post
+	 * @param type the type of post
+	 * @param scope the scope of post
 	 **/
-	public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, InfoId<Long> wgroupId) throws ServiceException;
+	public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, 
+			String account, 
+			String state, 
+			String type,
+			String scope) throws ServiceException;
 }
