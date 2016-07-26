@@ -12,9 +12,11 @@ import com.gp.dao.info.GroupUserInfo;
 import com.gp.dao.info.PostInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.exception.ServiceException;
+import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 import com.gp.svc.PostService;
+import com.gp.svc.info.PostExt;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -101,17 +103,28 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void addPostUser(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
+    public void addPostAttendee(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
+
 
     }
 
     @Override
-    public void removePostUser(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
+    public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
 
     }
 
     @Override
-    public List<UserInfo> getPostUsers(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException {
+    public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException {
         return null;
     }
+
+    @Override
+    public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, InfoId<Long> wgroupId) throws ServiceException {
+
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("SELECT * FROM ")
+        return null;
+    }
+
+
 }
