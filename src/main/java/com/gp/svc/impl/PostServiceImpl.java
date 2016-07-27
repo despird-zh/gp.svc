@@ -1,14 +1,8 @@
 package com.gp.svc.impl;
 
-import com.gp.common.GeneralConstants;
-import com.gp.common.GroupUsers;
-import com.gp.common.IdKey;
-import com.gp.common.ServiceContext;
+import com.gp.common.*;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.GroupDAO;
-import com.gp.dao.GroupUserDAO;
-import com.gp.dao.PostDAO;
-import com.gp.dao.PseudoDAO;
+import com.gp.dao.*;
 import com.gp.dao.info.GroupInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.dao.info.PostInfo;
@@ -117,22 +111,62 @@ public class PostServiceImpl implements PostService{
 
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
-    public void addPostAttendee(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
+    public void addPostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
 
+        try{
+            Long mbrid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
+            GroupUserInfo mbrinfo= new GroupUserInfo();
+            InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+            mbrinfo.setInfoId(guid);
+            mbrinfo.setAccount(attendee);
+            mbrinfo.setGroupId(mbrid);
+            mbrinfo.setRole(GroupUsers.PostMemberRole.ATTENDEE.name());
+            svcctx.setTraceInfo(mbrinfo);
+            groupuserdao.create(mbrinfo);
 
+        }catch(DataAccessException dae){
+            throw new ServiceException("", dae);
+        }
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
-    public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postKey, String attendee) throws ServiceException {
+    public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
+        try{
+            Long mbrid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
+            InfoId<Long> grpid = IdKey.GROUP.getInfoId(mbrid);
+            groupuserdao.deleteByAccount(grpid, attendee);
 
+        }catch(DataAccessException dae){
+            throw new ServiceException("", dae);
+        }
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException {
-        return null;
+    public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+
+        List<UserInfo> result = new ArrayList<>();
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("SELECT * FROM gp_users ");
+        SQL.append("WHERE account IN (SELECT gp_group_user WHERE group_id = ?)");
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        try{
+            Long grpid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
+            Object[] params = new Object[]{grpid};
+
+            result = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);
+        }catch(DataAccessException dae){
+
+            throw new ServiceException("", dae);
+        }
+        return result;
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
     public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, String account, 
 			String state, 
@@ -167,22 +201,27 @@ public class PostServiceImpl implements PostService{
             LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
         }
 
-        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet rs) throws SQLException {
-                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
-                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                row.setPrimary(base);
-                row.setExtended(ext);
+        try {
+            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+                @Override
+                public void processRow(ResultSet rs) throws SQLException {
+                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
+                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                    row.setPrimary(base);
+                    row.setExtended(ext);
 
-                result.add(row);
-            }
-        });
+                    result.add(row);
+                }
+            });
 
-        return result;
+            return result;
+        }catch(DataAccessException dae){
+            throw new ServiceException("",dae);
+        }
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
     public List<CombineInfo<PostInfo, PostExt>> getPersonalJoinedPosts(ServiceContext svcctx, String account, String state, String type, String scope) throws ServiceException {
 
@@ -226,22 +265,27 @@ public class PostServiceImpl implements PostService{
             LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
         }
 
-        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet rs) throws SQLException {
-                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
-                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                row.setPrimary(base);
-                row.setExtended(ext);
+        try {
+            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+                @Override
+                public void processRow(ResultSet rs) throws SQLException {
+                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
+                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                    row.setPrimary(base);
+                    row.setExtended(ext);
 
-                result.add(row);
-            }
-        });
+                    result.add(row);
+                }
+            });
 
-        return result;
+            return result;
+        }catch(DataAccessException dae){
+            throw new ServiceException("", dae);
+        }
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
     public List<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid, String state, String type, String scope) throws ServiceException {
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
@@ -271,22 +315,27 @@ public class PostServiceImpl implements PostService{
             LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
         }
 
-        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet rs) throws SQLException {
-                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
-                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                row.setPrimary(base);
-                row.setExtended(ext);
+        try {
+            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+                @Override
+                public void processRow(ResultSet rs) throws SQLException {
+                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
+                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                    row.setPrimary(base);
+                    row.setExtended(ext);
 
-                result.add(row);
-            }
-        });
+                    result.add(row);
+                }
+            });
 
-        return result;
+            return result;
+        }catch(DataAccessException dae){
+            throw new ServiceException("", dae);
+        }
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
     public List<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx, String state, String type, String scope) throws ServiceException {
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
@@ -315,20 +364,24 @@ public class PostServiceImpl implements PostService{
             LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
         }
 
-        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet rs) throws SQLException {
-                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
-                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                row.setPrimary(base);
-                row.setExtended(ext);
+        try {
+            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+                @Override
+                public void processRow(ResultSet rs) throws SQLException {
+                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
+                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                    row.setPrimary(base);
+                    row.setExtended(ext);
 
-                result.add(row);
-            }
-        });
+                    result.add(row);
+                }
+            });
 
-        return result;
+            return result;
+        }catch(DataAccessException dae){
+            throw new ServiceException("",dae);
+        }
     }
 
 
