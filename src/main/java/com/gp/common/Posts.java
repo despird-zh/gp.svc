@@ -11,4 +11,10 @@ public class Posts {
 		DISCUSSION,
 		VOTING,
 	}
+
+	public static enum State{
+		DRAFT,
+		PUBLISHED,
+		CLOSE,
+	}
 }

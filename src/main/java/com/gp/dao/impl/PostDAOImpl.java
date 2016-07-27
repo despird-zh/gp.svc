@@ -37,7 +37,7 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_posts (")
 			.append("source_id,workgroup_id,post_id,hash_code,")
-			.append("owner,content,excerpt,title,owm,")
+			.append("owner,content,excerpt,subject,owm,")
 			.append("state,comment_on,post_type,comment_count,")
 			.append("upvote_count,downvote_count,post_time,scope,")
 			.append("modifier,last_modified")
@@ -51,7 +51,7 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				info.getSourceId(),info.getWorkgroupId(),key.getId(),info.getHashCode(),
-				info.getOwner(),info.getContent(),info.getExcerpt(),info.getTitle(),info.getOwm(),
+				info.getOwner(),info.getContent(),info.getExcerpt(),info.getSubject(),info.getOwm(),
 				info.getState(),info.isCommentOn(),info.getPostType(),info.getCommentCount(),
 				info.getUpvoteCount(),info.getDownvoteCount(),info.getPostDate(),
 				info.getModifier(),info.getModifyDate()
@@ -113,9 +113,9 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			SQL.append("excerpt = ? ,");
 			params.add(info.getExcerpt());
 		}
-		if(columnCheck(mode, colset, "title")){
-			SQL.append("title = ? , ");
-			params.add(info.getTitle());
+		if(columnCheck(mode, colset, "subject")){
+			SQL.append("subject = ? , ");
+			params.add(info.getSubject());
 		}
 		if(columnCheck(mode, colset, "owm")){
 			SQL.append("owm = ?,");

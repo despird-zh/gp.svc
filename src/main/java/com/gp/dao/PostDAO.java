@@ -25,7 +25,7 @@ public interface PostDAO extends BaseDAO<PostInfo>{
 			info.setOwner(rs.getString("owner"));
 			info.setContent(rs.getString("content"));
 			info.setExcerpt(rs.getString("excerpt"));
-			info.setTitle(rs.getString("title"));
+			info.setSubject(rs.getString("subject"));
 			info.setState(rs.getString("state"));
 			info.setScope(rs.getString("scope"));
 			info.setCommentOn(rs.getBoolean("comment_on"));

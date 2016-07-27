@@ -43,7 +43,7 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setOwner("own001");
 		info.setContent("content -- -");
 		info.setExcerpt("exc---");
-		info.setTitle("this is title");
+		info.setSubject("this is title");
 		info.setState("state");
 		info.setCommentOn(true);
 		info.setPostType("posttype");
@@ -85,7 +85,7 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 			info.setOwner("own001");
 			info.setContent("content -- -");
 			info.setExcerpt("exc---");
-			info.setTitle("this is title");
+			info.setSubject("this is title");
 			info.setState("state");
 			info.setCommentOn(true);
 			info.setPostType("posttype");

@@ -22,7 +22,7 @@ public class PostInfo extends TraceableInfo<Long> {
 	
 	private String excerpt;
 	
-	private String title;
+	private String subject;
 	
 	private String scope ;
 	
@@ -82,12 +82,12 @@ public class PostInfo extends TraceableInfo<Long> {
 		this.excerpt = excerpt;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getSubject() {
+		return subject;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	public String getState() {
