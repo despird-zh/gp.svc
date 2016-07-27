@@ -127,7 +127,7 @@ public class PostServiceImpl implements PostService{
             groupuserdao.create(mbrinfo);
 
         }catch(DataAccessException dae){
-            throw new ServiceException("", dae);
+            throw new ServiceException("excp.create", dae,"post attendee");
         }
     }
 
@@ -140,7 +140,7 @@ public class PostServiceImpl implements PostService{
             groupuserdao.deleteByAccount(grpid, attendee);
 
         }catch(DataAccessException dae){
-            throw new ServiceException("", dae);
+            throw new ServiceException("excp.delete", dae, "post attendee");
         }
     }
 
@@ -161,7 +161,7 @@ public class PostServiceImpl implements PostService{
             result = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);
         }catch(DataAccessException dae){
 
-            throw new ServiceException("", dae);
+            throw new ServiceException("excp.query", dae, "post attendee");
         }
         return result;
     }
@@ -217,7 +217,7 @@ public class PostServiceImpl implements PostService{
 
             return result;
         }catch(DataAccessException dae){
-            throw new ServiceException("",dae);
+            throw new ServiceException("excp.query",dae, "personal's posts");
         }
     }
 
@@ -281,7 +281,7 @@ public class PostServiceImpl implements PostService{
 
             return result;
         }catch(DataAccessException dae){
-            throw new ServiceException("", dae);
+            throw new ServiceException("excp.query", dae,"personal joined posts");
         }
     }
 
@@ -331,7 +331,7 @@ public class PostServiceImpl implements PostService{
 
             return result;
         }catch(DataAccessException dae){
-            throw new ServiceException("", dae);
+            throw new ServiceException("excp.query", dae,"workgroup's posts");
         }
     }
 
@@ -380,7 +380,7 @@ public class PostServiceImpl implements PostService{
 
             return result;
         }catch(DataAccessException dae){
-            throw new ServiceException("",dae);
+            throw new ServiceException("excp.query",dae, "square's posts");
         }
     }
 
