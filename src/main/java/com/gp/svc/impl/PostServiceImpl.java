@@ -1,5 +1,6 @@
 package com.gp.svc.impl;
 
+import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -7,6 +8,7 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.PostDAO;
+import com.gp.dao.PseudoDAO;
 import com.gp.dao.info.GroupInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.dao.info.PostInfo;
@@ -18,11 +20,19 @@ import com.gp.svc.CommonService;
 import com.gp.svc.PostService;
 import com.gp.svc.info.PostExt;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +41,8 @@ import java.util.List;
 
 @Service("postService")
 public class PostServiceImpl implements PostService{
+
+    static Logger LOGGER = LoggerFactory.getLogger(PostService.class);
 
     @Autowired
     GroupDAO groupdao;
@@ -43,6 +55,9 @@ public class PostServiceImpl implements PostService{
 
     @Autowired
     CommonService idService;
+
+    @Autowired
+    PseudoDAO pseudodao;
 
     /**
      * Create a new post
@@ -124,10 +139,196 @@ public class PostServiceImpl implements PostService{
 			String type,
 			String scope) throws ServiceException {
 
+        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<Object> paramlist = new ArrayList<Object>();
         StringBuffer SQL = new StringBuffer();
         SQL.append("SELECT * FROM gp_personal_posts ");
-        SQL.append("WHERE ");
-        return null;
+        SQL.append("WHERE workgroup_id = ? AND owner = ? ");
+        paramlist.add(Long.valueOf(GeneralConstants.PERSON_WORKGROUP));
+        paramlist.add(account);
+
+        if(StringUtils.isNotBlank(state)){
+            SQL.append(" AND state = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(type)){
+            SQL.append(" AND post_type = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(scope)){
+
+            SQL.append(" AND scope = ?");
+            paramlist.add(scope);
+        }
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+        }
+
+        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
+                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                row.setPrimary(base);
+                row.setExtended(ext);
+
+                result.add(row);
+            }
+        });
+
+        return result;
+    }
+
+    @Override
+    public List<CombineInfo<PostInfo, PostExt>> getPersonalJoinedPosts(ServiceContext svcctx, String account, String state, String type, String scope) throws ServiceException {
+
+        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<Object> paramlist = new ArrayList<Object>();
+
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("SELECT pts.*, ");
+        SQL.append(" src.source_name,");
+        SQL.append(" usrs.full_name as user_name, ");
+        SQL.append(" grp.workgroup_name ");
+        SQL.append("FROM gp_posts pts ");
+        SQL.append(" LEFT JOIN (SELECT source_id, source_name from gp_sources) src on src.source_id = pts.source_id ");
+        SQL.append(" LEFT JOIN (SELECT workgroup_id, workgroup_name from gp_workgroups ) grp on grp.workgroup_id = pts.workgroup_id ");
+        SQL.append(" LEFT JOIN (SELECT account, full_name from gp_users) usrs on usrs.account = pts.owner ");
+        SQL.append("WHERE pts.owner != ? ");
+        SQL.append("AND (EXISTS (SELECT 1 from gp_group_user gusr where gusr.group_id = pts.mbr_group_id and gusr.account = ?) OR ");
+        SQL.append("        (SELECT 1 from gp_post_comments cmts where cmts.post_id = pts.post_id and cmts.author = ?) ) ");
+        paramlist.add(account);
+        paramlist.add(account);
+        paramlist.add(account);
+
+        if(StringUtils.isNotBlank(state)){
+            SQL.append(" AND pts.state = ? ");
+            paramlist.add(type);
+        }
+
+        if(StringUtils.isNotBlank(type)){
+            SQL.append(" AND pts.post_type = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(scope)){
+
+            SQL.append(" AND pts.scope = ? ");
+            paramlist.add(scope);
+        }
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+        }
+
+        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
+                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                row.setPrimary(base);
+                row.setExtended(ext);
+
+                result.add(row);
+            }
+        });
+
+        return result;
+    }
+
+    @Override
+    public List<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid, String state, String type, String scope) throws ServiceException {
+        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<Object> paramlist = new ArrayList<Object>();
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("SELECT * FROM gp_wrokgroup_posts ");
+        SQL.append("WHERE workgroup_id = ? ");
+        paramlist.add(Long.valueOf(wid.getId()));
+
+        if(StringUtils.isNotBlank(state)){
+            SQL.append(" AND state = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(type)){
+            SQL.append(" AND post_type = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(scope)){
+
+            SQL.append(" AND scope = ?");
+            paramlist.add(scope);
+        }
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+        }
+
+        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
+                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                row.setPrimary(base);
+                row.setExtended(ext);
+
+                result.add(row);
+            }
+        });
+
+        return result;
+    }
+
+    @Override
+    public List<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx, String state, String type, String scope) throws ServiceException {
+        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<Object> paramlist = new ArrayList<Object>();
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("SELECT * FROM gp_square_posts ");
+        SQL.append("WHERE 1=1 ");
+
+        if(StringUtils.isNotBlank(state)){
+            SQL.append(" AND state = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(type)){
+            SQL.append(" AND post_type = ? ");
+            paramlist.add(type);
+        }
+        if(StringUtils.isNotBlank(scope)){
+
+            SQL.append(" AND scope = ?");
+            paramlist.add(scope);
+        }
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+        }
+
+        jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet rs) throws SQLException {
+                CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
+                PostInfo base = PostDAO.PostMapper.mapRow(rs,result.size());
+                PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
+                row.setPrimary(base);
+                row.setExtended(ext);
+
+                result.add(row);
+            }
+        });
+
+        return result;
     }
 
 
