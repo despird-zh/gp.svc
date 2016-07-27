@@ -121,5 +121,8 @@ public enum Operations {
 	FIND_TAGS,
 	ATTACH_TAG,
 	DETACH_TAG,
-	
+	/** post */
+	FIND_POSTS,
+	NEW_POST,
+	DEL_POST,
 }
