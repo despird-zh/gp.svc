@@ -146,16 +146,31 @@ public class PostServiceImpl implements PostService{
     public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 
         List<UserInfo> result = new ArrayList<>();
-        StringBuffer SQL = new StringBuffer();
-        SQL.append("SELECT * FROM gp_users ");
-        SQL.append("WHERE account IN (SELECT gp_group_user WHERE group_id = ?)");
+
+        StringBuffer SQL_SEL = new StringBuffer();
+        StringBuffer SQL_1 = new StringBuffer();
+        SQL_SEL.append("SELECT * FROM gp_users ");
+        SQL_1.append("WHERE account IN (SELECT account from gp_group_user WHERE group_id = ?)");
+
+        StringBuffer SQL_2 = new StringBuffer();
+        SQL_2.append("WHERE account IN (select owner from gp_post_comments where post_id = ?) ");
 
         JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
         try{
             Long grpid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
             Object[] params = new Object[]{grpid};
+            if(grpid > 0){
 
-            result = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);
+                SQL_SEL.append(SQL_1);
+            }else{
+
+                SQL_SEL.append(SQL_2);
+            }
+
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("SQL : {} / PARAMS : {}", SQL_SEL.toString(), ArrayUtils.toString(params));
+            }
+            result = jtemplate.query(SQL_SEL.toString(), params, UserDAO.UserMapper);
         }catch(DataAccessException dae){
 
             throw new ServiceException("excp.query", dae, "post attendee");
@@ -391,6 +406,5 @@ public class PostServiceImpl implements PostService{
     public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException {
         return false;
     }
-
 
 }

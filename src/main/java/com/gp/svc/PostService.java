@@ -94,9 +94,11 @@ public interface PostService {
 																  String type,
 																  String scope) throws ServiceException;
 
-
 	/**
 	 * Find the comments related with post
+	 * @param postid the id of post
+	 * @param owner the owner of post
+	 * @param state the state of post
 	 **/
 	public List<PostCommentInfo> getPostComments(ServiceContext svcctx,
 												 InfoId<Long> postid,
