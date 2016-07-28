@@ -4,6 +4,7 @@ import com.gp.info.TraceableInfo;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class PostInfo extends TraceableInfo<Long> {
@@ -12,7 +13,7 @@ public class PostInfo extends TraceableInfo<Long> {
 
 	private int sourceId;
 
-	@NotEmpty
+	@NotNull
 	private Long workgroupId;
 
 	private Long memberGroupId;
