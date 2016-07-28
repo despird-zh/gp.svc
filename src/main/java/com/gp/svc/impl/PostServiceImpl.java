@@ -3,10 +3,7 @@ package com.gp.svc.impl;
 import com.gp.common.*;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.*;
-import com.gp.dao.info.GroupInfo;
-import com.gp.dao.info.GroupUserInfo;
-import com.gp.dao.info.PostInfo;
-import com.gp.dao.info.UserInfo;
+import com.gp.dao.info.*;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
@@ -382,6 +379,17 @@ public class PostServiceImpl implements PostService{
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "square's posts");
         }
+    }
+
+    @Override
+    public List<PostCommentInfo> getPostComments(ServiceContext svcctx, InfoId<Long> postid, String owner, String state) throws ServiceException {
+
+        return null;
+    }
+
+    @Override
+    public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException {
+        return false;
     }
 
 

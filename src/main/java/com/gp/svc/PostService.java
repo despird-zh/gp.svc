@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.gp.common.ServiceContext;
+import com.gp.dao.info.PostCommentInfo;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
@@ -93,9 +94,20 @@ public interface PostService {
 																  String type,
 																  String scope) throws ServiceException;
 
+
+	/**
+	 * Find the comments related with post
+	 **/
+	public List<PostCommentInfo> getPostComments(ServiceContext svcctx,
+												 InfoId<Long> postid,
+												 String owner,
+												 String state) throws ServiceException;
+
+	public boolean newComment(ServiceContext svcctx,PostCommentInfo commentinfo) throws ServiceException;
+
 	public static RowMapper<PostExt> POST_EXT_ROW_MAPPER = new RowMapper<PostExt>(){
 		@Override
-		public PostExt mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public PostExt mapRow(ResultSet rs, int num) throws SQLException {
 			PostExt info = new PostExt();
 
 			info.setOwnerName(rs.getString("user_name"));
