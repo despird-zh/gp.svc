@@ -442,7 +442,7 @@ public class CabinetServiceImpl implements CabinetService{
 		JdbcTemplate jdbctemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		RowMapper<CabinetInfo> mapper = CabinetDAO.CabinetMapper;
 		
-		Object[] parms = new Object[]{GeneralConstants.PERSON_WORKGROUP, account};
+		Object[] parms = new Object[]{GeneralConstants.PERSONAL_WORKGROUP, account};
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(parms));
 		try{

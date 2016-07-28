@@ -98,7 +98,7 @@ public class SecurityServiceImpl implements SecurityService{
 		CabinetInfo pubinfo = new CabinetInfo();
 		pubinfo.setInfoId(pubkey);
 		pubinfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
-		pubinfo.setWorkgroupId(GeneralConstants.PERSON_WORKGROUP);
+		pubinfo.setWorkgroupId(GeneralConstants.PERSONAL_WORKGROUP);
 		pubinfo.setCabinetName(uinfo.getAccount());
 		pubinfo.setCabinetType(Cabinets.CabinetType.PUBLISH.name());
 		pubinfo.setDescription(uinfo.getFullName() + "'s cabinet");			
@@ -122,7 +122,7 @@ public class SecurityServiceImpl implements SecurityService{
 		CabinetInfo priinfo = new CabinetInfo();
 		priinfo.setInfoId(prikey);
 		priinfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
-		priinfo.setWorkgroupId(GeneralConstants.PERSON_WORKGROUP);
+		priinfo.setWorkgroupId(GeneralConstants.PERSONAL_WORKGROUP);
 		priinfo.setCabinetName(uinfo.getAccount());
 		priinfo.setCabinetType(Cabinets.CabinetType.NETDISK.name());
 		priinfo.setDescription(uinfo.getFullName() + "'s cabinet");			

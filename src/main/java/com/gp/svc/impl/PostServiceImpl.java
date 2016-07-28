@@ -178,7 +178,7 @@ public class PostServiceImpl implements PostService{
         StringBuffer SQL = new StringBuffer();
         SQL.append("SELECT * FROM gp_personal_posts ");
         SQL.append("WHERE workgroup_id = ? AND owner = ? ");
-        paramlist.add(Long.valueOf(GeneralConstants.PERSON_WORKGROUP));
+        paramlist.add(Long.valueOf(GeneralConstants.PERSONAL_WORKGROUP));
         paramlist.add(account);
 
         if(StringUtils.isNotBlank(state)){

@@ -2,6 +2,8 @@ package com.gp.dao.info;
 
 import com.gp.info.TraceableInfo;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 public class PostInfo extends TraceableInfo<Long> {
@@ -9,29 +11,36 @@ public class PostInfo extends TraceableInfo<Long> {
 	private static final long serialVersionUID = 1L;
 
 	private int sourceId;
-	
+
+	@NotEmpty
 	private Long workgroupId;
 
 	private Long memberGroupId;
 
 	private String hashCode;
-	
+
+	@NotEmpty
 	private String owner;
-	
+
+	@NotEmpty
 	private String content;
 	
 	private String excerpt;
-	
+
+	@NotEmpty
 	private String subject;
-	
+
+	@NotEmpty
 	private String scope ;
-	
+
+	@NotEmpty
 	private String state;
 	
 	private Long owm;
 	
 	private boolean commentOn;
-	
+
+	@NotEmpty
 	private String postType;
 	
 	private int commentCount;

@@ -4,6 +4,10 @@ import com.gp.info.TraceableInfo;
 
 import java.util.Date;
 
+/**
+ * This class wrap the comment information, the comment might be anonymous or name.
+ * anyway, the owner always be non-empty, the author might be [Anonymous].
+ **/
 public class PostCommentInfo extends TraceableInfo<Long> {
 	
 	private static final long serialVersionUID = 1L;
