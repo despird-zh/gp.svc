@@ -36,7 +36,9 @@ public interface PostDAO extends BaseDAO<PostInfo>{
 			info.setPostDate(rs.getDate("post_time"));
 			info.setHashCode(rs.getString("hash_code"));
 			info.setOwm(rs.getLong("owm"));
-			
+			info.setPriority(rs.getInt("priority"));
+			info.setClassification(rs.getString("classification"));
+
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			return info;

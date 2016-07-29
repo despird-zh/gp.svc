@@ -52,6 +52,27 @@ public class PostInfo extends TraceableInfo<Long> {
 	
 	private Date postDate;
 
+	@NotEmpty
+	private String classification;
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
+	private int priority;
+
+	public String getClassification() {
+		return classification;
+	}
+
+	public void setClassification(String classification) {
+		this.classification = classification;
+	}
+
 	public Long getWorkgroupId() {
 		return workgroupId;
 	}

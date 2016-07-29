@@ -39,22 +39,22 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			.append("source_id,workgroup_id,post_id,hash_code,")
 			.append("owner,content,excerpt,subject,owm,")
 			.append("state,comment_on,post_type,comment_count,mbr_group_id,")
-			.append("upvote_count,downvote_count,post_time,scope,")
-			.append("modifier,last_modified")
+			.append("upvote_count,downvote_count,post_time,scope,classification,")
+			.append("priority,modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?,?,?,")
-			.append("?,?,?,?,")
-			.append("?,?)");
+			.append("?,?,?,?,?,")
+			.append("?,?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
 				info.getSourceId(),info.getWorkgroupId(),key.getId(),info.getHashCode(),
 				info.getOwner(),info.getContent(),info.getExcerpt(),info.getSubject(),info.getOwm(),
 				info.getState(),info.isCommentOn(),info.getPostType(),info.getCommentCount(),info.getMemberGroupId(),
-				info.getUpvoteCount(),info.getDownvoteCount(),info.getPostDate(),info.getScope(),
-				info.getModifier(),info.getModifyDate()
+				info.getUpvoteCount(),info.getDownvoteCount(),info.getPostDate(),info.getScope(),info.getClassification(),
+				info.getPriority(),info.getModifier(),info.getModifyDate()
 		};
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -153,6 +153,15 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			SQL.append("scope = ? ,");
 			params.add(info.getScope());
 		}
+		if(columnCheck(mode, colset, "classification")){
+			SQL.append("classification = ? ,");
+			params.add(info.getClassification());
+		}
+		if(columnCheck(mode, colset, "priority")){
+			SQL.append("priority = ? ,");
+			params.add(info.getPriority());
+		}
+
 		SQL.append("modifier = ?,last_modified = ? ")
 		.append("where post_id = ? ");
 		params.add(info.getModifier());
