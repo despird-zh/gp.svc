@@ -65,23 +65,7 @@ public class ImageServiceImpl implements ImageService{
 			if(LOGGER.isDebugEnabled()){
 				LOGGER.debug("SQL : {} / PARAMS : {}", QUERY_SQL, Arrays.toString(params));
 			}
-			result = jtemplate.query(QUERY_SQL, params, new RowMapper<ImageInfo>(){
-
-				@Override
-				public ImageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-					ImageInfo info = new ImageInfo("");
-					InfoId<Long> id = IdKey.IMAGE.getInfoId(rs.getLong("image_id"));
-					info.setInfoId(id);
-					info.setTouchTime(rs.getTimestamp("touch_time"));
-					info.setImageName(rs.getString("image_name"));
-					info.setFormat(rs.getString("image_format"));
-					info.setExtension(rs.getString("image_ext"));
-					
-					info.setModifier(rs.getString("modifier"));
-					info.setModifyDate(rs.getTimestamp("last_modified"));
-					
-					return info;
-				}});
+			result = jtemplate.query(QUERY_SQL, params, ImageDAO.ImageMapper);
 			
 		}catch(DataAccessException dae){
 			
@@ -146,7 +130,7 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public String getImageFileName(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
+	public String getImageName(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{
 			// force not to retrieve the binary data : parent = ""
 			String name = pseudodao.query(id, FlatColumns.IMG_NAME, String.class);

@@ -86,4 +86,20 @@ public class Images {
 		}else
 			return false;
 	}
+	
+	/**
+	 * Define the category of image 
+	 **/
+	public static enum Category{
+		
+		WGROUP_AVATAR, // the workgroup avatar image
+		USER_AVATAR, // the user avatar image
+		POST_EXCERPT,
+	}
+	
+	public static enum Persist{
+		
+		DATABASE,
+		HBASE
+	}
 }

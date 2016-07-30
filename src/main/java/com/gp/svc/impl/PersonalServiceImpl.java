@@ -262,7 +262,8 @@ public class PersonalServiceImpl implements PersonalService{
 			// check if the image exists
 			if(imginfo == null){ // save the image
 
-				imginfo = ImageDAOImpl.parseImageInfo(avatarImg);
+				imginfo = ImageDAOImpl.parseLocalImageInfo(avatarImg);
+				imginfo.setCategory(Images.Category.USER_AVATAR.name());
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}

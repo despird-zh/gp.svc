@@ -56,7 +56,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	public int create( final ImageInfo info) {
 		
 		final File binaryFile = info.getImageFile();
-		String INS_SQL = "INSERT into gp_images (image_id,image_name, image_format, image_ext, modifier, last_modified) VALUES (?, ?, ?, ?, ?, ?)";
+		String INS_SQL = "INSERT into gp_images (image_id,image_name, image_format,persist_type,category, image_link, modifier, last_modified) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
 		String UPD_SQL = "UPDATE gp_images SET image_data = ? , touch_time = ? WHERE image_id = ? ";
 	
 		JdbcTemplate jdbcTemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -67,7 +67,9 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 				info.getInfoId().getId(),
 				info.getImageName(),
 				info.getFormat(),
-				info.getExtension(),
+				info.getPersist(),
+				info.getCategory(),
+				info.getLink(),
 				info.getModifier(),
 				info.getModifyDate()
 		};
@@ -137,14 +139,24 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 			SQL.append("image_name = ?, ");
 			params.add(info.getImageName());
 		}
+		
+		if(columnCheck(mode, colset, "category")){
+			SQL.append("category = ?, ");
+			params.add(info.getCategory());
+		}
+		if(columnCheck(mode, colset, "persist_type")){
+			SQL.append("persist_type = ?, ");
+			params.add(info.getPersist());
+		}
+		
 		if(null != binaryFile && binaryFile.exists()){
 			if(columnCheck(mode, colset, "image_format")){
 				SQL.append("image_format =? ,");
 				params.add(info.getFormat());
 			}
-			if(columnCheck(mode, colset, "image_ext")){
-				SQL.append("image_ext = ?,");
-				params.add(info.getExtension());
+			if(columnCheck(mode, colset, "image_link")){
+				SQL.append("image_link = ?, ");
+				params.add(info.getLink());
 			}
 		}
 		
@@ -193,7 +205,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	@Override
 	public ImageInfo query( final InfoId<?> id) {
 		
-		String SQL = "SELECT image_id, image_name, image_format, image_ext,touch_time, modifier, last_modified FROM gp_images "
+		String SQL = "SELECT image_id, image_name, image_format, image_link, persist_type, category, touch_time, modifier, last_modified FROM gp_images "
 				+ "WHERE image_id = ? ";
 		
 		String SQL_FILE = "SELECT image_data, touch_time FROM gp_images WHERE image_id = ? ";
@@ -240,7 +252,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	@Override
 	public ImageInfo query(InfoId<Long> infoid, String parentPath) {
 		
-		String SQL = "SELECT image_id, image_name, image_format, image_ext,touch_time, modifier, last_modified FROM gp_images "
+		String SQL = "SELECT image_id, image_name, image_format, image_link,persist_type, category,touch_time, modifier, last_modified FROM gp_images "
 				+ "WHERE image_id = ? ";
 		
 		String SQL_FILE = "SELECT image_data, touch_time FROM gp_images WHERE image_id = ? ";
@@ -282,10 +294,12 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 
 
 	/**
-	 * Parse the image info out of the image path string
+	 * Parse the image info out of the image path string, it only process 
+	 * local database persist type image
+	 * 
 	 * @param  imagePath the path of image file
 	 **/
-	public static ImageInfo parseImageInfo(String imagePath){
+	public static ImageInfo parseLocalImageInfo(String imagePath){
 
 		String filename = FilenameUtils.getName(imagePath);
 		Long imgid = Images.parseImageId(filename);
@@ -296,7 +310,8 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 		imginfo.setTouchTime(createDate);
 		imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
 		imginfo.setImageFile(new File(imagePath));
-		imginfo.setExtension(extension);
+		imginfo.setLink(filename);
+		imginfo.setPersist(Images.Persist.DATABASE.name());
 		imginfo.setFormat(extension);
 
 		return imginfo;

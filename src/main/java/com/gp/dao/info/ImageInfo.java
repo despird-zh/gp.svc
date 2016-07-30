@@ -20,7 +20,11 @@ public class ImageInfo extends TraceableInfo<Long> {
 	
 	private String imageName = null;
 	
-	private String extension = null;
+	private String persist = null;
+	
+	private String category = null;
+	
+	private String link = null;
 	
 	private File imageFile = null;
 
@@ -81,7 +85,7 @@ public class ImageInfo extends TraceableInfo<Long> {
 	 **/
 	public String getFilePath(){
 		
-		String fn = Images.getImgFileName(touchTime, getInfoId().getId(), extension);
+		String fn = Images.getImgFileName(touchTime, getInfoId().getId(), format);
 		return parentPath + File.separator + fn;
 	}
 	
@@ -90,20 +94,7 @@ public class ImageInfo extends TraceableInfo<Long> {
 	 **/
 	public String getFileName(){
 		
-		return Images.getImgFileName(touchTime, getInfoId().getId(), extension);
-	}
-	/**
-	 * Get the extension of file 
-	 **/
-	public String getExtension() {
-		return extension;
-	}
-
-	/**
-	 * Set the extension of file 
-	 **/
-	public void setExtension(String extension) {
-		this.extension = extension;
+		return Images.getImgFileName(touchTime, getInfoId().getId(), format);
 	}
 	
 	/**
@@ -135,5 +126,29 @@ public class ImageInfo extends TraceableInfo<Long> {
 
 	public void setImageName(String name) {
 		this.imageName = name;
+	}
+
+	public String getPersist() {
+		return persist;
+	}
+
+	public void setPersist(String persist) {
+		this.persist = persist;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
 	}
 }

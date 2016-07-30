@@ -24,5 +24,5 @@ public interface ImageService {
 
 	public boolean removeImage(ServiceContext svcctx, InfoId<Long> id) throws ServiceException;
 
-	public String getImageFileName(ServiceContext svcctx,InfoId<Long> id) throws ServiceException;
+	public String getImageName(ServiceContext svcctx,InfoId<Long> id) throws ServiceException;
 }

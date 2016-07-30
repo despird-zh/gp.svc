@@ -24,7 +24,9 @@ public interface ImageDAO extends BaseDAO<ImageInfo>{
 			
 			info.setImageName(rs.getString("image_name"));
 			info.setFormat(rs.getString("image_format"));
-			info.setExtension(rs.getString("image_ext"));
+			info.setLink(rs.getString("image_link"));
+			info.setPersist(rs.getString("persist_type"));
+			info.setCategory(rs.getString("category"));
 			info.setTouchTime(rs.getTimestamp("touch_time"));
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));

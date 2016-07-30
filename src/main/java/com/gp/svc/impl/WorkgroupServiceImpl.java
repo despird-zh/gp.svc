@@ -204,7 +204,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
-				imginfo = ImageDAOImpl.parseImageInfo(imgpath);
+				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
+				imginfo.setCategory(Images.Category.WGROUP_AVATAR.name());
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}
@@ -241,7 +242,8 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
-				imginfo = ImageDAOImpl.parseImageInfo(imgpath);
+				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
+				imginfo.setCategory(Images.Category.WGROUP_AVATAR.name());
 				svcctx.setTraceInfo(imginfo);
 				imagedao.create(imginfo);
 			}
