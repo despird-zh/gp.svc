@@ -30,7 +30,8 @@ public class Images {
 	static Pattern FNAME_PATTERN = Pattern.compile(FNAME_REGEX);  
 	
 	/**
-	 * Get the image file name 
+	 * Get the image file name, pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
+	 * 
 	 * @param date The image create date
 	 * @param id The id of image
 	 * @param extension The image extension 
@@ -45,7 +46,7 @@ public class Images {
 	}
 	
 	/**
-	 * parse the create date from the file name 
+	 * parse the create date from the file name,pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
 	 * 
 	 * @param filename The File name
 	 **/
@@ -65,7 +66,7 @@ public class Images {
 	}
 	
 	/**
-	 * Parse the image id from the file name 
+	 * Parse the image id from the file name, pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
 	 **/
 	public static Long parseImageId(String filename){
 
@@ -77,7 +78,8 @@ public class Images {
 	}
 	
 	/**
-	 * Check the filename is qualified or not 
+	 * Check the filename is qualified or not ,pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
+	 * @param filename the name of file
 	 **/
 	public static boolean isQualifiedName(String filename){
 		

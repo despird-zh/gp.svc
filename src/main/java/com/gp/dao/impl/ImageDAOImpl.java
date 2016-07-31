@@ -55,9 +55,9 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	@Override
 	public int create( final ImageInfo info) {
 		
-		final File binaryFile = info.getImageFile();
+		final File binaryFile = info.getDataFile();
 		String INS_SQL = "INSERT into gp_images (image_id,image_name, image_format,persist_type,category, image_link, modifier, last_modified) VALUES (?, ?, ?, ?,?, ?, ?, ?)";
-		String UPD_SQL = "UPDATE gp_images SET image_data = ? , touch_time = ? WHERE image_id = ? ";
+		String UPD_SQL = "UPDATE gp_images SET image_data = ? WHERE image_id = ? ";
 	
 		JdbcTemplate jdbcTemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		final LobHandler lobHandler = new DefaultLobHandler();
@@ -88,9 +88,8 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 				}
 				jdbcTemplate.execute(UPD_SQL, new AbstractLobCreatingPreparedStatementCallback(lobHandler) {
 						protected void setValues(PreparedStatement pstmt, LobCreator lobCreator) throws SQLException{
-							lobCreator.setBlobAsBinaryStream(pstmt, 1, fis, (int) binaryFile.length());
-							pstmt.setTimestamp(2, new Timestamp(info.getTouchTime().getTime()));						
-							pstmt.setLong(3, info.getInfoId().getId());
+							lobCreator.setBlobAsBinaryStream(pstmt, 1, fis, (int) binaryFile.length());					
+							pstmt.setLong(2, info.getInfoId().getId());
 						}
 					});
 			}
@@ -131,7 +130,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	public int update(final ImageInfo info,FilterMode mode, FlatColLocator ...exclcols) {
 		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
-		final File binaryFile = info.getImageFile();
+		final File binaryFile = info.getDataFile();
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("UPDATE gp_images SET ");
 		
@@ -166,7 +165,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
 		
-		String UPD_SQL = "UPDATE gp_images SET image_data = ? , touch_time = ? WHERE image_id = ? ";
+		String UPD_SQL = "UPDATE gp_images SET image_data = ? WHERE image_id = ? ";
 		
 		final LobHandler lobHandler = new DefaultLobHandler();
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -185,9 +184,8 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 				}
 				jtemplate.execute(UPD_SQL, new AbstractLobCreatingPreparedStatementCallback(lobHandler) {
 					protected void setValues(PreparedStatement pstmt, LobCreator lobCreator) throws SQLException{
-						lobCreator.setBlobAsBinaryStream(pstmt, 1, fis, (int) binaryFile.length());
-						pstmt.setTimestamp(2, new Timestamp(info.getTouchTime().getTime()));						
-						pstmt.setLong(3, info.getInfoId().getId());
+						lobCreator.setBlobAsBinaryStream(pstmt, 1, fis, (int) binaryFile.length());						
+						pstmt.setLong(2, info.getInfoId().getId());
 					}
 				});
 			}
@@ -205,10 +203,10 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	@Override
 	public ImageInfo query( final InfoId<?> id) {
 		
-		String SQL = "SELECT image_id, image_name, image_format, image_link, persist_type, category, touch_time, modifier, last_modified FROM gp_images "
+		String SQL = "SELECT image_id, image_name, image_format, image_link, persist_type, category, modifier, last_modified FROM gp_images "
 				+ "WHERE image_id = ? ";
 		
-		String SQL_FILE = "SELECT image_data, touch_time FROM gp_images WHERE image_id = ? ";
+		String SQL_FILE = "SELECT image_data FROM gp_images WHERE image_id = ? ";
 		Object[] params = new Object[]{				
 				id.getId()
 			};
@@ -231,9 +229,8 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 				jtemplate.query(SQL_FILE, params, new AbstractLobStreamingResultSetExtractor<Object>(){  
 					@Override
 					protected void streamData(ResultSet rs) throws SQLException, IOException, DataAccessException {
-						
-						imginfo.setTouchTime(rs.getTimestamp("touch_time"));												
-						OutputStream os=new FileOutputStream(imginfo.getImageFile());
+																
+						OutputStream os=new FileOutputStream(imginfo.getDataFile());
 						FileCopyUtils.copy(lobHandler.getBlobAsBinaryStream(rs,1),os); 
 				        os.close();
 					}  
@@ -252,10 +249,10 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	@Override
 	public ImageInfo query(InfoId<Long> infoid, String parentPath) {
 		
-		String SQL = "SELECT image_id, image_name, image_format, image_link,persist_type, category,touch_time, modifier, last_modified FROM gp_images "
+		String SQL = "SELECT image_id, image_name, image_format, image_link, persist_type, category, modifier, last_modified FROM gp_images "
 				+ "WHERE image_id = ? ";
 		
-		String SQL_FILE = "SELECT image_data, touch_time FROM gp_images WHERE image_id = ? ";
+		String SQL_FILE = "SELECT image_data FROM gp_images WHERE image_id = ? ";
 		Object[] params = new Object[]{				
 				infoid.getId()
 			};
@@ -280,9 +277,8 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 				jtemplate.query(SQL_FILE, params, new AbstractLobStreamingResultSetExtractor<Object>(){  
 					@Override
 					protected void streamData(ResultSet rs) throws SQLException, IOException, DataAccessException {
-						
-						imginfo.setTouchTime(rs.getTimestamp("touch_time"));												
-						OutputStream os=new FileOutputStream(imginfo.getImageFile());
+											
+						OutputStream os=new FileOutputStream(imginfo.getDataFile());
 						FileCopyUtils.copy(lobHandler.getBlobAsBinaryStream(rs,1),os); 
 				        os.close();
 					}  
@@ -307,9 +303,9 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 		String extension = FilenameUtils.getExtension(filename);
 
 		ImageInfo imginfo = new ImageInfo(imagePath.substring(0, imagePath.lastIndexOf(File.separator) + 1));
-		imginfo.setTouchTime(createDate);
+		imginfo.setModifyDate(createDate);
 		imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
-		imginfo.setImageFile(new File(imagePath));
+		imginfo.setDataFile(new File(imagePath));
 		imginfo.setLink(filename);
 		imginfo.setPersist(Images.Persist.DATABASE.name());
 		imginfo.setFormat(extension);

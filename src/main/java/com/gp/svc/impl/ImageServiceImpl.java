@@ -94,7 +94,7 @@ public class ImageServiceImpl implements ImageService{
 	public boolean newImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
 			
-			svcctx.setTraceInfo(info);
+			info.setModifier(svcctx.getPrincipal().getAccount());
 			return imagedao.create(info) > 0;
 		}catch(DataAccessException dae){
 			
@@ -106,7 +106,7 @@ public class ImageServiceImpl implements ImageService{
 	@Override
 	public boolean updateImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
-			svcctx.setTraceInfo(info);
+			info.setModifier(svcctx.getPrincipal().getAccount());
 			int cnt = imagedao.update(info,FilterMode.NONE);
 			return cnt > 0;
 			

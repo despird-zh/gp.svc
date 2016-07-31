@@ -1,14 +1,10 @@
 package com.gp.svc.info;
 
-import java.util.Date;
-
 public class WorkgroupLite{
 
 	private String imageFormat;
 	
-	private String imageExt;
-	
-	private Date imageTouch;
+	private String imageLink;
 
 	private String adminName;
 	
@@ -19,28 +15,20 @@ public class WorkgroupLite{
 	public void setImageFormat(String imageFormat) {
 		this.imageFormat = imageFormat;
 	}
-
-	public String getImageExt() {
-		return imageExt;
-	}
-
-	public void setImageExt(String imageExt) {
-		this.imageExt = imageExt;
-	}
-
-	public Date getImageTouch() {
-		return imageTouch;
-	}
-
-	public void setImageTouch(Date imageTouch) {
-		this.imageTouch = imageTouch;
-	}
-
+	
 	public String getAdminName() {
 		return adminName;
 	}
 
 	public void setAdminName(String adminName) {
 		this.adminName = adminName;
+	}
+
+	public String getImageLink() {
+		return imageLink;
+	}
+
+	public void setImageLink(String imageLink) {
+		this.imageLink = imageLink;
 	}
 }

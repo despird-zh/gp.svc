@@ -99,9 +99,8 @@ public interface WorkgroupService {
 			
 			WorkgroupLite lite = new WorkgroupLite();
 			lite.setAdminName(rs.getString("full_name"));
-			lite.setImageExt(rs.getString("image_ext"));
+			lite.setImageLink(rs.getString("image_link"));
 			lite.setImageFormat(rs.getString("image_format"));
-			lite.setImageTouch(rs.getTimestamp("touch_time"));
 			
 			cinfo.setPrimary(info);
 			cinfo.setExtended(lite);

@@ -42,7 +42,7 @@ public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setInfoId(id);
 		
 		info.setFormat("png");
-		info.setImageFile(new File("d:\\avatar5.png"));
+		info.setDataFile(new File("d:\\avatar5.png"));
 		info.setModifier("modifer001");
 		info.setModifyDate(new Date(System.currentTimeMillis()));
 		

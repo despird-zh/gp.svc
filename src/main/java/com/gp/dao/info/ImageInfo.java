@@ -1,8 +1,6 @@
 package com.gp.dao.info;
 
 import java.io.File;
-import java.util.Date;
-
 import com.gp.common.Images;
 import com.gp.info.TraceableInfo;
 
@@ -26,12 +24,11 @@ public class ImageInfo extends TraceableInfo<Long> {
 	
 	private String link = null;
 	
-	private File imageFile = null;
-
-	private Date touchTime = null;
-
+	private File dataFile = null;
+	
 	/**
 	 * Constructor with parentPath
+	 * 
 	 * @param parentPath The parent path to store the file data 
 	 **/
 	public ImageInfo(String parentPath){
@@ -48,22 +45,24 @@ public class ImageInfo extends TraceableInfo<Long> {
 	}
 	
 	/**
-	 * Get the image file object 
-	 * @return the file on disk
+	 * Get the image data file object, if the dataFile is null, use the default file name and parent path to create 
+	 * a default file. otherwise return the file object.
+	 * 
+	 * @return the file on disk which hold the image binary data.
 	 **/
-	public File getImageFile() {
-		if(null == imageFile)
-			imageFile = new File(getFilePath());
+	public File getDataFile() {
+		if(null == dataFile)
+			dataFile = new File(getFilePath());
 		
-		return imageFile;
+		return dataFile;
 	}
 	
 	/**
 	 * Set the image file object
 	 * @param imageFile the image file object to be persisted 
 	 **/
-	public void setImageFile(File imageFile) {
-		this.imageFile = imageFile;
+	public void setDataFile(File imageFile) {
+		this.dataFile = imageFile;
 	}
 
 	/**
@@ -81,36 +80,19 @@ public class ImageInfo extends TraceableInfo<Long> {
 	}
 	
 	/**
-	 * Get the path string of file, it equals {parentPath} + {createTime:yyyyMMdd-HHmmss} + [-] + {fileid} + {extension}
+	 * Get the path string of file.
+	 * as for database persisted images, it is {parentPath} + {link};
+	 * other images, it equals {parentPath} + {file name, pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}}
 	 **/
 	public String getFilePath(){
-		
-		String fn = Images.getImgFileName(touchTime, getInfoId().getId(), format);
+		String fn = null;
+		if(Images.Persist.DATABASE.name().equals(this.persist)){
+			fn = link;
+		}else{
+			fn = Images.getImgFileName(getModifyDate(), getInfoId().getId(), format);
+		}
 		return parentPath + File.separator + fn;
 	}
-	
-	/**
-	 * Get the file name combine with touch data/ id / extension 
-	 **/
-	public String getFileName(){
-		
-		return Images.getImgFileName(touchTime, getInfoId().getId(), format);
-	}
-	
-	/**
-	 * Get the create time in Long value
-	 **/
-	public Date getTouchTime() {
-		return touchTime;
-	}
-
-	/**
-	 * Set the create time in Long value 
-	 **/
-	public void setTouchTime(Date touchTime) {
-		this.touchTime = touchTime;
-	}
-	
 	
 	public String getParentPath() {
 		return parentPath;

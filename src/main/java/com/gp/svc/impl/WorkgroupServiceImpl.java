@@ -826,7 +826,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT COUNT(a.workgroup_id) ");
 		
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ");		
-		SQL_FROM.append(" LEFT JOIN (select image_id, image_format, image_name, image_ext, touch_time from gp_images) b")
+		SQL_FROM.append(" LEFT JOIN (select image_id, image_format, image_name, image_link from gp_images) b")
 				.append("    ON a.avatar_id = b.image_id ")
 				.append(" LEFT JOIN (SELECT account, full_name FROM gp_users WHERE source_id = -9999) c")
 				.append("    ON c.account = a.admin")
