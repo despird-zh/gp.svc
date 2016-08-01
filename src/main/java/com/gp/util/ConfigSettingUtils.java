@@ -11,13 +11,14 @@ import com.gp.dao.info.SysOptionInfo;
 import com.gp.svc.SystemService;
 
 /**
- * detect configuration setting in following sequence.
+ * Detect configuration setting in following sequence.
  * <ol>
  * 	<li>Find in META-INF/core-configuration file</li>
  *  <li>Find in core-configuration file</li>
  *  <li>Find in gp_sys_options</li>
  * </ol>
- * 
+ * This class be called in SystemService constructor to initial the service instance.
+ *
  * @author gary diao
  * @version 0.1 2015-1-1
  * 

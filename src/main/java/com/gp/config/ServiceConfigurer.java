@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.cache.CacheBuilder;
 import com.gp.common.SpringContextUtil;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 @ComponentScan(basePackages = { 
@@ -33,16 +34,20 @@ public class ServiceConfigurer {
 	
 	public static final String DICTIONARY_CACHE = "dictionaryCache";
 	
-	@Bean 
-	public SpringContextUtil springContextUtil() { 
-		
-	    return new SpringContextUtil();
+	@Bean
+	@Order(1)
+	public SpringContextUtil springContextUtil() {
+
+		SpringContextUtil springContextUtil = new SpringContextUtil();
+
+	    return springContextUtil;
 	}
 	
 	/**
 	 * Create the cache for service usage 
 	 **/
 	@Bean
+	@Order(2)
 	public CacheManager cacheManager() {
 		
 		SimpleCacheManager scm = new SimpleCacheManager();
