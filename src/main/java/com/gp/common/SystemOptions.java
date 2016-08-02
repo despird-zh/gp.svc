@@ -28,6 +28,6 @@ public class SystemOptions {
 	public static final String SYSTEM_APP = "SYSTEM_APP";
 	public static final String VALID_MSG_RESOURCES = "VALID_MSG_RESOURCES";
 	public static final String CABINET_VERSION_ENABLE = "CABINET_VERSION_ENABLE";
-	public static final String UPLOAD_CACHE_PATH = "UPLOAD_CACHE_PATH";
+	public static final String FILE_CACHE_PATH = "file.cache.path";
 
 }

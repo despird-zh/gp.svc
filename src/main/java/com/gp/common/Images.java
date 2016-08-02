@@ -44,7 +44,19 @@ public class Images {
 		
 		return  sbuf.toString();
 	}
-	
+
+	/**
+	 * Get the image file name, pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
+	 *
+	 * @param id The id of image
+	 * @param extension The image extension
+	 **/
+	public static String getImgFileName(Long id, String extension){
+
+		Date touchdate = new Date(System.currentTimeMillis());
+		return getImgFileName(touchdate, id, extension);
+	}
+
 	/**
 	 * parse the create date from the file name,pattern : {id}-{yyyyMMdd}-{HHmmss}.{extension}
 	 * 
