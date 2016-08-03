@@ -199,7 +199,7 @@ public class PostServiceImpl implements PostService{
         StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
 
         StringBuffer SQL = new StringBuffer();
-        SQL.append("SELECT * FROM gp_personal_posts ");
+        SQL.append("FROM gp_personal_posts ");
         SQL.append("WHERE workgroup_id = :wgroup_id AND owner = :owner ");
 
         Map<String,Object> params = new HashMap<String,Object>();
@@ -237,11 +237,11 @@ public class PostServiceImpl implements PostService{
 
         if(LOGGER.isDebugEnabled()){
 
-            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), params.toString());
+            LOGGER.debug("SQL : {} / PARAMS : {}", pagesql, params.toString());
         }
 
         try {
-            jtemplate.query(SQL.toString(), params, new RowCallbackHandler() {
+            jtemplate.query(pagesql, params, new RowCallbackHandler() {
                 @Override
                 public void processRow(ResultSet rs) throws SQLException {
                     CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
