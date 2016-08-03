@@ -275,7 +275,7 @@ public class CabinetServiceImpl implements CabinetService{
 			String filename, 
 			PageQuery pagequery) throws ServiceException {
 		
-		StringBuffer SQL_COLS = new StringBuffer("SELECT files.file_id ");
+		StringBuffer SQL_COLS = new StringBuffer("SELECT files.* ");
 		StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(files.file_id) ");
 		
 		StringBuffer SQL = new StringBuffer();

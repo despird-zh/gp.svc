@@ -11,6 +11,8 @@ import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PostInfo;
 import com.gp.dao.info.UserInfo;
+import com.gp.pagination.PageQuery;
+import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.PostExt;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -51,11 +53,12 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, 
-			String account, 
-			String state, 
-			String type,
-			String scope) throws ServiceException;
+	public PageWrapper<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx,
+																		String account,
+																		String state,
+																		String type,
+																		String scope,
+																		PageQuery pageQuery) throws ServiceException;
 
 	/**
 	 * Find the combined post base and ext information of personal

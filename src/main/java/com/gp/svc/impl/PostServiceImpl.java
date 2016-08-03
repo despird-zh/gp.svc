@@ -7,6 +7,10 @@ import com.gp.dao.info.*;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
+import com.gp.pagination.PageQuery;
+import com.gp.pagination.PageWrapper;
+import com.gp.pagination.PaginationHelper;
+import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.PostService;
 import com.gp.svc.info.PostExt;
@@ -18,13 +22,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by garydiao on 7/22/16.
@@ -180,41 +187,61 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, String account, 
-			String state, 
-			String type,
-			String scope) throws ServiceException {
+    public PageWrapper<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, String account,
+                                                                        String state,
+                                                                        String type,
+                                                                        String scope,
+                                                                        PageQuery pagequery) throws ServiceException {
 
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
-        List<Object> paramlist = new ArrayList<Object>();
+
+        StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
+        StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
+
         StringBuffer SQL = new StringBuffer();
         SQL.append("SELECT * FROM gp_personal_posts ");
-        SQL.append("WHERE workgroup_id = ? AND owner = ? ");
-        paramlist.add(Long.valueOf(GeneralConstants.PERSONAL_WORKGROUP));
-        paramlist.add(account);
+        SQL.append("WHERE workgroup_id = :wgroup_id AND owner = :owner ");
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("wgroup_id", Long.valueOf(GeneralConstants.PERSONAL_WORKGROUP));
+        params.put("owner", account);
 
         if(StringUtils.isNotBlank(state)){
-            SQL.append(" AND state = ? ");
-            paramlist.add(type);
+            SQL.append(" AND state = :state ");
+            params.put("state", state);
         }
         if(StringUtils.isNotBlank(type)){
-            SQL.append(" AND post_type = ? ");
-            paramlist.add(type);
+            SQL.append(" AND post_type = :postType ");
+            params.put("postType", type);
         }
         if(StringUtils.isNotBlank(scope)){
 
-            SQL.append(" AND scope = ?");
-            paramlist.add(scope);
+            SQL.append(" AND scope = :scope");
+            params.put("scope", scope);
         }
 
-        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+
+        if(pagequery.isTotalCountEnable()){
+            int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
+            // calculate pagination information, the page menu number is 5
+            PaginationInfo pagination = new PaginationHelper(totalrow,
+                    pagequery.getPageNumber(),
+                    pagequery.getPageSize(), 5).getPaginationInfo();
+
+            pwrapper.setPagination(pagination);
+        }
+        // get page query sql
+        String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
+
         if(LOGGER.isDebugEnabled()){
 
-            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), params.toString());
         }
 
         try {
-            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            jtemplate.query(SQL.toString(), params, new RowCallbackHandler() {
                 @Override
                 public void processRow(ResultSet rs) throws SQLException {
                     CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
@@ -227,10 +254,12 @@ public class PostServiceImpl implements PostService{
                 }
             });
 
-            return result;
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "personal's posts");
         }
+        pwrapper.setRows(result);
+
+        return pwrapper;
     }
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
