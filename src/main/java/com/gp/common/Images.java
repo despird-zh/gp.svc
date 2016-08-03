@@ -108,7 +108,7 @@ public class Images {
 		
 		WGROUP_AVATAR, // the workgroup avatar image
 		USER_AVATAR, // the user avatar image
-		POST_EXCERPT,
+		POST_IMAGE,
 	}
 	
 	public static enum Persist{
