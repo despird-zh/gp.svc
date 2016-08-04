@@ -282,17 +282,17 @@ public class SecurityServiceImpl implements SecurityService{
 
 		StringBuffer SQL = new StringBuffer();
 		Map<String, Object> params = new HashMap<>();
-		SQL.append("select usr.user_id,\n");
-		SQL.append("usr.account, \n");
-		SQL.append("usr.full_name,\n");
-		SQL.append("usr.email,\n");
-		SQL.append("src.source_id,\n");
-		SQL.append("src.source_name, \n");
-		SQL.append("img.image_id,\n");
-		SQL.append("img.image_link\n");
-		SQL.append("from gp_users usr\n");
-		SQL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id\n");
-		SQL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id");
+		SQL.append("select usr.user_id,");
+		SQL.append("usr.account, ");
+		SQL.append("usr.full_name,");
+		SQL.append("usr.email,");
+		SQL.append("src.source_id,");
+		SQL.append("src.source_name, ");
+		SQL.append("img.image_id,");
+		SQL.append("img.image_link ");
+		SQL.append("from gp_users usr ");
+		SQL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id ");
+		SQL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id ");
 
 		SQL.append("where 1=1 ");
 		if(CollectionUtils.isNotEmpty(userids) && CollectionUtils.isNotEmpty(accounts)) {
@@ -307,7 +307,7 @@ public class SecurityServiceImpl implements SecurityService{
 			SQL.append(")");
 		}else if(CollectionUtils.isEmpty(userids) && CollectionUtils.isNotEmpty(accounts)){
 
-			params.put("accounts", userids);
+			params.put("accounts", accounts);
 			SQL.append("AND usr.account in (:accounts) ");
 
 		}else if(CollectionUtils.isNotEmpty(userids) && CollectionUtils.isEmpty(accounts)){

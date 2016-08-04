@@ -161,18 +161,17 @@ public class PostServiceImpl implements PostService{
 
         StringBuffer SQL_SEL = new StringBuffer();
         StringBuffer SQL_1 = new StringBuffer();
-        SQL_SEL.append("SELECT * FROM gp_users ");
-        SQL_SEL.append("select usr.user_id,\n");
-        SQL_SEL.append("usr.account, \n");
-        SQL_SEL.append("usr.full_name,\n");
-        SQL_SEL.append("usr.email,\n");
-        SQL_SEL.append("src.source_id,\n");
-        SQL_SEL.append("src.source_name, \n");
-        SQL_SEL.append("img.image_id,\n");
-        SQL_SEL.append("img.image_link\n");
-        SQL_SEL.append("from gp_users usr\n");
-        SQL_SEL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id\n");
-        SQL_SEL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id");
+        SQL_SEL.append("select usr.user_id,");
+        SQL_SEL.append("usr.account, ");
+        SQL_SEL.append("usr.full_name,");
+        SQL_SEL.append("usr.email,");
+        SQL_SEL.append("src.source_id,");
+        SQL_SEL.append("src.source_name, ");
+        SQL_SEL.append("img.image_id,");
+        SQL_SEL.append("img.image_link ");
+        SQL_SEL.append("from gp_users usr ");
+        SQL_SEL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id ");
+        SQL_SEL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id ");
 
         SQL_1.append("WHERE usr.account IN (SELECT account from gp_group_user WHERE group_id = ?)");
 
