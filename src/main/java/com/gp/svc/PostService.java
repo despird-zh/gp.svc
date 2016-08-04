@@ -14,6 +14,7 @@ import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.PostExt;
+import com.gp.svc.info.UserLite;
 import org.springframework.jdbc.core.RowMapper;
 
 
@@ -44,7 +45,7 @@ public interface PostService {
 	 * Get the post attendees
 	 * @param  postKey the post id
 	 **/
-	public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException;
+	public List<UserLite> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException;
 
 	/**
 	 * Find the combined post base and ext information of personal
@@ -99,6 +100,7 @@ public interface PostService {
 
 	/**
 	 * Find the comments related with post
+	 *
 	 * @param postid the id of post
 	 * @param owner the owner of post
 	 * @param state the state of post
@@ -108,7 +110,10 @@ public interface PostService {
 												 String owner,
 												 String state) throws ServiceException;
 
-	public boolean newComment(ServiceContext svcctx,PostCommentInfo commentinfo) throws ServiceException;
+	/**
+	 * create post comment information
+	 **/
+	public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException;
 
 	public static RowMapper<PostExt> POST_EXT_ROW_MAPPER = new RowMapper<PostExt>(){
 		@Override
@@ -122,4 +127,5 @@ public interface PostService {
 			return info;
 		}
 	};
+
 }

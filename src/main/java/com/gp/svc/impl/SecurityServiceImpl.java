@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.gp.svc.info.UserLite;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -273,6 +274,59 @@ public class SecurityServiceImpl implements SecurityService{
 			throw new ServiceException("excp.query", dae, "Account lite information");
 		}
 		return role;
+	}
+
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Override
+	public List<UserLite> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException {
+
+		StringBuffer SQL = new StringBuffer();
+		Map<String, Object> params = new HashMap<>();
+		SQL.append("select usr.user_id,\n");
+		SQL.append("usr.account, \n");
+		SQL.append("usr.full_name,\n");
+		SQL.append("usr.email,\n");
+		SQL.append("src.source_id,\n");
+		SQL.append("src.source_name, \n");
+		SQL.append("img.image_id,\n");
+		SQL.append("img.image_link\n");
+		SQL.append("from gp_users usr\n");
+		SQL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id\n");
+		SQL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id");
+
+		SQL.append("where 1=1 ");
+		if(CollectionUtils.isNotEmpty(userids) && CollectionUtils.isNotEmpty(accounts)) {
+			SQL.append("AND (");
+
+			params.put("user_ids", userids);
+			SQL.append(" usr.user_id in (:user_ids) ");
+
+			params.put("accounts", userids);
+			SQL.append("OR usr.account in (:accounts) ");
+
+			SQL.append(")");
+		}else if(CollectionUtils.isEmpty(userids) && CollectionUtils.isNotEmpty(accounts)){
+
+			params.put("accounts", userids);
+			SQL.append("AND usr.account in (:accounts) ");
+
+		}else if(CollectionUtils.isNotEmpty(userids) && CollectionUtils.isEmpty(accounts)){
+
+			params.put("user_ids", userids);
+			SQL.append("AND usr.user_id in (:user_ids) ");
+
+		}
+
+		if(LOGGER.isDebugEnabled())
+			LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), params.toString());
+
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		try{
+			return jtemplate.query(SQL.toString(), params, USER_LITE_ROW_MAPPER);
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query", dae,"user lite");
+		}
+
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)

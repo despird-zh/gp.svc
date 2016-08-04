@@ -1,5 +1,7 @@
 package com.gp.svc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +15,8 @@ import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.UserExt;
+import com.gp.svc.info.UserLite;
+import org.springframework.jdbc.core.RowMapper;
 
 public interface SecurityService {
 	
@@ -67,6 +71,15 @@ public interface SecurityService {
 	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
 
 	/**
+	 * Query the account list
+	 *
+	 * @param accounts the account list
+	 * @param userids the user id list
+	 **/
+	public List<UserLite> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException;
+
+
+	/**
 	 * Query the account list per page support pagination request
 	 * 
 	 * @param accountname the account or name as query condition
@@ -90,6 +103,8 @@ public interface SecurityService {
 	 * 
 	 * @param wgroupId the work group id
 	 * @param account the account i.e login
+	 *
+	 * @return KVPair's key is the id of group ; value is the name of group
 	 **/
 	public Set<KVPair<Long, String>> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account) throws ServiceException;
 	
@@ -123,4 +138,18 @@ public interface SecurityService {
 
 	
 	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
+
+	public static RowMapper<UserLite> USER_LITE_ROW_MAPPER = new RowMapper<UserLite>() {
+		@Override
+		public UserLite mapRow(ResultSet rs, int rowNum) throws SQLException {
+			UserLite info = new UserLite();
+			info.setAccount(rs.getString("account"));
+			info.setUserId(rs.getLong("user_id"));
+			info.setAvatarLink(rs.getString("image_link"));
+			info.setEmail(rs.getString("email"));
+			info.setSourceName(rs.getString("source_name"));
+			info.setSourceId(rs.getLong("source_id"));
+			return info;
+		}
+	};
 }

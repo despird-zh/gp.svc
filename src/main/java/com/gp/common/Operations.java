@@ -125,4 +125,8 @@ public enum Operations {
 	FIND_POSTS,
 	NEW_POST,
 	DEL_POST,
+	/** comment */
+	FIND_COMMENTS,
+	NEW_COMMENT,
+	DEL_COMMENT
 }

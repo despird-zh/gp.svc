@@ -13,7 +13,9 @@ import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.PostService;
+import com.gp.svc.SecurityService;
 import com.gp.svc.info.PostExt;
+import com.gp.svc.info.UserLite;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -56,6 +58,9 @@ public class PostServiceImpl implements PostService{
 
     @Autowired
     PseudoDAO pseudodao;
+
+    @Autowired
+    PostCommentDAO commentdao;
 
     /**
      * Create a new post
@@ -150,17 +155,29 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<UserInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+    public List<UserLite> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 
-        List<UserInfo> result = new ArrayList<>();
+        List<UserLite> result = new ArrayList<>();
 
         StringBuffer SQL_SEL = new StringBuffer();
         StringBuffer SQL_1 = new StringBuffer();
         SQL_SEL.append("SELECT * FROM gp_users ");
-        SQL_1.append("WHERE account IN (SELECT account from gp_group_user WHERE group_id = ?)");
+        SQL_SEL.append("select usr.user_id,\n");
+        SQL_SEL.append("usr.account, \n");
+        SQL_SEL.append("usr.full_name,\n");
+        SQL_SEL.append("usr.email,\n");
+        SQL_SEL.append("src.source_id,\n");
+        SQL_SEL.append("src.source_name, \n");
+        SQL_SEL.append("img.image_id,\n");
+        SQL_SEL.append("img.image_link\n");
+        SQL_SEL.append("from gp_users usr\n");
+        SQL_SEL.append("left join (select image_id, image_link, persist_type from gp_images) img on usr.avatar_id = img.image_id\n");
+        SQL_SEL.append("left join (select source_id, source_name from gp_sources) src on usr.source_id = src.source_id");
+
+        SQL_1.append("WHERE usr.account IN (SELECT account from gp_group_user WHERE group_id = ?)");
 
         StringBuffer SQL_2 = new StringBuffer();
-        SQL_2.append("WHERE account IN (select owner from gp_post_comments where post_id = ?) ");
+        SQL_2.append("WHERE usr.account IN (select owner from gp_post_comments where post_id = ?) ");
 
         JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
         try{
@@ -177,7 +194,7 @@ public class PostServiceImpl implements PostService{
             if(LOGGER.isDebugEnabled()){
                 LOGGER.debug("SQL : {} / PARAMS : {}", SQL_SEL.toString(), ArrayUtils.toString(params));
             }
-            result = jtemplate.query(SQL_SEL.toString(), params, UserDAO.UserMapper);
+            result = jtemplate.query(SQL_SEL.toString(), params, SecurityService.USER_LITE_ROW_MAPPER);
         }catch(DataAccessException dae){
 
             throw new ServiceException("excp.query", dae, "post attendee");
@@ -425,15 +442,54 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
     public List<PostCommentInfo> getPostComments(ServiceContext svcctx, InfoId<Long> postid, String owner, String state) throws ServiceException {
 
-        return null;
+        List<Object> paramlist = new ArrayList<>();
+
+        StringBuffer SQL = new StringBuffer();
+        SQL.append("select * from gp_post_comments ");
+        SQL.append("where 1=1 ");
+        if(InfoId.isValid(postid)) {
+
+            SQL.append("AND post_id = ? ");
+            paramlist.add(postid.getId());
+        }
+        if(StringUtils.isNotBlank(owner)){
+            SQL.append("AND owner = ? ");
+            paramlist.add(owner);
+        }
+        if(StringUtils.isNotBlank(state)){
+            SQL.append("AND state = ? ");
+            paramlist.add(state);
+        }
+
+        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+
+            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+        }
+
+        try {
+
+            return jtemplate.query(SQL.toString(), paramlist.toArray(), PostCommentDAO.PostCommentMapper);
+
+        }catch(DataAccessException dae){
+            throw new ServiceException("excp.query",dae, "post comments");
+        }
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
     public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException {
-        return false;
+
+        try{
+            return commentdao.create(commentinfo) > 0;
+        }catch(DataAccessException dae){
+            throw new ServiceException("excp.create", dae, "comment");
+        }
+
     }
 
 }
