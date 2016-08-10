@@ -50,7 +50,7 @@ public class AttachDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setSize(1234l);
 		info.setState("uploading");
 		info.setBinaryId(123456l);
-		info.setWorkgroupId(123l);
+		info.setResourceType("ss");
 		
 		attachdao.create( info);
 		System.out.println("--- create done:"+id.toString());

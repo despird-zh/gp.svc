@@ -20,8 +20,8 @@ public interface AttachDAO extends BaseDAO<AttachInfo>{
 			InfoId<Long> id = IdKey.ATTACHMENT.getInfoId(rs.getLong("attachment_id"));
 			
 			info.setInfoId(id);
-			info.setSourceId(rs.getInt("source_id"));
-			info.setWorkgroupId(rs.getLong("workgroup_id"));
+			info.setResourceId(rs.getLong("resource_id"));
+			info.setResourceType(rs.getString("resource_type"));
 			info.setAttachName(rs.getString("attachment_name"));
 			info.setSize(rs.getLong("size"));
 			info.setOwner(rs.getString("owner"));

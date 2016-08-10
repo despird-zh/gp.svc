@@ -8,9 +8,9 @@ public class AttachInfo extends TraceableInfo<Long> {
 	
 	private static final long serialVersionUID = 1L;
 
-	private int sourceId;
+	private long resourceId;
 	
-	private Long workgroupId;
+	private String resourceType;
 	
 	private String attachName;
 	
@@ -32,13 +32,6 @@ public class AttachInfo extends TraceableInfo<Long> {
 	
 	private Date createDate;
 
-	public Long getWorkgroupId() {
-		return workgroupId;
-	}
-
-	public void setWorkgroupId(Long workgroupId) {
-		this.workgroupId = workgroupId;
-	}
 
 	public String getAttachName() {
 		return attachName;
@@ -120,12 +113,19 @@ public class AttachInfo extends TraceableInfo<Long> {
 		this.createDate = createDate;
 	}
 
-	public int getSourceId() {
-		return sourceId;
+	public long getResourceId() {
+		return resourceId;
 	}
 
-	public void setSourceId(int sourceId) {
-		this.sourceId = sourceId;
+	public void setResourceId(long resourceId) {
+		this.resourceId = resourceId;
 	}
-		
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
 }

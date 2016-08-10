@@ -37,7 +37,7 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_attachments (")
-			.append("attachment_id, source_id,workgroup_id,")
+			.append("attachment_id, resource_id,resource_type,")
 			.append("attachment_name,size,owner,state,")
 			.append("binary_id,format,modifier, last_modified,")
 			.append("hash_code,owm,create_time,creator")
@@ -50,7 +50,7 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 		InfoId<Long> key = info.getInfoId();
 		
 		Object[] params = new Object[]{
-				key.getId(),info.getSourceId(),info.getWorkgroupId(),
+				key.getId(),info.getResourceId(),info.getResourceType(),
 				info.getAttachName(),info.getSize(),info.getOwner(),info.getState(),
 				info.getBinaryId(),info.getFormat(),info.getModifier(),info.getModifyDate(),
 				info.getHashCode(),info.getOwm(),info.getCreateDate(),info.getCreator()
@@ -90,17 +90,17 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("update gp_attachments set ");
 		
-		if(columnCheck(mode, colset, "workgroup_id")){
-			SQL.append("workgroup_id = ?,");
-			params.add(info.getWorkgroupId());
+		if(columnCheck(mode, colset, "resource_type")){
+			SQL.append("resource_type = ?,");
+			params.add(info.getResourceType());
 		}
 		if(columnCheck(mode, colset, "attachment_name")){
 			SQL.append("attachment_name =?,");
 			params.add(info.getAttachName());
 		}
-		if(columnCheck(mode, colset, "source_id")){
-			SQL.append("source_id = ? ,");
-			params.add(info.getWorkgroupId());
+		if(columnCheck(mode, colset, "resource_id")){
+			SQL.append("resource_id = ? ,");
+			params.add(info.getResourceId());
 		}
 		if(columnCheck(mode, colset, "size")){
 			SQL.append("size = ?,");
