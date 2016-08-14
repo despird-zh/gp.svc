@@ -232,10 +232,12 @@ public class PostServiceImpl implements PostService{
         }
         if(StringUtils.isNotBlank(scope)){
 
-            SQL.append(" AND scope = :scope");
+            SQL.append(" AND scope = :scope ");
             params.put("scope", scope);
         }
-
+        
+        SQL.append(" ORDER BY last_modified desc");
+        
         NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
         PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
 
@@ -484,6 +486,7 @@ public class PostServiceImpl implements PostService{
     public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException {
 
         try{
+        	svcctx.setTraceInfo(commentinfo);
             return commentdao.create(commentinfo) > 0;
         }catch(DataAccessException dae){
             throw new ServiceException("excp.create", dae, "comment");
