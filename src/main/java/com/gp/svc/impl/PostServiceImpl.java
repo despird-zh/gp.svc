@@ -520,7 +520,7 @@ public class PostServiceImpl implements PostService{
 
         }catch(DataAccessException dae){
 
-            throw new ServiceException("excp.create", dae, "Vote")
+            throw new ServiceException("excp.create", dae, "like voting");
         }
 
     }
@@ -548,7 +548,7 @@ public class PostServiceImpl implements PostService{
 
         }catch(DataAccessException dae){
 
-            throw new ServiceException("excp.create", dae, "Vote")
+            throw new ServiceException("excp.create", dae, "dislike voting");
         }
     }
 
