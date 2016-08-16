@@ -55,6 +55,8 @@ public class FlatColumns {
 	
 	public static final FlatColumn CAPACITY = new FlatColumn("capacity");
 	public static final FlatColumn POST_VISIBLE = new FlatColumn("post_visible");
+
+	public static final FlatColumn WORKGROUP_ID = new FlatColumn("workgroup_id");
 	/**
 	 * Convert the Columns to string set for easy check existence.
 	 * @param cols the columns source

@@ -125,6 +125,8 @@ public enum Operations {
 	FIND_POSTS,
 	NEW_POST,
 	DEL_POST,
+	LIKE_POST,
+	DISLIKE_POST,
 	/** comment */
 	FIND_COMMENTS,
 	NEW_COMMENT,

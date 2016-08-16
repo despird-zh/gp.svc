@@ -62,6 +62,9 @@ public class PostServiceImpl implements PostService{
     @Autowired
     PostCommentDAO commentdao;
 
+    @Autowired
+    VoteDAO votedao;
+
     /**
      * Create a new post
      **/
@@ -492,6 +495,61 @@ public class PostServiceImpl implements PostService{
             throw new ServiceException("excp.create", dae, "comment");
         }
 
+    }
+
+    @Override
+    public boolean addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
+
+        VoteInfo vote = new VoteInfo();
+        InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+        vote.setInfoId(vid);
+        vote.setOpinion(TagVotes.VoteOpinion.LIKE.name());
+        vote.setVoter(voter);
+        vote.setResourceId(postId.getId());
+        vote.setResourceType(IdKey.VOTE.getSchema());
+
+        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
+        vote.setWorkgroupId(wid);
+
+        svcctx.setTraceInfo(vote);
+
+        try{
+
+            int cnt = votedao.create(vote);
+            return cnt >0 ;
+
+        }catch(DataAccessException dae){
+
+            throw new ServiceException("excp.create", dae, "Vote")
+        }
+
+    }
+
+    @Override
+    public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
+
+        VoteInfo vote = new VoteInfo();
+        InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+        vote.setInfoId(vid);
+        vote.setOpinion(TagVotes.VoteOpinion.DISLIKE.name());
+        vote.setVoter(voter);
+        vote.setResourceId(postId.getId());
+        vote.setResourceType(IdKey.VOTE.getSchema());
+
+        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
+        vote.setWorkgroupId(wid);
+
+        svcctx.setTraceInfo(vote);
+
+        try{
+
+            int cnt = votedao.create(vote);
+            return cnt >0 ;
+
+        }catch(DataAccessException dae){
+
+            throw new ServiceException("excp.create", dae, "Vote")
+        }
     }
 
 }

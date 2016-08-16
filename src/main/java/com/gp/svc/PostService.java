@@ -115,6 +115,19 @@ public interface PostService {
 	 **/
 	public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException;
 
+	/**
+	 * Add like to post
+	 **/
+	public boolean addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
+
+	/**
+	 * Remove like of post
+	 **/
+	public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
+
+	/**
+	 * Mapper for post extend information
+	 **/
 	public static RowMapper<PostExt> POST_EXT_ROW_MAPPER = new RowMapper<PostExt>(){
 		@Override
 		public PostExt mapRow(ResultSet rs, int num) throws SQLException {
