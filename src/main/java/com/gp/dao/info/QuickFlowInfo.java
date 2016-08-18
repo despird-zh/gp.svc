@@ -7,10 +7,14 @@ import com.gp.info.TraceableInfo;
  */
 public class QuickFlowInfo extends TraceableInfo<Long>{
 
-    private String category;
+	private static final long serialVersionUID = 1L;
+
+	private String category;
 
     private String flowName;
 
+    private int duration;
+    
     public String getCategory() {
         return category;
     }
@@ -26,4 +30,12 @@ public class QuickFlowInfo extends TraceableInfo<Long>{
     public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
+
+	public int getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
 }
