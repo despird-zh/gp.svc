@@ -15,24 +15,13 @@
  *******************************************************************************/
 package com.gp.common;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.acl.Acl;
 import com.gp.info.InfoId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Define the constant variables related with Cabinet's operation.
  * 

@@ -26,7 +26,7 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
     
     private String state;
     
-    private Map<String, String> data;
+    private Map<String, Object> data;
 
 	public Long getFlowId() {
 		return flowId;
@@ -84,11 +84,11 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 		this.state = state;
 	}
 
-	public Map<String, String> getData() {
+	public Map<String, Object> getData() {
 		return data;
 	}
 
-	public void setData(Map<String, String> data) {
+	public void setData(Map<String, Object> data) {
 		this.data = data;
 	}
 
