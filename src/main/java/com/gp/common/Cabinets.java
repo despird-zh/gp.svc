@@ -42,8 +42,6 @@ import com.gp.info.InfoId;
 public class Cabinets {
 	
 	static Logger LOGGER = LoggerFactory.getLogger(Cabinets.class);
-	
-	public static ObjectMapper JSON_MAPPER = new ObjectMapper();
 
 	/**
 	 * enums of cabinet type 
@@ -113,56 +111,5 @@ public class Cabinets {
 		acl.addAce(owner, true);
 		return acl;
 	}
-	
-	/**
-	 * Convert a permission set into a Json String 
-	 **/
-	public static String toPermString(Set<String> perms){
-		if(null == perms)
-			return "[]";
-		try {
-			return JSON_MAPPER.writeValueAsString(perms);
-		} catch (JsonProcessingException e) {
-			LOGGER.error("Fail convert Set<String> perm to String", e);
-		}
-		return StringUtils.EMPTY;
-	}
-	
-	/**
-	 * Convert a Json array String into Permission Set on cabinet entry
-	 **/
-	public static Set<String> toPermSet(String perms){
-		if(StringUtils.isBlank(perms))
-			return new HashSet<String>();
-		
-		try {
-			return JSON_MAPPER.readValue(perms, new TypeReference<Set<String>>(){});
-		} catch ( IOException e) {
-			LOGGER.error("Fail convert Set<String> perm to String", e);
-		}
-		return new HashSet<String>();
-	}
-	
-	public static String toPropertyString(Map<String, Object> propmap){
-		if(null == propmap)
-			return "{}";
-		try {
-			return JSON_MAPPER.writeValueAsString(propmap);
-		} catch (JsonProcessingException e) {
-			LOGGER.error("Fail convert Map<String, Object> propmap to String", e);
-		}
-		return StringUtils.EMPTY;
-	}
-	
-	public static Map<String, Object> toPropertyMap(String props){
-		if(StringUtils.isBlank(props))
-			return new HashMap<String,Object>();
-		
-		try {
-			return JSON_MAPPER.readValue(props, new TypeReference<Map<String, Object>>(){});
-		} catch ( IOException e) {
-			LOGGER.error("Fail convert Json string to Map<String, Object> propmap", e);
-		}
-		return new HashMap<String,Object>();
-	}
+
 }

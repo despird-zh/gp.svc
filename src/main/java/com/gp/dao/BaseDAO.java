@@ -39,7 +39,7 @@ public interface BaseDAO <T> {
 	 * 
 	 * @return int the row count of updated.
 	 **/
-	public int update(T info,FilterMode mode, FlatColLocator ... excludeCols);
+	public int update(T info,FilterMode mode, FlatColLocator ... filterCols);
 
 	/**
 	 * Query row by id

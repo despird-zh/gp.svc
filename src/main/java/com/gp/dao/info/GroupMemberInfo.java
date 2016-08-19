@@ -52,7 +52,12 @@ public class GroupMemberInfo implements BaseInfo<Long>{
 		
 		return relid;
 	}
-	
+
+	@Override
+	public Long getId() {
+		return relid.getId();
+	}
+
 	public Long getGroupId() {
 		return groupId;
 	}

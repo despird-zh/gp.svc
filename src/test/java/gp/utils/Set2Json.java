@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.common.Cabinets;
+import com.gp.util.CommonUtils;
 
 public class Set2Json {
 
@@ -26,7 +27,7 @@ public class Set2Json {
 		map.put("prop4", "属性值4");
 		map.put("prop5", 345);
 		
-		String mstr = Cabinets.toPropertyString(map);
+		String mstr = CommonUtils.toJson(map);
 		
 		System.out.println(mstr);
 	}

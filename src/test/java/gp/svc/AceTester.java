@@ -4,6 +4,7 @@ import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.common.Cabinets;
+import com.gp.util.CommonUtils;
 
 public class AceTester {
 
@@ -14,8 +15,7 @@ public class AceTester {
 		System.out.println(ace);
 		
 		System.out.println(ace.getPermissions().toString());
-		System.out.println(Cabinets.toPermString(ace.getPermissions()));
-		System.out.println(Cabinets.toPermString(null));
+		System.out.println(CommonUtils.toJson(ace.getPermissions()));
 		
 	}
 

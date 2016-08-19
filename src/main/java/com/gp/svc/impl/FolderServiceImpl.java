@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.gp.util.CommonUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,7 +178,7 @@ public class FolderServiceImpl implements FolderService{
 					// already have ace in database
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.update(aceinfo,FilterMode.NONE);
 				}else{
@@ -189,7 +190,7 @@ public class FolderServiceImpl implements FolderService{
 					
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);
 				}
@@ -219,7 +220,7 @@ public class FolderServiceImpl implements FolderService{
 					aceinfo.setSubjectType(ace.getType().value);
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);
 					

@@ -17,9 +17,9 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 	
     private String execMode;
 
-    private Set<Long> prevSteps;
+    private Set<Long> prevNodes;
 
-    private Set<Long> nextSteps;
+    private Set<Long> nextNodes;
 
 	public Long getFlowId() {
 		return flowId;
@@ -45,20 +45,19 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 		this.execMode = execMode;
 	}
 
-	public Set<Long> getPrevSteps() {
-		return prevSteps;
+	public Set<Long> getPrevNodes() {
+		return prevNodes;
 	}
 
-	public void setPrevSteps(Set<Long> prevSteps) {
-		this.prevSteps = prevSteps;
+	public void setPrevNodes(Set<Long> prevNodes) {
+		this.prevNodes = prevNodes;
 	}
 
-	public Set<Long> getNextSteps() {
-		return nextSteps;
+	public Set<Long> getNextNodes() {
+		return nextNodes;
 	}
 
-	public void setNextSteps(Set<Long> nextSteps) {
-		this.nextSteps = nextSteps;
+	public void setNextNodes(Set<Long> nextNodes) {
+		this.nextNodes = nextNodes;
 	}
- 
 }

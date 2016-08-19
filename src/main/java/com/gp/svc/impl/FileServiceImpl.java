@@ -3,7 +3,9 @@ package com.gp.svc.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.gp.util.CommonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -214,7 +216,7 @@ public class FileServiceImpl implements FileService{
 				aceinfo.setAclId(aclid);
 				aceinfo.setSubjectType(ace.getType().value);
 				aceinfo.setSubject(ace.getSubject());
-				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 				svcctx.setTraceInfo(aceinfo);
 				acedao.create(aceinfo);
 				
@@ -222,7 +224,7 @@ public class FileServiceImpl implements FileService{
 				
 				aceinfo.setSubjectType(ace.getType().value);
 				aceinfo.setSubject(ace.getSubject());
-				aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 				svcctx.setTraceInfo(aceinfo);
 				
 				acedao.update(aceinfo,FilterMode.NONE);
@@ -265,7 +267,7 @@ public class FileServiceImpl implements FileService{
 					aceinfo.setSubjectType(ace.getType().value);
 					aceinfo.setSubject(ace.getSubject());
 					aceinfo.setPrivilege(ace.getPrivilege());
-					aceinfo.setPermissions(Cabinets.toPermString(ace.getPermissions()));
+					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					acedao.create(aceinfo);
 				}
