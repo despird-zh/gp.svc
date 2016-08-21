@@ -51,7 +51,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,?,")
 			.append("?,?,?,?,?,?,")
-			.append("?,?,?)");
+			.append("?,?,?,?)");
 
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
@@ -59,7 +59,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),info.getMemberGroupId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),info.getParentId(),
 				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),info.getPostAcceptable(),
-				info.getCreateDate(),info.getModifier(),info.getModifyDate()
+				info.getPublicFlowId(),info.getCreateDate(),info.getModifier(),info.getModifyDate()
 		};
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled()){			
@@ -193,6 +193,10 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		if(columnCheck(mode, colset, "mbr_post_acpt")){
 			SQL.append("mbr_post_acpt = ?,");
 			params.add(info.getPostAcceptable());
+		}
+		if(columnCheck(mode, colset, "public_flow_id")){
+			SQL.append("public_flow_id = ?,");
+			params.add(info.getPublicFlowId());
 		}
 		
 		SQL.append("modifier = ?, last_modified = ?,")

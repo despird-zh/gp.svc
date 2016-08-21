@@ -48,6 +48,7 @@ public interface WorkgroupDAO extends BaseDAO<WorkgroupInfo>{
 			info.setMemberGroupId(rs.getLong("mbr_group_id"));
 			info.setParentId(rs.getLong("workgroup_pid"));
 			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
+			info.setPublicFlowId(rs.getLong("public_flow_id"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));

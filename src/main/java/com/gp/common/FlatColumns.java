@@ -57,6 +57,11 @@ public class FlatColumns {
 	public static final FlatColumn POST_VISIBLE = new FlatColumn("post_visible");
 
 	public static final FlatColumn WORKGROUP_ID = new FlatColumn("workgroup_id");
+	public static final FlatColumn PUBLIC_FLOW_ID = new FlatColumn("public_flow_id");
+	
+	public static final FlatColumn PREV_NODES = new FlatColumn("prev_nodes");
+	public static final FlatColumn NEXT_NODES = new FlatColumn("next_nodes");
+	
 	/**
 	 * Convert the Columns to string set for easy check existence.
 	 * @param cols the columns source

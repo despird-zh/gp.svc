@@ -8,6 +8,9 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.util.CommonUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,9 @@ import java.util.Set;
 @Component("procflowDAO")
 public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
 
+	static Logger LOGGER = LoggerFactory.getLogger(ProcFlowDAOImpl.class);
+	
+	@Autowired
     public ProcFlowDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }
@@ -34,12 +40,12 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         SQL.append("insert into gp_proc_flows (")
                 .append("proc_id, flow_id, proc_name,")
                 .append("descr, owner, launch_time, expire_time,")
-                .append("state, json_data,")
+                .append("state, json_data,resource_id, resource_type,")
                 .append("modifier, last_modified,")
                 .append(")values(")
                 .append("?,?,?,")
                 .append("?,?,?,?,")
-                .append("?,?,")
+                .append("?,?,?,?,")
                 .append("?,? ");
 
         InfoId<Long> key = info.getInfoId();
@@ -47,7 +53,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         Object[] params = new Object[]{
                 key.getId(),info.getFlowId(), info.getProcName(),
                 info.getDescription(), info.getOwner(), info.getLaunchTime(), info.getExpireTime(),
-                info.getState(), dataStr,
+                info.getState(), dataStr, info.getResourceId(), info.getResourceType(),
                 info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
@@ -104,7 +110,14 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
             SQL.append("expire_time = ? ,");
             params.add(info.getExpireTime());
         }
-
+        if(columnCheck(mode, colset, "resource_id")){
+            SQL.append("resource_id = ? ,");
+            params.add(info.getResourceId());
+        }
+        if(columnCheck(mode, colset, "resource_type")){
+            SQL.append("resource_type = ? ,");
+            params.add(info.getResourceType());
+        }
         if(columnCheck(mode, colset, "json_data")){
             SQL.append("json_data = ? ,");
             String dataStr = CommonUtils.toJson(info.getData());

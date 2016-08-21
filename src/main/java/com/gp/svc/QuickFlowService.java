@@ -11,9 +11,12 @@ import com.gp.info.InfoId;
 public interface QuickFlowService {
 
     /**
-     * Launch a quick flow
+     * Launch a quick flow for workgroup post publish
      **/
-    public void launchProcFlow(ServiceContext svcctx, ProcFlowInfo flowInfo) throws ServiceException;
+    public void launchPostPublic(ServiceContext svcctx, String descr,InfoId<Long> wgroupId, InfoId<Long> postId) throws ServiceException;
 
-    public void completeProcStep(ServiceContext svcctx, InfoId<Long> stepId) throws ServiceException;
+    /**
+     * submit a step for workgroup post public
+     **/
+    public void submitPostPublic(ServiceContext svcctx, InfoId<Long> stepId) throws ServiceException;
 }

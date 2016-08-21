@@ -7,6 +7,9 @@ import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ import java.util.Set;
 @Component("procstepDAO")
 public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
 
+	static Logger LOGGER = LoggerFactory.getLogger(ProcStepDAOImpl.class);
+	
+	@Autowired
     public ProcStepDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }

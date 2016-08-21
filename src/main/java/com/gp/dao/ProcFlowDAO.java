@@ -33,6 +33,8 @@ public interface ProcFlowDAO extends BaseDAO<ProcFlowInfo>{
             String jsonStr = rs.getString("json_data");
             info.setData(CommonUtils.toMap(jsonStr));
 
+            info.setResourceId(rs.getLong("resource_id"));
+            info.setResourceType(rs.getString("resource_type"));
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));
             return info;

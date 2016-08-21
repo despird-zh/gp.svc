@@ -26,6 +26,10 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
     
     private String state;
     
+	private long resourceId;
+	
+	private String resourceType;
+	
     private Map<String, Object> data;
 
 	public Long getFlowId() {
@@ -90,6 +94,22 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 
 	public void setData(Map<String, Object> data) {
 		this.data = data;
+	}
+
+	public long getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(long resourceId) {
+		this.resourceId = resourceId;
+	}
+
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 
 }

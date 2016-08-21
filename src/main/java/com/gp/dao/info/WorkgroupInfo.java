@@ -75,6 +75,8 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 	
 	private Long avatarId;
 	
+	private Long publicFlowId;
+	
 	public Boolean getShareEnable() {
 		return shareEnable;
 	}
@@ -269,6 +271,14 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 
 	public void setPostAcceptable(Boolean postAcceptable) {
 		this.postAcceptable = postAcceptable;
+	}
+
+	public Long getPublicFlowId() {
+		return publicFlowId;
+	}
+
+	public void setPublicFlowId(Long publicFlowId) {
+		this.publicFlowId = publicFlowId;
 	}
 
 }

@@ -7,6 +7,9 @@ import com.gp.dao.info.QuickFlowInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -22,6 +25,9 @@ import java.util.Set;
 @Component("quickflowDAO")
 public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
 
+	static Logger LOGGER = LoggerFactory.getLogger(QuickFlowDAOImpl.class);
+	
+	@Autowired
     public QuickFlowDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }

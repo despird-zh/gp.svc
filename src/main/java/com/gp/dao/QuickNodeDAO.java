@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,6 +16,14 @@ import java.util.Set;
  */
 public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
 
+	public QuickNodeInfo queryRootNode(InfoId<Long> flowId);
+	
+	public QuickNodeInfo queryEndNode(InfoId<Long> flowId);
+	
+	public List<QuickNodeInfo> queryPrevNodes(InfoId<Long> nodeId);
+	
+	public List<QuickNodeInfo> queryNextNodes(InfoId<Long> nodeId);
+	
     static RowMapper<QuickNodeInfo> QUICK_NODE_ROWMAPPER = new RowMapper<QuickNodeInfo>() {
         @Override
         public QuickNodeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
