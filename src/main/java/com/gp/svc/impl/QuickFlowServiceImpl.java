@@ -2,6 +2,7 @@ package com.gp.svc.impl;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,10 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	public void launchPostPublic(ServiceContext svcctx, String descr,InfoId<Long> wgroupId,  InfoId<Long> postId) throws ServiceException {
 		
 		// get the quick flow id
-		Long fid = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID, Long.class);
+		Map<String, Object> wmap = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID,
+				FlatColumns.ADMIN,
+				FlatColumns.MANAGER);
+		long fid = (Long)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn());
 		// query flow definition
 		QuickFlowInfo finfo = quickflowdao.query(IdKey.QUICK_FLOW.getInfoId(fid));
 		// create process flow information
@@ -95,5 +99,6 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

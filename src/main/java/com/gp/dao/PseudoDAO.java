@@ -110,6 +110,6 @@ public interface PseudoDAO {
 	 * @param col the flat column locator 
 	 * @return Map<String, Object> the map key is FlatColLocator.getColumn() i.e. column name
 	 **/
-	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols);
+	public Map<String, Object> query(InfoId<?> id, FlatColLocator... cols);
 	
 }
