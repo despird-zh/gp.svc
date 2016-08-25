@@ -18,9 +18,11 @@ public class NotificationInfo extends TraceableInfo<Long> {
 	
 	private String operation;
 	
-	private String notifDictKey;
+	private String subject;
 	
-	private String notifParams;
+	private String quoteExcerpt;
+	
+	private String excerpt;
 
 	private String sender;
 	
@@ -66,20 +68,28 @@ public class NotificationInfo extends TraceableInfo<Long> {
 		this.sourceId = sourceId;
 	}
 
-	public String getNotifDictKey() {
-		return notifDictKey;
+	public String getSubject() {
+		return subject;
 	}
 
-	public void setNotifDictKey(String notifDictKey) {
-		this.notifDictKey = notifDictKey;
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
-	public String getNotifParams() {
-		return notifParams;
+	public String getQuoteExcerpt() {
+		return quoteExcerpt;
 	}
 
-	public void setNotifParams(String notifParams) {
-		this.notifParams = notifParams;
+	public void setQuoteExcerpt(String quoteExcerpt) {
+		this.quoteExcerpt = quoteExcerpt;
+	}
+
+	public String getExcerpt() {
+		return excerpt;
+	}
+
+	public void setExcerpt(String excerpt) {
+		this.excerpt = excerpt;
 	}
 
 	public String getSender() {

@@ -21,8 +21,9 @@ public interface NotificationDAO extends BaseDAO<NotificationInfo>{
 			
 			info.setSourceId(rs.getInt("source_id"));
 			info.setWorkgroupId(rs.getLong("workgroup_id"));
-			info.setNotifDictKey(rs.getString("notif_dict_key"));
-			info.setNotifParams(rs.getString("params_json"));
+			info.setQuoteExcerpt(rs.getString("quote_excerpt"));
+			info.setExcerpt(rs.getString("excerpt"));
+			info.setSubject(rs.getString("subject"));
 			info.setSender(rs.getString("sender"));
 			info.setSendTime(rs.getTimestamp("send_time"));
 			info.setOperation(rs.getString("operation"));
