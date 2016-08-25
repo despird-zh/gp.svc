@@ -9,9 +9,7 @@ public class NotificationDispatchInfo extends TraceableInfo<Long> {
 	private static final long serialVersionUID = 1L;
 
 	private Long notificationId;
-	
-	private String notifContent;
-	
+
 	private String receiver;
 
 	private Boolean touchFlag;
@@ -24,14 +22,6 @@ public class NotificationDispatchInfo extends TraceableInfo<Long> {
 
 	public void setNotificationId(Long notificationId) {
 		this.notificationId = notificationId;
-	}
-
-	public String getNotifContent() {
-		return notifContent;
-	}
-
-	public void setNotifContent(String notifContent) {
-		this.notifContent = notifContent;
 	}
 
 	public String getReceiver() {

@@ -18,41 +18,38 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.NotificationDAO;
+import com.gp.dao.NotificationDispatchDAO;
+import com.gp.dao.info.NotificationDispatchInfo;
 import com.gp.dao.info.NotificationInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("notificationDAO")
-public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
+@Component("notificationdispatchDAO")
+public class NotificationDispatchDAOImpl extends DAOSupport implements NotificationDispatchDAO{
 
-	static Logger LOGGER = LoggerFactory.getLogger(NotificationDAOImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(NotificationDispatchDAOImpl.class);
 	
 	@Autowired
-	public NotificationDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public NotificationDispatchDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create(NotificationInfo info) {
-		
+	public int create(NotificationDispatchInfo info) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("INSERT INTO gp_notifications (")
-			.append("notification_id, source_id, workgroup_id, resource_id,")
-			.append("resource_type,operation,subject,quote_excerpt,")
-			.append("excerpt,sender, send_time,")
+		SQL.append("INSERT INTO gp_notification_dispatch (")
+			.append("rel_id, notification_id, receiver,")
+			.append("touch_flag,touch_time,")
 			.append("modifier, last_modified")
 			.append(")VALUES(")
-			.append("?,?,?,?,")
-			.append("?,?,?,?,")
-			.append("?,?,?")
+			.append("?,?,?,")
+			.append("?,?")
 			.append("?,?")
 			.append(")");
 		
 		Object[] params = new Object[]{
-				info.getInfoId().getId(),info.getSourceId(),info.getWorkgroupId(),info.getResourceId(),
-				info.getResourceType(),info.getOperation(),info.getSubject(),info.getQuoteExcerpt(),
-				info.getExcerpt(),info.getSender(),info.getSendTime(),
+				info.getInfoId().getId(),info.getNotificationId(),info.getReceiver(),
+				info.getTouchFlag(),info.getTouchTime(),
 				info.getModifier(), info.getModifyDate()
 		};
 
@@ -67,8 +64,8 @@ public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
 	@Override
 	public int delete(InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_notifications ")
-			.append("where notification_id = ?");
+		SQL.append("delete from gp_notification_dispatch ")
+			.append("where rel_id = ?");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -82,55 +79,27 @@ public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
 	}
 
 	@Override
-	public int update(NotificationInfo info, FilterMode mode, FlatColLocator... filterCols) {
+	public int update(NotificationDispatchInfo info, FilterMode mode, FlatColLocator... filterCols) {
 		Set<String> colset = FlatColumns.toColumnSet(filterCols);
 		List<Object> params = new ArrayList<Object>();
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_notifications set ");
+		SQL.append("update gp_notification_dispatch set ");
 		
-		if(columnCheck(mode, colset, "source_id")){
-			SQL.append("source_id = ?,");
-			params.add(info.getSourceId());
+		if(columnCheck(mode, colset, "notification_id")){
+			SQL.append("notification_id = ?,");
+			params.add(info.getNotificationId());
 		}
-		if(columnCheck(mode, colset, "workgroup_id")){
-			SQL.append("workgroup_id = ?,");
-			params.add(info.getWorkgroupId());
+		if(columnCheck(mode, colset, "touch_flag")){
+			SQL.append("touch_flag = ?,");
+			params.add(info.getTouchFlag());
 		}
-		if(columnCheck(mode, colset, "resource_id")){
-			SQL.append("resource_id = ?,");
-			params.add(info.getResourceId());
+		if(columnCheck(mode, colset, "touch_time")){
+			SQL.append("touch_time = ?,");
+			params.add(info.getTouchTime());
 		}
-		if(columnCheck(mode, colset, "resource_type")){
-			SQL.append("resource_type = ?,");
-			params.add(info.getResourceType());
-		}
-		if(columnCheck(mode, colset, "operation")){
-			SQL.append("operation = ?,");
-			params.add(info.getOperation());
-		}
-		if(columnCheck(mode, colset, "subject")){
-			SQL.append("subject = ?,");
-			params.add(info.getSubject());
-		}
-		if(columnCheck(mode, colset, "quote_excerpt")){
-			SQL.append("quote_excerpt = ?,");
-			params.add(info.getQuoteExcerpt());
-		}
-		if(columnCheck(mode, colset, "excerpt")){
-			SQL.append("excerpt = ?,");
-			params.add(info.getExcerpt());
-		}
-		if(columnCheck(mode, colset, "sender")){
-			SQL.append("sender = ?,");
-			params.add(info.getSender());
-		}
-		if(columnCheck(mode, colset, "send_time")){
-			SQL.append("send_time = ?,");
-			params.add(info.getSendTime());
-		}
-	
+			
 		SQL.append("modifier = ?, last_modified = ? ")
-			.append("where notification_id = ?");
+			.append("where rel_id = ?");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
@@ -144,9 +113,9 @@ public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
 	}
 
 	@Override
-	public NotificationInfo query(InfoId<?> id) {
-		String SQL = "select * from gp_notifications "
-				+ "where notification_id = ?";
+	public NotificationDispatchInfo query(InfoId<?> id) {
+		String SQL = "select * from gp_notification_dispatch "
+				+ "where rel_id = ?";
 		
 		Object[] params = new Object[]{				
 				id.getId()
@@ -155,7 +124,7 @@ public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
 			LOGGER.debug("SQL : {} / PARAMS : {}", SQL, Arrays.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		NotificationInfo ainfo = jtemplate.queryForObject(SQL, params, NotifcationMapper);
+		NotificationDispatchInfo ainfo = jtemplate.queryForObject(SQL, params, NotifDispatchMapper);
 		return ainfo;
 	}
 
