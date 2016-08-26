@@ -130,5 +130,9 @@ public enum Operations {
 	/** comment */
 	FIND_COMMENTS,
 	NEW_COMMENT,
-	DEL_COMMENT
+	DEL_COMMENT,
+	/** quick process flow */
+	LAUNCH_FLOW,
+	SUBMIT_STEP,
+	COMPLETE_FLOW,
 }

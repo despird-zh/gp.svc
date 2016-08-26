@@ -18,5 +18,9 @@ public interface QuickFlowService {
     /**
      * submit a step for workgroup post public
      **/
-    public void submitPostPublic(ServiceContext svcctx, InfoId<Long> stepId) throws ServiceException;
+    public void submitPostPublic(ServiceContext svcctx,
+                                 InfoId<Long> currStepId,
+                                 String opinion,
+                                 String comment,
+                                 InfoId<Long> nextNodeId) throws ServiceException;
 }
