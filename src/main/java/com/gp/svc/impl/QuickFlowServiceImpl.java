@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
-import com.gp.common.QuickFlowNodes;
+import com.gp.common.QuickFlows;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ProcFlowDAO;
@@ -75,7 +75,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		Date now = calendar.getTime();
 		pinfo.setLaunchTime(now);
 		calendar.add(Calendar.DATE, finfo.getDuration());
-		pinfo.setState(QuickFlowNodes.FlowState.START.name());
+		pinfo.setState(QuickFlows.FlowState.START.name());
 		pinfo.setExpireTime(calendar.getTime());
 		svcctx.setTraceInfo(pinfo);
 		
@@ -86,11 +86,13 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		sinfo.setCreateTime(now);
 		sinfo.setProcId(procId.getId());
 		sinfo.setNodeId(rootnode.getId());
-		sinfo.setPrevStep(QuickFlowNodes.ROOT_NODE);
-		sinfo.setState(QuickFlowNodes.StepState.PENDING.name());
+		sinfo.setPrevStep(QuickFlows.ROOT_NODE);
+		sinfo.setState(QuickFlows.StepState.PENDING.name());
 		sinfo.setStepName(rootnode.getNodeName());
 		
 		svcctx.setTraceInfo(sinfo);
+		
+		
 	}
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)

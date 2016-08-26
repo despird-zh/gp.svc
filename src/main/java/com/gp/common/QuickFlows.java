@@ -1,6 +1,6 @@
 package com.gp.common;
 
-public class QuickFlowNodes {
+public class QuickFlows {
 
 	/** the id of root node */
 	public static final Long ROOT_NODE = -1l;

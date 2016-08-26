@@ -1,7 +1,7 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.QuickFlowNodes;
+import com.gp.common.QuickFlows;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.QuickNodeDAO;
@@ -157,7 +157,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	@Override
 	public QuickNodeInfo queryRootNode(InfoId<Long> flowId) {
 		String SQL = "select * from gp_quick_node "
-                + "where flow_id = ? and prev_nodes = [" + QuickFlowNodes.ROOT_NODE + "]";
+                + "where flow_id = ? and prev_nodes = [" + QuickFlows.ROOT_NODE + "]";
 
         Object[] params = new Object[]{
                 flowId.getId()
@@ -174,7 +174,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	@Override
 	public QuickNodeInfo queryEndNode(InfoId<Long> flowId) {
 		String SQL = "select * from gp_quick_node "
-                + "where flow_id = ? and prev_nodes = [" + QuickFlowNodes.END_NODE + "]";
+                + "where flow_id = ? and prev_nodes = [" + QuickFlows.END_NODE + "]";
 
         Object[] params = new Object[]{
                 flowId.getId()

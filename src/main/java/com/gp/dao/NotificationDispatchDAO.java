@@ -20,7 +20,6 @@ public interface NotificationDispatchDAO extends BaseDAO<NotificationDispatchInf
 			info.setInfoId(id);
 			
 			info.setNotificationId(rs.getLong("notification_id"));
-			info.setNotifContent(rs.getString("notif_content"));
 			info.setReceiver(rs.getString("receiver"));
 			info.setTouchFlag(rs.getBoolean("touch_flag"));
 			info.setTouchTime(rs.getDate("touch_time"));
