@@ -12,6 +12,8 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 
 	private static final long serialVersionUID = 1L;
 
+	private Long workgroupId;
+
 	private Long flowId;
 	
 	private String description;
@@ -110,6 +112,15 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 
 	public void setResourceType(String resourceType) {
 		this.resourceType = resourceType;
+	}
+
+
+	public Long getWorkgroupId() {
+		return workgroupId;
+	}
+
+	public void setWorkgroupId(Long workgroupId) {
+		this.workgroupId = workgroupId;
 	}
 
 }

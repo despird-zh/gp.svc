@@ -1,13 +1,12 @@
 package com.gp.svc.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 import com.gp.common.*;
 import com.gp.dao.*;
 import com.gp.dao.info.*;
 import com.gp.info.FlatColLocator;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
+import com.gp.common.QuickFlows.DefaultExecutor;
 
 @Service("quickflowService")
 public class QuickFlowServiceImpl implements QuickFlowService{
@@ -63,6 +63,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		InfoId<Long> procId = idservice.generateId(IdKey.PROC_FLOW, Long.class);
 		pinfo.setInfoId(procId);
 		pinfo.setFlowId(fid);
+		pinfo.setWorkgroupId(wgroupId.getId());
 		pinfo.setResourceId(postId.getId());
 		pinfo.setResourceType(postId.getIdKey());
 		pinfo.setDescription(descr);
@@ -76,6 +77,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		pinfo.setState(QuickFlows.FlowState.START.name());
 		pinfo.setExpireTime(calendar.getTime());
 		svcctx.setTraceInfo(pinfo);
+
 		// query quick node information : root node
 		QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKey.QUICK_FLOW.getInfoId(fid));
 		InfoId<Long> nodeId = idservice.generateId(IdKey.PROC_STEP, Long.class);
@@ -160,4 +162,37 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		}
 	}
 
+	private Set<String> getStepExecutors(InfoId<Long> procId, Set<String> executorSet) throws ServiceException{
+		Set<String> result = new HashSet<>();
+
+		if(CollectionUtils.isEmpty(executorSet))
+			return result;
+
+		for(String executor: executorSet){
+			if(DefaultExecutor.contains(executor)){
+				DefaultExecutor runner = DefaultExecutor.valueOf(executor);
+				switch (runner){
+					case FLOW_OWNER:
+						String owner = pseudodao.query(procId, FlatColumns.OWNER, String.class);
+						result.add(owner);
+						break;
+					case WGROUP_ADMIN:
+						String admin = pseudodao.query(procId, FlatColumns.OWNER, String.class);
+						result.add(owner);
+						break;
+					case WGROUP_MANAGER:
+						break;
+					case FLOW_ATTENDEE:
+						break;
+					case RESOURCE_OWNER:
+						break;
+					default:
+						break;
+				}
+
+			}else{
+				result.add(executor);
+			}
+		}
+	}
 }

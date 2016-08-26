@@ -21,6 +21,8 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 
     private Set<Long> nextNodes;
 
+	private Set<String> executor;
+
 	public Long getFlowId() {
 		return flowId;
 	}
@@ -60,4 +62,14 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 	public void setNextNodes(Set<Long> nextNodes) {
 		this.nextNodes = nextNodes;
 	}
+
+
+	public Set<String> getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Set<String> executor) {
+		this.executor = executor;
+	}
+
 }

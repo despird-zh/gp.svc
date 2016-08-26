@@ -11,16 +11,36 @@ public class QuickFlows {
 	/**
 	 * Execute mode on flow step 
 	 **/
-	public static enum ExecMode{
+	public enum ExecMode{
 		ANYONE_PASS,
 		ALL_PASS,
 		VETO_REJECT
 	}
-	
+
+	/**
+	 * The default executor on flow node
+	 **/
+	public static enum DefaultExecutor{
+
+		WGROUP_MANAGER,
+		WGROUP_ADMIN,
+		RESOURCE_OWNER,
+		FLOW_OWNER,
+		FLOW_ATTENDEE;
+
+		public static boolean contains(String checkStr)
+		{
+			for(DefaultExecutor choice : values())
+				if (choice.name().equals(checkStr))
+					return true;
+			return false;
+		}
+	}
+
 	/**
 	 * The state of process flow
 	 **/
-	public static enum FlowState{
+	public enum FlowState{
 		START,
 		END,
 		EXPIRE,
@@ -29,7 +49,7 @@ public class QuickFlows {
 	/**
 	 * The state of process step
 	 **/
-	public static enum StepState{
+	public enum StepState{
 		PENDING,
 		COMPLETE,
 	}

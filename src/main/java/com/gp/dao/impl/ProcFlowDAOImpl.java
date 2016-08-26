@@ -38,7 +38,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         StringBuffer SQL = new StringBuffer();
 
         SQL.append("insert into gp_proc_flows (")
-                .append("proc_id, flow_id, proc_name,")
+                .append("proc_id, workgroup_id, flow_id, proc_name,")
                 .append("descr, owner, launch_time, expire_time,")
                 .append("state, json_data,resource_id, resource_type,")
                 .append("modifier, last_modified,")
@@ -51,7 +51,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         InfoId<Long> key = info.getInfoId();
         String dataStr = CommonUtils.toJson(info.getData());
         Object[] params = new Object[]{
-                key.getId(),info.getFlowId(), info.getProcName(),
+                key.getId(),info.getWorkgroupId(), info.getFlowId(), info.getProcName(),
                 info.getDescription(), info.getOwner(), info.getLaunchTime(), info.getExpireTime(),
                 info.getState(), dataStr, info.getResourceId(), info.getResourceType(),
                 info.getModifier(),info.getModifyDate()
@@ -90,6 +90,10 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         StringBuffer SQL = new StringBuffer();
         SQL.append("update gp_proc_flows set ");
 
+        if(columnCheck(mode, colset, "workgroup_id")){
+            SQL.append("workgroup_id = ?,");
+            params.add(info.getWorkgroupId());
+        }
         if(columnCheck(mode, colset, "flow_id")){
             SQL.append("flow_id = ?,");
             params.add(info.getFlowId());

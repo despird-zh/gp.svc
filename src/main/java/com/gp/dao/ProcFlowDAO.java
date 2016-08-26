@@ -23,6 +23,7 @@ public interface ProcFlowDAO extends BaseDAO<ProcFlowInfo>{
             InfoId<Long> id = IdKey.PROC_FLOW.getInfoId(rs.getLong("proc_id"));
             info.setInfoId(id);
 
+            info.setWorkgroupId(rs.getLong("workgroup_id"));
             info.setFlowId(rs.getLong("flow_id"));
             info.setProcName(rs.getString("proc_name"));
             info.setDescription(rs.getString("descr"));

@@ -52,7 +52,8 @@ public class FlatColumns {
 	public static final FlatColumn NETDISK_CAB_ID = new FlatColumn("netdisk_cab_id");
 	
 	public static final FlatColumn ACCOUNT = new FlatColumn("account");
-	
+	public static final FlatColumn OWNER = new FlatColumn("owner");
+
 	public static final FlatColumn CAPACITY = new FlatColumn("capacity");
 	public static final FlatColumn POST_VISIBLE = new FlatColumn("post_visible");
 

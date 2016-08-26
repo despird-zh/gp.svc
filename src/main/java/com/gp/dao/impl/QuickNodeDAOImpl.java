@@ -145,7 +145,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
         }
-        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QUICK_NODE_ROWMAPPER);
+        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QuickNodeMapper);
         return ainfo.size()>0 ? ainfo.get(0) : null;
     }
 
@@ -167,7 +167,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
         }
-        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QUICK_NODE_ROWMAPPER);
+        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QuickNodeMapper);
         return ainfo.size()>0 ? ainfo.get(0) : null;
 	}
 
@@ -184,7 +184,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
         }
-        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QUICK_NODE_ROWMAPPER);
+        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QuickNodeMapper);
         return ainfo.size()>0 ? ainfo.get(0) : null;
 	}
 
@@ -202,7 +202,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	        if(LOGGER.isDebugEnabled()){
 	            LOGGER.debug("SQL : " + SQL + " / params : " + params.toString());
 	        }
-	        List<QuickNodeInfo> ainfos = jtemplate.query(SQL, params, QUICK_NODE_ROWMAPPER);
+	        List<QuickNodeInfo> ainfos = jtemplate.query(SQL, params, QuickNodeMapper);
 	        return ainfos;
 		}
 	}
@@ -222,7 +222,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	        if(LOGGER.isDebugEnabled()){
 	            LOGGER.debug("SQL : " + SQL + " / params : " + params.toString());
 	        }
-	        List<QuickNodeInfo> ainfos = jtemplate.query(SQL, params, QUICK_NODE_ROWMAPPER);
+	        List<QuickNodeInfo> ainfos = jtemplate.query(SQL, params, QuickNodeMapper);
 	        return ainfos;
 		}
 	}
