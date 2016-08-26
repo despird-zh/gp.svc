@@ -20,7 +20,7 @@ public interface QuickFlowService {
      **/
     public void submitPostPublic(ServiceContext svcctx,
                                  InfoId<Long> currStepId,
+                                 InfoId<Long> nextNodeId,
                                  String opinion,
-                                 String comment,
-                                 InfoId<Long> nextNodeId) throws ServiceException;
+                                 String comment) throws ServiceException;
 }

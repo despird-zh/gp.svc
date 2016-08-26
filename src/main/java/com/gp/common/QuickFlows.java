@@ -53,4 +53,12 @@ public class QuickFlows {
 		PENDING,
 		COMPLETE,
 	}
+	
+	/**
+	 * the opinion of approve 
+	 **/
+	public enum StepOpinion{
+		REJECT,
+		APPROVE
+	}
 }

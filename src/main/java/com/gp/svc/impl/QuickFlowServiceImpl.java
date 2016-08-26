@@ -6,7 +6,10 @@ import com.gp.common.*;
 import com.gp.dao.*;
 import com.gp.dao.info.*;
 import com.gp.info.FlatColLocator;
+import com.gp.info.Identifier;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -129,29 +132,33 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, String opinion, String comment, InfoId<Long> nextNodeId) throws ServiceException {
-
+	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, InfoId<Long> nextNodeId, String opinion, String comment) throws ServiceException {
+		// find the next node
 		QuickNodeInfo nextnode = quicknodedao.query(nextNodeId);
 		ProcStepInfo stepinfo = procstepdao.query(currStepId);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		Date now = calendar.getTime();
-		if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
-			InfoId<Long> nodeId = idservice.generateId(IdKey.PROC_STEP, Long.class);
-			ProcStepInfo sinfo = new ProcStepInfo();
-			sinfo.setInfoId(nodeId);
-			sinfo.setCreateTime(now);
-			sinfo.setProcId(stepinfo.getProcId());
-			sinfo.setNodeId(nextNodeId.getId());
-			sinfo.setPrevStep(stepinfo.getId());
-			sinfo.setState(QuickFlows.StepState.PENDING.name());
-			sinfo.setStepName(nextnode.getNodeName());
-			// set the executor of step
-			//sinfo.setExecutor();
-			svcctx.setTraceInfo(sinfo);
-		}
+		
+
 
 		try{
+			// not the ending node
+			if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
+				
+				InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+				ProcStepInfo sinfo = new ProcStepInfo();
+				sinfo.setInfoId(stepId);
+				sinfo.setCreateTime(now);
+				sinfo.setProcId(stepinfo.getProcId());
+				sinfo.setNodeId(nextNodeId.getId());
+				sinfo.setPrevStep(stepinfo.getId());
+				sinfo.setState(QuickFlows.StepState.PENDING.name());
+				sinfo.setStepName(nextnode.getNodeName());
+				// set the executor of step
+				//sinfo.setExecutor();
+				svcctx.setTraceInfo(sinfo);
+			}
 			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
 			Object[] vals = new Object[]{opinion, comment};
 
@@ -185,8 +192,20 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						result.add(mgr);
 						break;
 					case FLOW_ATTENDEE:
+						List<String> attendees = procstepdao.queryProcAttendees(procId);
+						result.addAll(attendees);
 						break;
 					case RESOURCE_OWNER:
+						Map<String,Object> resmap = pseudodao.query(procId, FlatColumns.RESOURCE_ID,FlatColumns.RESOURCE_TYPE);
+						if(MapUtils.isNotEmpty(resmap)){
+							String res_type = (String)resmap.get(FlatColumns.RESOURCE_TYPE.getColumn());
+							Long res_id = (Long)resmap.get(FlatColumns.RESOURCE_ID.getColumn());
+							Identifier idf = IdKey.valueOfIgnoreCase(res_type);
+							InfoId<Long> resId = new InfoId<Long>(idf, res_id);
+							
+							String res_owner = pseudodao.query(resId, FlatColumns.OWNER, String.class);
+							result.add(res_owner);
+						}
 						break;
 					default:
 						break;

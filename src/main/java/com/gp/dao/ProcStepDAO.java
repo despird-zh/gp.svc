@@ -2,18 +2,20 @@ package com.gp.dao;
 
 import com.gp.common.IdKey;
 import com.gp.dao.info.ProcStepInfo;
-import com.gp.dao.info.QuickFlowInfo;
 import com.gp.info.InfoId;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by garydiao on 8/19/16.
  */
 public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
 
+	public List<String> queryProcAttendees(InfoId<Long> procId);
+	
     public static RowMapper<ProcStepInfo> PROC_STEP_ROWMAPPER = new RowMapper<ProcStepInfo>() {
         @Override
         public ProcStepInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

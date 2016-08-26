@@ -168,4 +168,21 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
     protected void initialJdbcTemplate(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+	@Override
+	public List<String> queryProcAttendees(InfoId<Long> procId) {
+		String SQL = "select executor from gp_proc_step "
+                + "where proc_id = ? ";
+
+        Object[] params = new Object[]{
+                procId.getId()
+        };
+
+        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        List<String> ainfo = jtemplate.queryForList(SQL, String.class, params);
+        return ainfo;
+	}
 }
