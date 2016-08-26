@@ -177,10 +177,12 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						result.add(owner);
 						break;
 					case WGROUP_ADMIN:
-						String admin = pseudodao.query(procId, FlatColumns.OWNER, String.class);
-						result.add(owner);
+						String admin = pseudodao.query(procId, FlatColumns.ADMIN, String.class);
+						result.add(admin);
 						break;
 					case WGROUP_MANAGER:
+						String mgr = pseudodao.query(procId, FlatColumns.MANAGER, String.class);
+						result.add(mgr);
 						break;
 					case FLOW_ATTENDEE:
 						break;
@@ -194,5 +196,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				result.add(executor);
 			}
 		}
+
+		return result;
 	}
 }
