@@ -7,6 +7,7 @@ import java.util.Map;
 import com.gp.common.*;
 import com.gp.dao.*;
 import com.gp.dao.info.*;
+import com.gp.info.FlatColLocator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -126,9 +127,37 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId,String opinion,String comment, InfoId<Long> nextNodeId) throws ServiceException {
+	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, String opinion, String comment, InfoId<Long> nextNodeId) throws ServiceException {
 
-		
+		QuickNodeInfo nextnode = quicknodedao.query(nextNodeId);
+		ProcStepInfo stepinfo = procstepdao.query(currStepId);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		Date now = calendar.getTime();
+		if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
+			InfoId<Long> nodeId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+			ProcStepInfo sinfo = new ProcStepInfo();
+			sinfo.setInfoId(nodeId);
+			sinfo.setCreateTime(now);
+			sinfo.setProcId(stepinfo.getProcId());
+			sinfo.setNodeId(nextNodeId.getId());
+			sinfo.setPrevStep(stepinfo.getId());
+			sinfo.setState(QuickFlows.StepState.PENDING.name());
+			sinfo.setStepName(nextnode.getNodeName());
+			// set the executor of step
+			//sinfo.setExecutor();
+			svcctx.setTraceInfo(sinfo);
+		}
+
+		try{
+			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
+			Object[] vals = new Object[]{opinion, comment};
+
+			pseudodao.update(currStepId, cols, vals);
+
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.create", dae, "proc step");
+		}
 	}
 
 }
