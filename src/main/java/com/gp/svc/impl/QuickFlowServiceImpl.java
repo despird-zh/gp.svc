@@ -18,9 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.config.ServiceConfigurer;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
+import com.gp.info.KVPair;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
 import com.gp.common.QuickFlows.DefaultExecutor;
+import com.gp.common.QuickFlows.ExecMode;
+import com.gp.common.QuickFlows.StepOpinion;
 
 @Service("quickflowService")
 public class QuickFlowServiceImpl implements QuickFlowService{
@@ -139,27 +142,57 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		Date now = calendar.getTime();
+		InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepinfo.getProcId());
 		
-
-
 		try{
+			ExecMode execmode = ExecMode.valueOf(nextnode.getExecMode());
+			List<KVPair<String, Integer>> cnts = procstepdao.queryStepStateCounts(procId);
+			int appr_cnt = 0;
+			int reject_cnt = 0;
+			int none_cnt = 0;
+			int all_cnt = 0;
+			for(KVPair<String, Integer> cnt: cnts){
+				if(StepOpinion.APPROVE.name().equals(cnt.getKey())){
+					appr_cnt = cnt.getValue();
+				}else if(StepOpinion.REJECT.name().equals(cnt.getKey())){
+					reject_cnt = cnt.getValue();
+				}else{
+					none_cnt = cnt.getValue();
+				}
+				all_cnt += cnt.getValue();
+			}
 			// not the ending node
 			if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
-				
-				InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
-				ProcStepInfo sinfo = new ProcStepInfo();
-				sinfo.setInfoId(stepId);
-				sinfo.setCreateTime(now);
-				sinfo.setProcId(stepinfo.getProcId());
-				sinfo.setNodeId(nextNodeId.getId());
-				sinfo.setPrevStep(stepinfo.getId());
-				sinfo.setState(QuickFlows.StepState.PENDING.name());
-				sinfo.setStepName(nextnode.getNodeName());
-				// set the executor of step
-				//sinfo.setExecutor();
-				svcctx.setTraceInfo(sinfo);
+				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)
+					|| (execmode == ExecMode.VETO_REJECT && reject_cnt > 0)
+					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
+	
+					Set<String> runners = nextnode.getExecutor();
+					// retrieve the real executors
+					runners = getStepExecutors(procId, runners);
+					for(String executor: runners){
+						
+						InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+						ProcStepInfo sinfo = new ProcStepInfo();
+						
+						sinfo.setInfoId(stepId);
+						sinfo.setCreateTime(now);
+						sinfo.setProcId(stepinfo.getProcId());
+						sinfo.setNodeId(nextNodeId.getId());
+						sinfo.setPrevStep(stepinfo.getId());
+						sinfo.setState(QuickFlows.StepState.PENDING.name());
+						sinfo.setStepName(nextnode.getNodeName());
+	
+						// set the executor of step
+						sinfo.setExecutor(executor);
+						svcctx.setTraceInfo(sinfo);
+						
+						procstepdao.create(sinfo);
+					}
+				}
 			}
-			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
+			// end node not need further processing
+			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT, FlatColumns.NEXT_STEP};
 			Object[] vals = new Object[]{opinion, comment};
 
 			pseudodao.update(currStepId, cols, vals);

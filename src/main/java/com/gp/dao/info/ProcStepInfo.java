@@ -18,8 +18,6 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 	
 	private Long prevStep;
 	
-	private Long nextStep;
-	
     private String opinion;
 
     private String comment;
@@ -62,14 +60,6 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 
 	public void setPrevStep(Long prevStep) {
 		this.prevStep = prevStep;
-	}
-
-	public Long getNextStep() {
-		return nextStep;
-	}
-
-	public void setNextStep(Long nextStep) {
-		this.nextStep = nextStep;
 	}
 
 	public String getOpinion() {

@@ -1,20 +1,28 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.QuickFlows.StepOpinion;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ProcStepDAO;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
+import com.gp.info.KVPair;
+
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +46,7 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
 
         SQL.append("insert into gp_proc_step (")
                 .append("step_id, proc_id, node_id, step_name,")
-                .append("prev_step, next_step, create_time, exec_time,")
+                .append("prev_step, create_time, exec_time,")
                 .append("state, opinion, executor, comment,")
                 .append("modifier, last_modified,")
                 .append(")values(")
@@ -50,7 +58,7 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         InfoId<Long> key = info.getInfoId();
         Object[] params = new Object[]{
                 key.getId(),info.getProcId(), info.getNodeId(), info.getStepName(),
-                info.getPrevStep(), info.getNextStep(), info.getCreateTime(), info.getExecuteTime(),
+                info.getPrevStep(), info.getCreateTime(), info.getExecuteTime(),
                 info.getState(), info.getOpinion(), info.getExecutor(), info.getComment(),
                 info.getModifier(),info.getModifyDate()
         };
@@ -104,11 +112,7 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
             SQL.append("prev_step = ? ,");
             params.add(info.getPrevStep());
         }
-        if(columnCheck(mode, colset, "next_step")){
-            SQL.append("next_step = ? ,");
-            params.add(info.getNextStep());
-        }
-
+    
         if(columnCheck(mode, colset, "create_time")){
             SQL.append("create_time = ? ,");
             params.add(info.getCreateTime());
@@ -160,7 +164,7 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
         }
-        List<ProcStepInfo> ainfo = jtemplate.query(SQL, params, PROC_STEP_ROWMAPPER);
+        List<ProcStepInfo> ainfo = jtemplate.query(SQL, params, ProcStepRowMapper);
         return ainfo.size()>0 ? ainfo.get(0) : null;
     }
 
@@ -184,5 +188,33 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         }
         List<String> ainfo = jtemplate.queryForList(SQL, String.class, params);
         return ainfo;
+	}
+
+	@Override
+	public List<KVPair<String, Integer>> queryStepStateCounts(InfoId<Long> procId) {
+		String SQL = "select opinion,count(opinion) as cnt from gp_proc_step "
+                + "where proc_id = ? group by opinion";
+
+        Object[] params = new Object[]{
+                procId.getId()
+        };
+
+        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        List<KVPair<String, Integer>> kvs = jtemplate.query(SQL, params, new RowMapper<KVPair<String, Integer>>(){
+
+			@Override
+			public KVPair<String, Integer> mapRow(ResultSet rs, int rowNum) throws SQLException {
+				KVPair<String, Integer> kv = new KVPair<String, Integer>();
+				String k = rs.getString("opinion");
+				k = StringUtils.isBlank(k)? StepOpinion.NONE.name() : k;
+				
+				kv.setKey(k);
+				kv.setValue(rs.getInt("cnt"));
+				return kv;
+			}});
+        return kvs;
 	}
 }

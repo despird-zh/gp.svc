@@ -62,6 +62,7 @@ public class FlatColumns {
 	
 	public static final FlatColumn PREV_NODES = new FlatColumn("prev_nodes");
 	public static final FlatColumn NEXT_NODES = new FlatColumn("next_nodes");
+	public static final FlatColumn NEXT_STEP = new FlatColumn("next_step");
 	public static final FlatColumn OPINION = new FlatColumn("opinion");
 	public static final FlatColumn COMMENT = new FlatColumn("comment");
 

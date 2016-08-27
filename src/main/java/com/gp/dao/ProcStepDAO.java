@@ -3,6 +3,8 @@ package com.gp.dao;
 import com.gp.common.IdKey;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.InfoId;
+import com.gp.info.KVPair;
+
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -14,9 +16,18 @@ import java.util.List;
  */
 public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
 
+	/**
+	 *  find all the attendees of process flow
+	 *  @param procId the id of process
+	 */
 	public List<String> queryProcAttendees(InfoId<Long> procId);
 	
-    public static RowMapper<ProcStepInfo> PROC_STEP_ROWMAPPER = new RowMapper<ProcStepInfo>() {
+	public List<KVPair<String,Integer>> queryStepStateCounts(InfoId<Long> procId);
+	
+	/**
+	 * the process step row mapper 
+	 **/
+    public static RowMapper<ProcStepInfo> ProcStepRowMapper = new RowMapper<ProcStepInfo>() {
         @Override
         public ProcStepInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             ProcStepInfo info = new ProcStepInfo();
@@ -34,8 +45,7 @@ public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
             info.setState(rs.getString("state"));
             info.setExecutor(rs.getString("executor"));
             info.setPrevStep(rs.getLong("prev_step"));
-            info.setNextStep(rs.getLong("next_step"));
-
+            
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));
             return info;

@@ -52,6 +52,7 @@ public class QuickFlows {
 	public enum StepState{
 		PENDING,
 		COMPLETE,
+		IGNORE,
 	}
 	
 	/**
@@ -59,6 +60,7 @@ public class QuickFlows {
 	 **/
 	public enum StepOpinion{
 		REJECT,
-		APPROVE
+		APPROVE,
+		NONE,
 	}
 }
