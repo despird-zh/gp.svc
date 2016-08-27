@@ -23,6 +23,7 @@ import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
 import com.gp.common.QuickFlows.DefaultExecutor;
 import com.gp.common.QuickFlows.ExecMode;
+import com.gp.common.QuickFlows.FlowState;
 import com.gp.common.QuickFlows.StepOpinion;
 
 @Service("quickflowService")
@@ -143,7 +144,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		Date now = calendar.getTime();
 		InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepinfo.getProcId());
-		
+		ProcFlowInfo procinfo = procflowdao.query(procId);
 		try{
 			ExecMode execmode = ExecMode.valueOf(nextnode.getExecMode());
 			List<KVPair<String, Integer>> cnts = procstepdao.queryStepStateCounts(procId);
@@ -161,8 +162,24 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				}
 				all_cnt += cnt.getValue();
 			}
+			// create notification information
+			NotificationInfo notifInfo = new NotificationInfo();
+			InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
+			notifInfo.setInfoId(notifId);
+			notifInfo.setOperation(Operations.SUBMIT_STEP.name());
+			notifInfo.setQuoteExcerpt(procinfo.getDescription());
+			notifInfo.setExcerpt(comment);
+			notifInfo.setSender(svcctx.getPrincipal().getAccount());
+			notifInfo.setSendTime(now);
+			notifInfo.setResourceId(procId.getId());
+			notifInfo.setResourceType(procId.getIdKey());
+			notifInfo.setSubject(procinfo.getProcName());
+			notifInfo.setWorkgroupId(procinfo.getWorkgroupId());
+			svcctx.setTraceInfo(notifInfo);
+			notifdao.create(notifInfo);
 			// not the ending node
 			if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
+				
 				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)
 					|| (execmode == ExecMode.VETO_REJECT && reject_cnt > 0)
 					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
@@ -185,11 +202,24 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	
 						// set the executor of step
 						sinfo.setExecutor(executor);
-						svcctx.setTraceInfo(sinfo);
-						
+						svcctx.setTraceInfo(sinfo);						
 						procstepdao.create(sinfo);
+						
+						// create notification dispatch information
+						NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+						InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+						notifdisp.setInfoId(dispId);
+						notifdisp.setNotificationId(notifId.getId());
+						notifdisp.setReceiver(executor);
+						svcctx.setTraceInfo(notifdisp);
+						
+						notifdispatchdao.create(notifdisp);
 					}
 				}
+				
+			}else{
+				// change the state of process
+				pseudodao.update(procId, FlatColumns.STATE, FlowState.END.name());
 			}
 			// end node not need further processing
 			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT, FlatColumns.NEXT_STEP};
