@@ -150,15 +150,12 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			List<KVPair<String, Integer>> cnts = procstepdao.queryStepStateCounts(procId);
 			int appr_cnt = 0;
 			int reject_cnt = 0;
-			int none_cnt = 0;
 			int all_cnt = 0;
 			for(KVPair<String, Integer> cnt: cnts){
 				if(StepOpinion.APPROVE.name().equals(cnt.getKey())){
 					appr_cnt = cnt.getValue();
 				}else if(StepOpinion.REJECT.name().equals(cnt.getKey())){
 					reject_cnt = cnt.getValue();
-				}else{
-					none_cnt = cnt.getValue();
 				}
 				all_cnt += cnt.getValue();
 			}
