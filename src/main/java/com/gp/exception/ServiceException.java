@@ -6,8 +6,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
-
 public class ServiceException  extends BaseException{
 
 	private static final long serialVersionUID = 1L;
