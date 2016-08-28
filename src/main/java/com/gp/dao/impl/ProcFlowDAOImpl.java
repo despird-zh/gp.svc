@@ -41,12 +41,12 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
                 .append("proc_id, workgroup_id, flow_id, proc_name,")
                 .append("descr, owner, launch_time, expire_time,")
                 .append("state, json_data,resource_id, resource_type,")
-                .append("modifier, last_modified,")
+                .append("operation, modifier, last_modified,")
                 .append(")values(")
                 .append("?,?,?,")
                 .append("?,?,?,?,")
                 .append("?,?,?,?,")
-                .append("?,? ");
+                .append("?,?,? ");
 
         InfoId<Long> key = info.getInfoId();
         String dataStr = CommonUtils.toJson(info.getData());
@@ -121,6 +121,10 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         if(columnCheck(mode, colset, "resource_type")){
             SQL.append("resource_type = ? ,");
             params.add(info.getResourceType());
+        }
+        if(columnCheck(mode, colset, "operation")){
+            SQL.append("operation = ? ,");
+            params.add(info.getOperation());
         }
         if(columnCheck(mode, colset, "json_data")){
             SQL.append("json_data = ? ,");

@@ -17,7 +17,7 @@ public class FlowOperationFactory {
 	
 	private static Map<String, FlowOperation> operationMap;
 	
-	{
+	static{
 		new FlowOperationFactory();
 	}
 	

@@ -45,6 +45,7 @@ public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
             info.setState(rs.getString("state"));
             info.setExecutor(rs.getString("executor"));
             info.setPrevStep(rs.getLong("prev_step"));
+            info.setOperation(rs.getString("operation"));
             
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));

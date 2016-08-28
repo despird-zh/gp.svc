@@ -32,6 +32,8 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 	
 	private String resourceType;
 	
+	private String operation;
+	
     private Map<String, Object> data;
 
 	public Long getFlowId() {
@@ -121,6 +123,14 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 
 	public void setWorkgroupId(Long workgroupId) {
 		this.workgroupId = workgroupId;
+	}
+
+	public String getOperation() {
+		return operation;
+	}
+
+	public void setOperation(String operation) {
+		this.operation = operation;
 	}
 
 }
