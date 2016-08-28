@@ -219,8 +219,8 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				pseudodao.update(procId, FlatColumns.STATE, FlowState.END.name());
 			}
 			// end node not need further processing
-			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT, FlatColumns.NEXT_STEP};
-			Object[] vals = new Object[]{opinion, comment};
+			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
+			Object[] vals = new Object[]{opinion, comment };
 
 			pseudodao.update(currStepId, cols, vals);
 
