@@ -42,7 +42,8 @@ public class QuickFlows {
 	 **/
 	public enum FlowState{
 		START,
-		END,
+		PASS,
+		FAIL,
 		EXPIRE,
 	}
 	

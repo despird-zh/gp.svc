@@ -10,15 +10,19 @@ import com.gp.info.Identifier;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.config.ServiceConfigurer;
+import com.gp.exception.BaseException;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
+import com.gp.quickflow.FlowOperation;
+import com.gp.quickflow.FlowOperationFactory;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
 import com.gp.common.QuickFlows.DefaultExecutor;
@@ -138,15 +142,27 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	@Override
 	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, InfoId<Long> nextNodeId, String opinion, String comment) throws ServiceException {
 		// find the next node
-		QuickNodeInfo nextnode = quicknodedao.query(nextNodeId);
-		ProcStepInfo stepinfo = procstepdao.query(currStepId);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		Date now = calendar.getTime();
-		InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepinfo.getProcId());
-		ProcFlowInfo procinfo = procflowdao.query(procId);
+		QuickNodeInfo nextnode = null;
+		
 		try{
-			ExecMode execmode = ExecMode.valueOf(nextnode.getExecMode());
+			if(InfoId.isValid(nextNodeId)){
+				// if next node is valid, then fetch the next node info
+				nextnode = quicknodedao.query(nextNodeId);
+			}
+			ProcStepInfo stepinfo = procstepdao.query(currStepId);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			Date now = calendar.getTime();
+			InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepinfo.getProcId());
+			ProcFlowInfo procinfo = procflowdao.query(procId);
+			InfoId<Long> currNodeId = IdKey.QUICK_NODE.getInfoId(stepinfo.getNodeId());
+			QuickNodeInfo currnode = quicknodedao.query(currNodeId);
+			// end node not need further processing
+			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
+			Object[] vals = new Object[]{opinion, comment };
+			pseudodao.update(currStepId, cols, vals);
+
+			ExecMode execmode = ExecMode.valueOf(currnode.getExecMode());
 			List<KVPair<String, Integer>> cnts = procstepdao.queryStepStateCounts(procId);
 			int appr_cnt = 0;
 			int reject_cnt = 0;
@@ -174,11 +190,19 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			notifInfo.setWorkgroupId(procinfo.getWorkgroupId());
 			svcctx.setTraceInfo(notifInfo);
 			notifdao.create(notifInfo);
-			// not the ending node
-			if(!nextnode.getNextNodes().contains(QuickFlows.END_NODE)){
+			
+			// current node not the ending node AND next node is available
+			if(!currnode.getNextNodes().contains(QuickFlows.END_NODE) && nextnode != null){
 				
-				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)
-					|| (execmode == ExecMode.VETO_REJECT && reject_cnt > 0)
+				FlowOperation stepop = null;
+				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
+				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
+				// run the step operation
+				if(StringUtils.isNotBlank(stepinfo.getOperation())){
+					
+					stepop = FlowOperationFactory.getFlowOperation(stepinfo.getOperation());
+				}
+				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)					
 					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
 	
 					Set<String> runners = nextnode.getExecutor();
@@ -212,19 +236,61 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						
 						notifdispatchdao.create(notifdisp);
 					}
+					if(null != stepop && stepop.isStepSupport()){
+						
+						stepop.approve(currStepId, resourceId, procinfo.getData());
+						
+					}
+				}else if(execmode == ExecMode.VETO_REJECT && reject_cnt > 0){}
+					if(null != stepop && stepop.isStepSupport()){
+						
+						stepop.reject(currStepId, resourceId, procinfo.getData());
+						
+					}
+				else{
+					// not ready to next node, then leave it and 
+					// ignore
 				}
 				
 			}else{
-				// change the state of process
-				pseudodao.update(procId, FlatColumns.STATE, FlowState.END.name());
+				// otherwise current is ending node or next node not available, 
+				// then change the state of process
+				FlowState state = null;
+				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
+				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
+				// run the step operation
+				FlowOperation procop = null;
+				if(StringUtils.isNotBlank(procinfo.getOperation())){
+					
+					procop = FlowOperationFactory.getFlowOperation(procinfo.getOperation());
+					
+				}
+				
+				StepOpinion op = StepOpinion.valueOf(opinion);
+				if(StepOpinion.APPROVE == op){
+					state = FlowState.PASS;
+					if(null != procop && procop.isProcSupport())
+						procop.pass(currStepId, resourceId, procinfo.getData());
+					
+				}else if(StepOpinion.REJECT == op){
+					state = FlowState.FAIL;
+					if(null != procop && procop.isProcSupport())
+						procop.fail(currStepId, resourceId, procinfo.getData());
+				}
+				
+				pseudodao.update(procId, FlatColumns.STATE, state.name());
+				// create notification dispatch information
+				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				notifdisp.setInfoId(dispId);
+				notifdisp.setNotificationId(notifId.getId());
+				notifdisp.setReceiver(procinfo.getOwner());
+				svcctx.setTraceInfo(notifdisp);
+				
+				notifdispatchdao.create(notifdisp);
 			}
-			// end node not need further processing
-			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
-			Object[] vals = new Object[]{opinion, comment };
 
-			pseudodao.update(currStepId, cols, vals);
-
-		}catch(DataAccessException dae){
+		}catch(DataAccessException | BaseException dae ){
 			throw new ServiceException("excp.create", dae, "proc step");
 		}
 	}
