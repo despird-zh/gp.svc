@@ -10,9 +10,12 @@ public interface FlowProcess {
 	/**
 	 * Get the name of process operation name 
 	 **/
-	public String getOperation();
+	public String getProcessName();
 	
-	public boolean isProcSupport();
+	/**
+	 * Check if the resource type is supported by this process 
+	 **/
+	public boolean isProcSupport(String resourceType);
 
 	/**
 	 * Process the reject result scenario 

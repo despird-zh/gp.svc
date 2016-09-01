@@ -238,7 +238,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					if (StringUtils.isNotBlank(procinfo.getBindProcess())) {
 
 						procop = FlowProcessFactory.getFlowOperation(procinfo.getBindProcess());
-						if (null != procop && procop.isProcSupport())
+						if (null != procop && procop.isProcSupport(procinfo.getResourceType()))
 							procop.fail(currStepId, resourceId, procinfo.getData());
 					}
 					// change the state of flow proc
@@ -274,12 +274,12 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				StepOpinion op = StepOpinion.valueOf(opinion);
 				if(StepOpinion.APPROVE == op){
 					state = FlowState.PASS;
-					if(null != procop && procop.isProcSupport())
+					if(null != procop && procop.isProcSupport(procinfo.getResourceType()))
 						procop.pass(currStepId, resourceId, procinfo.getData());
 					
 				}else if(StepOpinion.REJECT == op){
 					state = FlowState.FAIL;
-					if(null != procop && procop.isProcSupport())
+					if(null != procop && procop.isProcSupport(procinfo.getResourceType()))
 						procop.fail(currStepId, resourceId, procinfo.getData());
 				}
 				

@@ -35,7 +35,7 @@ public class FlowProcessFactory {
             Iterator<FlowProcess> operations = loader.iterator();
             while (operations.hasNext()) {
             	FlowProcess foper = operations.next();
-            	operationMap.put(foper.getOperation(), foper);
+            	operationMap.put(foper.getProcessName(), foper);
             }
         } catch (ServiceConfigurationError serviceError) {
         	LOGGER.error("Fail to load operations", serviceError);
