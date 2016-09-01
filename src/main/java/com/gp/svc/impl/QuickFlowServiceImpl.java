@@ -8,6 +8,7 @@ import com.gp.dao.info.*;
 import com.gp.info.FlatColLocator;
 import com.gp.info.Identifier;
 
+import com.gp.quickflow.FlowProcess;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,8 +22,7 @@ import com.gp.exception.BaseException;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
-import com.gp.quickflow.FlowOperation;
-import com.gp.quickflow.FlowOperationFactory;
+import com.gp.quickflow.FlowProcessFactory;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
 import com.gp.common.QuickFlows.DefaultExecutor;
@@ -190,18 +190,12 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			notifInfo.setWorkgroupId(procinfo.getWorkgroupId());
 			svcctx.setTraceInfo(notifInfo);
 			notifdao.create(notifInfo);
-			
-			// current node not the ending node AND next node is available
+
 			if(!currnode.getNextNodes().contains(QuickFlows.END_NODE) && nextnode != null){
-				
-				FlowOperation stepop = null;
+				// current node not the ending node AND next node is available
 				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
 				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
-				// run the step operation
-				if(StringUtils.isNotBlank(stepinfo.getOperation())){
-					
-					stepop = FlowOperationFactory.getFlowOperation(stepinfo.getOperation());
-				}
+				// can continue and hand over to next node.
 				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)					
 					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
 	
@@ -236,18 +230,29 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						
 						notifdispatchdao.create(notifdisp);
 					}
-					if(null != stepop && stepop.isStepSupport()){
-						
-						stepop.approve(currStepId, resourceId, procinfo.getData());
-						
+
+				}else if(execmode == ExecMode.VETO_REJECT && reject_cnt > 0) {
+					// encounter reject opinion, then break directly
+					// run the step operation
+					FlowProcess procop = null;
+					if (StringUtils.isNotBlank(procinfo.getBindProcess())) {
+
+						procop = FlowProcessFactory.getFlowOperation(procinfo.getBindProcess());
+						if (null != procop && procop.isProcSupport())
+							procop.fail(currStepId, resourceId, procinfo.getData());
 					}
-				}else if(execmode == ExecMode.VETO_REJECT && reject_cnt > 0){}
-					if(null != stepop && stepop.isStepSupport()){
-						
-						stepop.reject(currStepId, resourceId, procinfo.getData());
-						
-					}
-				else{
+					// change the state of flow proc
+					pseudodao.update(procId, FlatColumns.STATE, FlowState.FAIL.name());
+					// create notification dispatch information
+					NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+					InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+					notifdisp.setInfoId(dispId);
+					notifdisp.setNotificationId(notifId.getId());
+					notifdisp.setReceiver(procinfo.getOwner());
+					svcctx.setTraceInfo(notifdisp);
+
+					notifdispatchdao.create(notifdisp);
+				}else{
 					// not ready to next node, then leave it and 
 					// ignore
 				}
@@ -259,10 +264,10 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
 				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
 				// run the step operation
-				FlowOperation procop = null;
-				if(StringUtils.isNotBlank(procinfo.getOperation())){
+				FlowProcess procop = null;
+				if(StringUtils.isNotBlank(procinfo.getBindProcess())){
 					
-					procop = FlowOperationFactory.getFlowOperation(procinfo.getOperation());
+					procop = FlowProcessFactory.getFlowOperation(procinfo.getBindProcess());
 					
 				}
 				

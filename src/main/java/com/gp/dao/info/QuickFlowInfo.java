@@ -14,7 +14,17 @@ public class QuickFlowInfo extends TraceableInfo<Long>{
     private String flowName;
 
     private int duration;
-    
+
+    private String bindProcess;
+
+    public String getBindProcess() {
+        return bindProcess;
+    }
+
+    public void setBindProcess(String bindProcess) {
+        this.bindProcess = bindProcess;
+    }
+
     public String getCategory() {
         return category;
     }

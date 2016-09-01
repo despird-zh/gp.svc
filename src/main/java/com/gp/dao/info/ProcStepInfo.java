@@ -30,8 +30,6 @@ public class ProcStepInfo extends TraceableInfo<Long>{
     
     private String state;
 
-	private String operation;
-	
 	public Long getProcId() {
 		return procId;
 	}
@@ -112,13 +110,4 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 		this.state = state;
 	}
 
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-    
-    
 }

@@ -41,7 +41,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
                 .append("proc_id, workgroup_id, flow_id, proc_name,")
                 .append("descr, owner, launch_time, expire_time,")
                 .append("state, json_data,resource_id, resource_type,")
-                .append("operation, modifier, last_modified,")
+                .append("bind_process, modifier, last_modified,")
                 .append(")values(")
                 .append("?,?,?,")
                 .append("?,?,?,?,")
@@ -54,7 +54,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
                 key.getId(),info.getWorkgroupId(), info.getFlowId(), info.getProcName(),
                 info.getDescription(), info.getOwner(), info.getLaunchTime(), info.getExpireTime(),
                 info.getState(), dataStr, info.getResourceId(), info.getResourceType(),
-                info.getModifier(),info.getModifyDate()
+                info.getBindProcess(),info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
 
@@ -122,9 +122,9 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
             SQL.append("resource_type = ? ,");
             params.add(info.getResourceType());
         }
-        if(columnCheck(mode, colset, "operation")){
-            SQL.append("operation = ? ,");
-            params.add(info.getOperation());
+        if(columnCheck(mode, colset, "bind_process")){
+            SQL.append("bind_process = ? ,");
+            params.add(info.getBindProcess());
         }
         if(columnCheck(mode, colset, "json_data")){
             SQL.append("json_data = ? ,");

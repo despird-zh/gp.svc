@@ -53,14 +53,14 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
                 .append("?,?,?,?,")
                 .append("?,?,?,?,")
                 .append("?,?,?,?,")
-                .append("?,?,? ");
+                .append("?,? ");
 
         InfoId<Long> key = info.getInfoId();
         Object[] params = new Object[]{
                 key.getId(),info.getProcId(), info.getNodeId(), info.getStepName(),
                 info.getPrevStep(), info.getCreateTime(), info.getExecuteTime(),
                 info.getState(), info.getOpinion(), info.getExecutor(), info.getComment(),
-                info.getOperation(),info.getModifier(),info.getModifyDate()
+                info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
 
@@ -134,10 +134,6 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         if(columnCheck(mode, colset, "comment")){
             SQL.append("comment = ? ,");
             params.add(info.getComment());
-        }
-        if(columnCheck(mode, colset, "operation")){
-            SQL.append("operation = ? ,");
-            params.add(info.getOperation());
         }
         
         SQL.append("modifier = ?, last_modified = ? ")

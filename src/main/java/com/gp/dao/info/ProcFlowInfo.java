@@ -32,9 +32,17 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 	
 	private String resourceType;
 	
-	private String operation;
-	
     private Map<String, Object> data;
+
+	private String bindProcess;
+
+	public String getBindProcess() {
+		return bindProcess;
+	}
+
+	public void setBindProcess(String bindProcess) {
+		this.bindProcess = bindProcess;
+	}
 
 	public Long getFlowId() {
 		return flowId;
@@ -123,14 +131,6 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 
 	public void setWorkgroupId(Long workgroupId) {
 		this.workgroupId = workgroupId;
-	}
-
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
 	}
 
 }
