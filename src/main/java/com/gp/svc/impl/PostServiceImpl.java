@@ -552,4 +552,10 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+	@Override
+	public boolean publicPost(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
