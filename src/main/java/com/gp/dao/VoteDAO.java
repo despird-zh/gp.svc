@@ -11,6 +11,11 @@ import com.gp.dao.info.VoteInfo;
 
 public interface VoteDAO extends BaseDAO<VoteInfo>{
 
+	/**
+	 * Query the vote information of account on resource 
+	 **/
+	public VoteInfo queryByAccount(InfoId<Long> resourceId, String account);
+	
 	public static RowMapper<VoteInfo> VoteMapper = new RowMapper<VoteInfo>(){
 
 		@Override

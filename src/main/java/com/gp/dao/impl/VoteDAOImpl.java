@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,6 +139,24 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public VoteInfo queryByAccount(InfoId<Long> resourceId, String account) {
+		String SQL = "select * from gp_votes "
+				+ "where resource_id = ? and resource_type= ? and voter = ?";
+		
+		Object[] params = new Object[]{				
+				resourceId.getId(), resourceId.getIdKey(), account
+			};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		List<VoteInfo> infos = jtemplate.query(SQL, params, VoteMapper);
+		return CollectionUtils.isEmpty(infos) ? null : infos.get(0);
+
 	}
 
 

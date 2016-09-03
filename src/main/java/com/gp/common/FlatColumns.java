@@ -66,6 +66,7 @@ public class FlatColumns {
 	public static final FlatColumn OPINION = new FlatColumn("opinion");
 	public static final FlatColumn COMMENT = new FlatColumn("comment");
 
+	public static final FlatColumn SCOPE = new FlatColumn("scope");
 	public static final FlatColumn RESOURCE_ID = new FlatColumn("resource_id");
 	public static final FlatColumn RESOURCE_TYPE = new FlatColumn("resource_type");
 	

@@ -6,6 +6,7 @@ import com.gp.dao.*;
 import com.gp.dao.info.*;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
+import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -500,22 +502,31 @@ public class PostServiceImpl implements PostService{
     @Override
     public boolean addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
-        VoteInfo vote = new VoteInfo();
-        InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
-        vote.setInfoId(vid);
-        vote.setOpinion(TagVotes.VoteOpinion.LIKE.name());
-        vote.setVoter(voter);
-        vote.setResourceId(postId.getId());
-        vote.setResourceType(IdKey.VOTE.getSchema());
-
-        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
-        vote.setWorkgroupId(wid);
-
-        svcctx.setTraceInfo(vote);
-
+        VoteInfo vote = null;
         try{
+        	int cnt = 0;
+        	vote = votedao.queryByAccount(postId, voter);
+        	if(null == vote){
+        		vote = new VoteInfo();
+                InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+                vote.setInfoId(vid);
+                vote.setOpinion(TagVotes.VoteOpinion.LIKE.name());
+                vote.setVoter(voter);
+                vote.setResourceId(postId.getId());
+                vote.setResourceType(postId.getIdKey());
 
-            int cnt = votedao.create(vote);
+                Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
+                vote.setWorkgroupId(wid);
+
+                svcctx.setTraceInfo(vote);
+                cnt = votedao.create(vote);
+        	}else{
+        		
+        		FlatColumn[] cols = new FlatColumn[]{FlatColumns.OPINION, FlatColumns.MODIFIER, FlatColumns.MODIFY_DATE};
+        		Object[] vals = new Object[]{TagVotes.VoteOpinion.LIKE.name(), svcctx.getPrincipal().getAccount(), new Date(System.currentTimeMillis())};
+        		cnt = pseudodao.update(vote.getInfoId(), cols, vals);
+        	}
+           
             return cnt >0 ;
 
         }catch(DataAccessException dae){
@@ -528,24 +539,34 @@ public class PostServiceImpl implements PostService{
     @Override
     public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
-        VoteInfo vote = new VoteInfo();
-        InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
-        vote.setInfoId(vid);
-        vote.setOpinion(TagVotes.VoteOpinion.DISLIKE.name());
-        vote.setVoter(voter);
-        vote.setResourceId(postId.getId());
-        vote.setResourceType(IdKey.VOTE.getSchema());
-
-        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
-        vote.setWorkgroupId(wid);
-
-        svcctx.setTraceInfo(vote);
-
+        VoteInfo vote = null;
+       
         try{
-
-            int cnt = votedao.create(vote);
-            return cnt >0 ;
-
+        	int cnt = 0;
+        	vote = votedao.queryByAccount(postId, voter);
+        	if( null == vote){
+        		vote = new VoteInfo();
+        		InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+		        vote.setInfoId(vid);
+		        vote.setOpinion(TagVotes.VoteOpinion.DISLIKE.name());
+		        vote.setVoter(voter);
+		        vote.setResourceId(postId.getId());
+		        vote.setResourceType(postId.getIdKey());
+		
+		        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
+		        vote.setWorkgroupId(wid);
+		
+		        svcctx.setTraceInfo(vote);
+	            cnt = votedao.create(vote);
+	           
+        	}else{
+        		
+        		FlatColumn[] cols = new FlatColumn[]{FlatColumns.OPINION, FlatColumns.MODIFIER, FlatColumns.MODIFY_DATE};
+        		Object[] vals = new Object[]{TagVotes.VoteOpinion.DISLIKE.name(), svcctx.getPrincipal().getAccount(), new Date(System.currentTimeMillis())};
+        		cnt = pseudodao.update(vote.getInfoId(), cols, vals);
+        		
+        	} 
+        	return cnt >0 ;
         }catch(DataAccessException dae){
 
             throw new ServiceException("excp.create", dae, "dislike voting");
@@ -554,8 +575,13 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public boolean publicPost(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+		
+		try{
+			int cnt = pseudodao.update(postId, FlatColumns.SCOPE, Posts.Scope.SQUARE.name());
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update.with", dae, "post scope", postId.toString());
+		}
 	}
 
 }
