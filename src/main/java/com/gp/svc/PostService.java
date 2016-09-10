@@ -146,4 +146,14 @@ public interface PostService {
 		}
 	};
 
+	/**
+	 * Remove like of post
+	 **/
+	public boolean addPostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException;
+	
+	/**
+	 * Remove like of post
+	 **/
+	public boolean remvoePostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException;
+	
 }

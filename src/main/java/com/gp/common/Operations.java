@@ -128,6 +128,8 @@ public enum Operations {
 	LIKE_POST,
 	DISLIKE_POST,
 	PUBLIC_POST,
+	FAVORITE_POST,
+	UNFAVORITE_POST,
 	/** comment */
 	FIND_COMMENTS,
 	NEW_COMMENT,

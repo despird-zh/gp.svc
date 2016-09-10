@@ -584,4 +584,16 @@ public class PostServiceImpl implements PostService{
 		}
 	}
 
+	@Override
+	public boolean addPostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remvoePostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
