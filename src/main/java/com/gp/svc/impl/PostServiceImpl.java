@@ -67,6 +67,9 @@ public class PostServiceImpl implements PostService{
     @Autowired
     VoteDAO votedao;
 
+    @Autowired
+    FavoriteDAO favoritedao;
+    
     /**
      * Create a new post
      **/
@@ -536,6 +539,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
     public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
@@ -573,6 +577,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean publicPost(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 		
@@ -584,16 +589,23 @@ public class PostServiceImpl implements PostService{
 		}
 	}
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addPostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean remvoePostFavorite(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
-		// TODO Auto-generated method stub
-		return false;
+	public int removePost(ServiceContext svcctx, InfoId<Long> postid) throws ServiceException {
+		
+    	try{
+    	Long mbrgrpid = pseudodao.query(postid, FlatColumns.MBR_GRP_ID, Long.class);
+    	InfoId<Long> grpid = IdKey.GROUP.getInfoId(mbrgrpid);
+    	
+    	groupuserdao.deleteByGroup(grpid);
+    	groupdao.delete(grpid);
+    	votedao.deleteByResource(postid);
+    	favoritedao.deleteByResource(postid);
+    	
+		return postdao.delete(postid);
+    	}catch(DataAccessException dae){
+			throw new ServiceException("excp.delete.with", dae, "post scope", postid.toString());
+		}
 	}
 
 }

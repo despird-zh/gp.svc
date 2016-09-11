@@ -17,7 +17,13 @@ public interface FavoriteDAO extends BaseDAO<FavoriteInfo>{
 	
 	public List<FavoriteInfo> queryByAccount(String type, String favoriter);
 	
-	public int delete(String favorite, InfoId<Long> resourceId);
+	public int delete(String favoriter, InfoId<Long> resourceId);
+	
+	public List<FavoriteInfo> queryByResource(InfoId<?> resourceId);
+	
+	public FavoriteInfo query(String favoriter, InfoId<Long> resourceId);
+	
+	public int deleteByResource(InfoId<?> resourceId);
 	
 	public static RowMapper<FavoriteInfo> FavMapper = new RowMapper<FavoriteInfo>(){
 

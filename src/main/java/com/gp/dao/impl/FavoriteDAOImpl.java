@@ -210,4 +210,55 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 		return rtv;
 	}
 
+	@Override
+	public List<FavoriteInfo> queryByResource(InfoId<?> resourceId) {
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("select * from gp_favorites ")
+			.append("where resource_id = ? and resource_type = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+				resourceId.getId(), resourceId.getIdKey()
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		return jtemplate.query(SQL.toString(), params, FavMapper);
+		
+	}
+
+	@Override
+	public FavoriteInfo query(String favoriter, InfoId<Long> resourceId) {
+		StringBuffer SQL = new StringBuffer("select * from gp_favorites ");
+		SQL.append("where resource_id = ? and resource_type = ? and favoriter = ?");
+		
+		Object[] params = new Object[]{
+				resourceId.getId(), resourceId.getIdKey(), favoriter
+		};
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		List<FavoriteInfo> infos = jtemplate.query(SQL.toString(), params, FavMapper);
+		return CollectionUtils.isEmpty(infos)? null : infos.get(0);
+	}
+
+	@Override
+	public int deleteByResource(InfoId<?> resourceId) {
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_favorites ")
+			.append("where resource_id = ? and resource_type = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			resourceId.getId(), resourceId.getIdKey()
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
+	}
+
 }

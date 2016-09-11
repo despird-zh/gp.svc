@@ -16,6 +16,7 @@ import com.gp.dao.FavoriteDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.FavoriteInfo;
+import com.gp.info.Identifier;
 import com.gp.info.InfoId;
 import com.gp.svc.FavoriteService;
 
@@ -91,8 +92,13 @@ public class FavoriteServiceImpl implements FavoriteService{
 		
 		boolean rtv = false;
 		try{
-			
-			rtv = favoritedao.create(fav) > 0;
+			Identifier idf = IdKey.valueOfIgnoreCase(fav.getResourceType());
+			InfoId<Long> rid = new InfoId<Long>(idf, fav.getResourceId()); 
+			FavoriteInfo favinfo = favoritedao.query(fav.getFavoriter(), rid);
+			if(favinfo == null){
+				svcctx.setTraceInfo(fav);
+				rtv = favoritedao.create(fav) > 0;
+			}
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.create", dae, "Favorite");

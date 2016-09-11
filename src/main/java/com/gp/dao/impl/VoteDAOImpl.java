@@ -159,5 +159,22 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 
 	}
 
+	@Override
+	public int deleteByResource(InfoId<Long> resourceId) {
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_votes ")
+			.append("where resource_id = ? and resource_type = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			resourceId.getId(), resourceId.getIdKey()
+		};
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+		return rtv;
+	}
+
 
 }
