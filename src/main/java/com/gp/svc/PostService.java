@@ -81,11 +81,12 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public List<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx,
+	public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx,
 																 InfoId<Long> wid,
 																 String state,
 																 String type,
-																 String scope) throws ServiceException;
+																 String scope,
+																 PageQuery pageQuery) throws ServiceException;
 
 	/**
 	 * Find the combined post data(base and ext) to be presented in square
@@ -93,10 +94,11 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public List<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx,
+	public PageWrapper<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx,
 																  String state,
 																  String type,
-																  String scope) throws ServiceException;
+																  String scope,
+																  PageQuery pageQuery) throws ServiceException;
 
 	/**
 	 * Find the comments related with post

@@ -354,36 +354,58 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid, String state, String type, String scope) throws ServiceException {
+    public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
+
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
-        List<Object> paramlist = new ArrayList<Object>();
+
+        StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
+        StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
+
         StringBuffer SQL = new StringBuffer();
-        SQL.append("SELECT * FROM gp_wrokgroup_posts ");
-        SQL.append("WHERE workgroup_id = ? ");
-        paramlist.add(Long.valueOf(wid.getId()));
+        SQL.append("FROM gp_workgroup_posts ");
+        SQL.append("WHERE workgroup_id = :wgroup_id ");
+
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("wgroup_id", wid.getId());
 
         if(StringUtils.isNotBlank(state)){
-            SQL.append(" AND state = ? ");
-            paramlist.add(type);
+            SQL.append(" AND state = :state ");
+            params.put("state", state);
         }
         if(StringUtils.isNotBlank(type)){
-            SQL.append(" AND post_type = ? ");
-            paramlist.add(type);
+            SQL.append(" AND post_type = :postType ");
+            params.put("postType", type);
         }
         if(StringUtils.isNotBlank(scope)){
 
-            SQL.append(" AND scope = ?");
-            paramlist.add(scope);
+            SQL.append(" AND scope = :scope ");
+            params.put("scope", scope);
         }
 
-        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        SQL.append(" ORDER BY last_modified desc");
+
+        NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+
+        if(pagequery.isTotalCountEnable()){
+            int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
+            // calculate pagination information, the page menu number is 5
+            PaginationInfo pagination = new PaginationHelper(totalrow,
+                    pagequery.getPageNumber(),
+                    pagequery.getPageSize(), 5).getPaginationInfo();
+
+            pwrapper.setPagination(pagination);
+        }
+        // get page query sql
+        String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
+
         if(LOGGER.isDebugEnabled()){
 
-            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+            LOGGER.debug("SQL : {} / PARAMS : {}", pagesql, params.toString());
         }
 
         try {
-            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            jtemplate.query(pagesql, params, new RowCallbackHandler() {
                 @Override
                 public void processRow(ResultSet rs) throws SQLException {
                     CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
@@ -396,43 +418,68 @@ public class PostServiceImpl implements PostService{
                 }
             });
 
-            return result;
         }catch(DataAccessException dae){
-            throw new ServiceException("excp.query", dae,"workgroup's posts");
+            throw new ServiceException("excp.query",dae, "workgroup's posts");
         }
+        pwrapper.setRows(result);
+
+        return pwrapper;
+
     }
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx, String state, String type, String scope) throws ServiceException {
+    public PageWrapper<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
+
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
-        List<Object> paramlist = new ArrayList<Object>();
+
+        StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
+        StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
+
         StringBuffer SQL = new StringBuffer();
-        SQL.append("SELECT * FROM gp_square_posts ");
+        SQL.append("FROM gp_square_posts ");
         SQL.append("WHERE 1=1 ");
 
+        Map<String,Object> params = new HashMap<String,Object>();
+
         if(StringUtils.isNotBlank(state)){
-            SQL.append(" AND state = ? ");
-            paramlist.add(type);
+            SQL.append(" AND state = :state ");
+            params.put("state", state);
         }
         if(StringUtils.isNotBlank(type)){
-            SQL.append(" AND post_type = ? ");
-            paramlist.add(type);
+            SQL.append(" AND post_type = :postType ");
+            params.put("postType", type);
         }
         if(StringUtils.isNotBlank(scope)){
 
-            SQL.append(" AND scope = ?");
-            paramlist.add(scope);
+            SQL.append(" AND scope = :scope ");
+            params.put("scope", scope);
         }
 
-        JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+        SQL.append(" ORDER BY last_modified desc");
+
+        NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+
+        if(pagequery.isTotalCountEnable()){
+            int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
+            // calculate pagination information, the page menu number is 5
+            PaginationInfo pagination = new PaginationHelper(totalrow,
+                    pagequery.getPageNumber(),
+                    pagequery.getPageSize(), 5).getPaginationInfo();
+
+            pwrapper.setPagination(pagination);
+        }
+        // get page query sql
+        String pagesql = pseudodao.getPageQuerySql(SQL_COLS.append(SQL).toString(), pagequery);
+
         if(LOGGER.isDebugEnabled()){
 
-            LOGGER.debug("SQL : {} / PARAMS : {}", SQL.toString(), paramlist.toString());
+            LOGGER.debug("SQL : {} / PARAMS : {}", pagesql, params.toString());
         }
 
         try {
-            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
+            jtemplate.query(pagesql, params, new RowCallbackHandler() {
                 @Override
                 public void processRow(ResultSet rs) throws SQLException {
                     CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
@@ -445,10 +492,13 @@ public class PostServiceImpl implements PostService{
                 }
             });
 
-            return result;
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "square's posts");
         }
+        pwrapper.setRows(result);
+
+        return pwrapper;
+
     }
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
