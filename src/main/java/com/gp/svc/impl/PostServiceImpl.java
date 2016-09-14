@@ -636,7 +636,14 @@ public class PostServiceImpl implements PostService{
 	public boolean publicPost(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 		
 		try{
-			int cnt = pseudodao.update(postId, FlatColumns.SCOPE, Posts.Scope.SQUARE.name());
+            Long wgroupId = pseudodao.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
+
+            int cnt = 0;
+            if(wgroupId == GeneralConstants.PERSONAL_WORKGROUP) {
+                cnt = pseudodao.update(postId, FlatColumns.SCOPE, Posts.Scope.SQUARE.name());
+            }else{
+
+            }
 			return cnt > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.update.with", dae, "post scope", postId.toString());
