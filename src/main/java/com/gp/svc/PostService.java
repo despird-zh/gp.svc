@@ -80,12 +80,13 @@ public interface PostService {
 	 * @param state the state of post
 	 * @param type the type of post
 	 * @param scope the scope of post
+	 * @param mode the data query mode :  ALL/MEMBER/SQUARE
 	 **/
 	public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx,
 																 InfoId<Long> wid,
+																 String mode,
 																 String state,
 																 String type,
-																 String scope,
 																 PageQuery pageQuery) throws ServiceException;
 
 	/**

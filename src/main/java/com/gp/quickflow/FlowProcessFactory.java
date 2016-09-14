@@ -32,6 +32,9 @@ public class FlowProcessFactory {
 		
 		operationMap = new HashMap<String, FlowProcess>();
 		try {
+			// try to find all the implementation classes of FlowProcess
+			loader = ServiceLoader.load(FlowProcess.class);
+
             Iterator<FlowProcess> operations = loader.iterator();
             while (operations.hasNext()) {
             	FlowProcess foper = operations.next();

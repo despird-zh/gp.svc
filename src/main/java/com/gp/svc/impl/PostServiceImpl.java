@@ -354,7 +354,7 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
+    public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid,String mode, String state, String type, PageQuery pagequery) throws ServiceException {
 
         final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
 
@@ -376,10 +376,14 @@ public class PostServiceImpl implements PostService{
             SQL.append(" AND post_type = :postType ");
             params.put("postType", type);
         }
-        if(StringUtils.isNotBlank(scope)){
+        if(StringUtils.equalsIgnoreCase(mode,"SQUARE")){
 
             SQL.append(" AND scope = :scope ");
-            params.put("scope", scope);
+            params.put("scope", Posts.Scope.SQUARE.name());
+        }else if(StringUtils.equalsIgnoreCase(mode,"MEMBER")){
+
+            SQL.append(" AND owner = :owner ");
+            params.put("owner", svcctx.getPrincipal().getAccount());
         }
 
         SQL.append(" ORDER BY last_modified desc");
