@@ -4,8 +4,7 @@ public abstract class BaseFlowProcess implements FlowProcess {
 
 	private String processName;
 
-	
-	public BaseFlowProcess(String processName){
+	public void setProcessName(String processName){
 		this.processName = processName;
 	}
 

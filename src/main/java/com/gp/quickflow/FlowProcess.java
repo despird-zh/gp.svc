@@ -15,7 +15,7 @@ public interface FlowProcess {
 	/**
 	 * Check if the resource type is supported by this process 
 	 **/
-	public boolean isProcSupport(String resourceType);
+	public boolean supportCheck(String resourceType);
 
 	/**
 	 * Process the reject result scenario 
