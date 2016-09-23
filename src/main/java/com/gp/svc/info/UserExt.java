@@ -1,29 +1,33 @@
 package com.gp.svc.info;
 
-public class UserExt{
+import com.gp.dao.info.UserInfo;
+
+public class UserExt extends UserInfo{
+
+	private static final long serialVersionUID = -4298738524459869982L;
 
 	private String sourceName;
 	
-	private String shortName;
+	private String sourceShortName;
 	
-	private String abbr;
+	private String sourceAbbr;
 
 	private String storageName;
 
-	public String getShortName() {
-		return shortName;
+	public String getSourceShortName() {
+		return sourceShortName;
 	}
 
-	public void setShortName(String shortName) {
-		this.shortName = shortName;
+	public void setSourceShortName(String sourceShortName) {
+		this.sourceShortName = sourceShortName;
 	}
 
-	public String getAbbr() {
-		return abbr;
+	public String getSourceAbbr() {
+		return sourceAbbr;
 	}
 
-	public void setAbbr(String abbr) {
-		this.abbr = abbr;
+	public void setSourceAbbr(String sourceAbbr) {
+		this.sourceAbbr = sourceAbbr;
 	}
 
 	public String getStorageName() {

@@ -7,10 +7,13 @@ import java.util.Set;
 
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
+import com.gp.common.IdKey;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
+import com.gp.dao.impl.DAOSupport;
+import com.gp.dao.impl.UserDAOImpl;
 import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -58,7 +61,7 @@ public interface SecurityService {
 	 * @param account the account, i.e login 
 	 * @param type the type of user: inner / ldap / external 
 	 **/
-	public CombineInfo<UserInfo, UserExt> getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
+	public UserExt getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
 		
 	/**
 	 * Query the account list 
@@ -68,7 +71,7 @@ public interface SecurityService {
 	 * @param type the types condition
 	 * @param state the states condition
 	 **/
-	public List<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
+	public List<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
 
 	/**
 	 * Query the account list
@@ -88,7 +91,7 @@ public interface SecurityService {
 	 * @param pagequery the page query condition
 	 *  
 	 **/
-	public PageWrapper<CombineInfo<UserInfo, UserExt>> getAccounts(ServiceContext svcctx, String accountname, Integer sourceId, String[] type, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer sourceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Query Roles of account in Greoupress System
@@ -153,4 +156,50 @@ public interface SecurityService {
 			return info;
 		}
 	};
+
+	public static RowMapper<UserExt> UserExMapper = new RowMapper<UserExt>(){
+
+		@Override
+		public UserExt mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+			// save extend data
+			UserExt info = new UserExt();
+			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
+			info.setInfoId(id);
+
+			info.setSourceId(rs.getInt("source_id"));
+			info.setAccount(rs.getString("account"));
+			info.setType(rs.getString("type"));
+			info.setMobile(rs.getString("mobile"));
+			info.setPhone(rs.getString("phone"));
+			info.setFullName(rs.getString("full_name"));
+			info.setEmail(rs.getString("email"));
+			info.setPassword(rs.getString("password"));
+			info.setState(rs.getString("state"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setExtraInfo(rs.getString("extra_info"));
+			info.setRetryTimes(rs.getInt("retry_times"));
+			info.setLastLogonDate(rs.getDate("last_logon"));
+			info.setLanguage(rs.getString("language"));
+			info.setTimeZone(rs.getString("timezone"));
+			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
+			info.setGlobalAccount(rs.getString("global_account"));
+			info.setStorageId(rs.getInt("storage_id"));
+			info.setAvatarId(rs.getLong("avatar_id"));
+			info.setClassification(rs.getString("classification"));
+			info.setSignature(rs.getString("signature"));
+			
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
+			if(DAOSupport.hasColInResultSet(rs, "storage_name")){
+				info.setStorageName(rs.getString("storage_name"));
+			}
+			info.setSourceAbbr(rs.getString("abbr"));
+			info.setSourceShortName(rs.getString("short_name"));
+			info.setSourceName(rs.getString("source_name"));
+
+			return info;
+		}};
 }
