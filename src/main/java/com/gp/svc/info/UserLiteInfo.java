@@ -1,7 +1,7 @@
 package com.gp.svc.info;
 
 
-public class UserLite {
+public class UserLiteInfo {
 
     private Long userId;
 

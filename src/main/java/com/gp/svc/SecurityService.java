@@ -18,7 +18,7 @@ import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.UserExtInfo;
-import com.gp.svc.info.UserLite;
+import com.gp.svc.info.UserLiteInfo;
 import org.springframework.jdbc.core.RowMapper;
 
 public interface SecurityService {
@@ -79,7 +79,7 @@ public interface SecurityService {
 	 * @param accounts the account list
 	 * @param userids the user id list
 	 **/
-	public List<UserLite> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException;
+	public List<UserLiteInfo> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException;
 
 
 	/**
@@ -142,10 +142,10 @@ public interface SecurityService {
 	
 	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
 
-	public static RowMapper<UserLite> USER_LITE_ROW_MAPPER = new RowMapper<UserLite>() {
+	public static RowMapper<UserLiteInfo> USER_LITE_ROW_MAPPER = new RowMapper<UserLiteInfo>() {
 		@Override
-		public UserLite mapRow(ResultSet rs, int rowNum) throws SQLException {
-			UserLite info = new UserLite();
+		public UserLiteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+			UserLiteInfo info = new UserLiteInfo();
 			info.setAccount(rs.getString("account"));
 			info.setUserId(rs.getLong("user_id"));
 			info.setAvatarLink(rs.getString("image_link"));

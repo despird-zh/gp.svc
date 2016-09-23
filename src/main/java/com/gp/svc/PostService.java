@@ -14,7 +14,7 @@ import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.PostExt;
-import com.gp.svc.info.UserLite;
+import com.gp.svc.info.UserLiteInfo;
 import org.springframework.jdbc.core.RowMapper;
 
 
@@ -45,7 +45,7 @@ public interface PostService {
 	 * Get the post attendees
 	 * @param  postKey the post id
 	 **/
-	public List<UserLite> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException;
+	public List<UserLiteInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postKey) throws ServiceException;
 
 	/**
 	 * Find the combined post base and ext information of personal

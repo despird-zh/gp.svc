@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.gp.svc.info.UserLite;
+import com.gp.svc.info.UserLiteInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -278,7 +278,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserLite> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException {
+	public List<UserLiteInfo> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException {
 
 		StringBuffer SQL = new StringBuffer();
 		Map<String, Object> params = new HashMap<>();

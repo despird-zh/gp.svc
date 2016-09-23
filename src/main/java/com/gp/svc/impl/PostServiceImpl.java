@@ -16,7 +16,7 @@ import com.gp.svc.CommonService;
 import com.gp.svc.PostService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.info.PostExt;
-import com.gp.svc.info.UserLite;
+import com.gp.svc.info.UserLiteInfo;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -163,9 +163,9 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<UserLite> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
+    public List<UserLiteInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 
-        List<UserLite> result = new ArrayList<>();
+        List<UserLiteInfo> result = new ArrayList<>();
 
         StringBuffer SQL_SEL = new StringBuffer();
         StringBuffer SQL_1 = new StringBuffer();
