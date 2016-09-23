@@ -56,7 +56,7 @@ import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.SecurityService;
 import com.gp.svc.SystemService;
-import com.gp.svc.info.UserExt;
+import com.gp.svc.info.UserExtInfo;
 import com.gp.util.DateTimeUtils;
 
 /**
@@ -429,7 +429,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public UserExt getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
+	public UserExtInfo getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
 			throws ServiceException {
 
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
@@ -463,7 +463,7 @@ public class SecurityServiceImpl implements SecurityService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExt> users = null;
+		List<UserExtInfo> users = null;
 		try{
 			
 			users = jtemplate.query(querysql, params, UserExMapper);
@@ -477,10 +477,10 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
+	public List<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
 		
-		List<UserExt> rtv = null;
+		List<UserExtInfo> rtv = null;
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.*,c.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
 				.append("LEFT JOIN ( SELECT storage_id, storage_name FROM gp_storages) c ")
@@ -529,10 +529,10 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
+	public PageWrapper<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
 			throws ServiceException {
 		
-		List<UserExt> rtv = null;
+		List<UserExtInfo> rtv = null;
 		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.user_id) ");
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.*,b.* ");
 		StringBuffer SQL_FROM = new StringBuffer("FROM gp_users a ")
@@ -560,7 +560,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<UserExt> pwrapper = new PageWrapper<UserExt>();
+		PageWrapper<UserExtInfo> pwrapper = new PageWrapper<UserExtInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM.toString()).toString();

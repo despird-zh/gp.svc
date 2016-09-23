@@ -59,7 +59,7 @@ import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.SystemService;
 import com.gp.svc.WorkgroupService;
-import com.gp.svc.info.UserExt;
+import com.gp.svc.info.UserExtInfo;
 import com.gp.svc.info.WorkgroupExt;
 import com.gp.util.DateTimeUtils;
 
@@ -452,7 +452,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<UserExt> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
+	public List<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
@@ -480,7 +480,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExt> result = null;
+		List<UserExtInfo> result = null;
 		try{
 			result = jtemplate.query(querysql, params, SecurityServiceImpl.UserExMapper);
 		}catch(DataAccessException dae){
@@ -492,7 +492,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<UserExt> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
+	public PageWrapper<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		Long memberGroupId = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID, Long.class);
@@ -515,7 +515,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<UserExt> pwrapper = new PageWrapper<UserExt>();
+		PageWrapper<UserExtInfo> pwrapper = new PageWrapper<UserExtInfo>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -533,7 +533,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<UserExt> result = null;
+		List<UserExtInfo> result = null;
 		try{
 			result = jtemplate.query(pagesql, params, SecurityServiceImpl.UserExMapper);
 			pwrapper.setRows(result);

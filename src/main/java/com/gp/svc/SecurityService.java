@@ -17,7 +17,7 @@ import com.gp.dao.impl.UserDAOImpl;
 import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
-import com.gp.svc.info.UserExt;
+import com.gp.svc.info.UserExtInfo;
 import com.gp.svc.info.UserLite;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -61,7 +61,7 @@ public interface SecurityService {
 	 * @param account the account, i.e login 
 	 * @param type the type of user: inner / ldap / external 
 	 **/
-	public UserExt getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
+	public UserExtInfo getAccountFull(ServiceContext svcctx,InfoId<Long> userId, String account, String type) throws ServiceException;
 		
 	/**
 	 * Query the account list 
@@ -71,7 +71,7 @@ public interface SecurityService {
 	 * @param type the types condition
 	 * @param state the states condition
 	 **/
-	public List<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
+	public List<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer sourId, String[] type,String[] state) throws ServiceException;
 
 	/**
 	 * Query the account list
@@ -91,7 +91,7 @@ public interface SecurityService {
 	 * @param pagequery the page query condition
 	 *  
 	 **/
-	public PageWrapper<UserExt> getAccounts(ServiceContext svcctx, String accountname, Integer sourceId, String[] type, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer sourceId, String[] type, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Query Roles of account in Greoupress System
@@ -157,13 +157,13 @@ public interface SecurityService {
 		}
 	};
 
-	public static RowMapper<UserExt> UserExMapper = new RowMapper<UserExt>(){
+	public static RowMapper<UserExtInfo> UserExMapper = new RowMapper<UserExtInfo>(){
 
 		@Override
-		public UserExt mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public UserExtInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			// save extend data
-			UserExt info = new UserExt();
+			UserExtInfo info = new UserExtInfo();
 			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
 			info.setInfoId(id);
 

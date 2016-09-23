@@ -2,7 +2,7 @@ package com.gp.svc.info;
 
 import com.gp.dao.info.UserInfo;
 
-public class UserExt extends UserInfo{
+public class UserExtInfo extends UserInfo{
 
 	private static final long serialVersionUID = -4298738524459869982L;
 

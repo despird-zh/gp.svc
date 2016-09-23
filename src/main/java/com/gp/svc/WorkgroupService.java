@@ -19,7 +19,7 @@ import com.gp.dao.info.WorkgroupInfo;
 import com.gp.dao.info.WorkgroupSumInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
-import com.gp.svc.info.UserExt;
+import com.gp.svc.info.UserExtInfo;
 import com.gp.svc.info.WorkgroupExt;
 import com.gp.svc.info.WorkgroupLite;
 
@@ -60,9 +60,9 @@ public interface WorkgroupService {
 	/**
 	 * Get the users that could be added to work group 
 	 **/
-	public List<UserExt> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException;
+	public List<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException;
 
-	public PageWrapper<UserExt> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException;
+	public PageWrapper<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException;
 	
 	/**
 	 * Get the groups under a work group, the search condition is group name 
