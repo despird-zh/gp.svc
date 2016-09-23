@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.dao.impl.WorkgroupDAOImpl;
 import com.gp.exception.ServiceException;
@@ -44,7 +45,7 @@ public interface WorkgroupService {
 	 **/
 	public WorkgroupInfo getWorkgroup(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public CombineInfo<WorkgroupInfo,WorkgroupExt> getWorkgroupEx(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
+	public WorkgroupExt getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
 	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo wminfo) throws ServiceException;
 
@@ -81,11 +82,11 @@ public interface WorkgroupService {
 	
 	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
-	public List<CombineInfo<WorkgroupInfo,WorkgroupExt>> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExt> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 	
 	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
-	public List<CombineInfo<WorkgroupInfo,WorkgroupExt>> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExt> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 
 	public WorkgroupSumInfo getWorkgroupSummary(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException ;
 	
@@ -109,27 +110,52 @@ public interface WorkgroupService {
 		}
 	};
 
-	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>> WorkgroupExMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupExt>>(){
+	public static RowMapper<WorkgroupExt> WorkgroupExMapper = new RowMapper<WorkgroupExt>(){
 
-		public CombineInfo<WorkgroupInfo,WorkgroupExt> mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public WorkgroupExt mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+			WorkgroupExt info = new WorkgroupExt();
+
+			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			info.setInfoId(id);
+			
+			info.setSourceId(rs.getInt("source_id"));
+			info.setWorkgroupName(rs.getString("workgroup_name"));
+			info.setDescription(rs.getString("descr"));
+			info.setState(rs.getString("state"));
+			info.setAdmin(rs.getString("admin"));
+			info.setManager(rs.getString("manager"));
+			info.setCreator(rs.getString("creator"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setStorageId(rs.getInt("storage_id"));
+			info.setPublishCabinet(rs.getLong("publish_cab_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
+			info.setOrgId(rs.getLong("org_id"));
+			info.setHashCode(rs.getString("hash_code"));
+			info.setOwm(rs.getLong("owm"));
+			info.setShareEnable(rs.getBoolean("share_enable"));
+			info.setLinkEnable(rs.getBoolean("link_enable"));
+			info.setPostEnable(rs.getBoolean("post_enable"));
+			info.setNetdiskEnable(rs.getBoolean("netdisk_enable"));
+			info.setPublishEnable(rs.getBoolean("publish_enable"));
+			info.setTaskEnable(rs.getBoolean("task_enable"));
+			info.setAvatarId(rs.getLong("avatar_id"));
+			info.setMemberGroupId(rs.getLong("mbr_group_id"));
+			info.setParentId(rs.getLong("workgroup_pid"));
+			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
+			info.setPublicFlowId(rs.getLong("public_flow_id"));
+			
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			info.setEntityCode(rs.getString("entity_code"));
+			info.setNodeCode(rs.getString("node_code"));
+			info.setSourceAbbr(rs.getString("abbr"));
+			info.setSourceName(rs.getString("source_name"));
+			info.setSourceShort(rs.getString("short_name"));
+			info.setAdminName(rs.getString("full_name"));
+			info.setManagerName(rs.getString("mgr_name"));
 		
-			CombineInfo<WorkgroupInfo,WorkgroupExt> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupExt>();
-			
-			WorkgroupInfo info = WorkgroupDAOImpl.WorkgroupMapper.mapRow(rs, rowNum);
-			
-			WorkgroupExt ext = new WorkgroupExt();
-			ext.setEntityCode(rs.getString("entity_code"));
-			ext.setNodeCode(rs.getString("node_code"));
-			ext.setSourceAbbr(rs.getString("abbr"));
-			ext.setSourceName(rs.getString("source_name"));
-			ext.setSourceShort(rs.getString("short_name"));
-			ext.setAdminName(rs.getString("full_name"));
-			ext.setManagerName(rs.getString("mgr_name"));
-			
-			cinfo.setPrimary(info);
-			cinfo.setExtended(ext);
-			
-			return cinfo;
+			return info;
 		}
 		
 	};
