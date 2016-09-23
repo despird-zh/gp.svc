@@ -21,7 +21,7 @@ import com.gp.dao.info.WorkgroupSumInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.UserExtInfo;
-import com.gp.svc.info.WorkgroupExt;
+import com.gp.svc.info.WorkgroupExtInfo;
 import com.gp.svc.info.WorkgroupLite;
 
 public interface WorkgroupService {
@@ -45,7 +45,7 @@ public interface WorkgroupService {
 	 **/
 	public WorkgroupInfo getWorkgroup(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
-	public WorkgroupExt getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
+	public WorkgroupExtInfo getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException;
 	
 	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo wminfo) throws ServiceException;
 
@@ -82,11 +82,11 @@ public interface WorkgroupService {
 	
 	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
-	public List<WorkgroupExt> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExtInfo> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 	
 	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
-	public List<WorkgroupExt> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
+	public List<WorkgroupExtInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 
 	public WorkgroupSumInfo getWorkgroupSummary(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException ;
 	
@@ -110,11 +110,11 @@ public interface WorkgroupService {
 		}
 	};
 
-	public static RowMapper<WorkgroupExt> WorkgroupExMapper = new RowMapper<WorkgroupExt>(){
+	public static RowMapper<WorkgroupExtInfo> WorkgroupExMapper = new RowMapper<WorkgroupExtInfo>(){
 
-		public WorkgroupExt mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public WorkgroupExtInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			WorkgroupExt info = new WorkgroupExt();
+			WorkgroupExtInfo info = new WorkgroupExtInfo();
 
 			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
 			info.setInfoId(id);

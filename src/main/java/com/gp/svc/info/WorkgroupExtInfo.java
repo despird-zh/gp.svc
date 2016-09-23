@@ -2,7 +2,7 @@ package com.gp.svc.info;
 
 import com.gp.dao.info.WorkgroupInfo;
 
-public class WorkgroupExt extends WorkgroupInfo{
+public class WorkgroupExtInfo extends WorkgroupInfo{
 	
 	private static final long serialVersionUID = -7455714273637511174L;
 

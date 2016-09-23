@@ -60,7 +60,7 @@ import com.gp.svc.CommonService;
 import com.gp.svc.SystemService;
 import com.gp.svc.WorkgroupService;
 import com.gp.svc.info.UserExtInfo;
-import com.gp.svc.info.WorkgroupExt;
+import com.gp.svc.info.WorkgroupExtInfo;
 import com.gp.util.DateTimeUtils;
 
 /**
@@ -708,7 +708,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExt> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
+	public List<WorkgroupExtInfo> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
@@ -732,7 +732,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExt> result = null;
+		List<WorkgroupExtInfo> result = null;
 		try{
 			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 			
@@ -746,7 +746,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public List<WorkgroupExt> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
+	public List<WorkgroupExtInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		
@@ -770,7 +770,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExt> result = null;
+		List<WorkgroupExtInfo> result = null;
 		try{
 			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 		}catch(DataAccessException dae){
@@ -782,7 +782,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public WorkgroupExt getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
+	public WorkgroupExtInfo getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
 		Object[] params = new Object[]{wkey.getId()};
 		
@@ -801,7 +801,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + querysql + " / PARAMS : " + ArrayUtils.toString(params));
 		}
-		List<WorkgroupExt> result = null;
+		List<WorkgroupExtInfo> result = null;
 		try{
 			result = jtemplate.query(querysql, params, WorkgroupExMapper);
 			
