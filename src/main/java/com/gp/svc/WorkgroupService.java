@@ -84,29 +84,56 @@ public interface WorkgroupService {
 	
 	public List<WorkgroupExtInfo> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 	
-	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
+	public PageWrapper<WorkgroupLite> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;
 	
 	public List<WorkgroupExtInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 
 	public WorkgroupSumInfo getWorkgroupSummary(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException ;
 	
-	public static RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> WorkgroupLiteMapper = new RowMapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>(){
+	public static RowMapper<WorkgroupLite> WorkgroupLiteMapper = new RowMapper<WorkgroupLite>(){
 
 		@Override
-		public CombineInfo<WorkgroupInfo,WorkgroupLite> mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public WorkgroupLite mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
-			CombineInfo<WorkgroupInfo,WorkgroupLite> cinfo = new CombineInfo<WorkgroupInfo,WorkgroupLite>();
-			WorkgroupInfo info = WorkgroupDAOImpl.WorkgroupMapper.mapRow(rs, rowNum);
+			WorkgroupLite info = new WorkgroupLite();
+
+			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			info.setInfoId(id);
 			
-			WorkgroupLite lite = new WorkgroupLite();
-			lite.setAdminName(rs.getString("full_name"));
-			lite.setImageLink(rs.getString("image_link"));
-			lite.setImageFormat(rs.getString("image_format"));
+			info.setSourceId(rs.getInt("source_id"));
+			info.setWorkgroupName(rs.getString("workgroup_name"));
+			info.setDescription(rs.getString("descr"));
+			info.setState(rs.getString("state"));
+			info.setAdmin(rs.getString("admin"));
+			info.setManager(rs.getString("manager"));
+			info.setCreator(rs.getString("creator"));
+			info.setCreateDate(rs.getTimestamp("create_time"));
+			info.setStorageId(rs.getInt("storage_id"));
+			info.setPublishCabinet(rs.getLong("publish_cab_id"));
+			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
+			info.setOrgId(rs.getLong("org_id"));
+			info.setHashCode(rs.getString("hash_code"));
+			info.setOwm(rs.getLong("owm"));
+			info.setShareEnable(rs.getBoolean("share_enable"));
+			info.setLinkEnable(rs.getBoolean("link_enable"));
+			info.setPostEnable(rs.getBoolean("post_enable"));
+			info.setNetdiskEnable(rs.getBoolean("netdisk_enable"));
+			info.setPublishEnable(rs.getBoolean("publish_enable"));
+			info.setTaskEnable(rs.getBoolean("task_enable"));
+			info.setAvatarId(rs.getLong("avatar_id"));
+			info.setMemberGroupId(rs.getLong("mbr_group_id"));
+			info.setParentId(rs.getLong("workgroup_pid"));
+			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
+			info.setPublicFlowId(rs.getLong("public_flow_id"));
 			
-			cinfo.setPrimary(info);
-			cinfo.setExtended(lite);
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
 			
-			return cinfo;
+			info.setAdminName(rs.getString("full_name"));
+			info.setImageLink(rs.getString("image_link"));
+			info.setImageFormat(rs.getString("image_format"));
+			
+			return info;
 		}
 	};
 

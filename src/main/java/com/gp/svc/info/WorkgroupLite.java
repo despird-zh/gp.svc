@@ -1,6 +1,10 @@
 package com.gp.svc.info;
 
-public class WorkgroupLite{
+import com.gp.dao.info.WorkgroupInfo;
+
+public class WorkgroupLite extends WorkgroupInfo{
+
+	private static final long serialVersionUID = 1704692604921194219L;
 
 	private String imageFormat;
 	

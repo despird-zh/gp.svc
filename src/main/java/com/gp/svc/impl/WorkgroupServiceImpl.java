@@ -816,7 +816,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
+	public PageWrapper<WorkgroupLite> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
 			throws ServiceException {
 		
 		Map<String,Object> params = new HashMap<String,Object>();
@@ -845,7 +845,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
 		
-		PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>> pwrapper = new PageWrapper<CombineInfo<WorkgroupInfo,WorkgroupLite>>();
+		PageWrapper<WorkgroupLite> pwrapper = new PageWrapper<WorkgroupLite>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -863,7 +863,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + params.toString());
 		}
-		List<CombineInfo<WorkgroupInfo,WorkgroupLite>> result = null;
+		List<WorkgroupLite> result = null;
 		try{
 			result = jtemplate.query(pagesql, params, WorkgroupLiteMapper);
 			pwrapper.setRows(result);
