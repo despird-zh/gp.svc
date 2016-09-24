@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.SysOptionInfo;
 
-@Component("sysOptionDAO")
+@Component
 public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(SysOptionDAOImpl.class);

@@ -24,7 +24,7 @@ import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.DictionaryService;
 
-@Service("dictionaryService")
+@Service
 public class DictionaryServiceImpl implements DictionaryService{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(DictionaryServiceImpl.class);

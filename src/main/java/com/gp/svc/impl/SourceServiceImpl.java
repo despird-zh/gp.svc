@@ -32,7 +32,7 @@ import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.SourceService;
 
-@Service("instanceService")
+@Service
 public class SourceServiceImpl implements SourceService{
 
 	Logger LOGGER = LoggerFactory.getLogger(SourceServiceImpl.class);

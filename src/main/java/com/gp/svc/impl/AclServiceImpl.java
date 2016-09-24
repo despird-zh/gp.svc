@@ -29,7 +29,7 @@ import com.gp.info.InfoId;
 import com.gp.svc.AclService;
 import com.gp.svc.CommonService;
 
-@Service("aclService")
+@Service
 public class AclServiceImpl implements AclService{
 	
 	Logger LOGGER = LoggerFactory.getLogger(AclServiceImpl.class);

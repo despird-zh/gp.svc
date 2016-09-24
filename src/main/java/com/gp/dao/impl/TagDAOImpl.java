@@ -23,7 +23,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TagInfo;
 
-@Component("tagDAO")
+@Component
 public class TagDAOImpl extends DAOSupport implements TagDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(TagDAOImpl.class);

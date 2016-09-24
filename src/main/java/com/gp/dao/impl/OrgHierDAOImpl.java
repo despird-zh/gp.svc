@@ -26,7 +26,7 @@ import com.gp.info.InfoId;
 import com.gp.dao.info.OrgHierInfo;
 
 
-@Component("orgHierDAO")
+@Component
 public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(OrgHierDAOImpl.class);

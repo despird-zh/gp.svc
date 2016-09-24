@@ -17,7 +17,7 @@ import com.gp.dao.info.CabAclInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabAclDAO")
+@Component
 public class CabAclDAOImpl extends DAOSupport implements CabAclDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(CabAclDAOImpl.class);

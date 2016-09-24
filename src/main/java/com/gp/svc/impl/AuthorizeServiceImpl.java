@@ -23,7 +23,7 @@ import com.gp.dao.info.RoleInfo;
 import com.gp.dao.info.RolePageInfo;
 import com.gp.svc.AuthorizeService;
 
-@Service("authorizeService")
+@Service
 public class AuthorizeServiceImpl implements AuthorizeService{
 
 	Logger LOGGER = LoggerFactory.getLogger(AuthorizeServiceImpl.class);

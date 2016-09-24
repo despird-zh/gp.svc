@@ -24,7 +24,7 @@ import com.gp.dao.info.AuditInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.AuditService;
 
-@Service("auditService")
+@Service
 public class AuditServiceImpl implements AuditService{
 
 	Logger LOGGER = LoggerFactory.getLogger(AuditServiceImpl.class);

@@ -24,7 +24,7 @@ import com.gp.dao.info.NotificationInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("notificationdispatchDAO")
+@Component
 public class NotificationDispatchDAOImpl extends DAOSupport implements NotificationDispatchDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(NotificationDispatchDAOImpl.class);

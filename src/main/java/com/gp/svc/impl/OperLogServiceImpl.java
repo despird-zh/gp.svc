@@ -25,7 +25,7 @@ import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.OperLogService;
 
-@Service("actlogService")
+@Service
 public class OperLogServiceImpl implements OperLogService {
 	
 	static Logger LOGGER = LoggerFactory.getLogger(OperLogServiceImpl.class);

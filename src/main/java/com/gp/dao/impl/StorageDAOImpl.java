@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.StorageInfo;
 
-@Component("storageDAO")
+@Component
 public class StorageDAOImpl extends DAOSupport implements StorageDAO{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(StorageDAOImpl.class);

@@ -22,7 +22,7 @@ import com.gp.dao.info.CabCommentInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabCommentDAO")
+@Component
 public class CabCommentDAOImpl extends DAOSupport implements CabCommentDAO{
 	
 	Logger LOGGER = LoggerFactory.getLogger(CabCommentDAOImpl.class);

@@ -22,7 +22,7 @@ import com.gp.dao.info.CabinetInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabinetDAO")
+@Component
 public class CabinetDAOImpl extends DAOSupport implements CabinetDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(CabinetDAOImpl.class);

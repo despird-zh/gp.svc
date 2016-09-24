@@ -31,7 +31,7 @@ import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("favoriteDAO")
+@Component
 public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(FavoriteDAOImpl.class);

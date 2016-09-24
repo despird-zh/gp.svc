@@ -17,7 +17,7 @@ import com.gp.dao.IdSettingDAO;
 import com.gp.dao.info.IdSettingInfo;
 import com.gp.info.Identifier;
 
-@Component("idSettingDao")
+@Component
 public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(IdSettingDAOImpl.class);

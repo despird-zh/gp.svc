@@ -24,7 +24,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PageInfo;
 
-@Component("pagedao")
+@Component
 public class PageDAOImpl extends DAOSupport implements PageDAO {
 
 	Logger LOGGER = LoggerFactory.getLogger(PageDAOImpl.class);

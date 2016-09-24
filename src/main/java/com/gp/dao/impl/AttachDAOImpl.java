@@ -22,7 +22,7 @@ import com.gp.dao.info.AttachInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("attachDAO")
+@Component
 public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(AttachDAOImpl.class);

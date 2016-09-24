@@ -23,7 +23,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupSumInfo;
 
-@Component("workgroupsumDAO")
+@Component
 public class WorkgroupSumDAOImpl extends DAOSupport implements WorkgroupSumDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(WorkgroupSumDAOImpl.class);

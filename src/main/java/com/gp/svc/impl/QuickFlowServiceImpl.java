@@ -30,7 +30,7 @@ import com.gp.common.QuickFlows.ExecMode;
 import com.gp.common.QuickFlows.FlowState;
 import com.gp.common.QuickFlows.StepOpinion;
 
-@Service("quickflowService")
+@Service
 public class QuickFlowServiceImpl implements QuickFlowService{
 
 	@Autowired

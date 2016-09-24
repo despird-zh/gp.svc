@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.ShareInfo;
 
-@Component("shareDAO")
+@Component
 public class ShareDAOImpl extends DAOSupport implements ShareDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(ShareDAOImpl.class);

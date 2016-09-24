@@ -1,7 +1,5 @@
 package com.gp.svc.impl;
 
-import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +38,6 @@ import com.gp.dao.WorkgroupDAO;
 import com.gp.dao.WorkgroupSumDAO;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.CabinetInfo;
-import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupInfo;
 import com.gp.dao.info.GroupMemberInfo;
@@ -69,7 +66,7 @@ import com.gp.util.DateTimeUtils;
  * @author gary diao
  * @version 0.1 2014-12-12
  **/
-@Service("workgroupService")
+@Service
 public class WorkgroupServiceImpl implements WorkgroupService{
 
 	private static Logger LOGGER = LoggerFactory.getLogger(WorkgroupServiceImpl.class);

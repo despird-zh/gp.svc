@@ -25,7 +25,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.RolePageInfo;
 
-@Component("rolepagedao")
+@Component
 public class RolePageDAOImpl extends DAOSupport implements RolePageDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(RolePageDAOImpl.class);

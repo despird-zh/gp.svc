@@ -41,7 +41,7 @@ import java.util.Map;
  * Created by garydiao on 7/22/16.
  */
 
-@Service("postService")
+@Service
 public class PostServiceImpl implements PostService{
 
     static Logger LOGGER = LoggerFactory.getLogger(PostService.class);

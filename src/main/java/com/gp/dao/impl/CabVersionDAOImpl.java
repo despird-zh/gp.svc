@@ -22,7 +22,7 @@ import com.gp.dao.info.CabVersionInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabVersionDAO")
+@Component
 public class CabVersionDAOImpl extends DAOSupport implements CabVersionDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(CabVersionDAOImpl.class);

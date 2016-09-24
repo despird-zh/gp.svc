@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.*;
 
 import javax.sql.DataSource;
@@ -42,7 +41,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
 
-@Component("imageDAO")
+@Component
 public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(ImageDAOImpl.class);

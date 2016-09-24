@@ -16,7 +16,7 @@ import com.gp.info.InfoId;
 import com.gp.dao.info.MeasureInfo;
 import com.gp.svc.MeasureService;
 
-@Service("measureService")
+@Service
 public class MeasureServiceImpl implements MeasureService{
 	
 	static Logger LOGGER = LoggerFactory.getLogger(MeasureServiceImpl.class);

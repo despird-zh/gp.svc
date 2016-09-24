@@ -23,7 +23,7 @@ import com.gp.dao.info.SourceInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("sourceDAO")
+@Component
 public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);

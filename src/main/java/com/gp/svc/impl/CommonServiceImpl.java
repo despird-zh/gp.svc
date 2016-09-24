@@ -23,7 +23,7 @@ import com.gp.info.Identifier;
 import com.gp.info.InfoId;
 import com.gp.svc.CommonService;
 
-@Service("commonService")
+@Service
 public class CommonServiceImpl implements CommonService{
 
 	public static Logger LOGGER = LoggerFactory.getLogger(CommonServiceImpl.class);

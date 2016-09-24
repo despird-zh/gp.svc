@@ -23,7 +23,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserSumInfo;
 
-@Component("usersumDAO")
+@Component
 public class UserSumDAOImpl extends DAOSupport implements UserSumDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(UserSumDAOImpl.class);

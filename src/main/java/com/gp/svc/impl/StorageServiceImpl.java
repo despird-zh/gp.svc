@@ -33,7 +33,7 @@ import com.gp.pagination.PaginationInfo;
 import com.gp.svc.StorageService;
 import com.gp.util.StorageUtils;
 
-@Service("storageService")
+@Service
 public class StorageServiceImpl implements StorageService{
 
 	Logger LOGGER = LoggerFactory.getLogger(StorageServiceImpl.class);

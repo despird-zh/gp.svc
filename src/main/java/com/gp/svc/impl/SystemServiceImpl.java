@@ -45,7 +45,7 @@ import com.gp.util.DateTimeUtils;
  * @version 0.1 2015-1-1
  **/
 
-@Service("systemService")
+@Service
 public class SystemServiceImpl implements SystemService{
 
 	Logger LOGGER = LoggerFactory.getLogger(SystemServiceImpl.class);

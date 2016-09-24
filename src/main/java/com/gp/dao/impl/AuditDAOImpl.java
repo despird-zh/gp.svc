@@ -23,7 +23,7 @@ import com.gp.dao.info.AuditInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("auditDAO")
+@Component
 public class AuditDAOImpl extends DAOSupport implements AuditDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(AuditDAOImpl.class);

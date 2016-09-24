@@ -21,7 +21,7 @@ import com.gp.dao.OperLogDAO;
 import com.gp.dao.info.OperLogInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-@Component("activitylogDAO")
+@Component
 public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 
 	Logger LOGGER = LoggerFactory.getLogger(OperLogDAOImpl.class);

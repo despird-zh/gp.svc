@@ -22,7 +22,7 @@ import com.gp.dao.info.ChatInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("chatDAO")
+@Component
 public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(ChatDAOImpl.class);

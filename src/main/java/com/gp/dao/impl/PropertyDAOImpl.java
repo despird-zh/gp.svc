@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PropertyInfo;
 
-@Component("propertyDAO")
+@Component
 public class PropertyDAOImpl extends DAOSupport implements PropertyDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(PropertyDAOImpl.class);

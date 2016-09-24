@@ -24,7 +24,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserRoleInfo;
 
-@Component("userroledao")
+@Component
 public class UserRoleDAOImple extends DAOSupport implements UserRoleDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(UserRoleDAOImple.class);

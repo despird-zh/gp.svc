@@ -41,7 +41,7 @@ import com.gp.dao.info.UserInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
 
-@Service("orghierService")
+@Service
 public class OrgHierServiceImpl implements OrgHierService{
 
 	Logger LOGGER = LoggerFactory.getLogger(OrgHierServiceImpl.class);

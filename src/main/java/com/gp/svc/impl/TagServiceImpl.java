@@ -35,7 +35,7 @@ import com.gp.dao.info.TagRelInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.TagService;
 
-@Service("tagService")
+@Service
 public class TagServiceImpl implements TagService{
 
 	Logger LOGGER = LoggerFactory.getLogger(TagServiceImpl.class);

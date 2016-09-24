@@ -24,7 +24,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserInfo;
 
-@Component("userDAO")
+@Component
 public class UserDAOImpl extends DAOSupport implements UserDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(UserDAOImpl.class);

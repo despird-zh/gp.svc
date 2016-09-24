@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * Created by garydiao on 8/19/16.
  */
-@Component("quickflowDAO")
+@Component
 public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(QuickFlowDAOImpl.class);

@@ -23,7 +23,7 @@ import java.util.Set;
 /**
  * Created by garydiao on 8/19/16.
  */
-@Component("procflowDAO")
+@Component
 public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(ProcFlowDAOImpl.class);

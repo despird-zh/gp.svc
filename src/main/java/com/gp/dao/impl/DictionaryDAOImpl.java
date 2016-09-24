@@ -24,7 +24,7 @@ import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("dictionaryDAO")
+@Component
 public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);

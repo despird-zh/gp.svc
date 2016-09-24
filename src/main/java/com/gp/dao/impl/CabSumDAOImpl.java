@@ -23,7 +23,7 @@ import com.gp.dao.info.CabSumInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabinetsumDAO")
+@Component
 public class CabSumDAOImpl extends DAOSupport implements CabSumDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(CabSumDAOImpl.class);

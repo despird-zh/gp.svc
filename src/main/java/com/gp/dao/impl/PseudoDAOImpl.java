@@ -23,7 +23,7 @@ import com.gp.dao.PseudoDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("pseudoDAO")
+@Component
 public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(PseudoDAOImpl.class);

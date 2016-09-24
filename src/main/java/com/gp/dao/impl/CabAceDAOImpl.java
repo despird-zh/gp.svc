@@ -23,7 +23,7 @@ import com.gp.dao.info.CabAceInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("cabAceDAO")
+@Component
 public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(CabAceDAOImpl.class);

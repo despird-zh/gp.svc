@@ -41,7 +41,7 @@ import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.CabinetService;
 
-@Service("cabinetService")
+@Service
 public class CabinetServiceImpl implements CabinetService{
 
 	Logger LOGGER = LoggerFactory.getLogger(CabinetServiceImpl.class);

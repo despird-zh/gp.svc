@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * Created by garydiao on 8/19/16.
  */
-@Component("quicknodeDAO")
+@Component
 public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(QuickNodeDAOImpl.class);

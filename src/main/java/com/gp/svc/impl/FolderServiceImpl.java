@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
-import com.gp.common.Cabinets;
 import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
@@ -44,7 +43,7 @@ import com.gp.svc.FolderService;
 import com.gp.util.DateTimeUtils;
 import com.gp.svc.CommonService;
 
-@Service("folderService")
+@Service
 public class FolderServiceImpl implements FolderService{
 
 	static Logger LOGGER = LoggerFactory.getLogger(FolderServiceImpl.class);

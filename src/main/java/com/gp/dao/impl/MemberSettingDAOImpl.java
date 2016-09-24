@@ -26,7 +26,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.MemberSettingInfo;
 
-@Component("memberSettingDAO")
+@Component
 public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);

@@ -13,7 +13,7 @@ import com.gp.dao.info.TaskInfo;
 import com.gp.dao.info.TaskRouteInfo;
 import com.gp.svc.TaskService;
 
-@Service("taskService")
+@Service
 public class TaskServiceImpl implements TaskService{
 
 	@Override

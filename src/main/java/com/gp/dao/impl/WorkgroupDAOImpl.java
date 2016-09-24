@@ -26,7 +26,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupInfo;
 
-@Component("workgroupDAO")
+@Component
 public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(WorkgroupDAOImpl.class);

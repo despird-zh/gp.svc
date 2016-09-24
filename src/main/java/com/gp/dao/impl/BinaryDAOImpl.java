@@ -22,7 +22,7 @@ import com.gp.dao.info.BinaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("binaryDAO")
+@Component
 public class BinaryDAOImpl extends DAOSupport implements BinaryDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(BinaryDAOImpl.class);

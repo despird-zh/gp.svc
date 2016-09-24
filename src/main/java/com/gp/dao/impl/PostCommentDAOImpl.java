@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PostCommentInfo;
 
-@Component("postCommentDAO")
+@Component
 public class PostCommentDAOImpl extends DAOSupport implements PostCommentDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(PostCommentDAOImpl.class);

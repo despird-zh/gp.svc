@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupMirrorInfo;
 
-@Component("workgroupMirrorDAO")
+@Component
 public class WorkgroupMirrorDAOImpl extends DAOSupport implements WorkgroupMirrorDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(WorkgroupMirrorDAOImpl.class);

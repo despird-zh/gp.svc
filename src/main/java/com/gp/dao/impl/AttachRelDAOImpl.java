@@ -22,7 +22,7 @@ import com.gp.dao.info.AttachRelInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
-@Component("attachRelDAO")
+@Component
 public class AttachRelDAOImpl extends DAOSupport implements AttachRelDAO{
 	
 	Logger LOGGER = LoggerFactory.getLogger(AttachRelDAOImpl.class);

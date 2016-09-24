@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TaskInfo;
 
-@Component("taskDAO")
+@Component
 public class TaskDAOImpl extends DAOSupport implements TaskDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(TaskDAOImpl.class);

@@ -20,7 +20,7 @@ import com.gp.info.Identifier;
 import com.gp.info.InfoId;
 import com.gp.svc.FavoriteService;
 
-@Service("favoriteService")
+@Service
 public class FavoriteServiceImpl implements FavoriteService{
 
 	@Autowired

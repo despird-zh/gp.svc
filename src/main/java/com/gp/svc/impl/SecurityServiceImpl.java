@@ -63,7 +63,7 @@ import com.gp.util.DateTimeUtils;
  * Security service covers all the operation related with security,
  * include group, user etc. operation. 
  **/
-@Service("securityService")
+@Service
 public class SecurityServiceImpl implements SecurityService{
 	
 	public static Logger LOGGER = LoggerFactory.getLogger(SecurityServiceImpl.class);

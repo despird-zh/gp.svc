@@ -24,7 +24,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 
-@Component("groupUserDAO")
+@Component
 public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(GroupUserDAOImpl.class);

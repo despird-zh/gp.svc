@@ -3,8 +3,6 @@ package com.gp.svc.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import com.gp.util.CommonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.gp.acl.Ace;
 import com.gp.acl.Acl;
-import com.gp.common.Cabinets;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
@@ -43,7 +40,7 @@ import com.gp.svc.FileService;
 import com.gp.svc.CommonService;
 import com.gp.util.DateTimeUtils;
 
-@Service("fileService")
+@Service
 public class FileServiceImpl implements FileService{
 
 	static Logger LOGGER = LoggerFactory.getLogger(FileServiceImpl.class);

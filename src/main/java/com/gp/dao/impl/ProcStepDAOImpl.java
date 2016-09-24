@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * Created by garydiao on 8/19/16.
  */
-@Component("procstepDAO")
+@Component
 public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(ProcStepDAOImpl.class);

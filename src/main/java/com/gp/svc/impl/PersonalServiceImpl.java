@@ -51,7 +51,7 @@ import com.gp.pagination.PageQuery;
 import com.gp.svc.CommonService;
 import com.gp.svc.PersonalService;
 
-@Service("personalService")
+@Service
 public class PersonalServiceImpl implements PersonalService{
 
 	static Logger LOGGER = LoggerFactory.getLogger(PersonalServiceImpl.class);

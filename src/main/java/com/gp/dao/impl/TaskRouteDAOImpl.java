@@ -22,7 +22,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TaskRouteInfo;
 
-@Component("taskRouteDAO")
+@Component
 public class TaskRouteDAOImpl extends DAOSupport implements TaskRouteDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(TaskRouteDAOImpl.class);

@@ -23,7 +23,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.dao.info.RoleInfo;
 
-@Component("roledao")
+@Component
 public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 
 	static Logger LOGGER = LoggerFactory.getLogger(TagDAOImpl.class);
