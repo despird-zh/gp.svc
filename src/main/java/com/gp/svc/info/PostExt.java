@@ -1,6 +1,8 @@
 package com.gp.svc.info;
 
-public class PostExt {
+import com.gp.dao.info.PostInfo;
+
+public class PostExt extends PostInfo{
 
     private String workgroupName;
 

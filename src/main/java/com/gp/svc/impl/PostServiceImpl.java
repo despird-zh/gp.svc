@@ -211,13 +211,13 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public PageWrapper<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx, String account,
+    public PageWrapper<PostExt> getPersonalPosts(ServiceContext svcctx, String account,
                                                                         String state,
                                                                         String type,
                                                                         String scope,
                                                                         PageQuery pagequery) throws ServiceException {
 
-        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<PostExt> result = new ArrayList<PostExt>();
 
         StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
         StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
@@ -247,7 +247,7 @@ public class PostServiceImpl implements PostService{
         SQL.append(" ORDER BY last_modified desc");
         
         NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
-        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+        PageWrapper<PostExt> pwrapper = new PageWrapper<>();
 
         if(pagequery.isTotalCountEnable()){
             int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
@@ -267,18 +267,7 @@ public class PostServiceImpl implements PostService{
         }
 
         try {
-            jtemplate.query(pagesql, params, new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet rs) throws SQLException {
-                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
-                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                    row.setPrimary(base);
-                    row.setExtended(ext);
-
-                    result.add(row);
-                }
-            });
+            result = jtemplate.query(pagesql, params, POST_EXT_ROW_MAPPER);
 
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "personal's posts");
@@ -290,9 +279,9 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public List<CombineInfo<PostInfo, PostExt>> getPersonalJoinedPosts(ServiceContext svcctx, String account, String state, String type, String scope) throws ServiceException {
+    public List<PostExt> getPersonalJoinedPosts(ServiceContext svcctx, String account, String state, String type, String scope) throws ServiceException {
 
-        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        final List<PostExt> result = new ArrayList<PostExt>();
         List<Object> paramlist = new ArrayList<Object>();
 
         StringBuffer SQL = new StringBuffer();
@@ -333,18 +322,7 @@ public class PostServiceImpl implements PostService{
         }
 
         try {
-            jtemplate.query(SQL.toString(), paramlist.toArray(), new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet rs) throws SQLException {
-                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
-                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                    row.setPrimary(base);
-                    row.setExtended(ext);
-
-                    result.add(row);
-                }
-            });
+            jtemplate.query(SQL.toString(), paramlist.toArray(), POST_EXT_ROW_MAPPER);
 
             return result;
         }catch(DataAccessException dae){
@@ -354,9 +332,9 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid,String mode, String state, String type, PageQuery pagequery) throws ServiceException {
+    public PageWrapper<PostExt> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid,String mode, String state, String type, PageQuery pagequery) throws ServiceException {
 
-        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<PostExt> result = new ArrayList<PostExt>();
 
         StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
         StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
@@ -389,7 +367,7 @@ public class PostServiceImpl implements PostService{
         SQL.append(" ORDER BY last_modified desc");
 
         NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
-        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+        PageWrapper<PostExt> pwrapper = new PageWrapper<>();
 
         if(pagequery.isTotalCountEnable()){
             int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
@@ -409,18 +387,7 @@ public class PostServiceImpl implements PostService{
         }
 
         try {
-            jtemplate.query(pagesql, params, new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet rs) throws SQLException {
-                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
-                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                    row.setPrimary(base);
-                    row.setExtended(ext);
-
-                    result.add(row);
-                }
-            });
+            result = jtemplate.query(pagesql, params, POST_EXT_ROW_MAPPER);
 
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "workgroup's posts");
@@ -433,9 +400,9 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
     @Override
-    public PageWrapper<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
+    public PageWrapper<PostExt> getSquarePosts(ServiceContext svcctx, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
 
-        final List<CombineInfo<PostInfo, PostExt>> result = new ArrayList<CombineInfo<PostInfo, PostExt>>();
+        List<PostExt> result = new ArrayList<PostExt>();
 
         StringBuffer SQL_COLS = new StringBuffer("SELECT * ");
         StringBuffer SQL_COUNT_COLS = new StringBuffer("SELECT count(post_id) ");
@@ -463,7 +430,7 @@ public class PostServiceImpl implements PostService{
         SQL.append(" ORDER BY last_modified desc");
 
         NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
-        PageWrapper<CombineInfo<PostInfo, PostExt>> pwrapper = new PageWrapper<>();
+        PageWrapper<PostExt> pwrapper = new PageWrapper<>();
 
         if(pagequery.isTotalCountEnable()){
             int totalrow = pseudodao.queryRowCount(jtemplate, SQL_COUNT_COLS.append(SQL).toString(), params);
@@ -483,18 +450,7 @@ public class PostServiceImpl implements PostService{
         }
 
         try {
-            jtemplate.query(pagesql, params, new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet rs) throws SQLException {
-                    CombineInfo<PostInfo, PostExt> row = new CombineInfo<PostInfo, PostExt>();
-                    PostInfo base = PostDAO.PostMapper.mapRow(rs, result.size());
-                    PostExt ext = POST_EXT_ROW_MAPPER.mapRow(rs, result.size());
-                    row.setPrimary(base);
-                    row.setExtended(ext);
-
-                    result.add(row);
-                }
-            });
+           result = jtemplate.query(pagesql, params, POST_EXT_ROW_MAPPER);
 
         }catch(DataAccessException dae){
             throw new ServiceException("excp.query",dae, "square's posts");

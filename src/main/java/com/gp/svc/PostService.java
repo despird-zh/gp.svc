@@ -54,7 +54,7 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public PageWrapper<CombineInfo<PostInfo, PostExt>> getPersonalPosts(ServiceContext svcctx,
+	public PageWrapper<PostExt> getPersonalPosts(ServiceContext svcctx,
 																		String account,
 																		String state,
 																		String type,
@@ -68,7 +68,7 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public List<CombineInfo<PostInfo, PostExt>> getPersonalJoinedPosts(ServiceContext svcctx,
+	public List<PostExt> getPersonalJoinedPosts(ServiceContext svcctx,
 																 String account,
 																 String state,
 																 String type,
@@ -82,7 +82,7 @@ public interface PostService {
 	 * @param scope the scope of post
 	 * @param mode the data query mode :  ALL/MEMBER/SQUARE
 	 **/
-	public PageWrapper<CombineInfo<PostInfo, PostExt>> getWorkgroupPosts(ServiceContext svcctx,
+	public PageWrapper<PostExt> getWorkgroupPosts(ServiceContext svcctx,
 																 InfoId<Long> wid,
 																 String mode,
 																 String state,
@@ -95,7 +95,7 @@ public interface PostService {
 	 * @param type the type of post
 	 * @param scope the scope of post
 	 **/
-	public PageWrapper<CombineInfo<PostInfo, PostExt>> getSquarePosts(ServiceContext svcctx,
+	public PageWrapper<PostExt> getSquarePosts(ServiceContext svcctx,
 																  String state,
 																  String type,
 																  String scope,
