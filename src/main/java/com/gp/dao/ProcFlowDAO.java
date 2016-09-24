@@ -2,7 +2,6 @@ package com.gp.dao;
 
 import com.gp.common.IdKey;
 import com.gp.dao.info.ProcFlowInfo;
-import com.gp.dao.info.QuickFlowInfo;
 import com.gp.info.InfoId;
 import com.gp.util.CommonUtils;
 import org.springframework.jdbc.core.RowMapper;

@@ -4,13 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.dao.info.PostCommentInfo;
 import com.gp.exception.ServiceException;
-import com.gp.info.CombineInfo;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PostInfo;
-import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.svc.info.PostExt;
@@ -141,6 +140,31 @@ public interface PostService {
 		public PostExt mapRow(ResultSet rs, int num) throws SQLException {
 			PostExt info = new PostExt();
 
+			InfoId<Long> id = IdKey.POST.getInfoId(rs.getLong("post_id"));
+			
+			info.setInfoId(id);
+			info.setSourceId(rs.getInt("source_id"));
+			info.setWorkgroupId(rs.getLong("workgroup_id"));
+			info.setOwner(rs.getString("owner"));
+			info.setContent(rs.getString("content"));
+			info.setExcerpt(rs.getString("excerpt"));
+			info.setSubject(rs.getString("subject"));
+			info.setState(rs.getString("state"));
+			info.setScope(rs.getString("scope"));
+			info.setCommentOn(rs.getBoolean("comment_on"));
+			info.setPostType(rs.getString("post_type"));
+			info.setCommentCount(rs.getInt("comment_count"));
+			info.setUpvoteCount(rs.getInt("upvote_count"));
+			info.setDownvoteCount(rs.getInt("downvote_count"));
+			info.setPostDate(rs.getDate("post_time"));
+			info.setHashCode(rs.getString("hash_code"));
+			info.setOwm(rs.getLong("owm"));
+			info.setPriority(rs.getInt("priority"));
+			info.setClassification(rs.getString("classification"));
+
+			info.setModifier(rs.getString("modifier"));
+			info.setModifyDate(rs.getTimestamp("last_modified"));
+			
 			info.setOwnerName(rs.getString("user_name"));
 			info.setWorkgroupName(rs.getString("workgroup_name"));
 			info.setSourceName(rs.getString("source_name"));
