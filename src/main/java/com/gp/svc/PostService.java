@@ -119,13 +119,15 @@ public interface PostService {
 
 	/**
 	 * Add like to post
+	 * @return the like vote count
 	 **/
-	public boolean addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
+	public int addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
 
 	/**
 	 * Remove like of post
+	 * @return the like vote count
 	 **/
-	public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
+	public int addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException;
 
 	/**
 	 * public the post 

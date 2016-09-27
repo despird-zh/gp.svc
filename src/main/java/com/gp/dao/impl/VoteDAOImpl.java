@@ -177,4 +177,20 @@ public class VoteDAOImpl extends DAOSupport implements VoteDAO{
 	}
 
 
+	@Override
+	public int queryVoteCount(InfoId<Long> resourceId, String opinion) {
+		String SQL = "SELECT COUNT(vote_id)  from gp_votes "
+				+ "where resource_id = ? and resource_type= ? and OPINION = '" + opinion + "'";
+
+		Object[] params = new Object[]{
+				resourceId.getId(), resourceId.getIdKey()
+		};
+
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){
+			LOGGER.debug("SQL : " + SQL + " / params : " + ArrayUtils.toString(params));
+		}
+		int votecount = jtemplate.queryForObject(SQL, params, Integer.class);
+		return votecount;
+	}
 }

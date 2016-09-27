@@ -513,7 +513,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public boolean addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
+    public int addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
         VoteInfo vote = null;
         try{
@@ -532,15 +532,16 @@ public class PostServiceImpl implements PostService{
                 vote.setWorkgroupId(wid);
 
                 svcctx.setTraceInfo(vote);
-                cnt = votedao.create(vote);
+                votedao.create(vote);
         	}else{
         		
         		FlatColumn[] cols = new FlatColumn[]{FlatColumns.OPINION, FlatColumns.MODIFIER, FlatColumns.MODIFY_DATE};
         		Object[] vals = new Object[]{TagVotes.VoteOpinion.LIKE.name(), svcctx.getPrincipal().getAccount(), new Date(System.currentTimeMillis())};
-        		cnt = pseudodao.update(vote.getInfoId(), cols, vals);
+        		pseudodao.update(vote.getInfoId(), cols, vals);
         	}
-           
-            return cnt >0 ;
+
+            cnt = votedao.queryVoteCount(postId, TagVotes.VoteOpinion.LIKE.name());
+            return cnt ;
 
         }catch(DataAccessException dae){
 
@@ -551,7 +552,7 @@ public class PostServiceImpl implements PostService{
 
     @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
-    public boolean addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
+    public int addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
         VoteInfo vote = null;
        
@@ -579,8 +580,9 @@ public class PostServiceImpl implements PostService{
         		Object[] vals = new Object[]{TagVotes.VoteOpinion.DISLIKE.name(), svcctx.getPrincipal().getAccount(), new Date(System.currentTimeMillis())};
         		cnt = pseudodao.update(vote.getInfoId(), cols, vals);
         		
-        	} 
-        	return cnt >0 ;
+        	}
+            cnt = votedao.queryVoteCount(postId, TagVotes.VoteOpinion.LIKE.name());
+        	return cnt;
         }catch(DataAccessException dae){
 
             throw new ServiceException("excp.create", dae, "dislike voting");

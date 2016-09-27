@@ -15,9 +15,19 @@ public interface VoteDAO extends BaseDAO<VoteInfo>{
 	 * Query the vote information of account on resource 
 	 **/
 	public VoteInfo queryByAccount(InfoId<Long> resourceId, String account);
-	
+
+	/**
+	 * Delete the vote information by resource id
+	 * @param resourceId the id of resource
+	 **/
 	public int deleteByResource(InfoId<Long> resourceId);
-	
+
+	/**
+	 * Query the like vote count
+	 * @param resourceId the id of resource
+	 **/
+	public int queryVoteCount(InfoId<Long> resourceId, String opinion);
+
 	public static RowMapper<VoteInfo> VoteMapper = new RowMapper<VoteInfo>(){
 
 		@Override
