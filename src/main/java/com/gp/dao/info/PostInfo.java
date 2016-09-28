@@ -48,8 +48,6 @@ public class PostInfo extends TraceableInfo<Long> {
 	
 	private int upvoteCount;
 	
-	private int downvoteCount;
-	
 	private Date postDate;
 
 	@NotEmpty
@@ -159,14 +157,6 @@ public class PostInfo extends TraceableInfo<Long> {
 
 	public void setUpvoteCount(int upvoteCount) {
 		this.upvoteCount = upvoteCount;
-	}
-
-	public int getDownvoteCount() {
-		return downvoteCount;
-	}
-
-	public void setDownvoteCount(int downvoteCount) {
-		this.downvoteCount = downvoteCount;
 	}
 
 	public Date getPostDate() {

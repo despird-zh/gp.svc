@@ -157,7 +157,6 @@ public interface PostService {
 			info.setPostType(rs.getString("post_type"));
 			info.setCommentCount(rs.getInt("comment_count"));
 			info.setUpvoteCount(rs.getInt("upvote_count"));
-			info.setDownvoteCount(rs.getInt("downvote_count"));
 			info.setPostDate(rs.getDate("post_time"));
 			info.setHashCode(rs.getString("hash_code"));
 			info.setOwm(rs.getLong("owm"));

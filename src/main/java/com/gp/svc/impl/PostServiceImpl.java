@@ -512,6 +512,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
+    @Transactional(ServiceConfigurer.TRNS_MGR)
     @Override
     public int addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
@@ -541,6 +542,8 @@ public class PostServiceImpl implements PostService{
         	}
 
             cnt = votedao.queryVoteCount(postId, TagVotes.VoteOpinion.LIKE.name());
+            // update the post up-vote count
+            pseudodao.update(postId, FlatColumns.UPVOTE_COUNT, cnt);
             return cnt ;
 
         }catch(DataAccessException dae){
@@ -582,6 +585,8 @@ public class PostServiceImpl implements PostService{
         		
         	}
             cnt = votedao.queryVoteCount(postId, TagVotes.VoteOpinion.LIKE.name());
+            // update the post up-vote count
+            pseudodao.update(postId, FlatColumns.UPVOTE_COUNT, cnt);
         	return cnt;
         }catch(DataAccessException dae){
 

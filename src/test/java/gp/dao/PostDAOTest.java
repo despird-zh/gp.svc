@@ -49,7 +49,6 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setPostType("posttype");
 		info.setCommentCount(3);
 		info.setUpvoteCount(3);
-		info.setDownvoteCount(4);
 		info.setPostDate(new Date(System.currentTimeMillis()));
 		info.setHashCode("hxxxsos");
 		info.setOwm(123l);
@@ -91,7 +90,6 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 			info.setPostType("posttype");
 			info.setCommentCount(3);
 			info.setUpvoteCount(3);
-			info.setDownvoteCount(4);
 			info.setPostDate(new Date(System.currentTimeMillis()));
 			info.setHashCode("hxxxsos");
 			info.setOwm(123l);

@@ -39,13 +39,13 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			.append("source_id,workgroup_id,post_id,hash_code,")
 			.append("owner,content,excerpt,subject,owm,")
 			.append("state,comment_on,post_type,comment_count,mbr_group_id,")
-			.append("upvote_count,downvote_count,post_time,scope,classification,")
+			.append("upvote_count,post_time,scope,classification,")
 			.append("priority,modifier,last_modified")
 			.append(")values(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,?,")
 			.append("?,?,?,?,?,")
-			.append("?,?,?,?,?,")
+			.append("?,?,?,?,")
 			.append("?,?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
@@ -53,7 +53,7 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 				info.getSourceId(),info.getWorkgroupId(),key.getId(),info.getHashCode(),
 				info.getOwner(),info.getContent(),info.getExcerpt(),info.getSubject(),info.getOwm(),
 				info.getState(),info.isCommentOn(),info.getPostType(),info.getCommentCount(),info.getMemberGroupId(),
-				info.getUpvoteCount(),info.getDownvoteCount(),info.getPostDate(),info.getScope(),info.getClassification(),
+				info.getUpvoteCount(),info.getPostDate(),info.getScope(),info.getClassification(),
 				info.getPriority(),info.getModifier(),info.getModifyDate()
 		};
 		
@@ -141,10 +141,7 @@ public class PostDAOImpl extends DAOSupport implements PostDAO{
 			SQL.append("upvote_count = ? ,");
 			params.add(info.getUpvoteCount());
 		}
-		if(columnCheck(mode, colset, "downvote_count")){
-			SQL.append("downvote_count = ? ,");
-			params.add(info.getDownvoteCount());
-		}
+
 		if(columnCheck(mode, colset, "post_time")){
 			SQL.append("post_time = ? ,");
 			params.add(info.getPostDate());

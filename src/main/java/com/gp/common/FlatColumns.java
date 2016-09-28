@@ -69,7 +69,9 @@ public class FlatColumns {
 	public static final FlatColumn SCOPE = new FlatColumn("scope");
 	public static final FlatColumn RESOURCE_ID = new FlatColumn("resource_id");
 	public static final FlatColumn RESOURCE_TYPE = new FlatColumn("resource_type");
-	
+
+	public static final FlatColumn UPVOTE_COUNT = new FlatColumn("upvote_count");
+
 	/**
 	 * Convert the Columns to string set for easy check existence.
 	 * @param cols the columns source
