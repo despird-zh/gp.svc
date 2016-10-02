@@ -18,7 +18,7 @@ public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
 
 	public QuickNodeInfo queryRootNode(InfoId<Long> flowId);
 	
-	public QuickNodeInfo queryEndNode(InfoId<Long> flowId);
+	public List<QuickNodeInfo> queryEndNodes(InfoId<Long> flowId);
 	
 	public List<QuickNodeInfo> queryPrevNodes(InfoId<Long> nodeId);
 	

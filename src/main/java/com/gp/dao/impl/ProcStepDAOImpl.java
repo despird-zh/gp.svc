@@ -48,12 +48,12 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
                 .append("step_id, proc_id, node_id, step_name,")
                 .append("prev_step, create_time, exec_time,")
                 .append("state, opinion, executor, comment,")
-                .append("operation,modifier, last_modified,")
+                .append("modifier, last_modified ")
                 .append(")values(")
                 .append("?,?,?,?,")
+                .append("?,?,?,")
                 .append("?,?,?,?,")
-                .append("?,?,?,?,")
-                .append("?,? ");
+                .append("?,? )");
 
         InfoId<Long> key = info.getInfoId();
         Object[] params = new Object[]{

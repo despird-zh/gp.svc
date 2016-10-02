@@ -40,13 +40,13 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
         SQL.append("insert into gp_proc_flows (")
                 .append("proc_id, workgroup_id, flow_id, proc_name,")
                 .append("descr, owner, launch_time, expire_time,")
-                .append("state, json_data,resource_id, resource_type,")
-                .append("bind_process, modifier, last_modified,")
+                .append("state, json_data, resource_id, resource_type,")
+                .append("bind_process, modifier, last_modified")
                 .append(")values(")
-                .append("?,?,?,")
                 .append("?,?,?,?,")
                 .append("?,?,?,?,")
-                .append("?,?,? ");
+                .append("?,?,?,?,")
+                .append("?,?,?)");
 
         InfoId<Long> key = info.getInfoId();
         String dataStr = CommonUtils.toJson(info.getData());

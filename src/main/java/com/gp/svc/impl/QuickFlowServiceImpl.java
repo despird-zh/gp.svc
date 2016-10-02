@@ -65,7 +65,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		Map<String, Object> wmap = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID,
 				FlatColumns.ADMIN,
 				FlatColumns.MANAGER);
-		long fid = (Long)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn());
+		long fid = ((Integer)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn())).longValue();
 		// query flow definition
 		QuickFlowInfo finfo = quickflowdao.query(IdKey.QUICK_FLOW.getInfoId(fid));
 		// create process flow information
@@ -87,6 +87,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		calendar.add(Calendar.DATE, finfo.getDuration());
 		pinfo.setState(QuickFlows.FlowState.START.name());
 		pinfo.setExpireTime(calendar.getTime());
+		pinfo.setBindProcess(finfo.getBindProcess());
 		svcctx.setTraceInfo(pinfo);
 
 		// query quick node information : root node
@@ -108,6 +109,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		NotificationInfo notifInfo = new NotificationInfo();
 		InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
 		notifInfo.setInfoId(notifId);
+		notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 		notifInfo.setOperation(Operations.LAUNCH_FLOW.name());
 		notifInfo.setExcerpt(descr);
 		notifInfo.setSender(svcctx.getPrincipal().getAccount());

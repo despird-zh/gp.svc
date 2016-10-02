@@ -154,10 +154,14 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * Query the node which follow the root (-1)
+     **/
 	@Override
 	public QuickNodeInfo queryRootNode(InfoId<Long> flowId) {
+
 		String SQL = "select * from gp_quick_node "
-                + "where flow_id = ? and prev_nodes = [" + QuickFlows.ROOT_NODE + "]";
+                + "where flow_id = ? and prev_nodes = '[" + QuickFlows.ROOT_NODE + "]'";
 
         Object[] params = new Object[]{
                 flowId.getId()
@@ -171,10 +175,14 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         return ainfo.size()>0 ? ainfo.get(0) : null;
 	}
 
+    /**
+     * Query the node which lead the end (-10)
+     **/
 	@Override
-	public QuickNodeInfo queryEndNode(InfoId<Long> flowId) {
+	public List<QuickNodeInfo> queryEndNodes(InfoId<Long> flowId) {
+
 		String SQL = "select * from gp_quick_node "
-                + "where flow_id = ? and prev_nodes = [" + QuickFlows.END_NODE + "]";
+                + "where flow_id = ? and next_nodes = '[" + QuickFlows.END_NODE + "]'";
 
         Object[] params = new Object[]{
                 flowId.getId()
@@ -185,7 +193,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
             LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
         }
         List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QuickNodeMapper);
-        return ainfo.size()>0 ? ainfo.get(0) : null;
+        return ainfo;
 	}
 
 	@Override

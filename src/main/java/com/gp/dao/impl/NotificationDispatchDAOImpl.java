@@ -43,9 +43,8 @@ public class NotificationDispatchDAOImpl extends DAOSupport implements Notificat
 			.append("modifier, last_modified")
 			.append(")VALUES(")
 			.append("?,?,?,")
-			.append("?,?")
-			.append("?,?")
-			.append(")");
+			.append("?,?,")
+			.append("?,?)");
 		
 		Object[] params = new Object[]{
 				info.getInfoId().getId(),info.getNotificationId(),info.getReceiver(),

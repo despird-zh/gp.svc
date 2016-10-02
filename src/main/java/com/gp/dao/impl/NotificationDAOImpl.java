@@ -41,13 +41,12 @@ public class NotificationDAOImpl extends DAOSupport implements NotificationDAO{
 			.append("notification_id, source_id, workgroup_id, resource_id,")
 			.append("resource_type,operation,subject,quote_excerpt,")
 			.append("excerpt,sender, send_time,")
-			.append("modifier, last_modified")
+			.append("modifier, last_modified ")
 			.append(")VALUES(")
 			.append("?,?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?,?")
-			.append("?,?")
-			.append(")");
+			.append("?,?,?,")
+			.append("?,?)");
 		
 		Object[] params = new Object[]{
 				info.getInfoId().getId(),info.getSourceId(),info.getWorkgroupId(),info.getResourceId(),
