@@ -31,8 +31,9 @@ public interface ProcFlowDAO extends BaseDAO<ProcFlowInfo>{
             info.setExpireTime(rs.getTimestamp("expire_time"));
             info.setState(rs.getString("state"));
             String jsonStr = rs.getString("json_data");
-            info.setData(CommonUtils.toMap(jsonStr));
-            info.setBindProcess(rs.getString("bind_process"));
+            info.setData(CommonUtils.toMap(jsonStr, Object.class));
+            info.setCustomProcess(rs.getString("cust_process"));
+            info.setCompleteTime(rs.getTimestamp("complete_time"));
 
             info.setResourceId(rs.getLong("resource_id"));
             info.setResourceType(rs.getString("resource_type"));

@@ -34,14 +34,16 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 	
     private Map<String, Object> data;
 
-	private String bindProcess;
+	private String customProcess;
 
-	public String getBindProcess() {
-		return bindProcess;
+	private Date completeTime;
+
+	public String getCustomProcess() {
+		return customProcess;
 	}
 
-	public void setBindProcess(String bindProcess) {
-		this.bindProcess = bindProcess;
+	public void setCustomProcess(String customProcess) {
+		this.customProcess = customProcess;
 	}
 
 	public Long getFlowId() {
@@ -124,6 +126,13 @@ public class ProcFlowInfo extends TraceableInfo<Long>{
 		this.resourceType = resourceType;
 	}
 
+	public Date getCompleteTime() {
+		return completeTime;
+	}
+
+	public void setCompleteTime(Date completeTime) {
+		this.completeTime = completeTime;
+	}
 
 	public Long getWorkgroupId() {
 		return workgroupId;

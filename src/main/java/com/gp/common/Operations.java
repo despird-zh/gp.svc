@@ -136,6 +136,8 @@ public enum Operations {
 	DEL_COMMENT,
 	/** quick process flow */
 	LAUNCH_FLOW,
+	START_STEP,
 	SUBMIT_STEP,
-	COMPLETE_FLOW,
+	END_STEP,
+	END_FLOW,
 }

@@ -12,6 +12,8 @@ import com.gp.quickflow.FlowProcess;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,8 @@ import com.gp.common.QuickFlows.StepOpinion;
 @Service
 public class QuickFlowServiceImpl implements QuickFlowService{
 
+	static Logger LOGGER = LoggerFactory.getLogger(QuickFlowServiceImpl.class);
+
 	@Autowired
 	QuickFlowDAO quickflowdao;
 	
@@ -44,7 +48,10 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	
 	@Autowired
 	ProcStepDAO procstepdao;
-	
+
+	@Autowired
+	ProcTrailDAO proctraildao;
+
 	@Autowired
 	PseudoDAO pseudodao;
 
@@ -60,80 +67,92 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public void launchPostPublic(ServiceContext svcctx, String descr,InfoId<Long> wgroupId,  InfoId<Long> postId) throws ServiceException {
-		
-		// get the quick flow id
-		Map<String, Object> wmap = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID,
-				FlatColumns.ADMIN,
-				FlatColumns.MANAGER);
-		long fid = ((Integer)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn())).longValue();
-		// query flow definition
-		QuickFlowInfo finfo = quickflowdao.query(IdKey.QUICK_FLOW.getInfoId(fid));
-		// create process flow information
-		ProcFlowInfo pinfo = new ProcFlowInfo();
-		// generate a new id
-		InfoId<Long> procId = idservice.generateId(IdKey.PROC_FLOW, Long.class);
-		pinfo.setInfoId(procId);
-		pinfo.setFlowId(fid);
-		pinfo.setWorkgroupId(wgroupId.getId());
-		pinfo.setResourceId(postId.getId());
-		pinfo.setResourceType(postId.getIdKey());
-		pinfo.setDescription(descr);
-		pinfo.setOwner(svcctx.getPrincipal().getAccount());
-		pinfo.setProcName(finfo.getFlowName());
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		Date now = calendar.getTime();
-		pinfo.setLaunchTime(now);
-		calendar.add(Calendar.DATE, finfo.getDuration());
-		pinfo.setState(QuickFlows.FlowState.START.name());
-		pinfo.setExpireTime(calendar.getTime());
-		pinfo.setBindProcess(finfo.getBindProcess());
-		svcctx.setTraceInfo(pinfo);
 
-		// query quick node information : root node
-		QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKey.QUICK_FLOW.getInfoId(fid));
-		InfoId<Long> nodeId = idservice.generateId(IdKey.PROC_STEP, Long.class);
-		ProcStepInfo sinfo = new ProcStepInfo();
-		sinfo.setInfoId(nodeId);
-		sinfo.setCreateTime(now);
-		sinfo.setProcId(procId.getId());
-		sinfo.setNodeId(rootnode.getId());
-		sinfo.setPrevStep(QuickFlows.ROOT_NODE);
-		sinfo.setState(QuickFlows.StepState.PENDING.name());
-		sinfo.setStepName(rootnode.getNodeName());
-		// set the executor of step
-		sinfo.setExecutor((String)wmap.get(FlatColumns.ADMIN.getColumn()));
-		svcctx.setTraceInfo(sinfo);
-
-		// create notification information
-		NotificationInfo notifInfo = new NotificationInfo();
-		InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
-		notifInfo.setInfoId(notifId);
-		notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
-		notifInfo.setOperation(Operations.LAUNCH_FLOW.name());
-		notifInfo.setExcerpt(descr);
-		notifInfo.setSender(svcctx.getPrincipal().getAccount());
-		notifInfo.setSendTime(now);
-		notifInfo.setResourceId(procId.getId());
-		notifInfo.setResourceType(procId.getIdKey());
-		notifInfo.setSubject(finfo.getFlowName());
-		notifInfo.setWorkgroupId(wgroupId.getId());
-		svcctx.setTraceInfo(notifInfo);
-		// create notification dispatch information
-		NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-		InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
-		notifdisp.setInfoId(dispId);
-		notifdisp.setNotificationId(notifId.getId());
-		notifdisp.setReceiver((String)wmap.get(FlatColumns.ADMIN.getColumn()));
-		svcctx.setTraceInfo(notifdisp);
-
-		// commit the table information
 		try{
-			procflowdao.create(pinfo);
-			procstepdao.create(sinfo);
-			notifdao.create(notifInfo);
-			notifdispatchdao.create(notifdisp);
+			// get the quick flow id
+			Map<String, Object> wmap = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID,
+					FlatColumns.ADMIN,
+					FlatColumns.MANAGER);
+			long fid = ((Integer)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn())).longValue();
+			// query flow definition
+			QuickFlowInfo finfo = quickflowdao.query(IdKey.QUICK_FLOW.getInfoId(fid));
+			// create process flow information
+			ProcFlowInfo procInfo = new ProcFlowInfo();
+			// generate a new id
+			InfoId<Long> procId = idservice.generateId(IdKey.PROC_FLOW, Long.class);
+			procInfo.setInfoId(procId);
+			procInfo.setFlowId(fid);
+			procInfo.setWorkgroupId(wgroupId.getId());
+			procInfo.setResourceId(postId.getId());
+			procInfo.setResourceType(postId.getIdKey());
+			procInfo.setDescription(descr);
+			procInfo.setOwner(svcctx.getPrincipal().getAccount());
+			procInfo.setProcName(finfo.getFlowName());
+			procInfo.setCustomProcess(finfo.getCustomProcess());
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			Date now = calendar.getTime();
+			procInfo.setLaunchTime(now);
+			calendar.add(Calendar.DATE, finfo.getDuration());
+			procInfo.setState(QuickFlows.FlowState.START.name());
+			procInfo.setExpireTime(calendar.getTime());
+			svcctx.setTraceInfo(procInfo);
+			procflowdao.create(procInfo);
 
+
+			// query quick node information : root node
+			QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKey.QUICK_FLOW.getInfoId(fid));
+			Set<String> executors = getStepExecutors(procId, rootnode.getExecutors());
+			InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+			ProcStepInfo stepInfo = new ProcStepInfo();
+			stepInfo.setInfoId(stepId);
+			stepInfo.setCreateTime(now);
+			stepInfo.setProcId(procId.getId());
+			stepInfo.setNodeId(rootnode.getId());
+			stepInfo.setPrevStep(QuickFlows.ROOT_NODE);
+			stepInfo.setState(QuickFlows.StepState.PENDING.name());
+			stepInfo.setStepName(rootnode.getNodeName());
+			stepInfo.setExecutors(executors);
+			svcctx.setTraceInfo(stepInfo);
+			procstepdao.create(stepInfo);
+
+			// create notification information
+			NotificationInfo notifInfo = new NotificationInfo();
+			InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
+			notifInfo.setInfoId(notifId);
+			notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
+			notifInfo.setOperation(Operations.LAUNCH_FLOW.name());
+			notifInfo.setExcerpt(descr);
+			notifInfo.setSender(svcctx.getPrincipal().getAccount());
+			notifInfo.setSendTime(now);
+			notifInfo.setResourceId(procId.getId());
+			notifInfo.setResourceType(procId.getIdKey());
+			notifInfo.setSubject(finfo.getFlowName());
+			notifInfo.setWorkgroupId(wgroupId.getId());
+			svcctx.setTraceInfo(notifInfo);
+			notifdao.create(notifInfo);
+
+			// Prepare the trail information and notification.
+			for(String executor: executors) {
+
+				ProcTrailInfo procTrailInfo = new ProcTrailInfo();
+				InfoId<Long> trailId = idservice.generateId(IdKey.PROC_TRAIL, Long.class);
+				procTrailInfo.setInfoId(trailId);
+				procTrailInfo.setExecutor(executor);
+				procTrailInfo.setProcId(procId.getId());
+				procTrailInfo.setStepId(stepId.getId());
+				svcctx.setTraceInfo(procTrailInfo);
+				proctraildao.create(procTrailInfo);
+
+				// create notification dispatch information
+				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				notifdisp.setInfoId(dispId);
+				notifdisp.setNotificationId(notifId.getId());
+				notifdisp.setReceiver(executor);
+				svcctx.setTraceInfo(notifdisp);
+				notifdispatchdao.create(notifdisp);
+			}
 		}catch( DataAccessException dae){
 
 			throw new ServiceException("excp.create", dae, "proc flow");
@@ -142,86 +161,160 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, InfoId<Long> nextNodeId, String opinion, String comment) throws ServiceException {
+	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, String opinion, String comment) throws ServiceException {
 		// find the next node
-		QuickNodeInfo nextnode = null;
+		QuickNodeInfo nextNode = null;
 		
 		try{
-			if(InfoId.isValid(nextNodeId)){
-				// if next node is valid, then fetch the next node info
-				nextnode = quicknodedao.query(nextNodeId);
-			}
-			ProcStepInfo stepinfo = procstepdao.query(currStepId);
+			ProcStepInfo stepInfo = procstepdao.query(currStepId);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			Date now = calendar.getTime();
-			InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepinfo.getProcId());
+			// query the proc data
+			InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepInfo.getProcId());
 			ProcFlowInfo procinfo = procflowdao.query(procId);
-			InfoId<Long> currNodeId = IdKey.QUICK_NODE.getInfoId(stepinfo.getNodeId());
+			// query the step data
+			InfoId<Long> currNodeId = IdKey.QUICK_NODE.getInfoId(stepInfo.getNodeId());
 			QuickNodeInfo currnode = quicknodedao.query(currNodeId);
-			// end node not need further processing
-			FlatColLocator[] cols = new FlatColLocator[]{FlatColumns.OPINION, FlatColumns.COMMENT};
-			Object[] vals = new Object[]{opinion, comment };
-			pseudodao.update(currStepId, cols, vals);
+			// update the opinion into the trail records.
+			proctraildao.updateOpinion(currStepId,
+					svcctx.getPrincipal().getAccount(),
+					opinion,
+					comment);
 
 			ExecMode execmode = ExecMode.valueOf(currnode.getExecMode());
-			List<KVPair<String, Integer>> cnts = procstepdao.queryStepStateCounts(procId);
+			// prepare the summary of step opinion
+			List<KVPair<String, Integer>> cnts = proctraildao.queryOpinionCounts(currStepId);
 			int appr_cnt = 0;
 			int reject_cnt = 0;
+			int abstain_cnt = 0;
+			int none_cnt = 0;
 			int all_cnt = 0;
 			for(KVPair<String, Integer> cnt: cnts){
 				if(StepOpinion.APPROVE.name().equals(cnt.getKey())){
-					appr_cnt = cnt.getValue();
+					appr_cnt = cnt.getValue(); // approval count
 				}else if(StepOpinion.REJECT.name().equals(cnt.getKey())){
-					reject_cnt = cnt.getValue();
+					reject_cnt = cnt.getValue(); // reject count
+				}else if(StepOpinion.ABSTAIN.name().equals(cnt.getKey())){
+					abstain_cnt = cnt.getValue(); // abstain count
+				}else{
+					none_cnt = cnt.getValue(); // no execute count
 				}
 				all_cnt += cnt.getValue();
 			}
-			// create notification information
+
+			Map<String, QuickNodeInfo> nextNodeMap = quicknodedao.queryNextNodeMap(currNodeId);
+
+			Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
+			InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
+
+			if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)
+					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
+				// The result : PASS
+				nextNode = nextNodeMap.get(QuickFlows.STEP_PASS);
+
+			}else if(execmode == ExecMode.VETO_REJECT && reject_cnt > 0) {
+				// The result : FAIL
+				nextNode = nextNodeMap.get(QuickFlows.STEP_FAIL);
+
+			}else if(execmode == ExecMode.CUSTOM && none_cnt == 0){
+				// all executor complete the execution
+				String nextKey = null;
+
+				if(StringUtils.isNotBlank(procinfo.getCustomProcess())){
+
+					FlowProcess customProcessor = FlowProcessFactory.getFlowOperation(procinfo.getCustomProcess());
+					if(null != customProcessor && customProcessor.supportCheck(procinfo.getResourceType())){
+						nextKey = customProcessor.customNextStep(currStepId, resourceId, procinfo.getData());
+					}
+				}
+				// Find next node By next key
+				nextNode = nextNodeMap.get(nextKey);
+
+			}
+
+			// prepare the notification header information
 			NotificationInfo notifInfo = new NotificationInfo();
 			InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
 			notifInfo.setInfoId(notifId);
-			notifInfo.setOperation(Operations.SUBMIT_STEP.name());
-			notifInfo.setQuoteExcerpt(procinfo.getDescription());
-			notifInfo.setExcerpt(comment);
+			notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 			notifInfo.setSender(svcctx.getPrincipal().getAccount());
 			notifInfo.setSendTime(now);
 			notifInfo.setResourceId(procId.getId());
 			notifInfo.setResourceType(procId.getIdKey());
-			notifInfo.setSubject(procinfo.getProcName());
 			notifInfo.setWorkgroupId(procinfo.getWorkgroupId());
+			notifInfo.setSubject(procinfo.getProcName());
 			svcctx.setTraceInfo(notifInfo);
-			notifdao.create(notifInfo);
 
-			if(!currnode.getNextNodes().contains(QuickFlows.END_NODE) && nextnode != null){
-				// current node not the ending node AND next node is available
-				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
-				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
-				// can continue and hand over to next node.
-				if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)					
-					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
-	
-					Set<String> runners = nextnode.getExecutor();
+			/**
+			 * the nextNode not null, means ready to jump to next node
+			 **/
+			if( null != nextNode){
+				// Change the state of current node step
+				FlatColLocator[] cols = new FlatColLocator[]{
+						FlatColumns.COMPLETE_TIME, FlatColumns.STATE
+				};
+				Object[] vals = new Object[]{
+						new Date(System.currentTimeMillis()), QuickFlows.StepState.COMPLETE.name()
+				};
+				pseudodao.update(currStepId, cols, vals);
+
+				if(QuickFlows.END_NODE == nextNode.getId()){
+					// next node is the ending one, the flow complete
+					FlatColLocator[] fcols = new FlatColLocator[]{
+							FlatColumns.COMPLETE_TIME, FlatColumns.STATE
+					};
+					Object[] fvals = new Object[]{
+							new Date(System.currentTimeMillis()), QuickFlows.FlowState.END.name()
+					};
+					pseudodao.update(procId, cols, vals);
+					if(StringUtils.isNotBlank(procinfo.getCustomProcess())){
+
+						FlowProcess customProcessor = FlowProcessFactory.getFlowOperation(procinfo.getCustomProcess());
+						if(null != customProcessor && customProcessor.supportCheck(procinfo.getResourceType())){
+							customProcessor.processComplete(procId, resourceId, currnode.getCustomStep(), procinfo.getData());
+						}
+					}
+
+					// create notification header
+					notifInfo.setOperation(Operations.END_FLOW.name());
+					notifInfo.setExcerpt("The process ends");
+					notifInfo.setQuoteExcerpt("");
+					notifdao.create(notifInfo);
+					// create notification dispatch to the flow owner
+					NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+					InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+					notifdisp.setInfoId(dispId);
+					notifdisp.setNotificationId(notifId.getId());
+					notifdisp.setReceiver(procinfo.getOwner());
+					svcctx.setTraceInfo(notifdisp);
+					notifdispatchdao.create(notifdisp);
+				}else{
+					// ready for jumping to the next node
+					Set<String> runners = nextNode.getExecutors();
 					// retrieve the real executors
 					runners = getStepExecutors(procId, runners);
+					InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+					ProcStepInfo nextStepInfo = new ProcStepInfo();
+					nextStepInfo.setInfoId(stepId);
+					nextStepInfo.setCreateTime(now);
+					nextStepInfo.setProcId(stepInfo.getProcId());
+					nextStepInfo.setNodeId(nextNode.getId());
+					nextStepInfo.setPrevStep(stepInfo.getId());
+					nextStepInfo.setState(QuickFlows.StepState.PENDING.name());
+					nextStepInfo.setStepName(nextNode.getNodeName());
+					// set the executor of step
+					nextStepInfo.setExecutors(runners);
+					svcctx.setTraceInfo(nextStepInfo);
+					procstepdao.create(nextStepInfo);
+
+					// create notification header
+					notifInfo.setOperation(Operations.START_STEP.name());
+					notifInfo.setExcerpt("start the step:" + nextNode.getNodeName());
+					notifInfo.setQuoteExcerpt("");
+					notifdao.create(notifInfo);
 					for(String executor: runners){
-						
-						InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
-						ProcStepInfo sinfo = new ProcStepInfo();
-						
-						sinfo.setInfoId(stepId);
-						sinfo.setCreateTime(now);
-						sinfo.setProcId(stepinfo.getProcId());
-						sinfo.setNodeId(nextNodeId.getId());
-						sinfo.setPrevStep(stepinfo.getId());
-						sinfo.setState(QuickFlows.StepState.PENDING.name());
-						sinfo.setStepName(nextnode.getNodeName());
-	
-						// set the executor of step
-						sinfo.setExecutor(executor);
-						svcctx.setTraceInfo(sinfo);						
-						procstepdao.create(sinfo);
-						
+
 						// create notification dispatch information
 						NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
 						InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
@@ -229,71 +322,57 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						notifdisp.setNotificationId(notifId.getId());
 						notifdisp.setReceiver(executor);
 						svcctx.setTraceInfo(notifdisp);
-						
+
 						notifdispatchdao.create(notifdisp);
 					}
-
-				}else if(execmode == ExecMode.VETO_REJECT && reject_cnt > 0) {
-					// encounter reject opinion, then break directly
-					// run the step operation
-					FlowProcess procop = null;
-					if (StringUtils.isNotBlank(procinfo.getBindProcess())) {
-
-						procop = FlowProcessFactory.getFlowOperation(procinfo.getBindProcess());
-						if (null != procop && procop.supportCheck(procinfo.getResourceType()))
-							procop.fail(currStepId, resourceId, procinfo.getData());
-					}
-					// change the state of flow proc
-					pseudodao.update(procId, FlatColumns.STATE, FlowState.FAIL.name());
-					// create notification dispatch information
-					NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-					InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
-					notifdisp.setInfoId(dispId);
-					notifdisp.setNotificationId(notifId.getId());
-					notifdisp.setReceiver(procinfo.getOwner());
-					svcctx.setTraceInfo(notifdisp);
-
-					notifdispatchdao.create(notifdisp);
-				}else{
-					// not ready to next node, then leave it and 
-					// ignore
 				}
-				
-			}else{
-				// otherwise current is ending node or next node not available, 
-				// then change the state of process
-				FlowState state = null;
-				Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
-				InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
-				// run the step operation
-				FlowProcess procop = null;
-				if(StringUtils.isNotBlank(procinfo.getBindProcess())){
-					
-					procop = FlowProcessFactory.getFlowOperation(procinfo.getBindProcess());
-					
-				}
-				
-				StepOpinion op = StepOpinion.valueOf(opinion);
-				if(StepOpinion.APPROVE == op){
-					state = FlowState.PASS;
-					if(null != procop && procop.supportCheck(procinfo.getResourceType()))
-						procop.pass(currStepId, resourceId, procinfo.getData());
-					
-				}else if(StepOpinion.REJECT == op){
-					state = FlowState.FAIL;
-					if(null != procop && procop.supportCheck(procinfo.getResourceType()))
-						procop.fail(currStepId, resourceId, procinfo.getData());
-				}
-				
-				pseudodao.update(procId, FlatColumns.STATE, state.name());
-				// create notification dispatch information
+			}else if(nextNode == null && none_cnt > 0){
+
+				// create notification header
+				notifInfo.setOperation(Operations.SUBMIT_STEP.name());
+				notifInfo.setExcerpt("Submit the opinion");
+				notifInfo.setQuoteExcerpt("");
+				notifdao.create(notifInfo);
+				// create notification dispatch to the flow owner
 				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
 				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
 				notifdisp.setInfoId(dispId);
 				notifdisp.setNotificationId(notifId.getId());
 				notifdisp.setReceiver(procinfo.getOwner());
 				svcctx.setTraceInfo(notifdisp);
-				
+				notifdispatchdao.create(notifdisp);
+
+			}else if(nextNode == null && none_cnt == 0){
+				// this is a exception scenario
+				LOGGER.warn("Can't find the next node, terminate the process flow.");
+				// Change the state of current node step
+				FlatColLocator[] cols = new FlatColLocator[]{
+						FlatColumns.COMPLETE_TIME, FlatColumns.STATE
+				};
+				Object[] vals = new Object[]{
+						new Date(System.currentTimeMillis()), QuickFlows.StepState.COMPLETE.name()
+				};
+				pseudodao.update(currStepId, cols, vals);
+				// next node is the ending one, the flow complete
+				FlatColLocator[] fcols = new FlatColLocator[]{
+						FlatColumns.COMPLETE_TIME, FlatColumns.STATE
+				};
+				Object[] fvals = new Object[]{
+						new Date(System.currentTimeMillis()), FlowState.FAIL.name()
+				};
+				pseudodao.update(procId, cols, vals);
+				// create notification header
+				notifInfo.setOperation(Operations.END_FLOW.name());
+				notifInfo.setExcerpt("Terminate the process flow");
+				notifInfo.setQuoteExcerpt("");
+				notifdao.create(notifInfo);
+				// create notification dispatch to the flow owner
+				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
+				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				notifdisp.setInfoId(dispId);
+				notifdisp.setNotificationId(notifId.getId());
+				notifdisp.setReceiver(procinfo.getOwner());
+				svcctx.setTraceInfo(notifdisp);
 				notifdispatchdao.create(notifdisp);
 			}
 
@@ -308,6 +387,8 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		if(CollectionUtils.isEmpty(executorSet))
 			return result;
 
+		Long wId = pseudodao.query(procId, FlatColumns.WORKGROUP_ID, Long.class);
+		InfoId<Long> wgroupId = IdKey.WORKGROUP.getInfoId(wId);
 		for(String executor: executorSet){
 			if(DefaultExecutor.contains(executor)){
 				DefaultExecutor runner = DefaultExecutor.valueOf(executor);
@@ -317,15 +398,15 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						result.add(owner);
 						break;
 					case WGROUP_ADMIN:
-						String admin = pseudodao.query(procId, FlatColumns.ADMIN, String.class);
+						String admin = pseudodao.query(wgroupId, FlatColumns.ADMIN, String.class);
 						result.add(admin);
 						break;
 					case WGROUP_MANAGER:
-						String mgr = pseudodao.query(procId, FlatColumns.MANAGER, String.class);
+						String mgr = pseudodao.query(wgroupId, FlatColumns.MANAGER, String.class);
 						result.add(mgr);
 						break;
 					case FLOW_ATTENDEE:
-						List<String> attendees = procstepdao.queryProcAttendees(procId);
+						List<String> attendees = proctraildao.queryProcAttendees(procId);
 						result.addAll(attendees);
 						break;
 					case RESOURCE_OWNER:

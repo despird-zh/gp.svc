@@ -7,14 +7,18 @@ public class QuickFlows {
 	
 	/** the id of end node */
 	public static final Long END_NODE = -10l;
-	
+
+	public static final String STEP_PASS = "PASS";
+	public static final String STEP_FAIL = "FAIL";
+
 	/**
 	 * Execute mode on flow step 
 	 **/
 	public enum ExecMode{
 		ANYONE_PASS,
 		ALL_PASS,
-		VETO_REJECT
+		VETO_REJECT,
+		CUSTOM,
 	}
 
 	/**
@@ -42,7 +46,7 @@ public class QuickFlows {
 	 **/
 	public enum FlowState{
 		START,
-		PASS,
+		END,
 		FAIL,
 		EXPIRE,
 	}
@@ -62,6 +66,7 @@ public class QuickFlows {
 	public enum StepOpinion{
 		REJECT,
 		APPROVE,
+		ABSTAIN,
 		NONE,
 	}
 }

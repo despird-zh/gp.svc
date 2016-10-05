@@ -15,14 +15,6 @@ import java.util.List;
  * Created by garydiao on 8/19/16.
  */
 public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
-
-	/**
-	 *  find all the attendees of process flow
-	 *  @param procId the id of process
-	 */
-	public List<String> queryProcAttendees(InfoId<Long> procId);
-	
-	public List<KVPair<String,Integer>> queryStepStateCounts(InfoId<Long> procId);
 	
 	/**
 	 * the process step row mapper 
@@ -37,13 +29,10 @@ public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
 
             info.setProcId(rs.getLong("proc_id"));
             info.setNodeId(rs.getLong("node_id"));
-            info.setOpinion(rs.getString("opinion"));
-            info.setState(rs.getString("state"));
-            info.setComment(rs.getString("comment"));
+            info.setStepName(rs.getString("step_name"));
             info.setCreateTime(rs.getTimestamp("create_time"));
-            info.setExecuteTime(rs.getTimestamp("exec_time"));
+            info.setCompleteTime(rs.getTimestamp("complete_time"));
             info.setState(rs.getString("state"));
-            info.setExecutor(rs.getString("executor"));
             info.setPrevStep(rs.getLong("prev_step"));
 
             info.setModifier(rs.getString("modifier"));

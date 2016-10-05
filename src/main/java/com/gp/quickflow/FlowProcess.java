@@ -20,11 +20,16 @@ public interface FlowProcess {
 	/**
 	 * Process the reject result scenario 
 	 **/
-	public void fail(InfoId<Long> procId, InfoId<?> resourceId, Map<String,Object> procData) throws BaseException;
-	
-	/**
-	 * Process the approve result scenario 
-	 **/
-	public void pass(InfoId<Long> procId, InfoId<?> resourceId, Map<String,Object> procData)throws BaseException;
+	public void processComplete(InfoId<Long> procId,
+							 InfoId<?> resourceId,
+							 String customStep,
+							 Map<String,Object> procData) throws BaseException;
 
+	/**
+	 * Process the step complete trigger event
+	 * @return String the key of next step
+	 **/
+	public String customNextStep(InfoId<Long> stepId,
+							   InfoId<?> resourceId,
+							   Map<String,Object> procData)throws BaseException;
 }

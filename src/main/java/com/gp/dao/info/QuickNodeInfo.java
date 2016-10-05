@@ -1,7 +1,9 @@
 package com.gp.dao.info;
 
+import java.util.Map;
 import java.util.Set;
 
+import com.gp.info.InfoId;
 import com.gp.info.TraceableInfo;
 
 /**
@@ -11,6 +13,12 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 
 	private static final long serialVersionUID = 1L;
 
+	public QuickNodeInfo(){}
+
+	public QuickNodeInfo(InfoId<Long> nodeId){
+		this.setInfoId(nodeId);
+	}
+
 	private Long flowId;
 	
 	private String nodeName;
@@ -19,9 +27,19 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 
     private Set<Long> prevNodes;
 
-    private Set<Long> nextNodes;
+	private Map<String, Long> nextNodeMap;
 
-	private Set<String> executor;
+	private Set<String> executors;
+
+	private String customStep;
+
+	public String getCustomStep() {
+		return customStep;
+	}
+
+	public void setCustomStep(String customStep) {
+		this.customStep = customStep;
+	}
 
 	public Long getFlowId() {
 		return flowId;
@@ -55,21 +73,20 @@ public class QuickNodeInfo extends TraceableInfo<Long>{
 		this.prevNodes = prevNodes;
 	}
 
-	public Set<Long> getNextNodes() {
-		return nextNodes;
+	public Set<String> getExecutors() {
+		return executors;
 	}
 
-	public void setNextNodes(Set<Long> nextNodes) {
-		this.nextNodes = nextNodes;
+	public Map<String, Long> getNextNodeMap() {
+		return nextNodeMap;
 	}
 
-
-	public Set<String> getExecutor() {
-		return executor;
+	public void setNextNodeMap(Map<String, Long> nextNodeMap) {
+		this.nextNodeMap = nextNodeMap;
 	}
 
-	public void setExecutor(Set<String> executor) {
-		this.executor = executor;
+	public void setExecutors(Set<String> executors) {
+		this.executors = executors;
 	}
 
 }

@@ -24,7 +24,7 @@ public interface QuickFlowDAO extends BaseDAO<QuickFlowInfo>{
             info.setFlowName(rs.getString("flow_name"));
             info.setCategory(rs.getString("category"));
             info.setDuration(rs.getInt("duration"));
-            info.setBindProcess(rs.getString("bind_process"));
+            info.setCustomProcess(rs.getString("cust_process"));
 
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));

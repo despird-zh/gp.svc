@@ -46,20 +46,17 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
 
         SQL.append("insert into gp_proc_step (")
                 .append("step_id, proc_id, node_id, step_name,")
-                .append("prev_step, create_time, exec_time,")
-                .append("state, opinion, executor, comment,")
+                .append("prev_step, create_time, complete_time,state, ")
                 .append("modifier, last_modified ")
                 .append(")values(")
                 .append("?,?,?,?,")
-                .append("?,?,?,")
                 .append("?,?,?,?,")
                 .append("?,? )");
 
         InfoId<Long> key = info.getInfoId();
         Object[] params = new Object[]{
                 key.getId(),info.getProcId(), info.getNodeId(), info.getStepName(),
-                info.getPrevStep(), info.getCreateTime(), info.getExecuteTime(),
-                info.getState(), info.getOpinion(), info.getExecutor(), info.getComment(),
+                info.getPrevStep(), info.getCreateTime(), info.getCompleteTime(),info.getState(),
                 info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
@@ -118,22 +115,13 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
             params.add(info.getCreateTime());
         }
 
-        if(columnCheck(mode, colset, "exec_time")){
-            SQL.append("exec_time = ? ,");
-            params.add(info.getExecuteTime());
+        if(columnCheck(mode, colset, "complete_time")){
+            SQL.append("complete_time = ? ,");
+            params.add(info.getCompleteTime());
         }
         if(columnCheck(mode, colset, "state")){
             SQL.append("state = ? ,");
             params.add(info.getState());
-        }
-        if(columnCheck(mode, colset, "opinion")){
-            SQL.append("opinion = ? ,");
-            params.add(info.getOpinion());
-        }
-
-        if(columnCheck(mode, colset, "comment")){
-            SQL.append("comment = ? ,");
-            params.add(info.getComment());
         }
         
         SQL.append("modifier = ?, last_modified = ? ")
@@ -173,48 +161,4 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-	@Override
-	public List<String> queryProcAttendees(InfoId<Long> procId) {
-		String SQL = "select executor from gp_proc_step "
-                + "where proc_id = ? ";
-
-        Object[] params = new Object[]{
-                procId.getId()
-        };
-
-        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
-        }
-        List<String> ainfo = jtemplate.queryForList(SQL, String.class, params);
-        return ainfo;
-	}
-
-	@Override
-	public List<KVPair<String, Integer>> queryStepStateCounts(InfoId<Long> procId) {
-		String SQL = "select opinion,count(opinion) as cnt from gp_proc_step "
-                + "where proc_id = ? group by opinion";
-
-        Object[] params = new Object[]{
-                procId.getId()
-        };
-
-        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
-        }
-        List<KVPair<String, Integer>> kvs = jtemplate.query(SQL, params, new RowMapper<KVPair<String, Integer>>(){
-
-			@Override
-			public KVPair<String, Integer> mapRow(ResultSet rs, int rowNum) throws SQLException {
-				KVPair<String, Integer> kv = new KVPair<String, Integer>();
-				String k = rs.getString("opinion");
-				k = StringUtils.isBlank(k)? StepOpinion.NONE.name() : k;
-				
-				kv.setKey(k);
-				kv.setValue(rs.getInt("cnt"));
-				return kv;
-			}});
-        return kvs;
-	}
 }

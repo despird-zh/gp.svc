@@ -1,6 +1,7 @@
 package com.gp.dao;
 
 import com.gp.common.IdKey;
+import com.gp.common.QuickFlows;
 import com.gp.dao.info.QuickNodeInfo;
 import com.gp.info.InfoId;
 import com.gp.util.CommonUtils;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,13 +18,17 @@ import java.util.Set;
  */
 public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
 
+    public static final QuickNodeInfo END_NODE_INFO = new QuickNodeInfo(IdKey.QUICK_NODE.getInfoId(QuickFlows.END_NODE));
+
+    /**
+     * Query the root node i.e the start node
+     **/
 	public QuickNodeInfo queryRootNode(InfoId<Long> flowId);
-	
-	public List<QuickNodeInfo> queryEndNodes(InfoId<Long> flowId);
-	
-	public List<QuickNodeInfo> queryPrevNodes(InfoId<Long> nodeId);
-	
-	public List<QuickNodeInfo> queryNextNodes(InfoId<Long> nodeId);
+
+    /**
+     * Query the key - node map of next nodes
+     **/
+	public Map<String, QuickNodeInfo> queryNextNodeMap(InfoId<Long> nodeId);
 	
     static RowMapper<QuickNodeInfo> QuickNodeMapper = new RowMapper<QuickNodeInfo>() {
         @Override
@@ -36,12 +42,15 @@ public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
             info.setExecMode(rs.getString("exec_mode"));
 
             Set<Long> prevNodes = CommonUtils.toSet(rs.getString("prev_nodes"), Long.class);
-            Set<Long> nextNodes = CommonUtils.toSet(rs.getString("next_nodes"), Long.class);
-
             info.setPrevNodes(prevNodes);
-            info.setNextNodes(nextNodes);
-            Set<String> executor = CommonUtils.toSet(rs.getString("executor"), String.class);
-            info.setExecutor(executor);
+
+            Map<String,Long> nextNodeMap = CommonUtils.toMap(rs.getString("next_node_map"), Long.class);
+            info.setNextNodeMap(nextNodeMap);
+
+            Set<String> executor = CommonUtils.toSet(rs.getString("executors"), String.class);
+            info.setExecutors(executor);
+
+            info.setCustomStep(rs.getString("custom_step"));
 
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));

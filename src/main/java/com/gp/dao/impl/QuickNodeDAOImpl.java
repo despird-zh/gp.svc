@@ -1,6 +1,7 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
+import com.gp.common.IdKey;
 import com.gp.common.QuickFlows;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
@@ -48,8 +49,8 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         StringBuffer SQL = new StringBuffer();
 
         SQL.append("insert into gp_quick_node (")
-                .append("node_id, flow_id, node_name,")
-                .append("prev_nodes, next_nodes, exec_mode,")
+                .append("node_id, flow_id, node_name,executors, ")
+                .append("prev_nodes, next_node_map, exec_mode, custom_step, ")
                 .append("modifier, last_modified,")
                 .append(")values(")
                 .append("?,?,?,")
@@ -58,10 +59,11 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 
         InfoId<Long> key = info.getInfoId();
         String prevSteps = CommonUtils.toJson(info.getPrevNodes());
-        String nextSteps = CommonUtils.toJson(info.getNextNodes());
+        String nextSteps = CommonUtils.toJson(info.getNextNodeMap(), Long.class);
+        String executors = CommonUtils.toJson(info.getExecutors());
         Object[] params = new Object[]{
-                key.getId(),info.getFlowId(), info.getNodeName(),
-                prevSteps, nextSteps, info.getExecMode(),
+                key.getId(),info.getFlowId(), info.getNodeName(), executors,
+                prevSteps, nextSteps, info.getExecMode(), info.getCustomStep(),
                 info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
@@ -111,12 +113,20 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
             String prevNodes = CommonUtils.toJson(info.getPrevNodes());
             params.add(prevNodes);
         }
-        if(columnCheck(mode, colset, "next_nodes")){
-            SQL.append("next_nodes = ? ,");
-            String nextNodes = CommonUtils.toJson(info.getNextNodes());
+        if(columnCheck(mode, colset, "next_node_map")){
+            SQL.append("next_node_map = ? ,");
+            String nextNodes = CommonUtils.toJson(info.getNextNodeMap(), Long.class);
             params.add(nextNodes);
         }
-
+        if(columnCheck(mode, colset, "executors")){
+            SQL.append("executors = ? ,");
+            String executors = CommonUtils.toJson(info.getExecutors());
+            params.add(executors);
+        }
+        if(columnCheck(mode, colset, "cust_step")){
+            SQL.append("cust_step = ? ,");
+            params.add(info.getCustomStep());
+        }
         SQL.append("modifier = ?, last_modified = ? ")
                 .append("where node_id = ? ");
         params.add(info.getModifier());
@@ -178,7 +188,6 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
     /**
      * Query the node which lead the end (-10)
      **/
-	@Override
 	public List<QuickNodeInfo> queryEndNodes(InfoId<Long> flowId) {
 
 		String SQL = "select * from gp_quick_node "
@@ -196,7 +205,6 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         return ainfo;
 	}
 
-	@Override
 	public List<QuickNodeInfo> queryPrevNodes(InfoId<Long> nodeId) {
 		String nodes_json = pseudodao.query(nodeId, FlatColumns.PREV_NODES, String.class);
 		if(StringUtils.isBlank(nodes_json) || StringUtils.equals(nodes_json, "[]")){
@@ -216,22 +224,45 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	}
 
 	@Override
-	public List<QuickNodeInfo> queryNextNodes(InfoId<Long> nodeId) {
+	public Map<String, QuickNodeInfo> queryNextNodeMap(InfoId<Long> nodeId) {
 		
-		String nodes_json = pseudodao.query(nodeId, FlatColumns.NEXT_NODES, String.class);
-		if(StringUtils.isBlank(nodes_json) || StringUtils.equals(nodes_json, "[]")){
-			return null;
+		String nodes_json = pseudodao.query(nodeId, FlatColumns.NEXT_NODE_MAP, String.class);
+		if(StringUtils.isBlank(nodes_json) || StringUtils.equals(nodes_json, "{}")){
+
+			return new HashMap<>();
+
 		}else{
-			List<Long> ids = CommonUtils.toList(nodes_json, Long.class);
+
+			Map<String, Long> IdMap = CommonUtils.toMap(nodes_json, Long.class);
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("nodes", ids);
+			params.put("nodes", IdMap.values());
 			String SQL = "select * from gp_quick_nodes where node_id in (:nodes)";
 			NamedParameterJdbcTemplate jtemplate = getJdbcTemplate(NamedParameterJdbcTemplate.class);
 	        if(LOGGER.isDebugEnabled()){
 	            LOGGER.debug("SQL : " + SQL + " / params : " + params.toString());
 	        }
-	        List<QuickNodeInfo> ainfos = jtemplate.query(SQL, params, QuickNodeMapper);
-	        return ainfos;
+	        List<QuickNodeInfo> blindNodes = jtemplate.query(SQL, params, QuickNodeMapper);
+
+            Map<String, QuickNodeInfo> nodeMap = new HashMap<>();
+            for(Map.Entry<String, Long> entry : IdMap.entrySet()){
+
+                if(entry.getValue() == QuickFlows.END_NODE){
+                    nodeMap.put(entry.getKey(), END_NODE_INFO);
+                }
+                else{
+                    for(QuickNodeInfo blind : blindNodes){
+
+                        if(blind.getId() == entry.getValue()){
+                            nodeMap.put(entry.getKey(), blind);
+                            break;
+                        }
+                    }
+                }
+            }
+            IdMap.clear();
+            blindNodes.clear();
+
+	        return nodeMap;
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.gp.dao.info;
 
 import java.util.Date;
+import java.util.Set;
+
 import com.gp.info.TraceableInfo;
 
 /**
@@ -17,17 +19,13 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 	private String stepName;
 	
 	private Long prevStep;
-	
-    private String opinion;
 
-    private String comment;
-    
     private Date createTime;
-    
-    private Date executeTime;
- 
-    private String executor;
-    
+
+	private Date completeTime;
+
+	private Set<String> executors;
+
     private String state;
 
 	public Long getProcId() {
@@ -62,22 +60,6 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 		this.prevStep = prevStep;
 	}
 
-	public String getOpinion() {
-		return opinion;
-	}
-
-	public void setOpinion(String opinion) {
-		this.opinion = opinion;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -86,20 +68,12 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 		this.createTime = createTime;
 	}
 
-	public Date getExecuteTime() {
-		return executeTime;
+	public Date getCompleteTime() {
+		return completeTime;
 	}
 
-	public void setExecuteTime(Date executeTime) {
-		this.executeTime = executeTime;
-	}
-
-	public String getExecutor() {
-		return executor;
-	}
-
-	public void setExecutor(String executor) {
-		this.executor = executor;
+	public void setCompleteTime(Date completeTime) {
+		this.completeTime = completeTime;
 	}
 
 	public String getState() {
@@ -110,4 +84,11 @@ public class ProcStepInfo extends TraceableInfo<Long>{
 		this.state = state;
 	}
 
+	public Set<String> getExecutors() {
+		return executors;
+	}
+
+	public void setExecutors(Set<String> executors) {
+		this.executors = executors;
+	}
 }

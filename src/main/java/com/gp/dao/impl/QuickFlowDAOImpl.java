@@ -37,7 +37,7 @@ public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
         StringBuffer SQL = new StringBuffer();
         SQL.append("insert into gp_quick_flows (")
                 .append("flow_id, flow_name, category,")
-                .append("duration,")
+                .append("cust_process, duration,")
                 .append("modifier, last_modified,")
                 .append(")values(")
                 .append("?,?,?,")
@@ -48,7 +48,7 @@ public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
 
         Object[] params = new Object[]{
                 key.getId(),info.getFlowName(),info.getCategory(),
-                info.getDuration(),
+                info.getCustomProcess(), info.getDuration(),
                 info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
@@ -92,6 +92,10 @@ public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
         if(columnCheck(mode, colset, "category")){
             SQL.append("category =?,");
             params.add(info.getCategory());
+        }
+        if(columnCheck(mode, colset, "cust_process")){
+            SQL.append("cust_process = ? ,");
+            params.add(info.getCustomProcess());
         }
         if(columnCheck(mode, colset, "duration")){
             SQL.append("duration = ? ,");

@@ -61,10 +61,11 @@ public class FlatColumns {
 	public static final FlatColumn PUBLIC_FLOW_ID = new FlatColumn("public_flow_id");
 	
 	public static final FlatColumn PREV_NODES = new FlatColumn("prev_nodes");
-	public static final FlatColumn NEXT_NODES = new FlatColumn("next_nodes");
+	public static final FlatColumn NEXT_NODE_MAP = new FlatColumn("next_node_map");
 	public static final FlatColumn PREV_STEP = new FlatColumn("prev_step");
 	public static final FlatColumn OPINION = new FlatColumn("opinion");
 	public static final FlatColumn COMMENT = new FlatColumn("comment");
+	public static final FlatColumn COMPLETE_TIME = new FlatColumn("complete_time");
 
 	public static final FlatColumn SCOPE = new FlatColumn("scope");
 	public static final FlatColumn RESOURCE_ID = new FlatColumn("resource_id");
