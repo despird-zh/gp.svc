@@ -5,11 +5,13 @@ import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 
+import com.gp.util.CommonUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by garydiao on 8/19/16.
@@ -34,6 +36,9 @@ public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
             info.setCompleteTime(rs.getTimestamp("complete_time"));
             info.setState(rs.getString("state"));
             info.setPrevStep(rs.getLong("prev_step"));
+
+            Set<String> executor = CommonUtils.toSet(rs.getString("executors"), String.class);
+            info.setExecutors(executor);
 
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));

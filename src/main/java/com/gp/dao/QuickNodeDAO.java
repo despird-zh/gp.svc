@@ -50,7 +50,7 @@ public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
             Set<String> executor = CommonUtils.toSet(rs.getString("executors"), String.class);
             info.setExecutors(executor);
 
-            info.setCustomStep(rs.getString("custom_step"));
+            info.setCustomStep(rs.getString("cust_step"));
 
             info.setModifier(rs.getString("modifier"));
             info.setModifyDate(rs.getTimestamp("last_modified"));

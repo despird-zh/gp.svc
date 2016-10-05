@@ -114,6 +114,12 @@ public enum IdKey implements Identifier{
 	}
 
 	@Override
+	public String getIdColumn() {
+
+		return this.idColumn;
+	}
+
+	@Override
 	public <T> InfoId<T> getInfoId(T sequence) {
 		
 		if(sequence == null || !this.clazz.equals(sequence.getClass()))

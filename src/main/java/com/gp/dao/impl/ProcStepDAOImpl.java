@@ -9,6 +9,7 @@ import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 
+import com.gp.util.CommonUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -47,16 +48,20 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
         SQL.append("insert into gp_proc_step (")
                 .append("step_id, proc_id, node_id, step_name,")
                 .append("prev_step, create_time, complete_time,state, ")
+                .append("executors,")
                 .append("modifier, last_modified ")
                 .append(")values(")
                 .append("?,?,?,?,")
                 .append("?,?,?,?,")
+                .append("?,")
                 .append("?,? )");
 
         InfoId<Long> key = info.getInfoId();
+        String executors = CommonUtils.toJson(info.getExecutors());
         Object[] params = new Object[]{
                 key.getId(),info.getProcId(), info.getNodeId(), info.getStepName(),
                 info.getPrevStep(), info.getCreateTime(), info.getCompleteTime(),info.getState(),
+                executors,
                 info.getModifier(),info.getModifyDate()
         };
         if(LOGGER.isDebugEnabled()){
@@ -123,7 +128,11 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
             SQL.append("state = ? ,");
             params.add(info.getState());
         }
-        
+        if(columnCheck(mode, colset, "executors")){
+            SQL.append("executors = ? ,");
+            String executors = CommonUtils.toJson(info.getExecutors());
+            params.add(executors);
+        }
         SQL.append("modifier = ?, last_modified = ? ")
                 .append("where step_id = ? ");
         params.add(info.getModifier());
