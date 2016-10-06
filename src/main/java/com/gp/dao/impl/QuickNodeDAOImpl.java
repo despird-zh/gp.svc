@@ -1,7 +1,6 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.IdKey;
 import com.gp.common.QuickFlows;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
@@ -264,5 +263,23 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 
 	        return nodeMap;
 		}
+	}
+
+	@Override
+	public List<QuickNodeInfo> queryByFlow(InfoId<Long> flowId) {
+		
+		String SQL = "select * from gp_quick_node "
+                + "where flow_id = ? ";
+
+        Object[] params = new Object[]{
+                flowId.getId()
+        };
+
+        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        List<QuickNodeInfo> ainfo = jtemplate.query(SQL, params, QuickNodeMapper);
+        return ainfo;
 	}
 }
