@@ -432,17 +432,4 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 		return result;
 	}
-
-	@Override
-	public List<QuickNodeInfo> getNodeList(ServiceContext svcctx, InfoId<Long> wgroupId) throws ServiceException {
-		
-		try{
-			Long flowId = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID, Long.class);
-			return quicknodedao.queryByFlow(IdKey.QUICK_FLOW.getInfoId(flowId));
-			
-		}catch(DataAccessException e){
-			throw new ServiceException("excp.query", e, "flow node");
-		}
-		
-	}
 }

@@ -30,11 +30,6 @@ public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
      **/
 	public Map<String, QuickNodeInfo> queryNextNodeMap(InfoId<Long> nodeId);
 	
-	/**
-	 * Query the nodes of a flow 
-	 **/
-	public List<QuickNodeInfo> queryByFlow(InfoId<Long> flowId);
-	
     static RowMapper<QuickNodeInfo> QuickNodeMapper = new RowMapper<QuickNodeInfo>() {
         @Override
         public QuickNodeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
