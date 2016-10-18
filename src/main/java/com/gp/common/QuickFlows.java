@@ -10,7 +10,8 @@ public class QuickFlows {
 
 	public static final String STEP_PASS = "PASS";
 	public static final String STEP_FAIL = "FAIL";
-
+	public static final String STEP_ALL = "ALL";
+	
 	/**
 	 * Execute mode on flow step 
 	 **/

@@ -175,4 +175,21 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
     protected void initialJdbcTemplate(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+	@Override
+	public List<ProcFlowInfo> query(InfoId<Long> wgroupId, String state) {
+		String SQL = "SELECT * from gp_proc_flows "
+                + "WHERE workgroup_id = ? and state = ?";
+
+        Object[] params = new Object[]{
+        		wgroupId.getId(), state
+        };
+
+        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        List<ProcFlowInfo> ainfos = jtemplate.query(SQL, params, PROC_FLOW_ROWMAPPER);
+        return ainfos;
+	}
 }

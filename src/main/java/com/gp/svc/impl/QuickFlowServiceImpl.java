@@ -11,11 +11,14 @@ import com.gp.info.Identifier;
 import com.gp.quickflow.FlowProcess;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,7 @@ import com.gp.info.KVPair;
 import com.gp.quickflow.FlowProcessFactory;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
+import com.gp.svc.info.ProcFlowExtInfo;
 import com.gp.common.QuickFlows.DefaultExecutor;
 import com.gp.common.QuickFlows.ExecMode;
 import com.gp.common.QuickFlows.FlowState;
@@ -444,5 +448,35 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			throw new ServiceException("excp.query", e, "flow node");
 		}
 		
+	}
+
+	@Override
+	public List<ProcFlowExtInfo> getWorkgroupProcs(ServiceContext svcctx, InfoId<Long> workgroupId, String state)
+			throws ServiceException {
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("SELECT p.*, w.workgroup_name, u.full_name ");
+		SQL.append("FROM gp_proc_flows p ");
+		SQL.append("LEFT JOIN gp_workgroups w ON (p.workgroup_id = w.workgroup_id) ");
+		SQL.append("LEFT JOIN gp_users u ON (p.owner = u.account) ");
+		SQL.append("WHERE p.workgroup_id = ? ");
+		
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("wgroup_id", workgroupId.getId());
+		
+		if(StringUtils.isNotBlank(state)){
+			SQL.append(" AND p.state = ? ");
+			params.put("state", state);
+		}
+		
+		SQL.append("ORDER BY p.workgroup_id ASC");
+		
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        
+        List<ProcFlowExtInfo> ainfos = jtemplate.query(SQL.toString(), params, PROC_EXT_MAPPER);
+        return ainfos;
 	}
 }
