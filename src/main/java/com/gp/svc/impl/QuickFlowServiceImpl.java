@@ -31,6 +31,7 @@ import com.gp.quickflow.FlowProcessFactory;
 import com.gp.svc.CommonService;
 import com.gp.svc.QuickFlowService;
 import com.gp.svc.info.ProcFlowExtInfo;
+import com.gp.svc.info.ProcTrailExtInfo;
 import com.gp.common.QuickFlows.DefaultExecutor;
 import com.gp.common.QuickFlows.ExecMode;
 import com.gp.common.QuickFlows.FlowState;
@@ -478,5 +479,12 @@ public class QuickFlowServiceImpl implements QuickFlowService{
         
         List<ProcFlowExtInfo> ainfos = jtemplate.query(SQL.toString(), params, PROC_EXT_MAPPER);
         return ainfos;
+	}
+
+	@Override
+	public List<ProcTrailExtInfo> getWorkgroupProcTrails(ServiceContext svcctx, InfoId<Long> stepId)
+			throws ServiceException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

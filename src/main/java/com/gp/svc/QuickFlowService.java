@@ -13,6 +13,7 @@ import com.gp.dao.info.QuickNodeInfo;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.svc.info.ProcFlowExtInfo;
+import com.gp.svc.info.ProcTrailExtInfo;
 import com.gp.util.CommonUtils;
 
 /**
@@ -44,6 +45,12 @@ public interface QuickFlowService {
     public List<ProcFlowExtInfo> getWorkgroupProcs(ServiceContext svcctx,
             InfoId<Long> currStepId,
             String state) throws ServiceException;
+    
+    /**
+     * Get all the step trails  
+     **/
+    public List<ProcTrailExtInfo> getWorkgroupProcTrails(ServiceContext svcctx,
+    		InfoId<Long> stepId) throws ServiceException;
     
     public static RowMapper<ProcFlowExtInfo> PROC_EXT_MAPPER = new RowMapper<ProcFlowExtInfo>() {
         @Override

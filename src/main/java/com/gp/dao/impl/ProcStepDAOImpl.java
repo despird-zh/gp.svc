@@ -1,29 +1,22 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.common.QuickFlows.StepOpinion;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ProcStepDAO;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.KVPair;
-
 import com.gp.util.CommonUtils;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -169,5 +162,22 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
     protected void initialJdbcTemplate(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+	@Override
+	public ProcStepInfo queryCurrentStep(InfoId<Long> procId) {
+		String SQL = "select * from gp_proc_step "
+                + "where proc_id = ? AND state = 'PENDING'";
+
+        Object[] params = new Object[]{
+                procId.getId()
+        };
+
+        JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+        List<ProcStepInfo> ainfo = jtemplate.query(SQL, params, ProcStepRowMapper);
+        return ainfo.size()>0 ? ainfo.get(0) : null;
+	}
 
 }

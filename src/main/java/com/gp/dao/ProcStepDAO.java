@@ -3,20 +3,23 @@ package com.gp.dao;
 import com.gp.common.IdKey;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.InfoId;
-import com.gp.info.KVPair;
-
 import com.gp.util.CommonUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Created by garydiao on 8/19/16.
  */
 public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
+	
+	/**
+	 * query the current step of a launched process
+	 * @param procId the process id 
+	 **/
+	public ProcStepInfo queryCurrentStep(InfoId<Long> procId);
 	
 	/**
 	 * the process step row mapper 
