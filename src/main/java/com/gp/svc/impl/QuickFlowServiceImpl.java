@@ -272,7 +272,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					Object[] fvals = new Object[]{
 							new Date(System.currentTimeMillis()), QuickFlows.FlowState.END.name()
 					};
-					pseudodao.update(procId, cols, vals);
+					pseudodao.update(procId, fcols, fvals);
 					if(StringUtils.isNotBlank(procinfo.getCustomProcess())){
 
 						FlowProcess customProcessor = FlowProcessFactory.getFlowOperation(procinfo.getCustomProcess());
@@ -365,7 +365,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				Object[] fvals = new Object[]{
 						new Date(System.currentTimeMillis()), FlowState.FAIL.name()
 				};
-				pseudodao.update(procId, cols, vals);
+				pseudodao.update(procId, fcols, fvals);
 				// create notification header
 				notifInfo.setOperation(Operations.END_FLOW.name());
 				notifInfo.setExcerpt("Terminate the process flow");
@@ -460,13 +460,13 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		SQL.append("FROM gp_proc_flows p ");
 		SQL.append("LEFT JOIN gp_workgroups w ON (p.workgroup_id = w.workgroup_id) ");
 		SQL.append("LEFT JOIN gp_users u ON (p.owner = u.account) ");
-		SQL.append("WHERE p.workgroup_id = ? ");
+		SQL.append("WHERE p.workgroup_id = :workgroup_id ");
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("wgroup_id", workgroupId.getId());
 		
 		if(StringUtils.isNotBlank(state)){
-			SQL.append(" AND p.state = ? ");
+			SQL.append(" AND p.state = :state ");
 			params.put("state", state);
 		}
 		
@@ -484,7 +484,31 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	@Override
 	public List<ProcTrailExtInfo> getWorkgroupProcTrails(ServiceContext svcctx, InfoId<Long> stepId)
 			throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("select ");
+		SQL.append("c.source_id,");
+		SQL.append("e.source_name,");
+		SQL.append("b.workgroup_id,");
+		SQL.append("c.workgroup_name,");
+		SQL.append("d.full_name,");
+		SQL.append("a.* ");
+		SQL.append("from gp_proc_trail a ");
+		SQL.append("left join gp_proc_flows b on (a.proc_id = b.proc_id) ");
+		SQL.append("left join gp_workgroups c on (b.workgroup_id = c.workgroup_id) ");
+		SQL.append("left join gp_sources e on (c.source_id = e.source_id) ");
+		SQL.append("left join gp_users d on (a.executor = d.account) ");
+		SQL.append("where a.step_id = ?");
+		
+		Object[] params = new Object[]{
+				stepId.getId()
+		};
+		
+		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+        }
+		
+		return jtemplate.query(SQL.toString(), params, TRAIL_EXT_MAPPER);
 	}
 }

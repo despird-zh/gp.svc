@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.dao.info.ProcFlowInfo;
+import com.gp.dao.info.ProcTrailInfo;
 import com.gp.dao.info.QuickNodeInfo;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
@@ -82,6 +83,32 @@ public interface QuickFlowService {
             info.setOwner(rs.getString("full_name"));
             
             return info;
+        }
+    };
+    
+    public static RowMapper<ProcTrailExtInfo> TRAIL_EXT_MAPPER = new RowMapper<ProcTrailExtInfo>() {
+        @Override
+        public ProcTrailExtInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+        	
+        	ProcTrailExtInfo info = new ProcTrailExtInfo();
+            InfoId<Long> id = IdKey.PROC_TRAIL.getInfoId(rs.getLong("trail_id"));
+            info.setInfoId(id);
+            
+            info.setExecutorName(rs.getString("full_name"));
+            info.setWorkgroupName(rs.getString("workgroup_name"));
+            info.setSourceName(rs.getString("source_name"));
+            
+            info.setProcId(rs.getLong("proc_id"));
+            info.setStepId(rs.getLong("step_id"));
+            info.setOpinion(rs.getString("opinion"));
+            info.setExecutor(rs.getString("executor"));
+            info.setComment(rs.getString("comment"));
+            info.setExecuteTime(rs.getTimestamp("execute_time"));
+
+            info.setModifier(rs.getString("modifier"));
+            info.setModifyDate(rs.getTimestamp("last_modified"));
+            return info;
+   
         }
     };
 }
