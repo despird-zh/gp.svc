@@ -20,12 +20,12 @@
 package com.gp.common;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.joda.time.DateTimeZone;
 
 import com.gp.info.InfoId;
 
@@ -63,7 +63,7 @@ public class Principal implements Serializable{
 	private Set<String> roles;
 	
 	/** the time zone */
-	private DateTimeZone timeZone;
+	private ZoneId timeZone;
 	
 	/** the locale object */
 	private Locale locale;
@@ -74,14 +74,14 @@ public class Principal implements Serializable{
 	public Principal(String account){
 		this.account = account;
 		this.locale = Locale.getDefault();
-		this.timeZone = DateTimeZone.getDefault();
+		this.timeZone = ZoneId.systemDefault();
 	}
 	
 	public Principal(InfoId<Long> userId){
 		
 		this.userId = userId;
 		this.locale = Locale.getDefault();
-		this.timeZone = DateTimeZone.getDefault();
+		this.timeZone = ZoneId.systemDefault();
 	}
 	
 	public Principal(InfoId<Long> userId, String account){
@@ -89,7 +89,7 @@ public class Principal implements Serializable{
 		this.userId = userId;
 		this.account = account;
 		this.locale = Locale.getDefault();
-		this.timeZone = DateTimeZone.getDefault();
+		this.timeZone = ZoneId.systemDefault();
 	}
 	
 	public void setSourceId(Integer sourceId) {
@@ -170,11 +170,11 @@ public class Principal implements Serializable{
 		this.locale = locale;
 	}
 
-	public DateTimeZone getTimeZone() {
+	public ZoneId getTimeZone() {
 		return timeZone;
 	}
 
-	public void setTimeZone(DateTimeZone timeZone) {
+	public void setTimeZone(ZoneId timeZone) {
 		this.timeZone = timeZone;
 	}
 
