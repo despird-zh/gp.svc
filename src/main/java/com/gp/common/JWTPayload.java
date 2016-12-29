@@ -19,12 +19,12 @@ public class JWTPayload {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	private Map<String, Object> claims;
+	private Map<String, String> claims;
 	
-	public Map<String, Object> getClaims() {
+	public Map<String, String> getClaims() {
 		return claims;
 	}
-	public void setClaims(Map<String, Object> claims) {
+	public void setClaims(Map<String, String> claims) {
 		this.claims = claims;
 	}
 	
