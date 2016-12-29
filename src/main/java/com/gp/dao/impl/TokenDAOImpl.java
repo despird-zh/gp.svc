@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
@@ -22,6 +23,7 @@ import com.gp.dao.info.TokenInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
+@Component
 public class TokenDAOImpl extends DAOSupport implements TokenDAO{
 
 	Logger LOGGER = LoggerFactory.getLogger(TokenDAOImpl.class);
