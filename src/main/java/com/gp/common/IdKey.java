@@ -84,8 +84,10 @@ public enum IdKey implements Identifier{
 	QUICK_NODE("gp_quick_node", "node_id", Long.class),
 	PROC_FLOW("gp_proc_flows", "proc_id", Long.class),
 	PROC_STEP("gp_proc_step", "step_id", Long.class),
-	PROC_TRAIL("gp_proc_trail", "trail_id", Long.class);
+	PROC_TRAIL("gp_proc_trail", "trail_id", Long.class),
 
+	TOKEN("gp_tokens", "token_id", Long.class);
+	
 	/**
 	 * the custom Identifier set 
 	 **/
