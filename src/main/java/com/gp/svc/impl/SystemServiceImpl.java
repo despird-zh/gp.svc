@@ -24,10 +24,12 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.SysOptionDAO;
+import com.gp.dao.TokenDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.dao.info.SysOptionInfo;
+import com.gp.dao.info.TokenInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -58,6 +60,9 @@ public class SystemServiceImpl implements SystemService{
 	
 	@Autowired
 	PseudoDAO pseudodao;
+	
+	@Autowired
+	TokenDAO tokendao;
 	
 	@Autowired
 	@Qualifier("sysSettingCache")
@@ -235,6 +240,26 @@ public class SystemServiceImpl implements SystemService{
 			return rows;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query", dae, "system option groups");
+		}
+	}
+
+	@Override
+	public TokenInfo getToken(ServiceContext svcctx, InfoId<Long> tokenKey) throws ServiceException {
+		try{
+			return tokendao.query( tokenKey);
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae, "jwt tokens", "key=" + tokenKey);
+		}
+	}
+
+	@Override
+	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
+		token.setModifier(svcctx.getPrincipal().getAccount());
+		token.setModifyDate(DateTimeUtils.now());
+		try{
+			return tokendao.create(token) > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.create", dae, "jwt tokens");
 		}
 	}
 
