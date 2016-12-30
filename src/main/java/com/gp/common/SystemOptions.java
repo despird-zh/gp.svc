@@ -29,5 +29,5 @@ public class SystemOptions {
 	public static final String VALID_MSG_RESOURCES = "valid.msg.resources";
 	public static final String CABINET_VERSION_ENABLE = "cabinet.version.enable";
 	public static final String FILE_CACHE_PATH = "file.cache.path";
-
+	public static final String SECURITY_JWT_SECRET = "security.jwt.secret";
 }

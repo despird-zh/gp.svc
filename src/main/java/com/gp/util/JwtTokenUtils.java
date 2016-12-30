@@ -13,7 +13,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.gp.common.JWTPayload;  
+import com.gp.common.JwtPayload;  
   
 
 public class JwtTokenUtils {
@@ -26,7 +26,7 @@ public class JwtTokenUtils {
      *            the milliseconds of life time 
      * @return the jwt token 
      */  
-    public static String signHS256(String secret, JWTPayload payload) {  
+    public static String signHS256(String secret, JwtPayload payload) {  
         try {  
         	JWTCreator.Builder build = JWT.create();
         	build.withIssuer(payload.getIssuer());
@@ -56,7 +56,7 @@ public class JwtTokenUtils {
      * @param jwt 
      * @return POJO object 
      */  
-    public static boolean verifyHS256(String secret, String jwtToken, JWTPayload payload) {  
+    public static boolean verifyHS256(String secret, String jwtToken, JwtPayload payload) {  
     	
     	try {
     		
@@ -104,11 +104,11 @@ public class JwtTokenUtils {
      * 
      * @return String the jwt id
      **/
-    public static JWTPayload parsePayload(String jwtToken, String ...claimKeys){
+    public static JwtPayload parsePayload(String jwtToken, String ...claimKeys){
     	
     	JWT decode = JWT.decode(jwtToken);
     	
-    	JWTPayload payload = new JWTPayload();
+    	JwtPayload payload = new JwtPayload();
     	
     	payload.setIssuer(decode.getIssuer());
     	List<String> audiences = decode.getAudience();

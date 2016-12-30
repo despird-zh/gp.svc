@@ -6,7 +6,6 @@ import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.dao.info.SysOptionInfo;
-import com.gp.dao.info.TokenInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 
