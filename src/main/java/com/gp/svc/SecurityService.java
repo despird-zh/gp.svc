@@ -14,6 +14,7 @@ import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.dao.impl.DAOSupport;
 import com.gp.dao.impl.UserDAOImpl;
+import com.gp.dao.info.TokenInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -139,6 +140,16 @@ public interface SecurityService {
 	 **/
 	public boolean updateLogonTrace(ServiceContext svcctx, InfoId<Long> userId,boolean resetRetry)throws ServiceException;
 
+	
+	/**
+	 * get a token from database 
+	 **/
+	public TokenInfo getToken(ServiceContext svcctx, InfoId<Long> tokenKey) throws ServiceException;
+	
+	/**
+	 * new a token in database 
+	 **/
+	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException;
 	
 	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
 

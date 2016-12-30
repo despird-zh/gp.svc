@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,17 +36,16 @@ import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.PseudoDAO;
+import com.gp.dao.TokenDAO;
 import com.gp.dao.UserDAO;
-import com.gp.dao.impl.DAOSupport;
-import com.gp.dao.impl.UserDAOImpl;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.CabinetInfo;
-import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.dao.info.SysOptionInfo;
+import com.gp.dao.info.TokenInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
@@ -76,9 +74,9 @@ public class SecurityServiceImpl implements SecurityService{
 	
 	@Autowired
 	private CabinetDAO cabinetdao;
-	
+
 	@Autowired
-	private GroupUserDAO groupuserdao;
+	TokenDAO tokendao;
 	
 	@Autowired
 	CommonService idService;
@@ -668,4 +666,24 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 		
+
+	@Override
+	public TokenInfo getToken(ServiceContext svcctx, InfoId<Long> tokenKey) throws ServiceException {
+		try{
+			return tokendao.query( tokenKey);
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query.with", dae, "jwt tokens", "key=" + tokenKey);
+		}
+	}
+
+	@Override
+	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
+		token.setModifier(svcctx.getPrincipal().getAccount());
+		token.setModifyDate(DateTimeUtils.now());
+		try{
+			return tokendao.create(token) > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.create", dae, "jwt tokens");
+		}
+	}
 }

@@ -62,9 +62,6 @@ public class SystemServiceImpl implements SystemService{
 	PseudoDAO pseudodao;
 	
 	@Autowired
-	TokenDAO tokendao;
-	
-	@Autowired
 	@Qualifier("sysSettingCache")
 	Cache cache = null;
 
@@ -243,24 +240,5 @@ public class SystemServiceImpl implements SystemService{
 		}
 	}
 
-	@Override
-	public TokenInfo getToken(ServiceContext svcctx, InfoId<Long> tokenKey) throws ServiceException {
-		try{
-			return tokendao.query( tokenKey);
-		}catch(DataAccessException dae){
-			throw new ServiceException("excp.query.with", dae, "jwt tokens", "key=" + tokenKey);
-		}
-	}
-
-	@Override
-	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
-		token.setModifier(svcctx.getPrincipal().getAccount());
-		token.setModifyDate(DateTimeUtils.now());
-		try{
-			return tokendao.create(token) > 0;
-		}catch(DataAccessException dae){
-			throw new ServiceException("excp.create", dae, "jwt tokens");
-		}
-	}
 
 }

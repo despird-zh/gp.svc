@@ -27,14 +27,5 @@ public interface SystemService {
 	public SysOptionInfo getOption(ServiceContext svcctx, InfoId<Long> oKey) throws ServiceException;
 
 	public List<String> getOptionGroups(ServiceContext svcctx) throws ServiceException;
-	
-	/**
-	 * get a token from database 
-	 **/
-	public TokenInfo getToken(ServiceContext svcctx, InfoId<Long> tokenKey) throws ServiceException;
-	
-	/**
-	 * new a token in database 
-	 **/
-	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException;
+
 }

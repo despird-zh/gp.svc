@@ -140,4 +140,7 @@ public enum Operations {
 	SUBMIT_STEP,
 	END_STEP,
 	END_FLOW,
+	/** jwt token */
+	FIND_TOKEN,
+	NEW_TOKEN
 }
