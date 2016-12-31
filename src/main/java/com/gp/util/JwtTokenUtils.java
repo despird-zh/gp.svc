@@ -12,6 +12,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.gp.common.JwtPayload;  
   
@@ -109,29 +110,33 @@ public class JwtTokenUtils {
      **/
     public static JwtPayload parsePayload(String jwtToken, String ...claimKeys){
     	
-    	JWT decode = JWT.decode(jwtToken);
-
-    	JwtPayload payload = new JwtPayload();
-    	
-    	payload.setIssuer(decode.getIssuer());
-    	List<String> audiences = decode.getAudience();
-    	
-    	if(CollectionUtils.isNotEmpty(audiences))
-    		payload.setAudience(audiences.get(0));
-    	
-    	payload.setSubject(decode.getSubject());
-    	payload.setIssueAt(decode.getIssuedAt());
-    	payload.setExpireTime(decode.getExpiresAt());
-    	payload.setNotBefore(decode.getNotBefore());
-    	
-    	if(ArrayUtils.isNotEmpty(claimKeys)){
-    		Map<String, String> map = new HashMap<String, String>();
-    		for(String key : claimKeys){
-    			map.put(key, decode.getClaim(key).asString());
-    		}
-    		payload.setClaims(map);
+    	try{
+	    	JWT decode = JWT.decode(jwtToken);
+	
+	    	JwtPayload payload = new JwtPayload();
+	    	
+	    	payload.setIssuer(decode.getIssuer());
+	    	List<String> audiences = decode.getAudience();
+	    	
+	    	if(CollectionUtils.isNotEmpty(audiences))
+	    		payload.setAudience(audiences.get(0));
+	    	
+	    	payload.setSubject(decode.getSubject());
+	    	payload.setIssueAt(decode.getIssuedAt());
+	    	payload.setExpireTime(decode.getExpiresAt());
+	    	payload.setNotBefore(decode.getNotBefore());
+	    	
+	    	if(ArrayUtils.isNotEmpty(claimKeys)){
+	    		Map<String, String> map = new HashMap<String, String>();
+	    		for(String key : claimKeys){
+	    			map.put(key, decode.getClaim(key).asString());
+	    		}
+	    		payload.setClaims(map);
+	    	}
+	    	
+	    	return payload;
+    	}catch(JWTDecodeException jde){
+    		return null;
     	}
-    	
-    	return payload;
     }
 }
