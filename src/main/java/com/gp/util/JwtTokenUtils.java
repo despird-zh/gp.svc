@@ -64,7 +64,10 @@ public class JwtTokenUtils {
     	    .withIssuer(payload.getIssuer())
     	    .withAudience(payload.getAudience())
     	    .withSubject(payload.getSubject())
-    	    .withJWTId(payload.getJwtId());
+    	    .withJWTId(payload.getJwtId())
+    	    .acceptLeeway(5 * 60);
+    	    // the leeway window is 5 minutes
+    	    
     	    if(MapUtils.isNotEmpty(payload.getClaims())){
             	
             	for(Map.Entry<String, String> entry: payload.getClaims().entrySet()){
@@ -107,7 +110,7 @@ public class JwtTokenUtils {
     public static JwtPayload parsePayload(String jwtToken, String ...claimKeys){
     	
     	JWT decode = JWT.decode(jwtToken);
-    	
+
     	JwtPayload payload = new JwtPayload();
     	
     	payload.setIssuer(decode.getIssuer());
