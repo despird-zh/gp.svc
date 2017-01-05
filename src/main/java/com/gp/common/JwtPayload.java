@@ -12,6 +12,7 @@ public class JwtPayload {
 	private String subject;
 	private Date issueAt = new Date();
 	private String jwtId;
+	private Map<String, String> claims;
 	
 	public String getSubject() {
 		return subject;
@@ -19,8 +20,7 @@ public class JwtPayload {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	private Map<String, String> claims;
-	
+
 	public Map<String, String> getClaims() {
 		return claims;
 	}

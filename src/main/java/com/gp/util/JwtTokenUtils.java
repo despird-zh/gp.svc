@@ -125,7 +125,7 @@ public class JwtTokenUtils {
 	    	payload.setIssueAt(decode.getIssuedAt());
 	    	payload.setExpireTime(decode.getExpiresAt());
 	    	payload.setNotBefore(decode.getNotBefore());
-	    	
+	    	payload.setJwtId(decode.getId());
 	    	if(ArrayUtils.isNotEmpty(claimKeys)){
 	    		Map<String, String> map = new HashMap<String, String>();
 	    		for(String key : claimKeys){
