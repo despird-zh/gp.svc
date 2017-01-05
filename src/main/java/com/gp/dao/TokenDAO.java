@@ -12,6 +12,8 @@ import com.gp.info.InfoId;
 
 public interface TokenDAO extends BaseDAO<TokenInfo>{
 
+	public int deleteBySubjectAudience(String subject, String audience);
+	
 	public static RowMapper<TokenInfo> TokenMapper = new RowMapper<TokenInfo>(){
 
 		@Override

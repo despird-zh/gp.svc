@@ -163,11 +163,30 @@ public class TokenDAOImpl extends DAOSupport implements TokenDAO{
 
 		return CollectionUtils.isEmpty(ainfo) ? null : ainfo.get(0);
 	}
-
+	
 	@Override
 	protected void initialJdbcTemplate(DataSource dataSource) {
 		
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	}
+
+	@Override
+	public int deleteBySubjectAudience(String subject, String audience) {
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("delete from gp_tokens ")
+			.append("where subject = ? and audience = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			subject, audience
+		};
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = jtemplate.update(SQL.toString(), params);
+
+		return rtv;
 	}
 
 }

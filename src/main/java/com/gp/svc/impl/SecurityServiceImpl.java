@@ -676,11 +676,13 @@ public class SecurityServiceImpl implements SecurityService{
 		}
 	}
 
+	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
 	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
 		token.setModifier(svcctx.getPrincipal().getAccount());
 		token.setModifyDate(DateTimeUtils.now());
 		try{
+			tokendao.deleteBySubjectAudience(token.getSubject(), token.getAudience());
 			return tokendao.create(token) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.create", dae, "jwt tokens");
