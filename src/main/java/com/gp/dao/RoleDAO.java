@@ -22,7 +22,7 @@ public interface RoleDAO extends BaseDAO<RoleInfo>{
 			RoleInfo info = new RoleInfo();
 			InfoId<Integer> id = IdKey.ROLE.getInfoId(	rs.getInt("tag_id"));
 			info.setInfoId(id);
-
+			info.setRoleAbbr(rs.getString("role_abbr"));
 			info.setRoleName(rs.getString("role_name"));
 			info.setDescription(rs.getString("descr"));
 			

@@ -12,6 +12,8 @@ public class PageInfo extends TraceableInfo<Integer> {
 
 	private String pageName;
 	
+	private String pageUrl;
+	
 	private String module;
 	
 	private String description;
@@ -66,5 +68,13 @@ public class PageInfo extends TraceableInfo<Integer> {
 	
 	public void putColValue(FlatColLocator col, String value){
 		actionMap.put(col, value);
+	}
+
+	public String getPageUrl() {
+		return pageUrl;
+	}
+
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
 	}
 }

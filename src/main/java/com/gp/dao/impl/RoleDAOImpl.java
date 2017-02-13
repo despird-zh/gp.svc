@@ -38,7 +38,7 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 		
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_roles (")
-			.append("role_id,role_name,descr,")
+			.append("role_id,role_name,descr,role_abbr,")
 			.append("modifier, last_modified")
 			.append(")values(")
 			.append("?,?,?,")
@@ -46,7 +46,7 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 		
 		InfoId<Integer> key = info.getInfoId();
 		Object[] params = new Object[]{
-				key.getId(),info.getRoleName(),info.getDescription(),
+				key.getId(),info.getRoleName(),info.getDescription(),info.getRoleAbbr(),
 				info.getModifier(),info.getModifyDate()
 		};
 		
@@ -84,6 +84,10 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 		if(columnCheck(mode, colset, "role_name")){
 			SQL.append("role_name = ?,");
 			params.add(info.getRoleName());
+		}
+		if(columnCheck(mode, colset, "role_abbr")){
+			SQL.append("role_abbr = ?,");
+			params.add(info.getRoleAbbr());
 		}
 		if(columnCheck(mode, colset, "descr")){
 			SQL.append("descr = ?,");

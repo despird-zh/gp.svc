@@ -8,6 +8,8 @@ public class RoleInfo extends TraceableInfo<Integer> {
 
 	private String roleName;
 
+	private String roleAbbr;
+	
 	private String description;
 	
 	public String getRoleName() {
@@ -24,6 +26,14 @@ public class RoleInfo extends TraceableInfo<Integer> {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getRoleAbbr() {
+		return roleAbbr;
+	}
+
+	public void setRoleAbbr(String roleAbbr) {
+		this.roleAbbr = roleAbbr;
 	}
 	
 	

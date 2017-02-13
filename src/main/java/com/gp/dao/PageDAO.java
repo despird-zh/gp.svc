@@ -29,6 +29,7 @@ public interface PageDAO extends BaseDAO<PageInfo>{
 			page.setModule(rs.getString("module"));
 			page.setPageName(rs.getString("page_name"));
 			page.setPageAbbr(rs.getString("page_abbr"));
+			page.setPageUrl(rs.getString("page_url"));
 			
 			for(int i = 1; i <= COLUMN_COUNT ; i++){
 				String val = rs.getString("act_abbr_"+i);

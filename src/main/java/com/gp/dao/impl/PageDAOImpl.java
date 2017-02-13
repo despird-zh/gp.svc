@@ -37,13 +37,14 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 	@Override
 	public int create(PageInfo info) {
 		
-		StringBuffer SQL = new StringBuffer("INSERT INTO gp_pages (page_id,page_name,");
+		StringBuffer SQL = new StringBuffer("INSERT INTO gp_pages (page_id,page_name,page_url,");
 		SQL.append("module,descr,page_abbr,");
 		StringBuffer SQL_PARAMS = new StringBuffer("?,?,?,?,?,");
 		
 		List<Object> params = new ArrayList<Object>();
 		params.add(info.getInfoId().getId());
 		params.add(info.getPageName());
+		params.add(info.getPageUrl());
 		params.add(info.getModule());
 		params.add(info.getDescription());
 		params.add(info.getPageAbbr());
@@ -96,6 +97,10 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 		if(columnCheck(mode, colset, "page_name")){
 			SQL.append("page_name=?,");
 			params.add(info.getPageName());
+		}
+		if(columnCheck(mode, colset, "page_url")){
+			SQL.append("page_url=?,");
+			params.add(info.getPageUrl());
 		}
 		if(columnCheck(mode, colset, "module")){
 			SQL.append("module=?,");
