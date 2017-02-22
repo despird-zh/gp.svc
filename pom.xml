@@ -10,8 +10,8 @@
 		<comm.coll>3.2.1</comm.coll>
 		<comm.io>2.4</comm.io>
 		<hib.val>5.2.4.Final</hib.val>
-		<mysql.version>5.1.37</mysql.version>
-		<bcp.version>0.8.0.RELEASE</bcp.version>
+		<mysql.version>5.1.40</mysql.version>
+		<pool.jdbc>2.6.0</pool.jdbc>
 		<spring.version>4.3.6.RELEASE</spring.version>
 		<jwt.version>3.0.2</jwt.version>
 	</properties>
@@ -65,10 +65,10 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.jolbox</groupId>
-			<artifactId>bonecp</artifactId>
-			<version>${bcp.version}</version>
-			<scope>test</scope>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>${pool.jdbc}</version>
+		    <scope>test</scope>
 		</dependency>
        <dependency>
 			<groupId>org.springframework</groupId>

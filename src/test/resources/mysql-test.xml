@@ -27,20 +27,24 @@
 		<property name="dataSource" ref="gpDataSource" />
 	</bean>
 	
-	<!-- BoneCP configuration -->
-	<bean id="gpDataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-	   <property name="driverClass" value="com.mysql.jdbc.Driver" />
-	   <property name="jdbcUrl" value="jdbc:mysql://localhost/gpress?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false" />
-	   <property name="username" value="gpadmin"/>
-	   <property name="password" value="gpress"/>
-	   <property name="idleConnectionTestPeriodInMinutes" value="30"/>
-	   <property name="idleMaxAgeInMinutes" value="240"/>
-	   <property name="maxConnectionsPerPartition" value="30"/>
-	   <property name="minConnectionsPerPartition" value="10"/>
-	   <property name="partitionCount" value="3"/>
-	   <property name="acquireIncrement" value="5"/>
-	   <property name="statementsCacheSize" value="100"/>
-	   <property name="releaseHelperThreads" value="3"/>
+	<!-- hikariCP configuration -->
+	<bean id="gpDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	   
+		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
+        <property name="maximumPoolSize" value="5" />
+        <property name="maxLifetime" value="30000" />
+        <property name="idleTimeout" value="30000" />
+        <property name="dataSourceProperties">
+	         <props>
+	             <prop key="url">jdbc:mysql://localhost/gpress?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</prop>
+	             <prop key="user">gpadmin</prop>
+	             <prop key="password">gpress</prop>
+	              <prop key="prepStmtCacheSize">250</prop>
+	              <prop key="prepStmtCacheSqlLimit">2048</prop>
+	              <prop key="cachePrepStmts">true</prop>
+	              <prop key="useServerPrepStmts">true</prop>
+	         </props>
+        </property>
 	</bean>  
 
 </beans>
