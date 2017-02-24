@@ -265,8 +265,8 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
-		UserInfo ainfo = jtemplate.queryForObject(SQL, params, UserMapper);
-		return ainfo;
+		List<UserInfo> infos = jtemplate.query(SQL, params, UserMapper);
+		return CollectionUtils.isEmpty(infos) ? null : infos.get(0);
 	}
 
 	@Override
