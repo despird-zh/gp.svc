@@ -20,6 +20,7 @@
 package com.gp.common;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.Set;
@@ -202,4 +203,13 @@ public class Principal implements Serializable{
 		this.classification = classification;
 	}	
 	
+	/**
+	 * Get the date format as per the locale 
+	 **/
+	public DateFormat getDateFormat(){
+		Locale locale = this.getLocale();
+		
+		DateFormat datefmt = DateFormat.getDateInstance(DateFormat.LONG, locale);
+		return datefmt;
+	}
 }
