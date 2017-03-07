@@ -72,7 +72,12 @@ public class FlatColumns {
 	public static final FlatColumn RESOURCE_TYPE = new FlatColumn("resource_type");
 
 	public static final FlatColumn UPVOTE_COUNT = new FlatColumn("upvote_count");
-
+	
+	public static final FlatColumn ISSUE_AT = new FlatColumn("issue_at");
+	public static final FlatColumn NOT_BEFORE = new FlatColumn("not_before");
+	public static final FlatColumn EXP_TIME = new FlatColumn("expire_time");
+	public static final FlatColumn JWT_TOKEN = new FlatColumn("jwt_token");
+	
 	/**
 	 * Convert the Columns to string set for easy check existence.
 	 * @param cols the columns source

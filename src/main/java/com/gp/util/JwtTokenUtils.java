@@ -18,7 +18,11 @@ import com.gp.common.JwtPayload;
   
 
 public class JwtTokenUtils {
-  
+	
+	public static int INVALID = -1;
+	public static int VALID = 1;
+	public static int EXPIRED = 2;
+	
     /** 
      * get jwt String of object 
      * @param object 
@@ -57,7 +61,7 @@ public class JwtTokenUtils {
      * @param jwt 
      * @return POJO object 
      */  
-    public static boolean verifyHS256(String secret, String jwtToken, JwtPayload payload) {  
+    public static int verifyHS256(String secret, String jwtToken, JwtPayload payload) {  
     	
     	try {
     		
@@ -78,10 +82,14 @@ public class JwtTokenUtils {
     	    JWTVerifier verifier = verification.build();
     	    
     	    verifier.verify(jwtToken);
+    	    if(payload.getExpireTime().getTime() < System.currentTimeMillis()){
+    	    	return EXPIRED;
+    	    }
     	    
-    	    return true;
+    	    return VALID;
+    	    
     	} catch (JWTVerificationException | IllegalArgumentException | UnsupportedEncodingException exception){
-    	    return false;
+    	    return INVALID;
     	}
     	
     } 

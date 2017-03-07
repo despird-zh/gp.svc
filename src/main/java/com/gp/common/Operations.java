@@ -142,5 +142,6 @@ public enum Operations {
 	END_FLOW,
 	/** jwt token */
 	FIND_TOKEN,
-	NEW_TOKEN
+	NEW_TOKEN,
+	REISSUE_TOKEN
 }

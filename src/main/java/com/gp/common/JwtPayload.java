@@ -6,12 +6,19 @@ import java.util.Map;
 public class JwtPayload {
 
 	private String issuer;
+	
 	private String audience;
+	
 	private Date expireTime;
+	
 	private Date notBefore;
+	
 	private String subject;
+	
 	private Date issueAt = new Date();
+	
 	private String jwtId;
+	
 	private Map<String, String> claims;
 	
 	public String getSubject() {

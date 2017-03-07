@@ -683,9 +683,21 @@ public class SecurityServiceImpl implements SecurityService{
 		token.setModifyDate(DateTimeUtils.now());
 		try{
 			tokendao.deleteBySubjectAudience(token.getSubject(), token.getAudience());
+			
 			return tokendao.create(token) > 0;
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.create", dae, "jwt tokens");
+		}
+	}
+
+	@Override
+	public boolean refreshToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
+		try{
+			int cnt = tokendao.update(token, FilterMode.INCLUDE, FlatColumns.EXP_TIME, FlatColumns.ISSUE_AT, FlatColumns.NOT_BEFORE, FlatColumns.JWT_TOKEN);
+			
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update", dae, "jwt tokens");
 		}
 	}
 }

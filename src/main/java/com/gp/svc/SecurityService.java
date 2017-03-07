@@ -10,6 +10,7 @@ import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
+import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 import com.gp.info.KVPair;
 import com.gp.dao.impl.DAOSupport;
@@ -150,6 +151,11 @@ public interface SecurityService {
 	 * new a token in database 
 	 **/
 	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException;
+	
+	/**
+	 * refresh the token in database. 
+	 **/
+	public boolean refreshToken(ServiceContext svcctx, TokenInfo token) throws ServiceException;
 	
 	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
 
