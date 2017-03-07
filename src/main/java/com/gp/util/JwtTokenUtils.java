@@ -7,6 +7,9 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
@@ -18,6 +21,8 @@ import com.gp.common.JwtPayload;
   
 
 public class JwtTokenUtils {
+	
+	static Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtils.class);
 	
 	public static int INVALID = -1;
 	public static int VALID = 1;
@@ -35,7 +40,10 @@ public class JwtTokenUtils {
         try {  
         	JWTCreator.Builder build = JWT.create();
         	build.withIssuer(payload.getIssuer());
-        	build.withAudience(payload.getAudience());
+        	
+        	if(StringUtils.isNotBlank(payload.getAudience()))
+        		build.withAudience(payload.getAudience());
+        	
         	build.withSubject(payload.getSubject());
         	build.withIssuedAt(payload.getIssueAt());
         	build.withNotBefore(payload.getNotBefore());
@@ -52,6 +60,7 @@ public class JwtTokenUtils {
             return build.sign(Algorithm.HMAC256(secret)); 
             
         } catch(Exception e) {  
+        	LOGGER.error("error sign the token payload",e);
             return null;  
         }  
     }  
@@ -66,9 +75,12 @@ public class JwtTokenUtils {
     	try {
     		
     	    JWTVerifier.Verification verification = JWT.require(Algorithm.HMAC256(secret))
-    	    .withIssuer(payload.getIssuer())
-    	    .withAudience(payload.getAudience())
-    	    .withSubject(payload.getSubject())
+    	    .withIssuer(payload.getIssuer());
+    	    
+    	    if(StringUtils.isNotBlank(payload.getAudience()))
+    	    	verification.withAudience(payload.getAudience());
+    	    
+    	    verification.withSubject(payload.getSubject())
     	    .withJWTId(payload.getJwtId())
     	    .acceptLeeway(5 * 60);
     	    // the leeway window is 5 minutes
@@ -89,6 +101,7 @@ public class JwtTokenUtils {
     	    return VALID;
     	    
     	} catch (JWTVerificationException | IllegalArgumentException | UnsupportedEncodingException exception){
+    		LOGGER.error("error verify the token payload", exception);
     	    return INVALID;
     	}
     	
@@ -144,6 +157,7 @@ public class JwtTokenUtils {
 	    	
 	    	return payload;
     	}catch(JWTDecodeException jde){
+    		LOGGER.error("error decode the token payload", jde);
     		return null;
     	}
     }
