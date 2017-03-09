@@ -157,7 +157,10 @@ public interface SecurityService {
 	 **/
 	public boolean refreshToken(ServiceContext svcctx, TokenInfo token) throws ServiceException;
 	
-	//public boolean updateAccountSetting(ServiceContext svcctx, UserInfo userinfo, FlatColLocator ...exclcols) throws ServiceException;
+	/**
+	 * remove the token from database 
+	 **/
+	public boolean removeToken(ServiceContext svcctx, InfoId<Long> tokenId) throws ServiceException;
 
 	public static RowMapper<UserLiteInfo> USER_LITE_ROW_MAPPER = new RowMapper<UserLiteInfo>() {
 		@Override

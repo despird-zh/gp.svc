@@ -700,4 +700,15 @@ public class SecurityServiceImpl implements SecurityService{
 			throw new ServiceException("excp.update", dae, "jwt tokens");
 		}
 	}
+
+	@Override
+	public boolean removeToken(ServiceContext svcctx, InfoId<Long> tokenId) throws ServiceException {
+		try{
+			int cnt = tokendao.delete(tokenId);
+			
+			return cnt > 0;
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.update", dae, "jwt tokens");
+		}
+	}
 }

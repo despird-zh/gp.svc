@@ -143,5 +143,6 @@ public enum Operations {
 	/** jwt token */
 	FIND_TOKEN,
 	NEW_TOKEN,
-	REISSUE_TOKEN
+	REISSUE_TOKEN,
+	LOGOFF
 }
