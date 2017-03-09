@@ -494,10 +494,20 @@ public class SecurityServiceImpl implements SecurityService{
 			params.put("fname", "%" + StringUtils.trim(accountname) + "%");
 		}
 		// entity condition
+		
 		if(null != instanceId){
-			
-			SQL_FROM.append(" AND a.source_id = :srcid ");
-			params.put("srcid", instanceId);
+			if(0 == instanceId){
+				
+				SQL_FROM.append(" AND a.source_id > :srcid ");
+				params.put("srcid", instanceId);
+			}
+			else if(-9999 == instanceId){
+				SQL_FROM.append(" AND a.source_id = :srcid ");
+				params.put("srcid", instanceId);
+			}else{
+				SQL_FROM.append(" AND a.source_id = :srcid ");
+				params.put("srcid", instanceId);
+			}
 		}
 		// user type condition
 		if(!ArrayUtils.isEmpty(types)){
