@@ -82,6 +82,8 @@ public interface WorkgroupService {
 	
 	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String ...accounts) throws ServiceException;	
 	
+	public List<WorkgroupExtInfo> getWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
+	
 	public List<WorkgroupExtInfo> getLocalWorkgroups(ServiceContext svcctx, String gname)throws ServiceException ;
 	
 	public PageWrapper<WorkgroupLite> getLocalWorkgroups(ServiceContext svcctx, String gname, List<String> tags, PageQuery pagequery)throws ServiceException ;

@@ -32,4 +32,9 @@ public class Workgroups {
 		EXTERN
 	}	
 	
+	public static enum QueryScope{
+		LOCAL,
+		MIRROR,
+		ALL,
+	}
 }

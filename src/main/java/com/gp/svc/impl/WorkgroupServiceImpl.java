@@ -883,4 +883,38 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 	}
 
+	@Override
+	public List<WorkgroupExtInfo> getWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
+		Map<String,Object> params = new HashMap<String,Object>();
+		
+		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ,b.*, c.*,d.* ");
+
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_workgroups a ")
+				.append("LEFT JOIN ( SELECT source_id,source_name,abbr,short_name,entity_code,node_code FROM gp_sources) b ON a.source_id = b.source_id ")
+				.append("LEFT JOIN ( SELECT account,full_name FROM gp_users) c ON a.admin = c.account ")
+				.append("LEFT JOIN ( SELECT account,full_name as mgr_name FROM gp_users) d ON a.manager = d.account ")
+				.append("WHERE 1=1 ");
+		
+		if(StringUtils.isNotBlank(gname)){
+			
+			SQL_FROM.append(" AND a.workgroup_name LIKE :wgroup ");
+			params.put("wgroup", "%" + StringUtils.trim(gname) + "%");
+		}
+		SQL_FROM.append(" ORDER BY a.workgroup_name");
+		NamedParameterJdbcTemplate jtemplate = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		String querysql = SQL_COLS.append(SQL_FROM.toString()).toString() ;
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + querysql + " / params : " + ArrayUtils.toString(params));
+		}
+		List<WorkgroupExtInfo> result = null;
+		try{
+			result = jtemplate.query(querysql, params, WorkgroupExMapper);
+		}catch(DataAccessException dae){
+			throw new ServiceException("excp.query", dae, "all workgroups");
+		}
+
+		return result;
+	}
+
 }
