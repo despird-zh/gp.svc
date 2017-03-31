@@ -201,7 +201,7 @@ public interface SecurityService {
 			info.setRetryTimes(rs.getInt("retry_times"));
 			info.setLastLogonDate(rs.getDate("last_logon"));
 			info.setLanguage(rs.getString("language"));
-			info.setTimeZone(rs.getString("timezone"));
+			info.setTimezone(rs.getString("timezone"));
 			info.setPublishCabinet(rs.getLong("publish_cabinet_id"));
 			info.setNetdiskCabinet(rs.getLong("netdisk_cabinet_id"));
 			info.setGlobalAccount(rs.getString("global_account"));

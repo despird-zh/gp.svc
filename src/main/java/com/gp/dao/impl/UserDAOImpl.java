@@ -59,7 +59,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),info.getCreateDate(),
 				info.getExtraInfo(),info.getRetryTimes(),info.getLastLogonDate(),info.getClassification(),
-				info.getLanguage(), info.getTimeZone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
+				info.getLanguage(), info.getTimezone(),info.getPublishCabinet(),info.getNetdiskCabinet(),
 				info.getSignature(),info.getStorageId(),info.getAvatarId(),info.getModifier(),info.getModifyDate()
 		};
 		if(LOGGER.isDebugEnabled()){
@@ -169,7 +169,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		}
 		if(columnCheck(mode, colset, "timezone")){
 			SQL.append("timezone = ?, ");
-			params.add(info.getTimeZone());
+			params.add(info.getTimezone());
 		}
 		if(columnCheck(mode, colset, "publish_cabinet_id")){
 			SQL.append("publish_cabinet_id = ?, ");
@@ -346,7 +346,7 @@ public class UserDAOImpl extends DAOSupport implements UserDAO{
 		Object[] params = new Object[]{
 				info.getType(),info.getMobile(),info.getPhone(),info.getFullName(),
 				info.getEmail(),info.getPassword(),info.getState(),				
-				info.getLanguage(), info.getTimeZone(),
+				info.getLanguage(), info.getTimezone(),
 				info.getStorageId(),info.getModifier(),info.getModifyDate(),
 				info.getInfoId().getId()
 		};

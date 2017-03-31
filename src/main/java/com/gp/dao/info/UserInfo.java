@@ -61,7 +61,7 @@ public class UserInfo extends TraceableInfo<Long> {
 	private String language;
 	
 	@NotNull
-	private String timeZone;
+	private String timezone;
 	
 	private Long publishCabinet;
 	
@@ -167,12 +167,12 @@ public class UserInfo extends TraceableInfo<Long> {
 		this.language = language;
 	}
 
-	public String getTimeZone() {
-		return timeZone;
+	public String getTimezone() {
+		return timezone;
 	}
 
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
+	public void setTimezone(String timezone) {
+		this.timezone = timezone;
 	}
 
 	public Integer getRetryTimes() {
