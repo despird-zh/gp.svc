@@ -42,7 +42,7 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 		StringBuffer SQL_VAL = new StringBuffer();
 		SQL_COL.append("INSERT INTO gp_dictionary (")
 			.append("dict_id,dict_group,")
-			.append("dict_key,dict_value,default_lang,");
+			.append("dict_key,dict_value,");
 		
 		SQL_VAL.append("VALUES(")
 			.append("?,?,")
@@ -53,8 +53,7 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 		plist.add(info.getGroup());
 		plist.add(info.getKey());
 		plist.add(info.getValue());
-		plist.add(info.getDefaultLang());
-		
+
 		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){
 			SQL_COL.append(entry.getKey().getColumn()).append(",");
 			SQL_VAL.append("?,");
@@ -112,10 +111,6 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 		if(columnCheck(mode, colset, "dict_value")){
 			SQL.append("dict_value = ?,");
 			plist.add(info.getValue());
-		}
-		if(columnCheck(mode, colset, "default_lang")){
-			SQL.append("default_lang = ?,");
-			plist.add(info.getDefaultLang());
 		}
 		
 		for(Map.Entry<FlatColLocator, String> entry : labelMap.entrySet()){

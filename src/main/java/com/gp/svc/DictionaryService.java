@@ -8,9 +8,7 @@ import com.gp.info.InfoId;
 
 public interface DictionaryService {
 
-	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx)throws ServiceException;
-
-	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup)throws ServiceException;
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup, String keyFilter)throws ServiceException;
 
 	public boolean updateDictEntry(ServiceContext svcctx, DictionaryInfo dictinfo) throws ServiceException;
 

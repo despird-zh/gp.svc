@@ -21,18 +21,7 @@ public class DictionaryInfo extends TraceableInfo<Long> {
 	@NotNull
 	private String value;
 
-	@NotNull
-	private String defaultLang;
-
 	private Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
-	
-	public String getDefaultLang() {
-		return defaultLang;
-	}
-
-	public void setDefaultLang(String defaultLang) {
-		this.defaultLang = defaultLang;
-	}
 
 	public String getGroup() {
 		return group;

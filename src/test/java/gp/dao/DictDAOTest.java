@@ -44,7 +44,6 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setGroup("dgroup");
 		info.setKey("dk001");
 		info.setValue("dv001");
-		info.setDefaultLang("zh_cn");
 		Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
 		labelMap.put(FlatColumns.DICT_DE_DE, "de demo");
 		labelMap.put(FlatColumns.DICT_EN_US, "this demo");
@@ -84,7 +83,6 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 			info.setKey("dk001");
 			info.setValue("dv001");
 			
-			info.setDefaultLang("zh_cn");
 			Map<FlatColLocator, String> labelMap = new HashMap<FlatColLocator, String>();
 			labelMap.put(FlatColumns.DICT_DE_DE, "de demo");
 			labelMap.put(FlatColumns.DICT_EN_US, "this demo");

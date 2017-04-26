@@ -1,8 +1,12 @@
 package com.gp.svc.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,46 +39,33 @@ public class DictionaryServiceImpl implements DictionaryService{
 	
 	@Autowired
 	PseudoDAO pseudodao;
-	
+
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx) throws ServiceException {
-
+	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup, String keyFilter) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
 		
-		SQL.append("SELECT * FROM gp_dictionary");
+		Map<String, Object> paramap = new HashMap<String, Object>();
 		
-		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
+		SQL.append("select * from gp_dictionary where 1=1 ");
+		
+		NamedParameterJdbcTemplate template = pseudodao.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		
+		if(StringUtils.isNotBlank(dictGroup)){
+			SQL.append(" and dict_group = :group ");
+			paramap.put("group", dictGroup);
+		}
+		
+		SQL.append(" and dict_key like :key ");
+		paramap.put("key", keyFilter == null ? "%" : keyFilter + "%");
 		
 		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
-		
+				
 		try{
-			List<DictionaryInfo> result = template.query(SQL.toString(), rmapper);
-			return result;
-		}catch(DataAccessException dae){
-			throw new ServiceException("excp.query", dae, "Dictionary");
-		}		
-	}
+			List<DictionaryInfo> result = template.query(SQL.toString(), paramap ,rmapper);
 
-	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictGroup")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
-	@Override
-	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup) throws ServiceException {
-		StringBuffer SQL = new StringBuffer();
-		
-		SQL.append("select * from gp_dictionary where dict_group = ?");
-		
-		JdbcTemplate template = pseudodao.getJdbcTemplate(JdbcTemplate.class);
-		
-		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
-		
-		Object[] parms = new Object[]{				
-				dictGroup
-			};
-		
-		try{
-			List<DictionaryInfo> result = template.query(SQL.toString(), parms ,rmapper);
 			return result;
+			
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "Dictionary", dictGroup);
 		}
