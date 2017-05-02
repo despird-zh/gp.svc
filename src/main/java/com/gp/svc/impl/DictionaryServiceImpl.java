@@ -62,6 +62,9 @@ public class DictionaryServiceImpl implements DictionaryService{
 		RowMapper<DictionaryInfo> rmapper = DictionaryDAO.DictionaryMapper;
 				
 		try{
+			if(LOGGER.isDebugEnabled()){
+				LOGGER.debug("SQL : {} / PARAM : {}", SQL.toString(), paramap.toString());
+			}
 			List<DictionaryInfo> result = template.query(SQL.toString(), paramap ,rmapper);
 
 			return result;
