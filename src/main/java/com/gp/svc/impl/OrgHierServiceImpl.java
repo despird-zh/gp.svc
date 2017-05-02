@@ -371,8 +371,11 @@ public class OrgHierServiceImpl implements OrgHierService{
 			for(OrgHierInfo oinfo: lvl1){
 				ids.add(oinfo.getInfoId());
 			}
-			List<OrgHierInfo> subs = getOrgHierSubNodes(svcctx, ids.toArray(new InfoId[0]));
-			if(!subs.isEmpty()) all.addAll(subs);
+			if(!ids.isEmpty()){
+				List<OrgHierInfo> subs = getOrgHierSubNodes(svcctx, ids.toArray(new InfoId[0]));
+				if(!subs.isEmpty()) 
+					all.addAll(subs);
+			}
 			return all;
 		}catch(DataAccessException dae){
 			
