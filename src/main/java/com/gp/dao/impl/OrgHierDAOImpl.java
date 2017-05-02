@@ -161,9 +161,6 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
-
-
-
 	@Override
 	public List<OrgHierInfo> queryByIds(InfoId<?>... ids) {
 
@@ -174,6 +171,27 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 		}
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_org_hier ");
 		SQL.append("WHERE org_id IN (:org_ids) ");
+		SQL.append("ORDER BY org_id asc");
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("org_ids", oids);
+		
+		NamedParameterJdbcTemplate jtemplate = super.getJdbcTemplate(NamedParameterJdbcTemplate.class);
+		if(LOGGER.isDebugEnabled()){			
+			LOGGER.debug("SQL : " + SQL + " / params : " + oids.toString());
+		}
+		
+		return jtemplate.query(SQL.toString(), params, OrgHierMapper);
+	}
+
+	@Override
+	public List<OrgHierInfo> querySubByIds(InfoId<?>... ids) {
+		List<Long> oids = new ArrayList<Long>();
+		
+		for(InfoId<?> id : ids){
+			oids.add((Long)id.getId());
+		}
+		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_org_hier ");
+		SQL.append("WHERE org_pid IN (:org_ids) ");
 		SQL.append("ORDER BY org_id asc");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("org_ids", oids);

@@ -2,6 +2,7 @@ package com.gp.svc.impl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -322,6 +323,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		return routes;
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... orgids) throws ServiceException {
 		
@@ -336,4 +338,45 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
+	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Override
+	public List<OrgHierInfo> getOrgHierAllNodes(ServiceContext svcctx, InfoId<Long> orgNodeId) throws ServiceException {
+		
+		List<OrgHierInfo> all = new ArrayList<OrgHierInfo>();
+		List<InfoId<Long>> ids = new ArrayList<InfoId<Long>>();
+		try{
+			
+			List<OrgHierInfo> lvl1 = orghierdao.querySubByIds(orgNodeId);
+			all.addAll(lvl1);
+			for(OrgHierInfo oinfo: lvl1){
+				ids.add(oinfo.getInfoId());
+			}
+			List<OrgHierInfo> subs = getOrgHierSubNodes(svcctx, ids.toArray(new InfoId[0]));
+			if(!subs.isEmpty()) all.addAll(subs);
+			return all;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query", dae, "org hier");
+		}
+	}
+	
+	private List<OrgHierInfo> getOrgHierSubNodes(ServiceContext svcctx, InfoId<?> ...orgNodeIds) throws ServiceException {
+		
+		List<OrgHierInfo> all = new ArrayList<OrgHierInfo>();
+		List<InfoId<Long>> ids = new ArrayList<InfoId<Long>>();
+		try{
+			
+			List<OrgHierInfo> lvl1 = orghierdao.querySubByIds(orgNodeIds);
+			all.addAll(lvl1);
+			for(OrgHierInfo oinfo: lvl1){
+				ids.add(oinfo.getInfoId());
+			}
+			List<OrgHierInfo> subs = getOrgHierSubNodes(svcctx, ids.toArray(new InfoId[0]));
+			if(!subs.isEmpty()) all.addAll(subs);
+			return all;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.query", dae, "org hier");
+		}
+	}
 }

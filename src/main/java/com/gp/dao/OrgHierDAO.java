@@ -14,6 +14,8 @@ public interface OrgHierDAO extends BaseDAO<OrgHierInfo>{
 
 	List<OrgHierInfo> queryByIds(InfoId<?> ... ids);
 	
+	List<OrgHierInfo> querySubByIds(InfoId<?> ... ids);
+	
 	public static RowMapper<OrgHierInfo> OrgHierMapper = new RowMapper<OrgHierInfo>(){
 
 		@Override
