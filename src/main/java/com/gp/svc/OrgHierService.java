@@ -6,8 +6,8 @@ import java.util.Map;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
+import com.gp.svc.info.UserLiteInfo;
 import com.gp.dao.info.OrgHierInfo;
-import com.gp.dao.info.UserInfo;
 
 public interface OrgHierService {
 
@@ -50,7 +50,7 @@ public interface OrgHierService {
 	/**
 	 * Get all members of an ORG hierarchy node 
 	 **/
-	public List<UserInfo> getOrgHierMembers(ServiceContext svcctx, InfoId<Long> orgid) throws ServiceException;
+	public List<UserLiteInfo> getOrgHierMembers(ServiceContext svcctx, InfoId<Long> orgid) throws ServiceException;
 
 	/**
 	 * Find the grand son organization node count 

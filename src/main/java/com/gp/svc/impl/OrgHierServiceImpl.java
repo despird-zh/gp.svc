@@ -32,15 +32,15 @@ import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.OrgHierDAO;
 import com.gp.dao.PseudoDAO;
-import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.GroupInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
 import com.gp.dao.info.OrgHierInfo;
-import com.gp.dao.info.UserInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
+import com.gp.svc.SecurityService;
+import com.gp.svc.info.UserLiteInfo;
 
 @Service
 public class OrgHierServiceImpl implements OrgHierService{
@@ -58,9 +58,6 @@ public class OrgHierServiceImpl implements OrgHierService{
 	
 	@Autowired
 	private GroupUserDAO groupuserdao;
-
-	@Autowired
-	private UserDAO userdao;
 	
 	@Autowired
 	private CommonService idservice;
@@ -238,17 +235,20 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<UserInfo> getOrgHierMembers(ServiceContext svcctx, InfoId<Long> orgid)
+	public List<UserLiteInfo> getOrgHierMembers(ServiceContext svcctx, InfoId<Long> orgid)
 			throws ServiceException {
 		
-		List<UserInfo> rtv = null;
+		List<UserLiteInfo> rtv = null;
 		Long memberGroupId = pseudodao.query(orgid, FlatColumns.MBR_GRP_ID, Long.class);
 	
 		StringBuffer SQL = new StringBuffer();
 		
-		SQL.append("SELECT b.* FROM gp_users b, gp_group_user a ")
+		SQL.append("SELECT b.user_id, b.account, b.email, b.full_name, i.image_link, s.source_id, s.source_name ")
+			.append("FROM gp_users b, gp_group_user a, gp_images i, gp_sources s ")
 			.append("WHERE a.account = b.account ")
-			.append(" AND a.group_id = ?");
+			.append("AND b.source_id = s.source_id ")
+			.append("AND b.avatar_id = i.image_id ")
+			.append("AND a.group_id = ?");
 		
 		Object[] params = new Object[]{ memberGroupId };
 		
@@ -259,7 +259,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			LOGGER.debug("SQL : " + SQL.toString() + " / PARAMS : " + ArrayUtils.toString(params));
 		}
 		try{
-			rtv = jtemplate.query(SQL.toString(), params, UserDAO.UserMapper);	
+			rtv = jtemplate.query(SQL.toString(), params, SecurityService.USER_LITE_ROW_MAPPER);	
 		}catch(DataAccessException dae){
 			throw new ServiceException("excp.query.with", dae, "org hierarchy", orgid);
 		}
