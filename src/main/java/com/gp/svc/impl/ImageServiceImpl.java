@@ -47,14 +47,14 @@ public class ImageServiceImpl implements ImageService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
-	public List<ImageInfo> getImages(ServiceContext svcctx, String format) throws ServiceException {
+	public List<ImageInfo> getImages(ServiceContext svcctx, String format, String category) throws ServiceException {
 		
 		List<ImageInfo> result = null;
-		String QUERY_SQL = "SELECT * FROM gp_images WHERE image_format LIKE ? ";
+		String QUERY_SQL = "SELECT * FROM gp_images WHERE image_format LIKE ? and category LIKE ?";
 		
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-				format+"%"
+			format + "%", category + "%"
 		};
 		try{
 			

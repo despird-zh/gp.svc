@@ -30,4 +30,6 @@ public class SystemOptions {
 	public static final String CABINET_VERSION_ENABLE = "cabinet.version.enable";
 	public static final String FILE_CACHE_PATH = "file.cache.path";
 	public static final String SECURITY_JWT_SECRET = "security.jwt.secret";
+	public static final String PUBLIC_ACCESS = "public.access";
+	
 }

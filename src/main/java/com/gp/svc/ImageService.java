@@ -14,7 +14,7 @@ public interface ImageService {
 	 **/
 	public ImageInfo getImage(ServiceContext svcctx,InfoId<Long> id) throws ServiceException;
 
-	public List<ImageInfo> getImages(ServiceContext svcctx, String format) throws ServiceException;
+	public List<ImageInfo> getImages(ServiceContext svcctx, String format, String category) throws ServiceException;
 
 	public ImageInfo getImage(ServiceContext svcctx,InfoId<Long> id, String parentPath) throws ServiceException;
 
