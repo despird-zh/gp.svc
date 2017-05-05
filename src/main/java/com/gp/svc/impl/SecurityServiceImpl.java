@@ -286,6 +286,7 @@ public class SecurityServiceImpl implements SecurityService{
 		SQL.append("usr.email,");
 		SQL.append("src.source_id,");
 		SQL.append("src.source_name, ");
+		SQL.append("src.abbr, ");
 		SQL.append("img.image_id,");
 		SQL.append("img.image_link ");
 		SQL.append("from gp_users usr ");

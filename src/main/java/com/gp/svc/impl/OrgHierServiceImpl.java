@@ -243,7 +243,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 	
 		StringBuffer SQL = new StringBuffer();
 		
-		SQL.append("SELECT b.user_id, b.account, b.email, b.full_name, i.image_link, s.source_id, s.source_name ")
+		SQL.append("SELECT b.user_id, b.account, b.email, b.full_name, i.image_link, s.source_id, s.source_name, s.abbr ")
 			.append("FROM gp_users b, gp_group_user a, gp_images i, gp_sources s ")
 			.append("WHERE a.account = b.account ")
 			.append("AND b.source_id = s.source_id ")

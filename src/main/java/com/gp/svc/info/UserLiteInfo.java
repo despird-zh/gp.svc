@@ -15,6 +15,8 @@ public class UserLiteInfo {
 
     private Long sourceId;
 
+    private String sourceAbbr;
+    
     private String sourceName;
 
     public Long getUserId() {
@@ -72,5 +74,13 @@ public class UserLiteInfo {
     public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
     }
+
+	public String getSourceAbbr() {
+		return sourceAbbr;
+	}
+
+	public void setSourceAbbr(String sourceAbbr) {
+		this.sourceAbbr = sourceAbbr;
+	}
 
 }

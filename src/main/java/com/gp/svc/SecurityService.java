@@ -173,6 +173,8 @@ public interface SecurityService {
 			info.setSourceName(rs.getString("source_name"));
 			info.setSourceId(rs.getLong("source_id"));
 			info.setUserName(rs.getString("full_name"));
+			info.setSourceAbbr(rs.getString("abbr"));
+			
 			return info;
 		}
 	};

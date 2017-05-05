@@ -175,6 +175,7 @@ public class PostServiceImpl implements PostService{
         SQL_SEL.append("usr.email,");
         SQL_SEL.append("src.source_id,");
         SQL_SEL.append("src.source_name, ");
+        SQL_SEL.append("src.abbr, ");
         SQL_SEL.append("img.image_id,");
         SQL_SEL.append("img.image_link ");
         SQL_SEL.append("from gp_users usr ");
