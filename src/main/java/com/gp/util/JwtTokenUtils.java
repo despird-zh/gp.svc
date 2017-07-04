@@ -115,7 +115,7 @@ public class JwtTokenUtils {
      * 
      * @return String the jwt id
      **/
-    public static String parseJwtId(String secret, String jwtToken){
+    public static String parseJwtId(String jwtToken){
     	
     	JWT decode = JWT.decode(jwtToken);
     	return decode.getId();
