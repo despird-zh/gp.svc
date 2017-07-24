@@ -28,7 +28,7 @@ public interface SourceDAO extends BaseDAO<SourceInfo>{
 
 			info.setEntityCode(rs.getString("entity_code"));
 			info.setNodeCode(rs.getString("node_code"));
-			
+			info.setEntityName(rs.getString("entity_name"));
 			info.setSourceName(rs.getString("source_name"));
 			info.setDescription(rs.getString("descr"));
 			info.setState(rs.getString("state"));

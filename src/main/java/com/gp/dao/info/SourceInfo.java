@@ -15,6 +15,17 @@ public class SourceInfo extends TraceableInfo<Integer> {
 	private String nodeCode;
 	
 	@NotBlank
+	private String entityName;
+	
+	public String getEntityName() {
+		return entityName;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
+	}
+
+	@NotBlank
 	private String sourceName;
 	
 	private String hashKey;

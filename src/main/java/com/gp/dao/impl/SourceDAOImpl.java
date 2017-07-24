@@ -38,7 +38,7 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_sources (")
-			.append("source_id,entity_code,node_code,source_name,")
+			.append("source_id,entity_code,node_code,entity_name,source_name,")
 			.append("abbr,short_name,descr,email,state,")
 			.append("service_url,binary_url,admin,hash_key,")
 			.append("modifier, last_modified")
@@ -49,7 +49,7 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 			.append("?,?)");
 		
 		Object[] params = new Object[]{
-				info.getInfoId().getId(), info.getEntityCode(),info.getNodeCode(),info.getSourceName(),
+				info.getInfoId().getId(), info.getEntityCode(),info.getNodeCode(),info.getEntityName(),info.getSourceName(),
 				info.getAbbr(),info.getShortName(),info.getDescription(),info.getEmail(),info.getState(),
 				info.getServiceUrl(),info.getBinaryUrl(),info.getAdmin(),info.getHashKey(),
 				info.getModifier(),info.getModifyDate()
@@ -95,6 +95,10 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 		if(columnCheck(mode, colset, "node_code")){
 			SQL.append("node_code = ?,");
 			params.add(info.getNodeCode());
+		}
+		if(columnCheck(mode, colset, "entity_name")){
+			SQL.append("entity_name = ?,");
+			params.add(info.getEntityName());
 		}
 		if(columnCheck(mode, colset, "source_name")){
 			SQL.append("source_name = ?,");
