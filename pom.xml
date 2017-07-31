@@ -12,7 +12,8 @@
 		<hib.val>5.2.4.Final</hib.val>
 		<mysql.version>5.1.40</mysql.version>
 		<pool.jdbc>2.6.0</pool.jdbc>
-		<spring.version>4.3.6.RELEASE</spring.version>
+		<spring.data>1.8.6.RELEASE</spring.data>
+		<spring.version>4.3.10.RELEASE</spring.version>
 		<jwt.version>3.0.2</jwt.version>
 	</properties>
 	<dependencies>
@@ -74,7 +75,7 @@
 		<dependency>
 	      <groupId>org.springframework.data</groupId>
 	      <artifactId>spring-data-redis</artifactId>
-	      <version>1.5.0.RELEASE</version>
+	      <version>${spring.data}</version>
 	    </dependency>
 		<dependency>
 		   <groupId>org.hibernate</groupId>
