@@ -43,7 +43,7 @@ public class OperationDAOImpl extends DAOSupport implements OperationDAO {
 			.append("modifier, last_modified ")
 			.append(")values(")
 			.append("?,?,?,?,")
-			.append("?,?,?,?,")
+			.append("?,?,?,?,?,")
 			.append("?,?,?,")
 			.append("?,?)");
 		
