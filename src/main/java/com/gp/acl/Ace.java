@@ -257,7 +257,18 @@ public class Ace implements Comparable<Ace> {
 		}
 	}
 	
-	public boolean[] checkPrivilege(AcePrivilege ...privileges){
+	public boolean checkPrivilege(AcePrivilege privilege){
+		
+		if(privileges == null )
+			return false;
+		
+		else{
+
+			return this.privileges.contains(privilege);
+		}
+	}
+
+	public boolean[] checkPrivileges(AcePrivilege ...privileges){
 		
 		if(privileges == null || privileges.length == 0)
 			return new boolean[0];

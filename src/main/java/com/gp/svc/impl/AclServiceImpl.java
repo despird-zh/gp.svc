@@ -29,13 +29,12 @@ import com.gp.dao.info.CabAclInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.AclService;
 import com.gp.svc.CommonService;
+import com.gp.util.CommonUtils;
 
 @Service
 public class AclServiceImpl implements AclService{
 	
 	Logger LOGGER = LoggerFactory.getLogger(AclServiceImpl.class);
-	// mapper to parse the json into Set<String> of permissions
-	private static ObjectMapper mapper = new ObjectMapper();
 	
 	@Autowired
 	PseudoDAO pseudodao;
@@ -169,9 +168,9 @@ public class AclServiceImpl implements AclService{
 				Set<String> perms = null;
 				Set<String> privileges = null;
 				try {
-					perms = mapper.readValue(cai.getPermissions(), new TypeReference<Set<String>>(){});
+					perms = CommonUtils.JSON_MAPPER.readValue(cai.getPermissions(), new TypeReference<Set<String>>(){});
 					ace.setPermissions(perms, true);
-					privileges = mapper.readValue(cai.getPrivileges(), new TypeReference<Set<String>>(){});
+					privileges = CommonUtils.JSON_MAPPER.readValue(cai.getPrivileges(), new TypeReference<Set<String>>(){});
 					for(String priv: privileges) {
 						ace.grantPrivileges(AcePrivilege.parse(priv));
 					}
@@ -208,9 +207,9 @@ public class AclServiceImpl implements AclService{
 			Set<String> privileges = null;
 			// parse the permission set
 			try {
-				perms = mapper.readValue(aci.getPermissions(), new TypeReference<Set<String>>(){});
+				perms = CommonUtils.JSON_MAPPER.readValue(aci.getPermissions(), new TypeReference<Set<String>>(){});
 				ace.setPermissions(perms, true);
-				privileges = mapper.readValue(aci.getPrivileges(), new TypeReference<Set<String>>(){});
+				privileges = CommonUtils.JSON_MAPPER.readValue(aci.getPrivileges(), new TypeReference<Set<String>>(){});
 				for(String priv: privileges) {
 					ace.grantPrivileges(AcePrivilege.parse(priv));
 				}
@@ -249,6 +248,77 @@ public class AclServiceImpl implements AclService{
 		}catch(DataAccessException dae){
 			
 			throw new ServiceException("excp.delete.with", dae, "ACE", "aclid="+aclId.getId() + "/type="+aceType + "/subject"+subject);
+		}
+	}
+
+	@Override
+	public InfoId<Long> addAcl(ServiceContext svcctx, Acl acl) throws ServiceException {
+		try{
+			
+			InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
+			CabAclInfo cabaclinfo = new CabAclInfo();
+			cabaclinfo.setInfoId(aclid);
+			svcctx.setTraceInfo(cabaclinfo);
+			cabacldao.create(cabaclinfo);
+			
+			CabAceInfo aceinfo = null;
+			for(Ace ace : acl.getAllAces()){
+				aceinfo = new CabAceInfo();
+				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				aceinfo.setInfoId(aceid);
+				aceinfo.setAclId(aclid.getId());
+				aceinfo.setSubject(ace.getSubject());
+				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
+				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
+				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
+				
+				svcctx.setTraceInfo(aceinfo);
+				cabacedao.create(aceinfo);
+			}
+			
+			return aclid;
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.create.with", dae, "ACL","ACES");
+		}
+	}
+
+	@Override
+	public InfoId<Long> addAce(ServiceContext svcctx,  InfoId<Long> aclId, Ace ace) throws ServiceException {
+		try{
+			
+			CabAceInfo aceinfo = cabacedao.queryBySubject(ace.getAceId().getId(), 
+					ace.getType().toString(), 
+					ace.getSubject());
+			
+			if(aceinfo != null){
+				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
+				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
+				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
+				
+				cabacedao.update( aceinfo, FilterMode.NONE);
+				
+				return aceinfo.getInfoId();
+			}else{
+				
+				aceinfo = new CabAceInfo();
+				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				
+				aceinfo.setInfoId(aceid);
+				aceinfo.setAclId(aclId.getId());
+				aceinfo.setSubject(ace.getSubject());
+				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
+				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
+				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
+				
+				svcctx.setTraceInfo(aceinfo);
+				cabacedao.create(aceinfo);
+				
+				return aceid;
+			}
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.add.ace", dae, aclId);
 		}
 	}
 

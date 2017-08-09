@@ -21,8 +21,12 @@ public interface AclService {
 	
 	public Acl getAcl(ServiceContext svcctx, InfoId<Long> aclId) throws ServiceException;
 	
+	public InfoId<Long> addAcl(ServiceContext svcctx, Acl acl) throws ServiceException;
+	
 	public Ace getAce(ServiceContext svcctx, InfoId<Long> aclId,String aceType, String subject) throws ServiceException;
 
+	public InfoId<Long> addAce(ServiceContext svcctx, InfoId<Long> aclId, Ace ace) throws ServiceException;
+	
 	public boolean removeAcl(ServiceContext svcctx, InfoId<Long> aclId) throws ServiceException;
 	
 	public boolean removeAce(ServiceContext svcctx, InfoId<Long> aclId,String aceType, String subject) throws ServiceException;
