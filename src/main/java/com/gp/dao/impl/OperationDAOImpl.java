@@ -17,29 +17,29 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.OperLogDAO;
-import com.gp.dao.info.OperLogInfo;
+import com.gp.dao.OperationDAO;
+import com.gp.dao.info.OperationInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 @Component
-public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
+public class OperationDAOImpl extends DAOSupport implements OperationDAO {
 
-	Logger LOGGER = LoggerFactory.getLogger(OperLogDAOImpl.class);
+	Logger LOGGER = LoggerFactory.getLogger(OperationDAOImpl.class);
 	
 	@Autowired
-	public OperLogDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public OperationDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	
 	@Override
-	public int create(OperLogInfo info) {
+	public int create(OperationInfo info) {
 
 		StringBuffer SQL = new StringBuffer();
 		
-		SQL.append("insert into gp_operation_log (")
-			.append("log_id,workgroup_id ,account ,user_name ,")
-			.append("audit_id,operation_time , operation ,object_id,")
-			.append("object_excerpt , predicate_id, predicate_excerpt, ")
+		SQL.append("insert into gp_operations (")
+			.append("oper_id, workgroup_id, subject, subject_excerpt,")
+			.append("audit_id, operation_time, operation, operation_excerpt, object,")
+			.append("object_excerpt, predicate, predicate_excerpt, ")
 			.append("modifier, last_modified ")
 			.append(")values(")
 			.append("?,?,?,?,")
@@ -50,9 +50,9 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		InfoId<Long> key = info.getInfoId();
 		
 		Object[] params = new Object[]{
-				key.getId(),info.getWorkgroupId(),info.getAccount(),info.getUserName(),
-				info.getAuditId(),info.getOperationTime(),info.getOperation(),info.getObjectId(),
-				info.getObjectExcerpt(),info.getPredicateId(),info.getPredicateExcerpt(),
+				key.getId(),info.getWorkgroupId(),info.getSubject(), info.getSubjectExcerpt(),
+				info.getAuditId(),info.getOperationTime(),info.getOperation(),info.getOperationExcerpt(), info.getObject(),
+				info.getObjectExcerpt(),info.getPredicate(),info.getPredicateExcerpt(),
 				info.getModifier(),info.getModifyDate()
 				
 		};
@@ -68,8 +68,8 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 	@Override
 	public int delete(InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_operation_log ")
-			.append("where log_id = ? ");
+		SQL.append("delete from gp_operations ")
+			.append("where oper_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
@@ -84,23 +84,23 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 	}
 
 	@Override
-	public int update(OperLogInfo info, FilterMode mode, FlatColLocator ...cols) {
+	public int update(OperationInfo info, FilterMode mode, FlatColLocator ...cols) {
 		
 		StringBuffer SQL = new StringBuffer();
 		Set<String> colset = FlatColumns.toColumnSet(cols);
 		List<Object> params = new ArrayList<Object>();
-		SQL.append("update gp_operation_log set ");
+		SQL.append("update gp_operations set ");
 		if(columnCheck(mode, colset, "workgroup_id")){
 			SQL.append("workgroup_id = ?,");
 			params.add(info.getWorkgroupId());
 		}
-		if(columnCheck(mode, colset, "account")){
-			SQL.append("account = ?,");
-			params.add(info.getAccount());
+		if(columnCheck(mode, colset, "subject")){
+			SQL.append("subject = ?,");
+			params.add(info.getSubject());
 		}
-		if(columnCheck(mode, colset, "user_name")){
-			SQL.append("user_name = ?,");
-			params.add(info.getUserName());
+		if(columnCheck(mode, colset, "subject_excerpt")){
+			SQL.append("subject_excerpt = ?,");
+			params.add(info.getSubjectExcerpt());
 		}
 		if(columnCheck(mode, colset, "audit_id")){
 			SQL.append("audit_id = ?,");
@@ -114,17 +114,21 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 			SQL.append("operation = ?,");
 			params.add(info.getOperation());
 		}
-		if(columnCheck(mode, colset, "object_id")){
-			SQL.append("object_id = ?,");
-			params.add(info.getObjectId());
+		if(columnCheck(mode, colset, "operation_excerpt")){
+			SQL.append("operation_excerpt = ?,");
+			params.add(info.getOperationExcerpt());
+		}
+		if(columnCheck(mode, colset, "object")){
+			SQL.append("object = ?,");
+			params.add(info.getObject());
 		}
 		if(columnCheck(mode, colset, "object_excerpt")){
 			SQL.append("object_excerpt = ?,");
 			params.add(info.getObjectExcerpt());
 		}
-		if(columnCheck(mode, colset, "predicate_id")){
-			SQL.append("predicate_id = ?,");
-			params.add(info.getPredicateId());
+		if(columnCheck(mode, colset, "predicate")){
+			SQL.append("predicate = ?,");
+			params.add(info.getPredicate());
 		}
 		if(columnCheck(mode, colset, "predicate_excerpt")){
 			SQL.append("predicate_excerpt = ?,");
@@ -136,7 +140,7 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		SQL.append("last_modified = ? ");
 		params.add(info.getModifyDate());
 
-		SQL.append("where log_id = ? ");
+		SQL.append("where oper_id = ? ");
 		params.add(info.getInfoId().getId());
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -149,8 +153,8 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 	}
 
 	@Override
-	public OperLogInfo query(InfoId<?> id) {
-		String SQL = "SELECT * FROM aq_actibity_log WHERE log_id = ?";
+	public OperationInfo query(InfoId<?> id) {
+		String SQL = "SELECT * FROM aq_operations WHERE oper_id = ?";
 		Object[] params = new Object[]{				
 				id.getId()
 			};
@@ -159,7 +163,7 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> ainfo = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperationInfo> ainfo = jtemplate.query(SQL, params, ActLogMapper);
 		return ainfo.size()>0 ? ainfo.get(0):null;
 	}
 	
@@ -169,8 +173,8 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 	}
 
 	@Override
-	public List<OperLogInfo> queryByAccount(String account) {
-		String SQL = "SELECT * FROM aq_operation_log WHERE account = ? ORDER BY log_id desc";
+	public List<OperationInfo> queryByAccount(String account) {
+		String SQL = "SELECT * FROM aq_operations WHERE subject = ? ORDER BY oper_id desc";
 		Object[] params = new Object[]{				
 				account
 			};
@@ -179,13 +183,13 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperationInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 
 	@Override
-	public List<OperLogInfo> queryByWorkgroup(InfoId<Long> wid) {
-		String SQL = "SELECT * FROM aq_operation_log WHERE account = ? ORDER BY log_id desc";
+	public List<OperationInfo> queryByWorkgroup(InfoId<Long> wid) {
+		String SQL = "SELECT * FROM aq_operations WHERE workgroup_id = ? ORDER BY oper_id desc";
 		Object[] params = new Object[]{				
 				wid.getId()
 			};
@@ -194,13 +198,13 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperationInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 
 	@Override
-	public List<OperLogInfo> queryByObject(InfoId<Long> objectid) {
-		String SQL = "SELECT * FROM aq_operation_log WHERE object_id = ? ORDER BY log_id desc";
+	public List<OperationInfo> queryByObject(InfoId<Long> objectid) {
+		String SQL = "SELECT * FROM aq_operation_log WHERE object = ? ORDER BY log_id desc";
 		Object[] params = new Object[]{				
 				objectid.toString()
 			};
@@ -209,7 +213,7 @@ public class OperLogDAOImpl extends DAOSupport implements OperLogDAO {
 		if(LOGGER.isDebugEnabled()){			
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
+		List<OperationInfo> infos = jtemplate.query(SQL, params, ActLogMapper);
 		return infos;
 	}
 

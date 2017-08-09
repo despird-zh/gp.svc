@@ -78,7 +78,7 @@ public enum IdKey implements Identifier{
 	CAB_SUM("gp_cab_summary","rel_id", Long.class),
 	USER_SUM("gp_user_summary","rel_id", Long.class),
 	WORKGROUP_SUM("gp_workgroup_summary","rel_id", Long.class),
-	OPER_LOG("gp_operation_log","log_id", Long.class),
+	OPERATION("gp_operations","oper_id", Long.class),
 	/** the quick flow table */
 	QUICK_FLOW("gp_quick_flows", "flow_id", Long.class),
 	QUICK_NODE("gp_quick_node", "node_id", Long.class),

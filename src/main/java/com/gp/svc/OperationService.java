@@ -2,18 +2,18 @@ package com.gp.svc;
 
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
-import com.gp.dao.info.OperLogInfo;
+import com.gp.dao.info.OperationInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 
-public interface OperLogService {
+public interface OperationService {
 
 	/**
 	 * Get the activity logs of workgroup
 	 * @param workgroupId the id of workgroup 
 	 **/ 
-	public PageWrapper<OperLogInfo> getWorkgroupOperLogs(ServiceContext svcctx,
+	public PageWrapper<OperationInfo> getWorkgroupOperations(ServiceContext svcctx,
 														 InfoId<Long> wid,
 														 PageQuery pagequery) throws ServiceException;
 	
@@ -21,7 +21,7 @@ public interface OperLogService {
 	 * Get the activity logs of user
 	 * @param account the user account
 	 **/ 
-	public PageWrapper<OperLogInfo> getAccountOperLogs(ServiceContext svcctx,
+	public PageWrapper<OperationInfo> getAccountOperations(ServiceContext svcctx,
 													   String account,
 													   PageQuery pagequery) throws ServiceException;
 	
@@ -29,12 +29,12 @@ public interface OperLogService {
 	 * Get the activity logs of object
 	 * @param objectId the id of object 
 	 **/ 
-	public PageWrapper<OperLogInfo> getObjectOperLogs(ServiceContext svcctx,
+	public PageWrapper<OperationInfo> getObjectOperations(ServiceContext svcctx,
 													  InfoId<?> objectId,
 													  PageQuery pagequery) throws ServiceException;
 
 	/**
 	 * Add the activity log into database
 	 **/
-	public void addOperLog(ServiceContext svcctx, OperLogInfo activitylog) throws ServiceException;
+	public void addOperation(ServiceContext svcctx, OperationInfo activitylog) throws ServiceException;
 }

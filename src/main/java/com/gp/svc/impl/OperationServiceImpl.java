@@ -12,46 +12,46 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
-import com.gp.dao.OperLogDAO;
+import com.gp.dao.OperationDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
-import com.gp.dao.info.OperLogInfo;
+import com.gp.dao.info.OperationInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.info.InfoId;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
-import com.gp.svc.OperLogService;
+import com.gp.svc.OperationService;
 
 @Service
-public class OperLogServiceImpl implements OperLogService {
+public class OperationServiceImpl implements OperationService {
 	
-	static Logger LOGGER = LoggerFactory.getLogger(OperLogServiceImpl.class);
+	static Logger LOGGER = LoggerFactory.getLogger(OperationServiceImpl.class);
 	
 	@Autowired
 	PseudoDAO pseudodao;
 	
 	@Autowired
-	OperLogDAO actlogdao;
+	OperationDAO actlogdao;
 	
 	@Autowired
 	UserDAO userdao;
 	
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<OperLogInfo> getWorkgroupOperLogs(ServiceContext svcctx, InfoId<Long> wid,
+	public PageWrapper<OperationInfo> getWorkgroupOperations(ServiceContext svcctx, InfoId<Long> wid,
 														 PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
-		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.log_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operation_log a WHERE a.workgroup_id = ?  ORDER BY a.log_id desc");
+		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.oper_id) ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operations a WHERE a.workgroup_id = ?  ORDER BY a.oper_id desc");
 		
 		Object[] params = new Object[]{wid.getId()};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<OperLogInfo> pwrapper = new PageWrapper<OperLogInfo>();
+		PageWrapper<OperationInfo> pwrapper = new PageWrapper<OperationInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -70,9 +70,9 @@ public class OperLogServiceImpl implements OperLogService {
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> result = null;
+		List<OperationInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, OperLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -84,17 +84,17 @@ public class OperLogServiceImpl implements OperLogService {
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<OperLogInfo> getAccountOperLogs(ServiceContext svcctx, String account, PageQuery pagequery)
+	public PageWrapper<OperationInfo> getAccountOperations(ServiceContext svcctx, String account, PageQuery pagequery)
 			throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
-		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.log_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operation_log a WHERE a.account = ?  ORDER BY a.log_id desc");
+		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.oper_id) ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operations a WHERE a.subject = ?  ORDER BY a.oper_id desc");
 		
 		Object[] params = new Object[]{account};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<OperLogInfo> pwrapper = new PageWrapper<OperLogInfo>();
+		PageWrapper<OperationInfo> pwrapper = new PageWrapper<OperationInfo>();
 		// get count sql scripts.
 		String countsql = SQL_COUNT.append(SQL_FROM).toString();
 		int totalrow = pseudodao.queryRowCount(jtemplate, countsql, params);
@@ -112,9 +112,9 @@ public class OperLogServiceImpl implements OperLogService {
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> result = null;
+		List<OperationInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, OperLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -126,17 +126,17 @@ public class OperLogServiceImpl implements OperLogService {
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
 	@Override
-	public PageWrapper<OperLogInfo> getObjectOperLogs(ServiceContext svcctx, InfoId<?> objectId,
+	public PageWrapper<OperationInfo> getObjectOperations(ServiceContext svcctx, InfoId<?> objectId,
 													  PageQuery pagequery) throws ServiceException {
 		
 		StringBuffer SQL_COLS = new StringBuffer("SELECT a.* ");
-		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.log_id) ");
-		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operation_log a WHERE a.object_id = ?  ORDER BY a.log_id desc");
+		StringBuffer SQL_COUNT = new StringBuffer("SELECT count(a.oper_id) ");
+		StringBuffer SQL_FROM = new StringBuffer("FROM gp_operations a WHERE a.object = ?  ORDER BY a.oper_id desc");
 		
 		Object[] params = new Object[]{objectId.toString()};
 		JdbcTemplate jtemplate = pseudodao.getJdbcTemplate(JdbcTemplate.class);
 		
-		PageWrapper<OperLogInfo> pwrapper = new PageWrapper<OperLogInfo>();
+		PageWrapper<OperationInfo> pwrapper = new PageWrapper<OperationInfo>();
 		if(pagequery.isTotalCountEnable()){
 			// get count sql scripts.
 			String countsql = SQL_COUNT.append(SQL_FROM).toString();
@@ -155,9 +155,9 @@ public class OperLogServiceImpl implements OperLogService {
 			
 			LOGGER.debug("SQL : " + pagesql + " / params : " + ArrayUtils.toString(params));
 		}
-		List<OperLogInfo> result = null;
+		List<OperationInfo> result = null;
 		try{
-			result = jtemplate.query(pagesql, params, OperLogDAO.ActLogMapper);
+			result = jtemplate.query(pagesql, params, OperationDAO.ActLogMapper);
 			pwrapper.setRows(result);
 			
 		}catch(DataAccessException dae){
@@ -169,11 +169,11 @@ public class OperLogServiceImpl implements OperLogService {
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addOperLog(ServiceContext svcctx, OperLogInfo operlog) throws ServiceException {
+	public void addOperation(ServiceContext svcctx, OperationInfo operlog) throws ServiceException {
 
 		try{
-			UserInfo uinfo = userdao.queryByAccount(operlog.getAccount());
-			operlog.setUserName(uinfo.getFullName());
+			UserInfo uinfo = userdao.queryByAccount(operlog.getSubject());
+			operlog.setSubjectExcerpt(uinfo.getFullName());
 			actlogdao.create(operlog);
 
 		}catch(DataAccessException dae){
