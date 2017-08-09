@@ -263,7 +263,7 @@ public class FileServiceImpl implements FileService{
 					aceinfo.setAclId(acl.getAclId().getId());
 					aceinfo.setSubjectType(ace.getType().value);
 					aceinfo.setSubject(ace.getSubject());
-					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					acedao.create(aceinfo);

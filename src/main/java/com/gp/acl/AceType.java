@@ -25,10 +25,10 @@ package com.gp.acl;
  **/
 public enum AceType {
 
-	OWNER("o"), 
-	USER("u"),
-	GROUP("g"),
-	EVERYONE("e");
+	OWNER("owner"), 
+	USER("user"),
+	GROUP("group"),
+	ANYONE("anyone");
 	
 	public final String value;
 	
@@ -45,17 +45,17 @@ public enum AceType {
 	
 	public static AceType parse(String val){
 		
-		if(OWNER.value.equals(val))
+		if(OWNER.value.equalsIgnoreCase(val))
 			return OWNER;
 		
-		if(USER.value.equals(val))
+		if(USER.value.equalsIgnoreCase(val))
 			return USER;
 		
-		if(GROUP.value.equals(val))
+		if(GROUP.value.equalsIgnoreCase(val))
 			return GROUP;
 		
-		if(EVERYONE.value.equals(val))
-			return EVERYONE;
+		if(ANYONE.value.equalsIgnoreCase(val))
+			return ANYONE;
 		
 		return OWNER;
 	}

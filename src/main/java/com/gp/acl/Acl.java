@@ -50,7 +50,7 @@ public class Acl {
 		aclmap = new HashMap<String,Ace>();
 		Ace owner = new Ace(AceType.OWNER, null, AcePrivilege.DELETE);
 		aclmap.put(owner.getMapKey(),owner);
-		Ace other = new Ace(AceType.EVERYONE, null, AcePrivilege.READ);
+		Ace other = new Ace(AceType.ANYONE, null, AcePrivilege.READ);
 		aclmap.put(other.getMapKey(), other);
 	}
 	
@@ -86,7 +86,7 @@ public class Acl {
 		Ace exist_ace = aclmap.get(ace.getMapKey());
 		if(exist_ace != null){
 
-			exist_ace.setPrivilege(ace.getPrivilege(), merge);
+			exist_ace.setPrivileges(merge, ace.getPrivileges());
 				
 			exist_ace.setPermissions(ace.getPermissions(), merge);
 

@@ -10,7 +10,7 @@ public class AceTester {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Ace ace = new Ace(AceType.EVERYONE, "", AcePrivilege.BROWSE);
+		Ace ace = new Ace(AceType.ANYONE, "", AcePrivilege.BROWSE);
 		ace.grantPermission("upgrade","download");
 		System.out.println(ace);
 		

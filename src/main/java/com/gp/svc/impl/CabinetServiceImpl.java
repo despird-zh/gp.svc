@@ -95,7 +95,7 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
-		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	ace.subject_type = '").append(AceType.ANYONE.value).append("'");
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
@@ -154,7 +154,7 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
-		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	ace.subject_type = '").append(AceType.ANYONE.value).append("'");
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
@@ -231,7 +231,7 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
-		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	ace.subject_type = '").append(AceType.ANYONE.value).append("'");
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
@@ -294,7 +294,7 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
-		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	ace.subject_type = '").append(AceType.ANYONE.value).append("'");
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
@@ -373,7 +373,7 @@ public class CabinetServiceImpl implements CabinetService{
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");
-		SQL.append("	ace.subject_type = '").append(AceType.EVERYONE.value).append("'");
+		SQL.append("	ace.subject_type = '").append(AceType.ANYONE.value).append("'");
 		SQL.append("	AND ace.privilege & ").append(AcePrivilege.BROWSE.value).append("=").append(AcePrivilege.BROWSE.value);
 		SQL.append(" )");
 		SQL.append(" OR (");

@@ -41,21 +41,24 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 		CabAceInfo aceowner = new CabAceInfo();
 		aceowner.setSubjectType(AceType.OWNER.value);
 		aceowner.setSubject(GeneralConstants.OWNER_SUBJECT);
-		aceowner.setPrivilege(AcePrivilege.DELETE.value | AcePrivilege.EXEC.value);
+		aceowner.setBrowse(true);
+		aceowner.setPrivileges("[\"write\",\"read\",\"delete\"]");
 		aceowner.setPermissions("[\"print\",\"browse\",\"copy\"]");
 		acelist.add(aceowner);
 		
 		CabAceInfo aceowner1 = new CabAceInfo();
 		aceowner1.setSubjectType(AceType.GROUP.value);
 		aceowner1.setSubject("demogrp");
-		aceowner1.setPrivilege(AcePrivilege.DELETE.value | AcePrivilege.EXEC.value);
+		aceowner1.setBrowse(true);
+		aceowner1.setPrivileges("[\"write\",\"read\",\"delete\"]");
 		aceowner1.setPermissions("[\"print\",\"browse\",\"copy\"]");
 		acelist.add(aceowner1);
 		
 		aceowner1 = new CabAceInfo();
 		aceowner1.setSubjectType(AceType.USER.value);
 		aceowner1.setSubject("demousr");
-		aceowner1.setPrivilege(AcePrivilege.DELETE.value | AcePrivilege.EXEC.value);
+		aceowner1.setBrowse(true);
+		aceowner1.setPrivileges("[\"write\",\"read\",\"delete\"]");
 		aceowner1.setPermissions("[\"print\",\"browse\",\"copy\"]");
 		acelist.add(aceowner1);
 		

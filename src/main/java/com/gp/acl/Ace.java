@@ -16,9 +16,12 @@
 
 package com.gp.acl;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -49,11 +52,11 @@ public class Ace implements Comparable<Ace> {
 	/** the group/user name */
 	private String subject;	
 	/** the privilege of role*/
-	private int privilege;	
+	private Set<AcePrivilege> privileges = new HashSet<AcePrivilege>();
 	/** the entry type */
 	private AceType type;	
 	/** the permission set */
-	private Set<String> permissions = new HashSet<String>();;
+	private Set<String> permissions = new HashSet<String>();
 	
 	/**
 	 * Constructor for user ACE item. default privilege is AcePrivilege.WRITE
@@ -65,7 +68,8 @@ public class Ace implements Comparable<Ace> {
 		
 		this.type = type;
 		setSubject(subject);
-		this.privilege = AcePrivilege.WRITE.value | AcePrivilege.READ.value;
+		this.privileges.add( AcePrivilege.WRITE );
+		this.privileges.add( AcePrivilege.READ );
 	}
 	
 	/**
@@ -79,7 +83,8 @@ public class Ace implements Comparable<Ace> {
 		
 		this.type = AceType.USER;
 		setSubject(subject);
-		this.privilege = AcePrivilege.WRITE.value | AcePrivilege.READ.value;
+		this.privileges.add( AcePrivilege.WRITE );
+		this.privileges.add( AcePrivilege.READ );
 
 	}
 	
@@ -95,8 +100,9 @@ public class Ace implements Comparable<Ace> {
 		
 		this.type = type;
 		setSubject(subject);
-		this.privilege = privilege.value;
-
+		this.privileges.add( privilege );
+		this.privileges.add( AcePrivilege.WRITE );
+		this.privileges.add( AcePrivilege.READ );
 	}
 	
 	/**
@@ -111,7 +117,7 @@ public class Ace implements Comparable<Ace> {
 		this.type = type;
 		setSubject(subject);
 		for(AcePrivilege privilege: privileges){
-			this.privilege = this.privilege | privilege.value;
+			this.privileges.add( privilege );
 		}
 
 	}
@@ -127,7 +133,7 @@ public class Ace implements Comparable<Ace> {
 		
 		this.type = type;
 		setSubject(subject);
-		this.privilege = AcePrivilege.WRITE.value;
+		this.privileges.add( AcePrivilege.WRITE );
 		if(perms == null || perms.length ==0)
 			return;
 
@@ -169,7 +175,7 @@ public class Ace implements Comparable<Ace> {
 		if(type == AceType.OWNER){
 			this.subject = GeneralConstants.OWNER_SUBJECT;
 		}
-		else if(type == AceType.EVERYONE){
+		else if(type == AceType.ANYONE){
 			this.subject = GeneralConstants.EVERYONE_SUBJECT;		
 		}
 		else if(StringUtils.isBlank(subject)){
@@ -190,35 +196,65 @@ public class Ace implements Comparable<Ace> {
 	/**
 	 * Get the privilege : none, browse, read, write, delete 
 	 **/
-	public int getPrivilege(){
+	public Set<AcePrivilege> getPrivileges(){
 		
-		return this.privilege;
+		return this.privileges;
 	}
 	
 	/**
-	 * Get the privilege : none, browse, read, write, delete 
+	 * Set the privilege : none, browse, read, write, delete 
 	 **/
-	public void setPrivilege(int privilege, boolean merge){
-		if(merge)
-			this.privilege = this.privilege | privilege;
-		else
-			this.privilege = privilege;
+	public void setPrivileges( boolean merge, AcePrivilege ... privileges){
+		if(merge && ArrayUtils.isNotEmpty(privileges)) {
+			for(AcePrivilege privilege: privileges){
+				this.privileges.add( privilege );
+			}
+		}else {
+			this.privileges.clear();
+			
+			if(ArrayUtils.isEmpty(privileges)) return;
+			
+			for(AcePrivilege privilege: privileges){
+				this.privileges.add( privilege );
+			}
+		}
+	}
+	
+	/**
+	 * Set the privilege : none, browse, read, write, delete 
+	 **/
+	public void setPrivileges( boolean merge, Set<AcePrivilege> privileges){
+		if(merge && CollectionUtils.isNotEmpty(privileges)) {
+			for(AcePrivilege privilege: privileges){
+				this.privileges.add( privilege );
+			}
+		}else {
+			this.privileges.clear();
+			
+			if(CollectionUtils.isEmpty(privileges)) return;
+			
+			this.privileges.addAll(privileges);
+		}
 	}
 	
 	/**
 	 * Set the privilege 
 	 **/
-	public void grantPrivilege(AcePrivilege privilege){
+	public void grantPrivileges(AcePrivilege ... privileges){
 		
-		this.privilege = this.privilege | privilege.value;
+		for(AcePrivilege privilege: privileges){
+			this.privileges.add( privilege );
+		}
 	}
 	
 	/**
 	 * Set the privilege 
 	 **/
-	public void revokePrivilege(AcePrivilege privilege){
+	public void revokePrivileges(AcePrivilege ... privileges){
 		
-		this.privilege = this.privilege & ~privilege.value;
+		for(AcePrivilege privilege: privileges){
+			this.privileges.remove( privilege );
+		}
 	}
 	
 	public boolean[] checkPrivilege(AcePrivilege ...privileges){
@@ -231,7 +267,7 @@ public class Ace implements Comparable<Ace> {
 			boolean[] result = new boolean[privileges.length];
 			for(int i = 0; i < privileges.length ; i++){
 				
-				result[i] = (privilege & privileges[i].value) > 0;
+				result[i] = this.privileges.contains(privileges[i]);
 			}
 			
 			return result;
@@ -307,7 +343,7 @@ public class Ace implements Comparable<Ace> {
 			.append(this.type).append(GeneralConstants.KVPAIRS_SEPARATOR);
 		
 		sbuf.append("privilege").append(GeneralConstants.KEYVAL_SEPARATOR)
-			.append(AcePrivilege.toString(privilege)).append(GeneralConstants.KVPAIRS_SEPARATOR);
+			.append(this.privileges.toString()).append(GeneralConstants.KVPAIRS_SEPARATOR);
 		
 		if(null != permissions){
 			sbuf.append("permissions").append(GeneralConstants.KEYVAL_SEPARATOR);
@@ -336,7 +372,7 @@ public class Ace implements Comparable<Ace> {
 		return new EqualsBuilder()
 			.append(this.type, that.getType())
 			.append(this.subject, that.getSubject())
-			.append(this.privilege, that.getPrivilege())
+			.append(this.privileges, that.getPrivileges())
 			.append(this.permissions, this.getPermissions()).isEquals();
 		
 	}
@@ -347,7 +383,7 @@ public class Ace implements Comparable<Ace> {
 		return new HashCodeBuilder(17, 37)
 			.append(this.type)
 			.append(this.subject)
-			.append(this.privilege)
+			.append(this.privileges)
 			.append(this.permissions).toHashCode();
 			
 	}

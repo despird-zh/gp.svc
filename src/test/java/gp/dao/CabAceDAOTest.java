@@ -43,7 +43,7 @@ public class CabAceDAOTest extends AbstractJUnit4SpringContextTests{
 		info.setAclId(123l);
 		info.setSubject("user1");
 		info.setSubjectType("type1");
-		info.setPrivilege(6);
+		info.setPrivileges("[\"write\",\"read\",\"delete\"]");
 		info.setPermissions("[\"sss\",\"sss\",\"sss\"]");
 		
 		info.setModifier("modifer001");

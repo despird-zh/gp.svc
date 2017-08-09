@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gp.acl.Ace;
+import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.acl.Acl;
 import com.gp.common.FlatColumns.FilterMode;
@@ -85,7 +86,7 @@ public class AclServiceImpl implements AclService{
 			
 			if(aceinfo != null){
 				
-				aceinfo.setPrivilege(ace.getPrivilege());
+				aceinfo.setPrivileges(ace.getPrivileges());
 				aceinfo.setPermissions(ace.getPermissions());
 				cabacedao.update( aceinfo, FilterMode.NONE);
 				
@@ -116,7 +117,7 @@ public class AclServiceImpl implements AclService{
 						ace.getSubject());
 				
 				if(aceinfo != null){
-					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPrivileges(ace.getPrivileges());
 					aceinfo.setPermissions(ace.getPermissions());
 					cabacedao.update( aceinfo, FilterMode.NONE);
 				}else{
@@ -164,17 +165,21 @@ public class AclServiceImpl implements AclService{
 				AceType type = AceType.parse(cai.getSubjectType());
 				Ace ace = new Ace(type, cai.getSubject());
 				ace.setAceId(cai.getInfoId());
-				ace.setPrivilege(cai.getPrivilege(), true);
+				
 				Set<String> perms = null;
-				// parse the permission set
+				Set<String> privileges = null;
 				try {
 					perms = mapper.readValue(cai.getPermissions(), new TypeReference<Set<String>>(){});
+					ace.setPermissions(perms, true);
+					privileges = mapper.readValue(cai.getPrivileges(), new TypeReference<Set<String>>(){});
+					for(String priv: privileges) {
+						ace.grantPrivileges(AcePrivilege.parse(priv));
+					}
 				} catch (Exception e) {
 					
 					throw new ServiceException("Fail to parse the permissions string", e);
 				} 
-	
-				ace.setPermissions(perms, true);
+
 				// add to acl.
 				acl.addAce(ace, false);
 			}
@@ -199,17 +204,21 @@ public class AclServiceImpl implements AclService{
 			AceType type = AceType.parse(aci.getSubjectType());
 			Ace ace = new Ace(type, aci.getSubject());
 			ace.setAceId(aci.getInfoId());
-			ace.setPrivilege(aci.getPrivilege(), true);
 			Set<String> perms = null;
+			Set<String> privileges = null;
 			// parse the permission set
 			try {
 				perms = mapper.readValue(aci.getPermissions(), new TypeReference<Set<String>>(){});
+				ace.setPermissions(perms, true);
+				privileges = mapper.readValue(aci.getPrivileges(), new TypeReference<Set<String>>(){});
+				for(String priv: privileges) {
+					ace.grantPrivileges(AcePrivilege.parse(priv));
+				}
 			} catch (Exception e) {
 				
 				throw new ServiceException("Fail to parse the permissions string", e);
 			} 
-	
-			ace.setPermissions(perms, true);
+
 			return ace;
 		}catch(DataAccessException dae){
 			

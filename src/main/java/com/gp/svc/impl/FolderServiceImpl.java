@@ -176,7 +176,7 @@ public class FolderServiceImpl implements FolderService{
 				if(aceinfo != null){
 					// already have ace in database
 					aceinfo.setSubject(ace.getSubject());
-					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.update(aceinfo,FilterMode.NONE);
@@ -188,7 +188,7 @@ public class FolderServiceImpl implements FolderService{
 					aceinfo.setInfoId(infoId);
 					
 					aceinfo.setSubject(ace.getSubject());
-					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);
@@ -218,7 +218,7 @@ public class FolderServiceImpl implements FolderService{
 					aceinfo.setAclId(acl.getAclId().getId());
 					aceinfo.setSubjectType(ace.getType().value);
 					aceinfo.setSubject(ace.getSubject());
-					aceinfo.setPrivilege(ace.getPrivilege());
+					aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 					aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 					svcctx.setTraceInfo(aceinfo);
 					cabacedao.create(aceinfo);

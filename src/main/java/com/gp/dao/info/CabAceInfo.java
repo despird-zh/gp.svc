@@ -12,7 +12,9 @@ public class CabAceInfo extends TraceableInfo<Long> {
 	
 	private String subjectType;
 	
-	private int privilege;
+	private boolean browse;
+	
+	private String privileges;
 	
 	private String permissions;
 
@@ -32,12 +34,12 @@ public class CabAceInfo extends TraceableInfo<Long> {
 		this.subjectType = subjectType;
 	}
 
-	public int getPrivilege() {
-		return privilege;
+	public String getPrivileges() {
+		return privileges;
 	}
 
-	public void setPrivilege(int privilege) {
-		this.privilege = privilege;
+	public void setPrivileges(String privileges) {
+		this.privileges = privileges;
 	}
 
 	public String getPermissions() {
@@ -54,6 +56,14 @@ public class CabAceInfo extends TraceableInfo<Long> {
 
 	public void setAclId(Long aclId) {
 		this.aclId = aclId;
+	}
+
+	public boolean getBrowse() {
+		return browse;
+	}
+
+	public void setBrowse(boolean browse) {
+		this.browse = browse;
 	}	
 	
 }

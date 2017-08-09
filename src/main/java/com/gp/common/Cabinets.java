@@ -94,7 +94,7 @@ public class Cabinets {
 	public static Acl getDefaultAcl()
 	{
 		Acl acl = new Acl();
-		Ace everyone = new Ace(AceType.EVERYONE, null, AcePrivilege.BROWSE);
+		Ace everyone = new Ace(AceType.ANYONE, null, AcePrivilege.BROWSE);
 		acl.addAce(everyone, true);
 		Ace owner = new Ace(AceType.OWNER, null, AcePrivilege.DELETE);
 		acl.addAce(owner, true);

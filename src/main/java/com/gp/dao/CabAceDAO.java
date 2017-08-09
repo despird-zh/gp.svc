@@ -31,11 +31,13 @@ public interface CabAceDAO extends BaseDAO<CabAceInfo>{
 			info.setAclId(rs.getLong("acl_id"));
 			info.setSubject(rs.getString("subject"));
 			info.setSubjectType(rs.getString("subject_type"));
-			info.setPrivilege(rs.getInt("privilege"));
+			info.setBrowse(rs.getBoolean("browse"));
+			info.setPrivileges(rs.getString("privilege_json"));
 			info.setPermissions(rs.getString("perm_json"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));
 			return info;
 		}};
+
 }
