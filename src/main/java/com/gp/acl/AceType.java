@@ -28,6 +28,7 @@ public enum AceType {
 	OWNER("owner"), 
 	USER("user"),
 	GROUP("group"),
+	ROLE("role"),
 	ANYONE("anyone");
 	
 	public final String value;
@@ -53,6 +54,9 @@ public enum AceType {
 		
 		if(GROUP.value.equalsIgnoreCase(val))
 			return GROUP;
+		
+		if(ROLE.value.equalsIgnoreCase(val))
+			return ROLE;
 		
 		if(ANYONE.value.equalsIgnoreCase(val))
 			return ANYONE;

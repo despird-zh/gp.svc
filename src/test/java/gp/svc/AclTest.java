@@ -66,6 +66,14 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 		aceowner1.setPermissions("[\"print\",\"browse\",\"copy\"]");
 		acelist.add(aceowner1);
 		
+		aceowner1 = new CabAceInfo();
+		aceowner1.setSubjectType(AceType.ROLE.value);
+		aceowner1.setSubject("demousr");
+		aceowner1.setBrowsable(true);
+		aceowner1.setPrivileges("[\"write\",\"read\",\"delete\"]");
+		aceowner1.setPermissions("[\"print\",\"browse\",\"copy\"]");
+		acelist.add(aceowner1);
+		
 		aclService.addAclInfo(svcctx, acelist);
 
 	}
@@ -87,6 +95,11 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 		acl.addAce(ace, false);
 		
 		ace = new Ace(AceType.GROUP, "grp1", AcePrivilege.BROWSE);
+		ace.grantPrivileges(AcePrivilege.READ, AcePrivilege.DELETE, AcePrivilege.EXEC);
+		ace.grantPermission("download", "share");
+		acl.addAce(ace, false);
+		
+		ace = new Ace(AceType.ROLE, "rol1", AcePrivilege.BROWSE);
 		ace.grantPrivileges(AcePrivilege.READ, AcePrivilege.DELETE, AcePrivilege.EXEC);
 		ace.grantPermission("download", "share");
 		acl.addAce(ace, false);
