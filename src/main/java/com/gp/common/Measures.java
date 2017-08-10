@@ -23,10 +23,17 @@ public enum Measures implements FlatColLocator {
 	WG_MEAS_POST(2),
 	WG_MEAS_MEMBER(3),
 	WG_MEAS_EXT_MBR(4),
-	WG_MEAS_SUB_GRP(5)
+	WG_MEAS_SUB_GRP(5),
+	NODE_MEAS_MEMBER(1),
+	NODE_MEAS_GROUP(2),
+	NODE_MEAS_TOPIC(3),
+	NODE_MEAS_FILE(4),
+	NODE_MEAS_POINT(5),
+	NODE_MEAS_EXPERT(6),
 	;
 	// measure type of work group summary
 	public static String MEAS_TYPE_WG_SUM = "wg_summary";
+	public static String MEAS_TYPE_NODE_SUM = "node_summary";
 	
 	private static String colPrefix = "measure_data_";
 	

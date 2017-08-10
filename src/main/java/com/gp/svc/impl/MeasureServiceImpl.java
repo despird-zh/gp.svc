@@ -48,6 +48,27 @@ public class MeasureServiceImpl implements MeasureService{
 			throw new ServiceException("excp.meas", dae, "workgroup");
 		}
 	}
+
+	@Override
+	public MeasureInfo getNodeLatestSummary(InfoId<Integer> nodeid) throws ServiceException {
+		try{
+			
+			MeasureInfo minfo = measuredao.queryLatest(nodeid, 
+					Measures.MEAS_TYPE_NODE_SUM,
+					Measures.NODE_MEAS_MEMBER,
+					Measures.NODE_MEAS_GROUP,
+					Measures.NODE_MEAS_TOPIC,
+					Measures.NODE_MEAS_FILE,
+					Measures.NODE_MEAS_POINT,
+					Measures.NODE_MEAS_EXPERT);
+			
+			return minfo;
+			
+		}catch(DataAccessException dae){
+			
+			throw new ServiceException("excp.meas", dae, "workgroup");
+		}
+	}
 	
 	
 }

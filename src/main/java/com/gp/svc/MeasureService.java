@@ -8,5 +8,6 @@ public interface MeasureService {
 
 	public MeasureInfo getWorkgroupLatestSummary(InfoId<Long> wid) throws ServiceException;
 	
+	public MeasureInfo getNodeLatestSummary(InfoId<Integer> nodeid) throws ServiceException;
 	
 }

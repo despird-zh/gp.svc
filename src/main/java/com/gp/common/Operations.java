@@ -42,6 +42,7 @@ public enum Operations {
 	CLOSE_WORKGROUP,
 	/** instance operation */
 	FIND_SOURCE,
+	FIND_SOURCE_SUM,
 	NEW_EXT_SOURCE,
 	UPDATE_SOURCE,
 	FIND_SOURCES,
