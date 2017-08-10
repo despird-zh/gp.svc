@@ -37,7 +37,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	public int create( CabAceInfo info) {
 		StringBuffer SQL = new StringBuffer();
 		SQL.append("insert into gp_cab_ace (")
-			.append("ace_id, acl_id, browse, ")
+			.append("ace_id, acl_id, browsable, ")
 			.append("subject,subject_type,privilege_json,perm_json,")
 			.append("modifier,last_modified")
 			.append(")values(")
@@ -46,7 +46,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 			.append("?,?)");
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				key.getId(),info.getAclId(),info.getBrowse(),
+				key.getId(),info.getAclId(),info.getBrowsable(),
 				info.getSubject(),info.getSubjectType(),info.getPrivileges(),info.getPermissions(),
 				info.getModifier(),info.getModifyDate()
 		};
@@ -88,9 +88,9 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 		SQL.append("acl_id = ?,");
 		params.add(info.getAclId());
 		}
-		if(columnCheck(mode, colset, "browse")){
-		SQL.append("browse = ?,");
-		params.add(info.getBrowse());
+		if(columnCheck(mode, colset, "browsable")){
+		SQL.append("browsable = ?,");
+		params.add(info.getBrowsable());
 		}
 		if(columnCheck(mode, colset, "subject")){
 		SQL.append("subject = ?,");

@@ -67,8 +67,19 @@ public class Ace implements Comparable<Ace> {
 	public Ace(AceType type, String subject){
 		
 		this.type = type;
-		setSubject(subject);
-		this.privileges.add( AcePrivilege.WRITE );
+		
+		if( type == AceType.ANYONE ) {
+			setSubject(type.value);
+		} else if(type == AceType.OWNER) {
+			setSubject(type.value);
+			this.privileges.add( AcePrivilege.WRITE );
+			this.privileges.add( AcePrivilege.DELETE );
+			this.privileges.add( AcePrivilege.EXEC );
+		} else {
+			setSubject(subject);
+			this.privileges.add( AcePrivilege.WRITE );
+		}
+		this.privileges.add( AcePrivilege.BROWSE );
 		this.privileges.add( AcePrivilege.READ );
 	}
 	
@@ -81,10 +92,8 @@ public class Ace implements Comparable<Ace> {
 	 **/
 	public Ace(String subject, AcePrivilege privilege){
 		
-		this.type = AceType.USER;
-		setSubject(subject);
-		this.privileges.add( AcePrivilege.WRITE );
-		this.privileges.add( AcePrivilege.READ );
+		this(AceType.USER, subject);
+		this.privileges.add( privilege);
 
 	}
 	
@@ -98,11 +107,8 @@ public class Ace implements Comparable<Ace> {
 	 **/
 	public Ace(AceType type, String subject, AcePrivilege privilege){
 		
-		this.type = type;
-		setSubject(subject);
+		this(type, subject);
 		this.privileges.add( privilege );
-		this.privileges.add( AcePrivilege.WRITE );
-		this.privileges.add( AcePrivilege.READ );
 	}
 	
 	/**
@@ -114,8 +120,8 @@ public class Ace implements Comparable<Ace> {
 	 * @param permissions the extend business permission
 	 **/
 	public Ace(AceType type,  String subject, AcePrivilege ...privileges){
-		this.type = type;
-		setSubject(subject);
+		
+		this(type, subject);
 		for(AcePrivilege privilege: privileges){
 			this.privileges.add( privilege );
 		}
@@ -131,10 +137,9 @@ public class Ace implements Comparable<Ace> {
 	 **/
 	public Ace(AceType type,  String subject, String ... perms){
 		
-		this.type = type;
-		setSubject(subject);
+		this(type, subject);
 		this.privileges.add( AcePrivilege.WRITE );
-		if(perms == null || perms.length ==0)
+		if(perms == null || perms.length == 0)
 			return;
 
 		for(String permission:permissions){
@@ -176,7 +181,7 @@ public class Ace implements Comparable<Ace> {
 			this.subject = GeneralConstants.OWNER_SUBJECT;
 		}
 		else if(type == AceType.ANYONE){
-			this.subject = GeneralConstants.EVERYONE_SUBJECT;		
+			this.subject = GeneralConstants.ANYONE_SUBJECT;		
 		}
 		else if(StringUtils.isBlank(subject)){
 			throw new IllegalArgumentException("the ace subject can not be null");

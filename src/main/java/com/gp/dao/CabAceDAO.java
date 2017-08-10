@@ -31,7 +31,7 @@ public interface CabAceDAO extends BaseDAO<CabAceInfo>{
 			info.setAclId(rs.getLong("acl_id"));
 			info.setSubject(rs.getString("subject"));
 			info.setSubjectType(rs.getString("subject_type"));
-			info.setBrowse(rs.getBoolean("browse"));
+			info.setBrowsable(rs.getBoolean("browsable"));
 			info.setPrivileges(rs.getString("privilege_json"));
 			info.setPermissions(rs.getString("perm_json"));
 			

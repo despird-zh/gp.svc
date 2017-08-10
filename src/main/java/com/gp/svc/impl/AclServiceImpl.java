@@ -1,5 +1,6 @@
 package com.gp.svc.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -174,6 +175,9 @@ public class AclServiceImpl implements AclService{
 					for(String priv: privileges) {
 						ace.grantPrivileges(AcePrivilege.parse(priv));
 					}
+					if(cai.getBrowsable()) {
+						ace.grantPrivileges(AcePrivilege.BROWSE);
+					}
 				} catch (Exception e) {
 					
 					throw new ServiceException("Fail to parse the permissions string", e);
@@ -212,6 +216,9 @@ public class AclServiceImpl implements AclService{
 				privileges = CommonUtils.JSON_MAPPER.readValue(aci.getPrivileges(), new TypeReference<Set<String>>(){});
 				for(String priv: privileges) {
 					ace.grantPrivileges(AcePrivilege.parse(priv));
+				}
+				if(aci.getBrowsable()) {
+					ace.grantPrivileges(AcePrivilege.BROWSE);
 				}
 			} catch (Exception e) {
 				
@@ -269,8 +276,14 @@ public class AclServiceImpl implements AclService{
 				aceinfo.setAclId(aclid.getId());
 				aceinfo.setSubjectType(ace.getType().value);
 				aceinfo.setSubject(ace.getSubject());
-				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
-				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
+				aceinfo.setBrowsable(ace.checkPrivilege(AcePrivilege.BROWSE));
+				Set<AcePrivilege> pset = ace.getPrivileges();
+				pset.remove(AcePrivilege.BROWSE);
+				Set<String> privs = new HashSet<String>();
+				for(AcePrivilege priv: pset) {
+					privs.add(priv.value);
+				}
+				aceinfo.setPrivileges(CommonUtils.toJson(privs));
 				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 				
 				svcctx.setTraceInfo(aceinfo);
@@ -293,7 +306,7 @@ public class AclServiceImpl implements AclService{
 					ace.getSubject());
 			
 			if(aceinfo != null){
-				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
+				aceinfo.setBrowsable(ace.checkPrivilege(AcePrivilege.BROWSE));
 				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 				
@@ -308,7 +321,7 @@ public class AclServiceImpl implements AclService{
 				aceinfo.setInfoId(aceid);
 				aceinfo.setAclId(aclId.getId());
 				aceinfo.setSubject(ace.getSubject());
-				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
+				aceinfo.setBrowsable(ace.checkPrivilege(AcePrivilege.BROWSE));
 				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
 				aceinfo.setPermissions(CommonUtils.toJson(ace.getPermissions()));
 				
