@@ -9,13 +9,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
+import com.gp.acl.Ace;
 import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
+import com.gp.acl.Acl;
 import com.gp.common.GeneralConstants;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.dao.info.CabAceInfo;
+import com.gp.info.InfoId;
 import com.gp.svc.AclService;
 import com.gp.svc.CommonService;
 
@@ -63,5 +66,33 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 		acelist.add(aceowner1);
 		
 		aclService.addAclInfo(svcctx, acelist);
+
+	}
+	
+	@Test
+	public void test1() throws Exception{
+		
+		Acl acl = new Acl();
+		
+		Ace ace = new Ace(AceType.OWNER, "dev1", AcePrivilege.BROWSE);
+		ace.grantPrivileges(AcePrivilege.READ, AcePrivilege.DELETE);
+		ace.grantPermission("download", "upload", "share");
+		
+		acl.addAce(ace, false);
+		
+		ace = new Ace(AceType.ANYONE, "dev2", AcePrivilege.BROWSE);
+		ace.grantPrivileges(AcePrivilege.READ, AcePrivilege.DELETE, AcePrivilege.EXEC);
+		ace.grantPermission("download", "share");
+		acl.addAce(ace, false);
+		
+		ace = new Ace(AceType.GROUP, "grp1", AcePrivilege.BROWSE);
+		ace.grantPrivileges(AcePrivilege.READ, AcePrivilege.DELETE, AcePrivilege.EXEC);
+		ace.grantPermission("download", "share");
+		acl.addAce(ace, false);
+		
+		svcctx = new ServiceContext(principal);
+		InfoId<Long> aclid = aclService.addAcl(svcctx, acl);
+		
+		
 	}
 }

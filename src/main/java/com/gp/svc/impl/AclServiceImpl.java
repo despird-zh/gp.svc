@@ -267,6 +267,7 @@ public class AclServiceImpl implements AclService{
 				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
 				aceinfo.setInfoId(aceid);
 				aceinfo.setAclId(aclid.getId());
+				aceinfo.setSubjectType(ace.getType().value);
 				aceinfo.setSubject(ace.getSubject());
 				aceinfo.setBrowse(ace.checkPrivilege(AcePrivilege.BROWSE));
 				aceinfo.setPrivileges(CommonUtils.toJson(ace.getPrivileges()));
