@@ -176,7 +176,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	public List<CabAceInfo> queryByAcl(Long aclid) {
 		
 		StringBuffer qbuf = new StringBuffer("Select * from gp_cab_ace ")
-				.append("where ace_id = ?");
+				.append("where acl_id = ?");
 		
 		Object[] params = new Object[]{
 				aclid,
@@ -191,7 +191,7 @@ public class CabAceDAOImpl extends DAOSupport implements CabAceDAO{
 	public int deleteBySubject(Long aclid, String type, String subject) {
 
 		StringBuffer rbuf = new StringBuffer("Delete from gp_cab_ace ")
-				.append("where ace_id = ? and subject_type =? and subject = ?");
+				.append("where acl_id = ? and subject_type =? and subject = ?");
 		Object[] params = new Object[]{
 				aclid,
 				type,

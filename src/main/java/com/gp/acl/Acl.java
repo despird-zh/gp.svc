@@ -39,7 +39,7 @@ public class Acl {
 	
 	InfoId<Long> aclId ;
 	
-	private Map<String,Ace> aclmap = null;
+	private Map<String,Ace> acemap = null;
 	
 	/**
 	 * Constructor with acl name 
@@ -47,11 +47,11 @@ public class Acl {
 	 * @param aclName the acl name
 	 **/
 	public Acl(){
-		aclmap = new HashMap<String,Ace>();
+		acemap = new HashMap<String,Ace>();
 		Ace owner = new Ace(AceType.OWNER, null, AcePrivilege.DELETE);
-		aclmap.put(owner.getMapKey(),owner);
+		acemap.put(owner.getMapKey(),owner);
 		Ace other = new Ace(AceType.ANYONE, null, AcePrivilege.READ);
-		aclmap.put(other.getMapKey(), other);
+		acemap.put(other.getMapKey(), other);
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class Acl {
 	 **/
 	public Acl(Ace ... aceArray){
 		
-		aclmap = new HashMap<String,Ace>();
+		acemap = new HashMap<String,Ace>();
 		
 		if(null == aceArray)
 			
@@ -70,7 +70,7 @@ public class Acl {
 		else{
 			
 			for(Ace ace:aceArray){
-				aclmap.put(ace.getMapKey(), ace);
+				acemap.put(ace.getMapKey(), ace);
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class Acl {
 	 **/
 	public void addAce(Ace ace,boolean merge){
 		
-		Ace exist_ace = aclmap.get(ace.getMapKey());
+		Ace exist_ace = acemap.get(ace.getMapKey());
 		if(exist_ace != null){
 
 			exist_ace.setPrivileges(merge, ace.getPrivileges());
@@ -92,7 +92,7 @@ public class Acl {
 
 		}else{
 			// none
-			this.aclmap.put(ace.getMapKey(),ace);
+			this.acemap.put(ace.getMapKey(),ace);
 		}
 	}
 		
@@ -109,7 +109,7 @@ public class Acl {
 	 **/
 	public Collection<Ace> getAllAces(){
 		
-		return aclmap.values();
+		return acemap.values();
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class Acl {
 	public List<Ace> getUserAces(){
 		List<Ace> uaces = new ArrayList<Ace>();
 		
-		for(Map.Entry<String, Ace> entry: aclmap.entrySet()){
+		for(Map.Entry<String, Ace> entry: acemap.entrySet()){
 			
 			if(AceType.USER == entry.getValue().getType())
 				uaces.add(entry.getValue());
@@ -136,7 +136,7 @@ public class Acl {
 		
 		List<Ace> gaces = new ArrayList<Ace>();
 		
-		for(Map.Entry<String, Ace> entry: aclmap.entrySet()){
+		for(Map.Entry<String, Ace> entry: acemap.entrySet()){
 			
 			if(AceType.GROUP == entry.getValue().getType())
 				gaces.add(entry.getValue());
@@ -148,7 +148,7 @@ public class Acl {
 	public Ace getAce(AceType type, String subject){
 		
 		String mapkey = type.value + GeneralConstants.KEYS_SEPARATOR + subject;		
-		return aclmap.get(mapkey);
+		return acemap.get(mapkey);
 	}
 		
 	@Override
@@ -161,8 +161,8 @@ public class Acl {
 	public int hashCode() {
 		
 		int sumAces = 0;
-		if(null != aclmap){
-			for(Ace ace:aclmap.values()){
+		if(null != acemap){
+			for(Ace ace:acemap.values()){
 				
 				sumAces += ace.hashCode();
 			}
@@ -171,4 +171,16 @@ public class Acl {
 		return sumAces;
 	}
 
+	@Override
+	public String toString(){
+		
+		StringBuffer sbuf = new StringBuffer();
+		sbuf.append("aclid").append(GeneralConstants.KEYVAL_SEPARATOR)
+			.append(this.aclId).append(GeneralConstants.KVPAIRS_SEPARATOR);
+		
+		sbuf.append("acemap").append(GeneralConstants.KEYVAL_SEPARATOR)
+			.append(this.acemap.toString()).append(GeneralConstants.KVPAIRS_SEPARATOR);
+		
+		return sbuf.toString();
+	}
 }

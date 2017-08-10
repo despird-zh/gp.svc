@@ -356,9 +356,15 @@ public class Ace implements Comparable<Ace> {
 		
 		sbuf.append("type").append(GeneralConstants.KEYVAL_SEPARATOR)
 			.append(this.type).append(GeneralConstants.KVPAIRS_SEPARATOR);
-		
-		sbuf.append("privilege").append(GeneralConstants.KEYVAL_SEPARATOR)
-			.append(this.privileges.toString()).append(GeneralConstants.KVPAIRS_SEPARATOR);
+
+		if(null != privileges){
+			sbuf.append("privilege").append(GeneralConstants.KEYVAL_SEPARATOR);
+			for(AcePrivilege priv : privileges){
+				
+				sbuf.append(priv.value).append(GeneralConstants.VALUES_SEPARATOR);
+			}
+			sbuf.append(this.type).append(GeneralConstants.KVPAIRS_SEPARATOR);
+		}
 		
 		if(null != permissions){
 			sbuf.append("permissions").append(GeneralConstants.KEYVAL_SEPARATOR);
