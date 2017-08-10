@@ -20,7 +20,6 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.NotificationDispatchDAO;
 import com.gp.dao.info.NotificationDispatchInfo;
-import com.gp.dao.info.NotificationInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
 
