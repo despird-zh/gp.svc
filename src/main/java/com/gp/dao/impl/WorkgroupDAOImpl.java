@@ -92,6 +92,29 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	}
 
 	@Override
+	public int delete( InfoId<?> id, boolean logic) {
+		if(!logic) delete(id);
+		
+		StringBuffer SQL = new StringBuffer();
+		SQL.append("udpate gp_workgroups set del_flag=1")
+			.append("where workgroup_id = ?");
+		
+		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
+		Object[] params = new Object[]{
+			id.getId()
+		};
+		if(LOGGER.isDebugEnabled()){
+			
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));
+		}
+		int rtv = -1;
+
+		rtv = jtemplate.update(SQL.toString(), params);
+
+		return rtv;
+	}
+	
+	@Override
 	public int update( WorkgroupInfo info,FilterMode mode, FlatColLocator ...exclcols) {
 		Set<String> colset = FlatColumns.toColumnSet(exclcols);
 		List<Object> params = new ArrayList<Object>();
@@ -197,6 +220,10 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		if(columnCheck(mode, colset, "public_flow_id")){
 			SQL.append("public_flow_id = ?,");
 			params.add(info.getPublicFlowId());
+		}
+		if(columnCheck(mode, colset, "del_flag")){
+			SQL.append("del_flag = ?,");
+			params.add(info.getDelFlag());
 		}
 		
 		SQL.append("modifier = ?, last_modified = ?,")

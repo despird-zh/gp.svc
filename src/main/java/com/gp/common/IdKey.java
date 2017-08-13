@@ -85,7 +85,9 @@ public enum IdKey implements Identifier{
 	PROC_FLOW("gp_proc_flows", "proc_id", Long.class),
 	PROC_STEP("gp_proc_step", "step_id", Long.class),
 	PROC_TRAIL("gp_proc_trail", "trail_id", Long.class),
-
+	
+	OWM("gp_owm", "id", Long.class),
+	
 	TOKEN("gp_tokens", "token_id", Long.class);
 	
 	/**

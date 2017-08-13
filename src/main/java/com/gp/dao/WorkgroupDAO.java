@@ -14,6 +14,7 @@ public interface WorkgroupDAO extends BaseDAO<WorkgroupInfo>{
 
 	List<WorkgroupInfo> queryByIds(InfoId<?> ... ids);
 	
+	public int delete( InfoId<?> id, boolean logic);
 
 	public static RowMapper<WorkgroupInfo> WorkgroupMapper = new RowMapper<WorkgroupInfo>(){
 
@@ -49,6 +50,7 @@ public interface WorkgroupDAO extends BaseDAO<WorkgroupInfo>{
 			info.setParentId(rs.getLong("workgroup_pid"));
 			info.setPostAcceptable(rs.getBoolean("mbr_post_acpt"));
 			info.setPublicFlowId(rs.getLong("public_flow_id"));
+			info.setDelFlag(rs.getBoolean("del_flag"));
 			
 			info.setModifier(rs.getString("modifier"));
 			info.setModifyDate(rs.getTimestamp("last_modified"));

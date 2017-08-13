@@ -77,6 +77,8 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 	
 	private Long publicFlowId;
 	
+	private Boolean delFlag = false;
+	
 	public Boolean getShareEnable() {
 		return shareEnable;
 	}
@@ -279,6 +281,14 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 
 	public void setPublicFlowId(Long publicFlowId) {
 		this.publicFlowId = publicFlowId;
+	}
+
+	public Boolean getDelFlag() {
+		return delFlag;
+	}
+
+	public void setDelFlag(Boolean delFlag) {
+		this.delFlag = delFlag;
 	}
 
 }
