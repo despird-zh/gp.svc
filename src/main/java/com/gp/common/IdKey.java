@@ -15,6 +15,9 @@
  *******************************************************************************/
 package com.gp.common;
 
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -152,6 +155,48 @@ public enum IdKey implements Identifier{
 	    throw new IllegalArgumentException(String.format(
 	            "There is no value with name '%s' in Enum IdKey",name
 	        ));
+	}
+	
+	/**
+	 * Generate the trace code with node code and info id
+	 * @param nodeCode the node code
+	 * @param infoId the id of info record
+	 *  
+	 **/
+	public static String getTraceCode(String nodeCode, InfoId<?> infoId) {
+		
+		Encoder encoder = Base64.getEncoder();
+		StringBuffer sb = new StringBuffer(30);
+		sb.append(nodeCode).append(GeneralConstants.NAMES_SEPARATOR);
+		sb.append(infoId.toString());
+		
+		return encoder.encodeToString(sb.toString().getBytes());
+	}
+	
+	/**
+	 * Parse the node code
+	 * @param traceCode the trace code
+	 **/
+	public static String parseNodeCode(String traceCode) {
+		Decoder decoder = Base64.getDecoder();
+		
+		String fullOrigin = new String(decoder.decode(traceCode));
+		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
+		
+		return fullOrigin.substring(0, idx);
+	}
+	
+	/**
+	 * Parse the info id
+	 * @param traceCode the trace code
+	 **/
+	public static <M> InfoId<M> parseInfoId(String traceCode, Class<M> clazz) {
+		Decoder decoder = Base64.getDecoder();
+		
+		String fullOrigin = new String(decoder.decode(traceCode));
+		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
+		
+		return InfoId.parseInfoId(fullOrigin.substring(idx+1), clazz);
 	}
 	
 	/**
