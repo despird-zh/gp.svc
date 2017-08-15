@@ -8,10 +8,8 @@ package com.gp.common;
  * @version 0.1 2016-12-29
  * 
  **/
-public class DatabaseHolder {
+public class DataSourceHolder {
 
-	public static final String DATA_SOURCE_ACM = "dataSource_acm";
-	
 	/**
 	 * the thread-local variable 
 	 **/
@@ -20,21 +18,21 @@ public class DatabaseHolder {
     /**
      * set the database type to thread local 
      **/
-    public static void setDatabaseType(String databaseType) {  
+    public static void setDataSourceKey(String databaseType) {  
         contextHolder.set(databaseType);  
     }  
     
     /**
      * get the database type from the thread-local 
      **/
-    public static String getDatabaseType() {  
+    public static String getDataSourceKey() {  
         return contextHolder.get();  
     }  
     
     /**
      * reset the database type from thread-local 
      **/
-    public static void resetDatabaseType() {  
+    public static void resetDataSourceKey() {  
         contextHolder.remove();  
     }  
 }

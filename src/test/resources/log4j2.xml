@@ -15,6 +15,14 @@
     </layout>
   </appender>
 
+	<logger name="org.springframework" additivity="false">       
+        <priority value ="error"/>         
+        <appender-ref ref="console" />         
+    </logger>   
+    	<logger name="com.zaxxer" additivity="false">       
+        <priority value ="error"/>         
+        <appender-ref ref="console" />         
+    </logger>  
   <root>
     <priority value ="debug"></priority>
     <appender-ref ref="console"></appender-ref>

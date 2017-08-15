@@ -22,13 +22,24 @@
 
 	<bean class="com.gp.common.SpringContextUtil" />
 
+
+	<bean id="gpDataSource" class="com.gp.common.DataSourceDynamic" >  
+	    <!-- 通过key-value的形式来关联数据源 -->  
+	    <property name="targetDataSources">  
+	        <map>  
+	            <entry value-ref="syncDataSource" key="syncDataSource"></entry>
+	            <entry value-ref="nodeDataSource" key="nodeDataSource"></entry>
+	        </map>  
+	    </property>
+	    <property name="defaultTargetDataSource" ref="nodeDataSource" />  
+	</bean>  
+	
 	<bean id="gpTxManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="gpDataSource" />
 	</bean>
 	
-	<!-- hikariCP configuration -->
-	<bean id="gpDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	<bean id="syncDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 	   
 		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
         <property name="maximumPoolSize" value="5" />
@@ -36,7 +47,7 @@
         <property name="idleTimeout" value="30000" />
         <property name="dataSourceProperties">
 	         <props>
-	             <prop key="url">jdbc:mysql://localhost/gpress?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</prop>
+	             <prop key="url">jdbc:mysql://localhost/gpress_sync?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</prop>
 	             <prop key="user">gpadmin</prop>
 	             <prop key="password">gpress</prop>
 	              <prop key="prepStmtCacheSize">250</prop>
@@ -46,5 +57,25 @@
 	         </props>
         </property>
 	</bean>  
+	
+	<!-- hikariCP configuration -->
+	<bean id="nodeDataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	   
+		<property name="dataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"/>
+        <property name="maximumPoolSize" value="5" />
+        <property name="maxLifetime" value="30000" />
+        <property name="idleTimeout" value="30000" />
+        <property name="dataSourceProperties">
+	         <props>
+	             <prop key="url">jdbc:mysql://localhost/gpress_node?characterEncoding=UTF-8&amp;useEncoding=true&amp;aut‌​oReconnect=true&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</prop>
+	             <prop key="user">gpadmin</prop>
+	             <prop key="password">gpress</prop>
+	              <prop key="prepStmtCacheSize">250</prop>
+	              <prop key="prepStmtCacheSqlLimit">2048</prop>
+	              <prop key="cachePrepStmts">true</prop>
+	              <prop key="useServerPrepStmts">true</prop>
+	         </props>
+        </property>
+	</bean> 
 
 </beans>

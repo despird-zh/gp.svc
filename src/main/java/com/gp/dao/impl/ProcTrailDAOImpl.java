@@ -2,6 +2,7 @@ package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.QuickFlows;
+import com.gp.config.ServiceConfigurer;
 import com.gp.dao.ProcTrailDAO;
 import com.gp.dao.info.ProcTrailInfo;
 import com.gp.info.FlatColLocator;
@@ -10,6 +11,7 @@ import com.gp.info.KVPair;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -29,7 +31,7 @@ import java.util.Set;
 public class ProcTrailDAOImpl extends DAOSupport implements ProcTrailDAO{
 
     @Autowired
-    public ProcTrailDAOImpl(DataSource dataSource){
+    public ProcTrailDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
 
         this.setDataSource(dataSource);
     }
