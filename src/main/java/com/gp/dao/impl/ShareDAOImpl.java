@@ -137,7 +137,7 @@ public class ShareDAOImpl extends DAOSupport implements ShareDAO{
 		}
 		
 		SQL.append("access_times = ?, modifier = ?, last_modified = ? ")
-			.append("where share_id = ? and ");
+			.append("where share_id = ?");
 		params.add(info.getModifier());
 		params.add(info.getModifyDate());
 		params.add(info.getInfoId().getId());
