@@ -3541,3 +3541,40 @@ Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No
 2017-08-15 12:02:29 DEBUG CommonServiceImpl:73 - idkey : ATTACHMENT / modify date : 2017-08-15 12:01:22.0 / current : 20 
 2017-08-15 12:02:29 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {21,pesudo-user,Tue Aug 15 12:02:29 CST 2017,gp_attachments}
 2017-08-15 12:02:29 DEBUG AttachDAOImpl:60 - SQL : insert into gp_attachments (attachment_id, resource_id,resource_type,attachment_name,size,owner,state,binary_id,format,modifier, last_modified,hash_code,owm,create_time,creator)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {20,0,ss,name,1234,owner001,uploading,123456,fmt,mdfer,Tue Aug 15 12:02:29 CST 2017,<null>,<null>,Tue Aug 15 12:02:29 CST 2017,creator}
+2017-08-15 12:10:55 DEBUG PropertiesConfiguration:588 - FileName set to META-INF/core-config.properties
+2017-08-15 12:10:55 DEBUG ConfigurationUtils:449 - ConfigurationUtils.locate(): base is null, name is META-INF/core-config.properties
+2017-08-15 12:10:55 DEBUG DefaultFileSystem:281 - Could not locate file META-INF/core-config.properties at null: no protocol: META-INF/core-config.properties
+2017-08-15 12:10:55 DEBUG ConfigurationUtils:550 - Loading configuration from the context classpath (META-INF/core-config.properties)
+2017-08-15 12:10:55 DEBUG PropertiesConfiguration:626 - Base path set to file:///gdev/gp-workspace/gp.svc/target/test-classes/META-INF/core-config.properties
+2017-08-15 12:10:55 DEBUG PropertiesConfiguration:588 - FileName set to core-config.properties
+2017-08-15 12:10:55 DEBUG ConfigurationUtils:449 - ConfigurationUtils.locate(): base is null, name is core-config.properties
+2017-08-15 12:10:55 DEBUG DefaultFileSystem:281 - Could not locate file core-config.properties at null: no protocol: core-config.properties
+2017-08-15 12:10:55 DEBUG ConfigurationUtils:550 - Loading configuration from the context classpath (core-config.properties)
+2017-08-15 12:10:55 DEBUG PropertiesConfiguration:626 - Base path set to file:///gdev/gp-workspace/gp.svc/target/test-classes/core-config.properties
+2017-08-15 12:10:55 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-05-04 10:06:58.0 / current : 41 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {42,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,41,<null>,cab1000...,descr0001010,true,456,<null>,2,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:140 - SQL : update gp_cabinets set workgroup_id = ?,cabinet_name =?,cabinet_type = ?,used = ?,source_id = ?,descr = ?,version_enable = ?,capacity = ?,storage_id = ?,creator = ?,create_time = ?,modifier = ?, last_modified = ? where cabinet_id = ?  / params : [345, cab1000..., null, null, 0, sub0001, true, 456, 2, cr0001, Tue Aug 15 12:10:56 CST 2017, modifer001, Tue Aug 15 12:10:56 CST 2017, 41]
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:157 - SQL : select * from gp_cabinets where cabinet_id = ?  / params : {41}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:75 - SQL : delete from gp_cabinets where cabinet_id = ?  / params : {41}
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 42 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {43,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,42,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 43 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {44,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,43,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 44 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {45,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,44,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 45 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {46,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,45,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:37 - SQL : select * from gp_identifier where id_key = ? / params : gp_cabinets
+2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 46 
+2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {47,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
+2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,46,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}

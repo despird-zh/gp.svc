@@ -61,7 +61,7 @@ public class SystemServiceImpl implements SystemService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Autowired
+	@Autowired( required = false)
 	@Qualifier("sysSettingCache")
 	Cache cache = null;
 
