@@ -23,7 +23,7 @@
 	<bean class="com.gp.common.SpringContextUtil" />
 
 
-	<bean id="gpDataSource" class="com.gp.common.DataSourceDynamic" >  
+	<bean id="gpDataSource" class="com.gp.common.DataSourceDynamic" primary="true">  
 	    <!-- 通过key-value的形式来关联数据源 -->  
 	    <property name="targetDataSources">  
 	        <map>  
