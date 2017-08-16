@@ -30,6 +30,7 @@ import com.gp.dao.TagRelDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
+import com.gp.info.InfoIdHelper;
 import com.gp.dao.info.TagInfo;
 import com.gp.dao.info.TagRelInfo;
 import com.gp.svc.CommonService;
@@ -183,7 +184,7 @@ public class TagServiceImpl implements TagService{
 	@Override
 	public boolean newTag(ServiceContext svcctx, TagInfo taginfo) throws ServiceException {
 		
-		if(!InfoId.isValid(taginfo.getInfoId())){
+		if(!InfoIdHelper.isValid(taginfo.getInfoId())){
 			
 			InfoId<Long> id = idservice.generateId(IdKey.TAG, Long.class);
 			taginfo.setInfoId(id);

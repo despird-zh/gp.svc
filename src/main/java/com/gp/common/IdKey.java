@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
+import com.gp.info.InfoIdHelper;
 
 
 public enum IdKey implements Identifier{
@@ -196,7 +197,7 @@ public enum IdKey implements Identifier{
 		String fullOrigin = new String(decoder.decode(traceCode));
 		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
 		
-		return InfoId.parseInfoId(fullOrigin.substring(idx+1), clazz);
+		return InfoIdHelper.parseInfoId(fullOrigin.substring(idx+1), clazz);
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
+import com.gp.info.InfoIdHelper;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -471,7 +472,7 @@ public class PostServiceImpl implements PostService{
         StringBuffer SQL = new StringBuffer();
         SQL.append("select * from gp_post_comments ");
         SQL.append("where 1=1 ");
-        if(InfoId.isValid(postid)) {
+        if(InfoIdHelper.isValid(postid)) {
 
             SQL.append("AND post_id = ? ");
             paramlist.add(postid.getId());
