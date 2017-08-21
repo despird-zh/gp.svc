@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.AttachInfo;
 import com.gp.info.InfoId;
 
@@ -17,7 +18,7 @@ public interface AttachDAO extends BaseDAO<AttachInfo>{
 		public AttachInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			AttachInfo info = new AttachInfo();
 			
-			InfoId<Long> id = IdKey.ATTACHMENT.getInfoId(rs.getLong("attachment_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.ATTACHMENT, rs.getLong("attachment_id"));
 			
 			info.setInfoId(id);
 			info.setResourceId(rs.getLong("resource_id"));

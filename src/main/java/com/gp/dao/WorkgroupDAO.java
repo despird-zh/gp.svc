@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupInfo;
 
@@ -22,7 +23,7 @@ public interface WorkgroupDAO extends BaseDAO<WorkgroupInfo>{
 		
 			WorkgroupInfo info = new WorkgroupInfo();
 			
-			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP, rs.getLong("workgroup_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

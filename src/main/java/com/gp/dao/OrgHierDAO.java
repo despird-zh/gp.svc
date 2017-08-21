@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.OrgHierInfo;
 
@@ -22,7 +23,7 @@ public interface OrgHierDAO extends BaseDAO<OrgHierInfo>{
 		public OrgHierInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
 			OrgHierInfo info = new OrgHierInfo();
-			InfoId<Long> id = IdKey.ORG_HIER.getInfoId(rs.getLong("org_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.ORG_HIER, rs.getLong("org_id"));
 			info.setInfoId(id);
 			
 			info.setMemberGroupId(rs.getLong("mbr_group_id"));

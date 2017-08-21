@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.FlatColumns;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
@@ -163,7 +164,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
-			InfoId<Long> org_grpid = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
+			InfoId<Long> org_grpid = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
 			groupuserdao.deleteByGroup(org_grpid);// remove group users
 			groupdao.delete(org_grpid);// remove group
 
@@ -183,12 +184,12 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 			
-			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
+			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
 			if(!InfoIdHelper.isValid(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
-				InfoId<Long> gid = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
+				InfoId<Long> gid = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
 				InfoId<Long> mbrid = groupuserdao.existByAccount(gid, account);
 				if(InfoIdHelper.isValid(mbrid)){
 					continue;
@@ -219,7 +220,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 
-			InfoId<Long> groupId = IdKey.GROUP.getInfoId(orginfo.getMemberGroupId());
+			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
 			if(!InfoIdHelper.isValid(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			

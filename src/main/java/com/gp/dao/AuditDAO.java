@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.AuditInfo;
 import com.gp.info.InfoId;
 
@@ -19,7 +20,7 @@ public interface AuditDAO extends BaseDAO<AuditInfo>{
 		
 			AuditInfo info = new AuditInfo();
 
-			InfoId<Long> id = IdKey.AUDIT.getInfoId(rs.getLong("audit_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.AUDIT, rs.getLong("audit_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

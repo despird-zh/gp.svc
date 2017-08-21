@@ -22,6 +22,7 @@ import com.gp.acl.Acl;
 import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
@@ -148,7 +149,7 @@ public class FolderServiceImpl implements FolderService{
 
 		try{
 			// recreate to ensure the id column name is correct.
-			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderkey.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FOLDER, folderkey.getId());
 			
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
 			colmap.put(FlatColumns.FOLDER_PID, destFolderId.getId());
@@ -227,7 +228,7 @@ public class FolderServiceImpl implements FolderService{
 				}
 			}
 			// update the cabinet file entry's acl_id
-			InfoId<Long> fid = IdKey.CAB_FOLDER.getInfoId(folderid.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FOLDER, folderid.getId());
 			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
@@ -293,7 +294,7 @@ public class FolderServiceImpl implements FolderService{
 			
 			LOGGER.debug("call procedure: proc_path2fid / params : cabid-{} ; path-{}",cabinetId, path);
 		}
-		return IdKey.CAB_FOLDER.getInfoId(id);
+		return IdKeys.getInfoId(IdKey.CAB_FOLDER, id);
 	}
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)

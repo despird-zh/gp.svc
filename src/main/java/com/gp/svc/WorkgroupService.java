@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.dao.impl.WorkgroupDAOImpl;
 import com.gp.exception.ServiceException;
@@ -99,7 +100,7 @@ public interface WorkgroupService {
 			
 			WorkgroupLite info = new WorkgroupLite();
 
-			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP, rs.getLong("workgroup_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));
@@ -145,7 +146,7 @@ public interface WorkgroupService {
 
 			WorkgroupExtInfo info = new WorkgroupExtInfo();
 
-			InfoId<Long> id = IdKey.WORKGROUP.getInfoId(rs.getLong("workgroup_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP, rs.getLong("workgroup_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

@@ -18,6 +18,7 @@ import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabAceInfo;
 import com.gp.info.InfoId;
 import com.gp.svc.AclService;
@@ -112,7 +113,7 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void test2() throws Exception{
 		svcctx = new ServiceContext(principal);
-		InfoId<Long> ckey = IdKey.CABINET.getInfoId(38l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,38l);
 		Acl acl = aclService.getAcl(svcctx, ckey);
 		System.out.println(acl);
 	}

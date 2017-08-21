@@ -23,6 +23,7 @@ import com.gp.acl.AceType;
 import com.gp.common.Cabinets;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabFileDAO;
@@ -463,7 +464,7 @@ public class CabinetServiceImpl implements CabinetService{
 			String isfolder = rs.getString("entry_type");
 			InfoId<Long> id = null;
 			if(Cabinets.EntryType.FOLDER.name().equals(isfolder)){
-				id = IdKey.CAB_FOLDER.getInfoId(rs.getLong("entry_id"));
+				id = IdKeys.getInfoId(IdKey.CAB_FOLDER, rs.getLong("entry_id"));
 			
 				CabFolderInfo ref = new CabFolderInfo();
 				info = ref;
@@ -475,7 +476,7 @@ public class CabinetServiceImpl implements CabinetService{
 				ref.setProperties(rs.getString("properties"));
 				
 			}else{
-				id = IdKey.CAB_FILE.getInfoId(rs.getLong("entry_id"));
+				id = IdKeys.getInfoId(IdKey.CAB_FILE,rs.getLong("entry_id"));
 				CabFileInfo ref = new CabFileInfo();
 				info = ref;
 				ref.setSize(rs.getLong("size"));

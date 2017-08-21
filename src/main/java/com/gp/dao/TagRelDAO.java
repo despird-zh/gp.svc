@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TagRelInfo;
 
@@ -26,7 +27,7 @@ public interface TagRelDAO extends BaseDAO<TagRelInfo>{
 		@Override
 		public TagRelInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TagRelInfo info = new TagRelInfo();
-			InfoId<Long> id = IdKey.TAG_REL.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.TAG_REL, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setResourceId(rs.getLong("resource_id"));

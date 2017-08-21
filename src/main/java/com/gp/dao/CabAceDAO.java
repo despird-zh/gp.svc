@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabAceInfo;
 import com.gp.info.InfoId;
 
@@ -25,7 +26,7 @@ public interface CabAceDAO extends BaseDAO<CabAceInfo>{
 		@Override
 		public CabAceInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabAceInfo info = new CabAceInfo();
-			InfoId<Long> id = IdKey.CAB_ACE.getInfoId(rs.getLong("ace_id"));
+			InfoId<Long> id = IdKeys.getInfoId( IdKey.CAB_ACE, rs.getLong("ace_id"));
 			
 			info.setInfoId(id);
 			info.setAclId(rs.getLong("acl_id"));

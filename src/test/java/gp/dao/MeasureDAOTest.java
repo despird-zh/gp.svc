@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Measures;
 import com.gp.common.Principal;
 import com.gp.common.GroupUsers;
@@ -34,7 +35,7 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void test() throws Exception{
 		System.out.println("Test not after");
-		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
+		InfoId<Long> trcid = IdKeys.getInfoId(IdKey.WORKGROUP,1l);
 		FlatColLocator[] columns = new FlatColLocator[]{Measures.WG_MEAS_FILE,Measures.WG_MEAS_EXT_MBR,Measures.WG_MEAS_SUB_GRP};
 		
 		Date after = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-25 22:06:25");
@@ -52,7 +53,7 @@ public class MeasureDAOTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void test1() throws Exception{
 		System.out.println("Test not before");
-		InfoId<Long> trcid = IdKey.WORKGROUP.getInfoId(1l);
+		InfoId<Long> trcid =  IdKeys.getInfoId(IdKey.WORKGROUP,1l);
 		FlatColLocator[] columns = new FlatColLocator[]{Measures.WG_MEAS_FILE,Measures.WG_MEAS_EXT_MBR,Measures.WG_MEAS_SUB_GRP};
 		
 		Date before = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2016-04-25 18:12:35");

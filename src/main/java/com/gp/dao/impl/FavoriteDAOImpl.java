@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
 import com.gp.dao.info.FavoriteInfo;
@@ -163,7 +164,7 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 			public void processRow(ResultSet rs) throws SQLException {
 				Long id = rs.getLong("resource_id");
 				String type = rs.getString("resource_type");
-				InfoId<Long> rid = IdKey.valueOfIgnoreCase(type).getInfoId(id);
+				InfoId<Long> rid = IdKeys.getInfoId(type, id);
 				
 				Integer count = rs.getInt("fav_count");
 				

@@ -23,6 +23,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Images;
 import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
@@ -199,7 +200,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE, imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
@@ -237,7 +238,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE,imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
@@ -248,7 +249,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			winfo.setAvatarId(imgid);	
 
 			// update storage id
-			InfoId<Integer> storageId = IdKey.STORAGE.getInfoId(winfo.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE, winfo.getStorageId());
 			List<CabinetInfo> cabinets = cabinetdao.queryByWorkgroupId(wkey);
 			for(CabinetInfo cab : cabinets){
 				// public cabinet
@@ -399,7 +400,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			InfoId<Long> grpid = null; 
 			if(null == memberinfo.getGroupId() || memberinfo.getGroupId() <= 0){
 				Long val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID,  Long.class);
-				grpid = IdKey.GROUP.getInfoId(val);
+				grpid = IdKeys.getInfoId(IdKey.GROUP, val);
 				memberinfo.setGroupId(grpid.getId());
 			}
 			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
@@ -584,7 +585,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		try{		
 			ginfo.setGroupType(GroupUsers.GroupType.WORKGROUP_GRP.name());
-			InfoId<Long> wgoupId = IdKey.WORKGROUP.getInfoId(ginfo.getManageId());
+			InfoId<Long> wgoupId = IdKeys.getInfoId(IdKey.WORKGROUP, ginfo.getManageId());
 			GroupInfo orig = groupdao.queryByName(wgoupId,GroupUsers.GroupType.WORKGROUP_GRP.name(), ginfo.getGroupName());
 			if(null != orig){
 				

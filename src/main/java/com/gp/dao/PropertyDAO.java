@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PropertyInfo;
 
@@ -17,7 +18,7 @@ public interface PropertyDAO extends BaseDAO<PropertyInfo>{
 		@Override
 		public PropertyInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			PropertyInfo info = new PropertyInfo();
-			InfoId<Long> id = IdKey.PROPERTY.getInfoId(rs.getLong("prop_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.PROPERTY, rs.getLong("prop_id"));
 			info.setInfoId(id);
 
 			info.setLabel(rs.getString("prop_label"));

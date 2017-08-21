@@ -1,6 +1,7 @@
 package com.gp.dao;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.ProcFlowInfo;
 import com.gp.info.InfoId;
 import com.gp.util.CommonUtils;
@@ -29,7 +30,7 @@ public interface ProcFlowDAO extends BaseDAO<ProcFlowInfo>{
         public ProcFlowInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             ProcFlowInfo info = new ProcFlowInfo();
 
-            InfoId<Long> id = IdKey.PROC_FLOW.getInfoId(rs.getLong("proc_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_FLOW, rs.getLong("proc_id"));
             info.setInfoId(id);
 
             info.setWorkgroupId(rs.getLong("workgroup_id"));

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.TokenInfo;
 import com.gp.info.InfoId;
 
@@ -19,7 +20,7 @@ public interface TokenDAO extends BaseDAO<TokenInfo>{
 		@Override
 		public TokenInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			TokenInfo info = new TokenInfo();
-			InfoId<Long> id = IdKey.TOKEN.getInfoId(rs.getLong("token_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.TOKEN, rs.getLong("token_id"));
 			info.setInfoId(id);
 			info.setAudience(rs.getString("audience"));
 			info.setClaims(rs.getString("claims"));

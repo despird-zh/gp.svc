@@ -28,6 +28,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.GeneralConstants;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.ServiceContext;
@@ -164,18 +165,18 @@ public class SecurityServiceImpl implements SecurityService{
 			if(StringUtils.isBlank(uinfo.getPassword()))
 				uinfo.setPassword(oldinfo.getPassword());
 			
-			InfoId<Integer> storageId = IdKey.STORAGE.getInfoId(uinfo.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE, uinfo.getStorageId());
 			
 			InfoId<Long> pubcab = null;
 			if(null != pubcapacity){
-				pubcab = IdKey.CABINET.getInfoId(oldinfo.getPublishCabinet());
+				pubcab = IdKeys.getInfoId(IdKey.CABINET, oldinfo.getPublishCabinet());
 				cabinetdao.updateCabCapacity(pubcab, pubcapacity);
 			}
 			cabinetdao.changeStorage(pubcab, storageId);
 			
 			InfoId<Long> pricab = null;
 			if(null != pricapacity){
-				pricab = IdKey.CABINET.getInfoId(oldinfo.getNetdiskCabinet());
+				pricab = IdKeys.getInfoId(IdKey.CABINET, oldinfo.getNetdiskCabinet());
 				cabinetdao.updateCabCapacity(pricab, pricapacity);
 			}
 			cabinetdao.changeStorage(pricab, storageId);
@@ -388,13 +389,13 @@ public class SecurityServiceImpl implements SecurityService{
 			// get personal public cabinet id.
 			Long cid = info.getPublishCabinet();			
 			// create cabinet id
-			InfoId<Long> cabId = IdKey.CABINET.getInfoId( cid);			
+			InfoId<Long> cabId = IdKeys.getInfoId(IdKey.CABINET,cid);			
 			// delete cabinet 
 			cabinetdao.delete( cabId);
 			// get personal private cabinet id.
 			cid = info.getNetdiskCabinet();			
 			// create cabinet id
-			cabId = IdKey.CABINET.getInfoId( cid);			
+			cabId = IdKeys.getInfoId(IdKey.CABINET, cid);			
 			// delete cabinet 
 			cabinetdao.delete( cabId);
 			

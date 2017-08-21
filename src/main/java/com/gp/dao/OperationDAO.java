@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.OperationInfo;
 import com.gp.info.InfoId;
 
@@ -25,7 +26,7 @@ public interface OperationDAO extends BaseDAO<OperationInfo>{
 		public OperationInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			OperationInfo actlog = new OperationInfo();
 			
-			InfoId<Long> logid = IdKey.OPERATION.getInfoId(rs.getLong("oper_id"));
+			InfoId<Long> logid = IdKeys.getInfoId(IdKey.OPERATION, rs.getLong("oper_id"));
 			actlog.setInfoId(logid);
 			actlog.setSubject(rs.getString("subject"));
 			actlog.setOperation(rs.getString("operation"));

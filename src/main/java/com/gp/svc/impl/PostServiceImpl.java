@@ -154,7 +154,7 @@ public class PostServiceImpl implements PostService{
     public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
         try{
             Long mbrid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
-            InfoId<Long> grpid = IdKey.GROUP.getInfoId(mbrid);
+            InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GROUP, mbrid);
             groupuserdao.deleteByAccount(grpid, attendee);
 
         }catch(DataAccessException dae){
@@ -614,7 +614,7 @@ public class PostServiceImpl implements PostService{
 		
     	try{
     	Long mbrgrpid = pseudodao.query(postid, FlatColumns.MBR_GRP_ID, Long.class);
-    	InfoId<Long> grpid = IdKey.GROUP.getInfoId(mbrgrpid);
+    	InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GROUP, mbrgrpid);
     	
     	groupuserdao.deleteByGroup(grpid);
     	groupdao.delete(grpid);

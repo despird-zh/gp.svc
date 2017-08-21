@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabFolderInfo;
 import com.gp.info.InfoId;
 
@@ -27,7 +28,7 @@ public interface CabFolderDAO extends BaseDAO<CabFolderInfo>{
 		@Override
 		public CabFolderInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabFolderInfo info = new CabFolderInfo();
-			InfoId<Long> id = IdKey.CAB_FOLDER.getInfoId(rs.getLong("folder_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_FOLDER, rs.getLong("folder_id"));
 			info.setInfoId(id);
 
 			info.setSourceId(rs.getInt("source_id"));

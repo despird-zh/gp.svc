@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TaskInfo;
 
@@ -17,7 +18,7 @@ public interface TaskDAO extends BaseDAO<TaskInfo>{
 		@Override
 		public TaskInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			TaskInfo info  =  new TaskInfo();
-			InfoId<Long> id = IdKey.TASK.getInfoId(rs.getLong("task_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.TASK, rs.getLong("task_id"));
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

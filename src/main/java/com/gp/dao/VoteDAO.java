@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.VoteInfo;
 
@@ -33,7 +34,7 @@ public interface VoteDAO extends BaseDAO<VoteInfo>{
 		@Override
 		public VoteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			VoteInfo info = new VoteInfo();
-			InfoId<Long> id = IdKey.VOTE.getInfoId(rs.getLong("vote_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.VOTE,rs.getLong("vote_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

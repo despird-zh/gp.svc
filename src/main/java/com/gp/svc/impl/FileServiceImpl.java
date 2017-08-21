@@ -17,6 +17,7 @@ import com.gp.acl.Ace;
 import com.gp.acl.Acl;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
@@ -140,7 +141,7 @@ public class FileServiceImpl implements FileService{
 
 		try{
 			// recreate to ensure the id column name is correct.
-			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(srcFileId.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE,srcFileId.getId());
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
 			colmap.put(FlatColumns.FOLDER_ID, destFolderId.getId());
 			colmap.put(FlatColumns.MODIFIER, svcctx.getPrincipal().getAccount());
@@ -271,7 +272,7 @@ public class FileServiceImpl implements FileService{
 				}
 			}
 			// update the cabinet file entry's acl_id
-			InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(cabfileId.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE, cabfileId.getId());
 			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			

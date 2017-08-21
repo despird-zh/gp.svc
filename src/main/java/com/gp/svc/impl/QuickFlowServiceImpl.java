@@ -80,7 +80,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					FlatColumns.MANAGER);
 			long fid = ((Integer)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn())).longValue();
 			// query flow definition
-			QuickFlowInfo finfo = quickflowdao.query(IdKey.QUICK_FLOW.getInfoId(fid));
+			QuickFlowInfo finfo = quickflowdao.query(IdKeys.getInfoId(IdKey.QUICK_FLOW, fid));
 			// create process flow information
 			ProcFlowInfo procInfo = new ProcFlowInfo();
 			// generate a new id
@@ -106,7 +106,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 
 			// query quick node information : root node
-			QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKey.QUICK_FLOW.getInfoId(fid));
+			QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKeys.getInfoId(IdKey.QUICK_FLOW,fid));
 			Set<String> executors = getStepExecutors(procId, rootnode.getExecutors());
 			InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
 			ProcStepInfo stepInfo = new ProcStepInfo();
@@ -176,10 +176,10 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			Date now = calendar.getTime();
 			// query the proc data
-			InfoId<Long> procId = IdKey.PROC_FLOW.getInfoId(stepInfo.getProcId());
+			InfoId<Long> procId = IdKeys.getInfoId(IdKey.PROC_FLOW, stepInfo.getProcId());
 			ProcFlowInfo procinfo = procflowdao.query(procId);
 			// query the step data
-			InfoId<Long> currNodeId = IdKey.QUICK_NODE.getInfoId(stepInfo.getNodeId());
+			InfoId<Long> currNodeId = IdKeys.getInfoId(IdKey.QUICK_NODE, stepInfo.getNodeId());
 			QuickNodeInfo currnode = quicknodedao.query(currNodeId);
 			// update the opinion into the trail records.
 			proctraildao.updateOpinion(currStepId,
@@ -210,8 +210,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 			Map<String, QuickNodeInfo> nextNodeMap = quicknodedao.queryNextNodeMap(currNodeId);
 
-			Identifier key = IdKey.valueOfIgnoreCase(procinfo.getResourceType());
-			InfoId<Long> resourceId = key.getInfoId(procinfo.getResourceId());
+			InfoId<Long> resourceId = IdKeys.getInfoId(procinfo.getResourceType(),procinfo.getResourceId());
 
 			if((execmode == ExecMode.ANYONE_PASS && appr_cnt > 0)
 					|| (execmode == ExecMode.ALL_PASS && appr_cnt == all_cnt)){
@@ -393,7 +392,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			return result;
 
 		Long wId = pseudodao.query(procId, FlatColumns.WORKGROUP_ID, Long.class);
-		InfoId<Long> wgroupId = IdKey.WORKGROUP.getInfoId(wId);
+		InfoId<Long> wgroupId = IdKeys.getInfoId(IdKey.WORKGROUP,wId);
 		for(String executor: executorSet){
 			if(DefaultExecutor.contains(executor)){
 				DefaultExecutor runner = DefaultExecutor.valueOf(executor);
@@ -419,7 +418,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 						if(MapUtils.isNotEmpty(resmap)){
 							String res_type = (String)resmap.get(FlatColumns.RESOURCE_TYPE.getColumn());
 							Long res_id = (Long)resmap.get(FlatColumns.RESOURCE_ID.getColumn());
-							Identifier idf = IdKey.valueOfIgnoreCase(res_type);
+							Identifier idf = IdKeys.valueOfIgnoreCase(res_type);
 							InfoId<Long> resId = new InfoId<Long>(idf, res_id);
 							
 							String res_owner = pseudodao.query(resId, FlatColumns.OWNER, String.class);
@@ -443,7 +442,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		
 		try{
 			Long flowId = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID, Long.class);
-			return quicknodedao.queryByFlow(IdKey.QUICK_FLOW.getInfoId(flowId));
+			return quicknodedao.queryByFlow(IdKeys.getInfoId(IdKey.QUICK_FLOW, flowId));
 			
 		}catch(DataAccessException e){
 			throw new ServiceException("excp.query", e, "flow node");

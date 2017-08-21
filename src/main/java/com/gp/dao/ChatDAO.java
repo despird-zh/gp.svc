@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.ChatInfo;
 import com.gp.info.InfoId;
 
@@ -16,7 +17,7 @@ public interface ChatDAO extends BaseDAO<ChatInfo>{
 		@Override
 		public ChatInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ChatInfo info = new ChatInfo();
-			InfoId<Long> id = IdKey.CHAT.getInfoId(rs.getLong("chat_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.CHAT, rs.getLong("chat_id"));
 			info.setInfoId(id);
 			
 			info.setChatType(rs.getString("chat_type"));

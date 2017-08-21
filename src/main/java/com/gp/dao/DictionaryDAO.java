@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
@@ -23,7 +24,7 @@ public interface DictionaryDAO extends BaseDAO<DictionaryInfo>{
 		@Override
 		public DictionaryInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			DictionaryInfo info = new DictionaryInfo();
-			InfoId<Long> id = IdKey.DICTIONARY.getInfoId(rs.getLong("dict_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.DICTIONARY,rs.getLong("dict_id"));
 			info.setInfoId(id);
 
 			info.setGroup(rs.getString("dict_group"));

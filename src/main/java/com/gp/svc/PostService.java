@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.dao.info.PostCommentInfo;
 import com.gp.exception.ServiceException;
@@ -142,7 +143,7 @@ public interface PostService {
 		public PostExt mapRow(ResultSet rs, int num) throws SQLException {
 			PostExt info = new PostExt();
 
-			InfoId<Long> id = IdKey.POST.getInfoId(rs.getLong("post_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.POST, rs.getLong("post_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

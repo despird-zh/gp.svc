@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.StorageInfo;
 
@@ -18,7 +19,7 @@ public interface StorageDAO extends BaseDAO<StorageInfo>{
 		public StorageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StorageInfo info = new StorageInfo();
 			
-			InfoId<Integer> id = IdKey.STORAGE.getInfoId(rs.getInt("storage_id"));
+			InfoId<Integer> id = IdKeys.getInfoId(IdKey.STORAGE, rs.getInt("storage_id"));
 			info.setInfoId(id);
 
 			info.setStorageName(rs.getString("storage_name"));

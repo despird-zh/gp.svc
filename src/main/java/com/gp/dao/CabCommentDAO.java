@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabCommentInfo;
 import com.gp.info.InfoId;
 
@@ -17,7 +18,7 @@ public interface CabCommentDAO extends BaseDAO<CabCommentInfo>{
 		public CabCommentInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabCommentInfo info = new CabCommentInfo();
 			
-			InfoId<Long> id = IdKey.CAB_COMMENT.getInfoId(	rs.getLong("comment_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_COMMENT,	rs.getLong("comment_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

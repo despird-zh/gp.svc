@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupSumInfo;
 
@@ -18,7 +19,7 @@ public interface WorkgroupSumDAO extends BaseDAO<WorkgroupSumInfo>{
 		@Override
 		public WorkgroupSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			WorkgroupSumInfo info = new WorkgroupSumInfo();
-			InfoId<Long> id = IdKey.WORKGROUP_SUM.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP_SUM, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

@@ -1,6 +1,7 @@
 package com.gp.dao;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.QuickFlowInfo;
 import com.gp.info.InfoId;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,7 +19,7 @@ public interface QuickFlowDAO extends BaseDAO<QuickFlowInfo>{
         public QuickFlowInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             QuickFlowInfo info = new QuickFlowInfo();
 
-            InfoId<Long> id = IdKey.QUICK_FLOW.getInfoId(rs.getLong("flow_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.QUICK_FLOW, rs.getLong("flow_id"));
             info.setInfoId(id);
 
             info.setFlowName(rs.getString("flow_name"));

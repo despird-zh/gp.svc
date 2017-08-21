@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.MemberSettingInfo;
 
@@ -18,7 +19,7 @@ public interface MemberSettingDAO extends BaseDAO<MemberSettingInfo>{
 		@Override
 		public MemberSettingInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			MemberSettingInfo info = new MemberSettingInfo();
-			InfoId<Long> id = IdKey.MBR_SETTING.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.MBR_SETTING, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setAccount(rs.getString("account"));

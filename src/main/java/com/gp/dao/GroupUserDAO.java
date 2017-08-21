@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.GroupMemberInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
@@ -24,7 +25,7 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 		public GroupMemberInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			GroupMemberInfo gminfo = new GroupMemberInfo();
 			Long relid = rs.getLong("mbr_rel_id");
-			InfoId<Long> rid = IdKey.GROUP_USER.getInfoId(relid);
+			InfoId<Long> rid = IdKeys.getInfoId(IdKey.GROUP_USER, relid);
 			gminfo.setInfoId(rid);
 			gminfo.setAccount(rs.getString("account"));
 			gminfo.setDescription(rs.getString("group_descr"));
@@ -52,7 +53,7 @@ public interface GroupUserDAO extends BaseDAO<GroupUserInfo>{
 		@Override
 		public GroupUserInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			GroupUserInfo info = new GroupUserInfo();
-			InfoId<Long> id = IdKey.GROUP_USER.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GROUP_USER, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setAccount(rs.getString("account"));

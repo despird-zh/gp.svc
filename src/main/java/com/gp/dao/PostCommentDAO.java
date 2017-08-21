@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PostCommentInfo;
 
@@ -17,7 +18,7 @@ public interface PostCommentDAO extends BaseDAO<PostCommentInfo>{
 		@Override
 		public PostCommentInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			PostCommentInfo info = new PostCommentInfo();
-			InfoId<Long> id = IdKey.POST_COMMENT.getInfoId(rs.getLong("comment_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.POST_COMMENT, rs.getLong("comment_id"));
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

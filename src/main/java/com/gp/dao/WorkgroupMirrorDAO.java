@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.WorkgroupMirrorInfo;
 
@@ -17,7 +18,7 @@ public interface WorkgroupMirrorDAO extends BaseDAO<WorkgroupMirrorInfo>{
 		
 			WorkgroupMirrorInfo info = new WorkgroupMirrorInfo();
 			
-			InfoId<Long> id = IdKey.WORKGROUP_MIRROR.getInfoId(rs.getLong("mirror_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP_MIRROR, rs.getLong("mirror_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

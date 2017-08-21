@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
@@ -160,7 +161,7 @@ public class TagServiceImpl implements TagService{
 				public void processRow(ResultSet rs) throws SQLException {
 					String res_type = rs.getString("resource_type");
 					Long res_id = rs.getLong("resource_id");
-					Identifier idfier = IdKey.valueOfIgnoreCase(res_type);
+					Identifier idfier = IdKeys.valueOfIgnoreCase(res_type);
 					
 					InfoId<Long> resid = new InfoId<Long>(idfier, res_id);
 					Set<TagInfo> tags = result.get(resid);

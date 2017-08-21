@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.dao.info.PageInfo;
@@ -22,7 +23,7 @@ public interface PageDAO extends BaseDAO<PageInfo>{
 		public PageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			PageInfo page = new PageInfo();
 			
-			InfoId<Integer> mid = IdKey.PAGE.getInfoId(rs.getInt("page_id"));
+			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.PAGE, rs.getInt("page_id"));
 			page.setInfoId(mid);
 			
 			page.setDescription(rs.getString("descr"));

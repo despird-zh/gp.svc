@@ -18,14 +18,14 @@ public class IdKeyTest {
 	public static void main(String[] a){
 		
 		setup();
-		InfoId<Long> id = IdKey.AUDIT.getInfoId(123l);
+		InfoId<Long> id = IdKeys.getInfoId(IdKey.AUDIT,123l);
 		
-		String tracecode = IdKey.getTraceCode("E001", id);
+		String tracecode = IdKeys.getTraceCode("E001", id);
 		
 		log.debug("trace code: {} / {}", id.toString(),tracecode);
 		
-		String node = IdKey.parseNodeCode(tracecode);
-		InfoId<Long> nid = IdKey.parseInfoId(tracecode, Long.class);
+		String node = IdKeys.parseNodeCode(tracecode);
+		InfoId<Long> nid = IdKeys.parseInfoId(tracecode, Long.class);
 		log.debug("parse code: {} / {}", node, nid);
 	}
 }

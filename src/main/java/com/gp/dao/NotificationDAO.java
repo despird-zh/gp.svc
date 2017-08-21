@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.NotificationInfo;
 
@@ -16,7 +17,7 @@ public interface NotificationDAO extends BaseDAO<NotificationInfo>{
 		@Override
 		public NotificationInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			NotificationInfo info = new NotificationInfo();
-			InfoId<Long> id = IdKey.NOTIF.getInfoId(rs.getLong("notification_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.NOTIF, rs.getLong("notification_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

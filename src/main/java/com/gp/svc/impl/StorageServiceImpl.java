@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
@@ -52,7 +53,7 @@ public class StorageServiceImpl implements StorageService{
 	public boolean newBinary(ServiceContext svcctx, BinaryInfo binary) throws ServiceException {
 
 		try{
-			InfoId<Integer> storageId = IdKey.STORAGE.getInfoId(binary.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE,binary.getStorageId());
 			String storeLoc = StorageUtils.toURIStr(storageId, binary.getInfoId().getId(), binary.getFormat());
 			binary.setStoreLocation(storeLoc);
 			svcctx.setTraceInfo(binary);

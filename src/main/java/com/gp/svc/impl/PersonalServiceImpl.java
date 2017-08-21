@@ -23,6 +23,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.GroupUsers;
 import com.gp.common.GroupUsers.GroupType;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Images;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
@@ -104,7 +105,7 @@ public class PersonalServiceImpl implements PersonalService{
 			int count = 0;
 			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
-				ids[count] = IdKey.WORKGROUP.getInfoId(minfo.getManageId());
+				ids[count] = IdKeys.getInfoId( IdKey.WORKGROUP, minfo.getManageId());
 				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
@@ -146,7 +147,7 @@ public class PersonalServiceImpl implements PersonalService{
 			int count = 0;
 			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
-				ids[count] = IdKey.ORG_HIER.getInfoId(minfo.getManageId());
+				ids[count] = IdKeys.getInfoId(IdKey.ORG_HIER, minfo.getManageId());
 				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
@@ -258,7 +259,7 @@ public class PersonalServiceImpl implements PersonalService{
 			// create image firstly.
 			String filename = FilenameUtils.getName(avatarImg);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKey.IMAGE.getInfoId(imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE, imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 
@@ -326,12 +327,12 @@ public class PersonalServiceImpl implements PersonalService{
 			// update the storage id
 			cnt = pseudodao.update(userid, FlatColumns.STORAGE_ID, storageId);
 			UserInfo uinfo = userdao.query(userid);
-			InfoId<Long> pubcabid = IdKey.CABINET.getInfoId(uinfo.getPublishCabinet());
+			InfoId<Long> pubcabid = IdKeys.getInfoId(IdKey.CABINET, uinfo.getPublishCabinet());
 			Map<FlatColLocator, Object> fields = new HashMap<FlatColLocator, Object>();
 			fields.put(FlatColumns.STORAGE_ID, storageId);
 			fields.put(FlatColumns.CAPACITY, publishcap);
 			cnt += pseudodao.update(pubcabid, fields);
-			InfoId<Long> pricabid = IdKey.CABINET.getInfoId(uinfo.getNetdiskCabinet());
+			InfoId<Long> pricabid = IdKeys.getInfoId(IdKey.CABINET, uinfo.getNetdiskCabinet());
 			// replace the capacity with netdisk's setting
 			fields.put(FlatColumns.CAPACITY, netdiskcap);
 			cnt += pseudodao.update(pricabid, fields);

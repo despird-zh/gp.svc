@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabinetInfo;
 import com.gp.info.InfoId;
 
@@ -33,7 +34,7 @@ public interface CabinetDAO extends BaseDAO<CabinetInfo>{
 		public CabinetInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 
 			CabinetInfo info = new CabinetInfo();
-			InfoId<Long> id = IdKey.CABINET.getInfoId(	rs.getLong("cabinet_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.CABINET, rs.getLong("cabinet_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

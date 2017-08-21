@@ -15,15 +15,7 @@
  *******************************************************************************/
 package com.gp.common;
 
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.Base64.Encoder;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.gp.info.Identifier;
-import com.gp.info.InfoId;
-import com.gp.info.InfoIdHelper;
 
 
 public enum IdKey implements Identifier{
@@ -94,11 +86,6 @@ public enum IdKey implements Identifier{
 	
 	TOKEN("gp_tokens", "token_id", Long.class);
 	
-	/**
-	 * the custom Identifier set 
-	 **/
-	private static Set<Identifier> IdSet = new HashSet<Identifier>();
-	
 	private final String schema;
 	private final Class<?> clazz;
 	private final String idColumn;
@@ -107,12 +94,6 @@ public enum IdKey implements Identifier{
 		this.idColumn = idColumn;
 		this.schema = schema;
 		this.clazz = clazz;
-	}
-	
-	@Override
-	public String getTable() {
-		
-		return schema;
 	}
 
 	@Override
@@ -128,92 +109,7 @@ public enum IdKey implements Identifier{
 	}
 
 	@Override
-	public <T> InfoId<T> getInfoId(T sequence) {
-		
-		if(sequence == null || !this.clazz.equals(sequence.getClass()))
-			throw new UnsupportedOperationException("Sequence type is not supported");
-		
-		return new InfoId<T>(this.getSchema(), this.idColumn, sequence);
-	}
-	
-	/** 
-	 * Finds the value of the given enumeration by name, case-insensitive. 
-	 * Throws an IllegalArgumentException if no match is found.  
-	 **/
-	public static Identifier valueOfIgnoreCase(String name) {
-
-	    for (IdKey enumValue : IdKey.values()) {
-	        if (enumValue.name().equalsIgnoreCase(name) 
-	        		|| enumValue.getSchema().equalsIgnoreCase(name)) {
-	            return enumValue;
-	        }
-	    }
-	    for (Identifier enumValue : IdSet) {
-	        if (enumValue.getSchema().equalsIgnoreCase(name)) {
-	            return enumValue;
-	        }
-	    }
-	    throw new IllegalArgumentException(String.format(
-	            "There is no value with name '%s' in Enum IdKey",name
-	        ));
-	}
-	
-	/**
-	 * Generate the trace code with node code and info id
-	 * @param nodeCode the node code
-	 * @param infoId the id of info record
-	 *  
-	 **/
-	public static String getTraceCode(String nodeCode, InfoId<?> infoId) {
-		
-		Encoder encoder = Base64.getEncoder();
-		StringBuffer sb = new StringBuffer(30);
-		sb.append(nodeCode).append(GeneralConstants.NAMES_SEPARATOR);
-		sb.append(infoId.toString());
-		
-		return encoder.encodeToString(sb.toString().getBytes());
-	}
-	
-	/**
-	 * Parse the node code
-	 * @param traceCode the trace code
-	 **/
-	public static String parseNodeCode(String traceCode) {
-		Decoder decoder = Base64.getDecoder();
-		
-		String fullOrigin = new String(decoder.decode(traceCode));
-		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
-		
-		return fullOrigin.substring(0, idx);
-	}
-	
-	/**
-	 * Parse the info id
-	 * @param traceCode the trace code
-	 **/
-	public static <M> InfoId<M> parseInfoId(String traceCode, Class<M> clazz) {
-		Decoder decoder = Base64.getDecoder();
-		
-		String fullOrigin = new String(decoder.decode(traceCode));
-		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
-		
-		return InfoIdHelper.parseInfoId(fullOrigin.substring(idx+1), clazz);
-	}
-	
-	/**
-	 * Get the custom Identifier set
-	 *  
-	 **/
-	public static Set<Identifier> getIdentifierSet(){
-		
-		return IdSet;
-	}
-	
-	/**
-	 * Add the custom Identifier  
-	 **/
-	public static void addIdentifier(Identifier idkey){
-		
-		IdSet.add(idkey);
+	public Class<?> getIdClass(){
+		return this.clazz;
 	}
 }

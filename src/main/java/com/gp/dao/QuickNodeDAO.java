@@ -1,6 +1,7 @@
 package com.gp.dao;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.QuickFlows;
 import com.gp.dao.info.QuickNodeInfo;
 import com.gp.info.InfoId;
@@ -18,7 +19,7 @@ import java.util.Set;
  */
 public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
 
-    public static final QuickNodeInfo END_NODE_INFO = new QuickNodeInfo(IdKey.QUICK_NODE.getInfoId(QuickFlows.END_NODE));
+    public static final QuickNodeInfo END_NODE_INFO = new QuickNodeInfo(IdKeys.getInfoId(IdKey.QUICK_NODE,QuickFlows.END_NODE));
 
     /**
      * Query the root node i.e the start node
@@ -39,7 +40,7 @@ public interface QuickNodeDAO extends BaseDAO<QuickNodeInfo>{
         @Override
         public QuickNodeInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             QuickNodeInfo info = new QuickNodeInfo();
-            InfoId<Long> nid = IdKey.QUICK_NODE.getInfoId(rs.getLong("node_id"));
+            InfoId<Long> nid = IdKeys.getInfoId(IdKey.QUICK_NODE,rs.getLong("node_id"));
             info.setInfoId(nid);
 
             info.setNodeName(rs.getString("node_name"));

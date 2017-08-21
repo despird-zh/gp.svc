@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.TagInfo;
 
@@ -38,7 +39,7 @@ public interface TagDAO extends BaseDAO<TagInfo>{
 		@Override
 		public TagInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TagInfo info = new TagInfo();
-			InfoId<Long> id = IdKey.TAG.getInfoId(	rs.getLong("tag_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.TAG, rs.getLong("tag_id"));
 			info.setInfoId(id);
 
 			info.setTagName(rs.getString("tag_name"));

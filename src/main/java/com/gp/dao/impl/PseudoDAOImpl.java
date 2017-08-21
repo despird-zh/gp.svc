@@ -173,7 +173,7 @@ public class PseudoDAOImpl extends DAOSupport implements PseudoDAO{
 	}
 
 	@Override
-	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols) {
+	public Map<String, Object> query(InfoId<?> id, FlatColLocator... cols) {
 		
 		StringBuffer SQL = new StringBuffer("SELECT ");
 		for(FlatColLocator col : cols){

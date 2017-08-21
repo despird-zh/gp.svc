@@ -15,6 +15,7 @@ import java.util.*;
 import javax.sql.DataSource;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Images;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -303,7 +304,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 
 		ImageInfo imginfo = new ImageInfo(imagePath.substring(0, imagePath.lastIndexOf(File.separator) + 1));
 		imginfo.setModifyDate(createDate);
-		imginfo.setInfoId(IdKey.IMAGE.getInfoId( imgid));
+		imginfo.setInfoId(IdKeys.getInfoId(IdKey.IMAGE, imgid));
 		imginfo.setDataFile(new File(imagePath));
 		imginfo.setLink(filename);
 		imginfo.setPersist(Images.Persist.DATABASE.name());

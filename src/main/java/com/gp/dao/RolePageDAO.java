@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.FlatColLocator;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
@@ -23,7 +24,7 @@ public interface RolePageDAO extends BaseDAO<RolePageInfo>{
 		public RolePageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			RolePageInfo rpage = new RolePageInfo();
 			
-			InfoId<Integer> mid = IdKey.PAGE.getInfoId(rs.getInt("rel_id"));
+			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.PAGE,rs.getInt("rel_id"));
 			rpage.setInfoId(mid);
 			
 			rpage.setPageId(rs.getInt("page_id"));

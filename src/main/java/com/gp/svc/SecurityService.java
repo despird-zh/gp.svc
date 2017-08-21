@@ -8,6 +8,7 @@ import java.util.Set;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.FlatColLocator;
@@ -186,7 +187,7 @@ public interface SecurityService {
 
 			// save extend data
 			UserExtInfo info = new UserExtInfo();
-			InfoId<Long> id = IdKey.USER.getInfoId(rs.getLong("user_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.USER, rs.getLong("user_id"));
 			info.setInfoId(id);
 
 			info.setSourceId(rs.getInt("source_id"));

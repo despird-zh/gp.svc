@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserSumInfo;
 
@@ -19,7 +20,7 @@ public interface UserSumDAO extends BaseDAO<UserSumInfo>{
 		@Override
 		public UserSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserSumInfo info = new UserSumInfo();
-			InfoId<Long> id = IdKey.USER_SUM.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.USER_SUM,rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setAccount(rs.getString("account"));

@@ -19,7 +19,7 @@ import com.gp.info.InfoId;
 
 public class Sources {
 
-	public static final InfoId<Integer> LOCAL_INST_ID = IdKey.SOURCE.getInfoId(GeneralConstants.LOCAL_SOURCE);
+	public static final InfoId<Integer> LOCAL_INST_ID = IdKeys.getInfoId(IdKey.SOURCE, GeneralConstants.LOCAL_SOURCE);
 	
 	public static enum State{
 		

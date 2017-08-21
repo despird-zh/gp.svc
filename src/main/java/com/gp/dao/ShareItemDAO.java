@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.InfoId;
 import com.gp.dao.info.ShareItemInfo;
 
@@ -18,7 +19,7 @@ public interface ShareItemDAO extends BaseDAO<ShareItemInfo>{
 		public ShareItemInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			ShareItemInfo info = new ShareItemInfo();
-			InfoId<Long> id = IdKey.SHARE_ITEM.getInfoId(rs.getLong("share_item_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.SHARE_ITEM,rs.getLong("share_item_id"));
 			info.setInfoId(id);
 
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

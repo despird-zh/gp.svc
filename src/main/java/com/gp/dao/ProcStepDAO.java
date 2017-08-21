@@ -1,6 +1,7 @@
 package com.gp.dao;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.InfoId;
 import com.gp.util.CommonUtils;
@@ -29,7 +30,7 @@ public interface ProcStepDAO extends BaseDAO<ProcStepInfo>{
         public ProcStepInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             ProcStepInfo info = new ProcStepInfo();
 
-            InfoId<Long> id = IdKey.PROC_STEP.getInfoId(rs.getLong("step_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_STEP, rs.getLong("step_id"));
             info.setInfoId(id);
 
             info.setProcId(rs.getLong("proc_id"));

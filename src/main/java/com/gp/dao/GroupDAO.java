@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.GroupInfo;
 import com.gp.info.InfoId;
 
@@ -21,7 +22,7 @@ public interface GroupDAO extends BaseDAO<GroupInfo>{
 		@Override
 		public GroupInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			GroupInfo info = new GroupInfo();
-			InfoId<Long> id = IdKey.GROUP.getInfoId(rs.getLong("group_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GROUP, rs.getLong("group_id"));
 			
 			info.setInfoId(id);
 

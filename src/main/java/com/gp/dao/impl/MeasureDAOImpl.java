@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.MeasureDAO;
 import com.gp.info.FlatColLocator;
@@ -315,7 +316,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			@Override
 			public MeasureInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				MeasureInfo measure = new MeasureInfo();
-				InfoId<Long> mid = IdKey.MEASURE.getInfoId(rs.getLong("measure_id"));
+				InfoId<Long> mid = IdKeys.getInfoId(IdKey.MEASURE, rs.getLong("measure_id"));
 				measure.setInfoId(mid);
 				
 				if(!ArrayUtils.isEmpty(_columns)){

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.InfoId;
 
@@ -30,7 +31,7 @@ public interface FavoriteDAO extends BaseDAO<FavoriteInfo>{
 		@Override
 		public FavoriteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			FavoriteInfo info = new FavoriteInfo();
-			InfoId<Long> id = IdKey.FAVORITE.getInfoId(rs.getLong("favorite_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.FAVORITE,rs.getLong("favorite_id"));
 			info.setInfoId(id);
 			info.setFavoriter(rs.getString("favoriter"));
 			info.setResourceId(rs.getLong("resource_id"));

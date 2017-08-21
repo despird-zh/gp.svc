@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Principal;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
@@ -33,7 +34,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Integer> id = IdKey.SOURCE.getInfoId(-9999);
+		InfoId<Integer> id = IdKeys.getInfoId(IdKey.SOURCE,-9999);
 		
 		SourceInfo info = new SourceInfo();
 		info.setInfoId(id);

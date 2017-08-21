@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.dao.info.CabSumInfo;
 import com.gp.info.InfoId;
 
@@ -17,7 +18,7 @@ public interface CabSumDAO extends BaseDAO<CabSumInfo>{
 		@Override
 		public CabSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			CabSumInfo info = new CabSumInfo();
-			InfoId<Long> id = IdKey.USER_SUM.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.USER_SUM ,rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setResourceId(rs.getLong("resource_id"));

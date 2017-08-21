@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.FlatColLocator;
@@ -169,7 +170,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		List<Long> cnt = jtemplate.queryForList(SQL, params, Long.class);
 		
-		return CollectionUtils.isEmpty(cnt)?null:IdKey.GROUP_USER.getInfoId(cnt.get(0));
+		return CollectionUtils.isEmpty(cnt) ? null : IdKeys.getInfoId(IdKey.GROUP_USER,cnt.get(0));
 	}
 
 	@Override

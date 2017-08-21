@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import com.config.TestConfig;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.Principal;
 import com.gp.dao.PseudoDAO;
 import com.gp.info.FlatColLocator;
@@ -31,7 +32,7 @@ public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testquery(){
 		
-		InfoId<Long> fid = IdKey.CAB_FILE.getInfoId(120l);
+		InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE,120l);
 		Long val = pseudodao.query(fid, FlatColumns.ACL_ID, Long.class);
 		System.out.println("value : " + val);
 		

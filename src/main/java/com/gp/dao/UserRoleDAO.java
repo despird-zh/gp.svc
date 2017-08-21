@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserRoleInfo;
@@ -21,7 +22,7 @@ public interface UserRoleDAO extends BaseDAO<UserRoleInfo>{
 		public UserRoleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserRoleInfo ur = new UserRoleInfo();
 			
-			InfoId<Long> mid = IdKey.USER_ROLE.getInfoId(rs.getLong("rel_id"));
+			InfoId<Long> mid = IdKeys.getInfoId(IdKey.USER_ROLE,rs.getLong("rel_id"));
 			ur.setInfoId(mid);
 			
 			ur.setUserId(rs.getLong("user_id"));

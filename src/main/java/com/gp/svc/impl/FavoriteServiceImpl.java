@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.FavoriteDAO;
@@ -92,7 +93,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 		
 		boolean rtv = false;
 		try{
-			Identifier idf = IdKey.valueOfIgnoreCase(fav.getResourceType());
+			Identifier idf = IdKeys.valueOfIgnoreCase(fav.getResourceType());
 			InfoId<Long> rid = new InfoId<Long>(idf, fav.getResourceId()); 
 			FavoriteInfo favinfo = favoritedao.query(fav.getFavoriter(), rid);
 			if(favinfo == null){

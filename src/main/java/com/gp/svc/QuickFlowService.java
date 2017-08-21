@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gp.common.IdKey;
+import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.dao.info.ProcFlowInfo;
 import com.gp.dao.info.ProcTrailInfo;
@@ -58,7 +59,7 @@ public interface QuickFlowService {
         public ProcFlowExtInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
         	ProcFlowExtInfo info = new ProcFlowExtInfo();
 
-            InfoId<Long> id = IdKey.PROC_FLOW.getInfoId(rs.getLong("proc_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_FLOW, rs.getLong("proc_id"));
             info.setInfoId(id);
 
             info.setWorkgroupId(rs.getLong("workgroup_id"));
@@ -91,7 +92,7 @@ public interface QuickFlowService {
         public ProcTrailExtInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
         	
         	ProcTrailExtInfo info = new ProcTrailExtInfo();
-            InfoId<Long> id = IdKey.PROC_TRAIL.getInfoId(rs.getLong("trail_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_TRAIL, rs.getLong("trail_id"));
             info.setInfoId(id);
             
             info.setExecutorName(rs.getString("full_name"));
