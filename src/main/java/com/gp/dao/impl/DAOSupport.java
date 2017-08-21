@@ -55,18 +55,18 @@ public abstract class DAOSupport{
     @SuppressWarnings("unchecked")
 	public <T> T getJdbcTemplate(Class<T> clazz){
     	
-    	if(clazz.isInstance(jdbcTemplate))
-    		return (T)jdbcTemplate;
-    	else if (NamedParameterJdbcTemplate.class.equals(clazz)){
-    		
-    		return (T) new NamedParameterJdbcTemplate(dataSource);
-    	}else if (JdbcTemplate.class.equals(clazz)){
-    		
-    		return (T) new JdbcTemplate(dataSource);
-    	}else{
-    		
-    		return null;
-    	}
+	    	if(clazz.isInstance(jdbcTemplate))
+	    		return (T)jdbcTemplate;
+	    	else if (NamedParameterJdbcTemplate.class.equals(clazz)){
+	    		
+	    		return (T) new NamedParameterJdbcTemplate(dataSource);
+	    	}else if (JdbcTemplate.class.equals(clazz)){
+	    		
+	    		return (T) new JdbcTemplate(dataSource);
+	    	}else{
+	    		
+	    		return null;
+	    	}
     }
     
     /**
@@ -78,7 +78,7 @@ public abstract class DAOSupport{
 
     public String getDatabaseProduct(){
     	
-    	return this.databaseProduct;
+    		return this.databaseProduct;
     }
     
     /**
@@ -86,20 +86,20 @@ public abstract class DAOSupport{
      **/
     public void setDataSource(DataSource dataSource){
         
-    	this.dataSource = dataSource;    	
+    		this.dataSource = dataSource;    	
         initialJdbcTemplate(dataSource);
         
         try {		
-        	databaseProduct = (String)JdbcUtils.extractDatabaseMetaData(dataSource,"getDatabaseProductName");
+        		databaseProduct = (String)JdbcUtils.extractDatabaseMetaData(dataSource,"getDatabaseProductName");
         } catch (MetaDataAccessException e) {
-        	// ignore setting
-        	LOGGER.error("fail to fetch meta data : product name",e);        	
+        		// ignore setting
+        		LOGGER.error("fail to fetch meta data : product name",e);        	
         }
         
         if(null != jdbcTemplate && jdbcTemplate instanceof JdbcTemplate){
-        	String value = GeneralConfig.getString(SystemOptions.QUERY_MAX_ROWS,"2000");
-        	int maxrows= Integer.valueOf(value);
-        	((JdbcTemplate)jdbcTemplate).setMaxRows(maxrows);
+	        	String value = GeneralConfig.getString(SystemOptions.QUERY_MAX_ROWS,"2000");
+	        	int maxrows= Integer.valueOf(value);
+	        	((JdbcTemplate)jdbcTemplate).setMaxRows(maxrows);
         }
     }
 
@@ -117,7 +117,7 @@ public abstract class DAOSupport{
      **/
     public void releaseConnection(Connection conn){
     	
-    	DataSourceUtils.releaseConnection(conn,dataSource);
+    		DataSourceUtils.releaseConnection(conn,dataSource);
     }
         
     /**
@@ -127,35 +127,35 @@ public abstract class DAOSupport{
      **/
     public String getPageQuerySql(String sql, PageQuery pagequery){
     	
-    	if(DatabaseProduct.MySql.name().equalsIgnoreCase(databaseProduct)){
-    		
-    		String newSql = sql + " LIMIT " + (pagequery.getPageNumber()-1) * pagequery.getPageSize() + " , " + pagequery.getPageSize() ;
-    		return newSql;
-    	
-    	}else if(DatabaseProduct.Oracle.name().equalsIgnoreCase(databaseProduct)){
-    		
-    		String newSql = null;
-    		if(pagequery.getPageNumber() == 1){
-    			newSql = "SELECT ROWNUM ROW_NUM, SUBQ.* " 
-    			+ " FROM "
-    			+ " ( " +sql + " ) SUBQ "
-    			+ " WHERE ROW_NUM <= " + pagequery.getPageSize();
-    		}else{
-    			newSql = "SELECT * FROM ( "
-    			+ " SELECT ROWNUM ROW_NUM, SUBQ.* "
-    			+ " FROM "
-    			+ " ( " +sql + " ) SUBQ "
-    			+ " WHERE ROW_NUM <= " + pagequery.getPageNumber() * pagequery.getPageSize() + ")"
-    			+ "    WHERE ROW_NUM > " + (pagequery.getPageNumber()-1) * pagequery.getPageSize() ;
-    			
-    		}
-    		
-    		return newSql;
-    	}
-    	else{
-    		
-    		throw new UnsupportedOperationException("not supported paging feature");
-    	}
+	    	if(DatabaseProduct.MySql.name().equalsIgnoreCase(databaseProduct)){
+	    		
+	    		String newSql = sql + " LIMIT " + (pagequery.getPageNumber()-1) * pagequery.getPageSize() + " , " + pagequery.getPageSize() ;
+	    		return newSql;
+	    	
+	    	}else if(DatabaseProduct.Oracle.name().equalsIgnoreCase(databaseProduct)){
+	    		
+	    		String newSql = null;
+	    		if(pagequery.getPageNumber() == 1){
+	    			newSql = "SELECT ROWNUM ROW_NUM, SUBQ.* " 
+	    			+ " FROM "
+	    			+ " ( " +sql + " ) SUBQ "
+	    			+ " WHERE ROW_NUM <= " + pagequery.getPageSize();
+	    		}else{
+	    			newSql = "SELECT * FROM ( "
+	    			+ " SELECT ROWNUM ROW_NUM, SUBQ.* "
+	    			+ " FROM "
+	    			+ " ( " +sql + " ) SUBQ "
+	    			+ " WHERE ROW_NUM <= " + pagequery.getPageNumber() * pagequery.getPageSize() + ")"
+	    			+ "    WHERE ROW_NUM > " + (pagequery.getPageNumber()-1) * pagequery.getPageSize() ;
+	    			
+	    		}
+	    		
+	    		return newSql;
+	    	}
+	    	else{
+	    		
+	    		throw new UnsupportedOperationException("not supported paging feature");
+	    	}
     }
 
     /**
@@ -166,35 +166,35 @@ public abstract class DAOSupport{
      **/
     public String getPageQuerySql(String sql, int start, int length){
     	
-    	if(DatabaseProduct.MySql.name().equalsIgnoreCase(databaseProduct)){
-    		
-    		String newSql = sql + " LIMIT " + start + " , " + length ;
-    		return newSql;
-    	
-    	}else if(DatabaseProduct.Oracle.name().equalsIgnoreCase(databaseProduct)){
-    		
-    		String newSql = null;
-    		if(start == 0){
-    			newSql = "SELECT ROWNUM ROW_NUM, SUBQ.* " 
-    			+ " FROM "
-    			+ " ( " +sql + " ) SUBQ "
-    			+ " WHERE ROW_NUM <= " + length;
-    		}else{
-    			newSql = "SELECT * FROM ( "
-    			+ " SELECT ROWNUM ROW_NUM, SUBQ.* "
-    			+ " FROM "
-    			+ " ( " +sql + " ) SUBQ "
-    			+ " WHERE ROW_NUM <= " + (start + length) + ")"
-    			+ "    WHERE ROW_NUM > " + start ;
-    			
-    		}
-    		
-    		return newSql;
-    	}
-    	else{
-    		
-    		throw new UnsupportedOperationException("not supported paging feature");
-    	}
+	    	if(DatabaseProduct.MySql.name().equalsIgnoreCase(databaseProduct)){
+	    		
+	    		String newSql = sql + " LIMIT " + start + " , " + length ;
+	    		return newSql;
+	    	
+	    	}else if(DatabaseProduct.Oracle.name().equalsIgnoreCase(databaseProduct)){
+	    		
+	    		String newSql = null;
+	    		if(start == 0){
+	    			newSql = "SELECT ROWNUM ROW_NUM, SUBQ.* " 
+	    			+ " FROM "
+	    			+ " ( " +sql + " ) SUBQ "
+	    			+ " WHERE ROW_NUM <= " + length;
+	    		}else{
+	    			newSql = "SELECT * FROM ( "
+	    			+ " SELECT ROWNUM ROW_NUM, SUBQ.* "
+	    			+ " FROM "
+	    			+ " ( " +sql + " ) SUBQ "
+	    			+ " WHERE ROW_NUM <= " + (start + length) + ")"
+	    			+ "    WHERE ROW_NUM > " + start ;
+	    			
+	    		}
+	    		
+	    		return newSql;
+	    	}
+	    	else{
+	    		
+	    		throw new UnsupportedOperationException("not supported paging feature");
+	    	}
     }
     
 	/**
