@@ -45,7 +45,7 @@ import com.gp.dao.info.GroupMemberInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.dao.info.ImageInfo;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIdHelper;
+import com.gp.info.InfoIds;
 import com.gp.dao.info.SysOptionInfo;
 import com.gp.dao.info.UserInfo;
 import com.gp.dao.info.WorkgroupInfo;
@@ -313,7 +313,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			SQL_FROM.append("AND (account like :uname OR email like :uname OR full_name like :uname) ");
 			params.put("uname", "%" + StringUtils.trim(uname) + "%");
 		}
-		if(InfoIdHelper.isValid(sourceId)){
+		if(InfoIds.isValid(sourceId)){
 			
 			SQL_FROM.append("AND source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
@@ -355,7 +355,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			SQL_FROM.append("AND (account like :uname OR email like :uname OR full_name like :uname) ");
 			params.put("uname", "%" + StringUtils.trim(uname) + "%");
 		}
-		if(InfoIdHelper.isValid(sourceId)){
+		if(InfoIds.isValid(sourceId)){
 			
 			SQL_FROM.append("AND source_id = :source_id ");
 			params.put("source_id", sourceId.getId());
@@ -405,7 +405,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			}
 			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
 	
-			if(InfoIdHelper.isValid(mbrid)){
+			if(InfoIds.isValid(mbrid)){
 				// member already existed, update 
 				Map<FlatColLocator, Object> cols = new HashMap<FlatColLocator, Object>();
 				cols.put(FlatColumns.MBR_ROLE, memberinfo.getRole());
@@ -643,7 +643,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			for(String account : accounts){
 				
 				InfoId<Long> mbrId = groupuserdao.existByAccount(groupid, account);
-				if(InfoIdHelper.isValid(mbrId)) {
+				if(InfoIds.isValid(mbrId)) {
 					LOGGER.debug("User : {} already exist in group : {}", account, groupid.toString());
 					continue;
 				}

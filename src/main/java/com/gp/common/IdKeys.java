@@ -11,7 +11,7 @@ import java.util.Base64.Encoder;
 
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIdHelper;
+import com.gp.info.InfoIds;
 
 public class IdKeys {
 	
@@ -83,7 +83,7 @@ public class IdKeys {
 		String fullOrigin = new String(decoder.decode(traceCode));
 		int idx = fullOrigin.indexOf(GeneralConstants.NAMES_SEPARATOR);
 		
-		return InfoIdHelper.parseInfoId(fullOrigin.substring(idx+1), clazz);
+		return InfoIds.parseInfoId(fullOrigin.substring(idx+1), clazz);
 	}
 	
 	/**
