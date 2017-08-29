@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import com.config.TestConfig;
 import com.gp.common.GeneralConfig;
 import com.gp.common.IdKey;
-import com.gp.common.Principal;
+import com.gp.common.GPrincipal;
 import com.gp.common.ServiceContext;
 import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
@@ -23,7 +23,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = new Principal("demouser");
+	GPrincipal principal = new GPrincipal("demouser");
 	ServiceContext svcctx ;
 	@Autowired
     private ImageDAO imgdao;

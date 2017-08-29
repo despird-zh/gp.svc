@@ -39,7 +39,7 @@ import com.gp.info.InfoId;
  * @version 1.0 2014-01-01
  *
  **/
-public class Principal implements Serializable{
+public class GPrincipal implements Serializable{
 		
 	private static final long serialVersionUID = 5413765750513254954L;
 
@@ -72,20 +72,20 @@ public class Principal implements Serializable{
 	/** the classification of current user */
 	private String classification;
 	
-	public Principal(String account){
+	public GPrincipal(String account){
 		this.account = account;
 		this.locale = Locale.getDefault();
 		this.timeZone = ZoneId.systemDefault();
 	}
 	
-	public Principal(InfoId<Long> userId){
+	public GPrincipal(InfoId<Long> userId){
 		
 		this.userId = userId;
 		this.locale = Locale.getDefault();
 		this.timeZone = ZoneId.systemDefault();
 	}
 	
-	public Principal(InfoId<Long> userId, String account){
+	public GPrincipal(InfoId<Long> userId, String account){
 		
 		this.userId = userId;
 		this.account = account;
@@ -144,11 +144,11 @@ public class Principal implements Serializable{
 			return true;
 		}
 		// step 2
-		if (!(other instanceof Principal)) {
+		if (!(other instanceof GPrincipal)) {
 			return false;
 		}
 		// step 3
-		Principal that = (Principal) other;
+		GPrincipal that = (GPrincipal) other;
 		// step 4
 		String account = this.getAccount();
 		String oacct = that.getAccount();

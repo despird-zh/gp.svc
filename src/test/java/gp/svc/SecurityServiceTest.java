@@ -9,7 +9,7 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.config.TestConfig;
 import com.gp.common.IdKey;
-import com.gp.common.Principal;
+import com.gp.common.GPrincipal;
 import com.gp.common.ServiceContext;
 import com.gp.info.InfoId;
 import com.gp.dao.info.UserInfo;
@@ -19,7 +19,7 @@ import com.gp.svc.SecurityService;
 @ContextConfiguration(classes={TestConfig.class})
 public class SecurityServiceTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = new Principal("demouser");
+	GPrincipal principal = new GPrincipal("demouser");
 	ServiceContext svcctx ;
 	
 	@Autowired

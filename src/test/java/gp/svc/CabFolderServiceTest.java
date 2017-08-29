@@ -14,7 +14,7 @@ import com.gp.acl.AceType;
 import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
-import com.gp.common.Principal;
+import com.gp.common.GPrincipal;
 import com.gp.common.ServiceContext;
 import com.gp.exception.ServiceException;
 import com.gp.dao.info.CabAceInfo;
@@ -32,7 +32,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = new Principal("demouser");
+	GPrincipal principal = new GPrincipal("demouser");
 	ServiceContext svcctx ;
 	
 	@Autowired

@@ -26,12 +26,12 @@ public class GroupUsers {
 	/**
 	 * The Administrator principal 
 	 **/
-	public static Principal ADMIN_USER = new Principal("admin");
+	public static GPrincipal ADMIN_USER = new GPrincipal("admin");
 	
 	/**
 	 * The pseudo user definition
 	 **/
-	public static Principal PSEUDO_USER = new Principal("pesudo-user");
+	public static GPrincipal PSEUDO_USER = new GPrincipal("pesudo-user");
 	
 	static{
 		InfoId<Long> pkey = IdKeys.getInfoId(IdKey.USER, 0l);

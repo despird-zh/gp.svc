@@ -32,7 +32,7 @@ import com.gp.util.DateTimeUtils;
 public class ServiceContext extends GeneralContext {
 
 	/** the principal  */
-	private Principal principal = null;
+	private GPrincipal principal = null;
 
 	/** the workgroup key */
 	private InfoId<Long> workgroupId = null;
@@ -42,7 +42,7 @@ public class ServiceContext extends GeneralContext {
 	/** 
 	 * constructor with principal
 	 **/
-	public ServiceContext(Principal principal){
+	public ServiceContext(GPrincipal principal){
 		this.principal = principal;
 		this.setAuditable(false);
 	}
@@ -50,7 +50,7 @@ public class ServiceContext extends GeneralContext {
 	/**
 	 * get principal of context 
 	 **/
-	public Principal getPrincipal(){
+	public GPrincipal getPrincipal(){
 		 
 		return this.principal;
 	}
@@ -58,7 +58,7 @@ public class ServiceContext extends GeneralContext {
 	/**
 	 * set the principal to context 
 	 **/
-	public void setPrincipal(Principal principal){
+	public void setPrincipal(GPrincipal principal){
 		
 		this.principal = principal;
 	}	
@@ -141,7 +141,7 @@ public class ServiceContext extends GeneralContext {
 	 **/
 	public static ServiceContext getPseudoServiceContext(int sourceId){
 		
-		Principal principal = GroupUsers.PSEUDO_USER;
+		GPrincipal principal = GroupUsers.PSEUDO_USER;
 		
 		return new ServiceContext(principal);
 		

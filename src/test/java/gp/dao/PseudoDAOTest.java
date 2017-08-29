@@ -17,7 +17,7 @@ import com.config.TestConfig;
 import com.gp.common.FlatColumns;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
-import com.gp.common.Principal;
+import com.gp.common.GPrincipal;
 import com.gp.dao.PseudoDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -25,7 +25,7 @@ import com.gp.info.InfoId;
 @ContextConfiguration(classes={TestConfig.class})
 public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 
-	Principal principal = new Principal("demouser");
+	GPrincipal principal = new GPrincipal("demouser");
 	@Autowired
     private PseudoDAO pseudodao;
 

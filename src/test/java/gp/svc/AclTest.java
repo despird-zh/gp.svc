@@ -14,7 +14,7 @@ import com.gp.acl.AcePrivilege;
 import com.gp.acl.AceType;
 import com.gp.acl.Acl;
 import com.gp.common.GeneralConstants;
-import com.gp.common.Principal;
+import com.gp.common.GPrincipal;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
@@ -27,7 +27,7 @@ import com.gp.svc.CommonService;
 @ContextConfiguration(classes={TestConfig.class})
 public class AclTest extends AbstractJUnit4SpringContextTests{
 	
-	Principal principal = GroupUsers.PSEUDO_USER;
+	GPrincipal principal = GroupUsers.PSEUDO_USER;
 	ServiceContext svcctx ;
 	
 	@Autowired
