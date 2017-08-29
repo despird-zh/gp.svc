@@ -20,6 +20,7 @@
 package com.gp.common;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.text.DateFormat;
 import java.time.ZoneId;
 import java.util.Locale;
@@ -39,7 +40,7 @@ import com.gp.info.InfoId;
  * @version 1.0 2014-01-01
  *
  **/
-public class GPrincipal implements Serializable{
+public class GPrincipal implements Principal, Serializable{
 		
 	private static final long serialVersionUID = 5413765750513254954L;
 
@@ -211,5 +212,10 @@ public class GPrincipal implements Serializable{
 		
 		DateFormat datefmt = DateFormat.getDateInstance(DateFormat.LONG, locale);
 		return datefmt;
+	}
+
+	@Override
+	public String getName() {
+		return this.account;
 	}
 }
