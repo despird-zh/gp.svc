@@ -42,9 +42,10 @@ public class AccessPoint {
 	private String app;
 	/** the version */
 	private String version;
+	
 	/**
 	 * Constructor with name
-	 * 
+	 * @deprecated not suggest to use this constructor, because of low performance
 	 *  @param name the access point name
 	 **/
 	public AccessPoint(String client) {
