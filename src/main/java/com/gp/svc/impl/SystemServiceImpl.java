@@ -9,8 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,12 +25,10 @@ import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.SysOptionDAO;
-import com.gp.dao.TokenDAO;
 import com.gp.dao.UserDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
 import com.gp.dao.info.SysOptionInfo;
-import com.gp.dao.info.TokenInfo;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -61,8 +60,13 @@ public class SystemServiceImpl implements SystemService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Autowired( required = false)
-	@Qualifier("sysSettingCache")
+	@Autowired
+	public void setCacheManager(CacheManager cacheManager) {
+		cache = cacheManager.getCache(ServiceConfigurer.SYSSETTING_CACHE);
+	}
+	
+	//@Autowired( required = false)
+	//@Qualifier("sysSettingCache")
 	Cache cache = null;
 
 	/**
@@ -171,6 +175,8 @@ public class SystemServiceImpl implements SystemService{
 
 	}
 
+	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@CacheEvict(value=ServiceConfigurer.SYSSETTING_CACHE, key="#oKey")
 	@Override
 	public boolean updateOption(ServiceContext svcctx, InfoId<Long> oKey, String value) throws ServiceException {
 		
@@ -181,7 +187,7 @@ public class SystemServiceImpl implements SystemService{
 			boolean m = sysoptiondao.update(opt,FilterMode.NONE) > 0;
 			
 			if(null != cache){
-				cache.put(IdKey.SYS_OPTION.name() + ":" + opt.getOptionKey(), opt);
+				cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + opt.getOptionKey(), opt);
 			}	
 			return m;
 		}catch(DataAccessException dae){
@@ -197,11 +203,12 @@ public class SystemServiceImpl implements SystemService{
 			SysOptionInfo rtv = cache.get(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, SysOptionInfo.class);
 			if(rtv == null){
 				rtv = sysoptiondao.queryByKey( oKey);
-			}
-			if(rtv != null){
+				if(rtv != null){
 				
-				cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, rtv);
+					cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, rtv);
+				}
 			}
+			
 			return rtv;
 		}
 		try{

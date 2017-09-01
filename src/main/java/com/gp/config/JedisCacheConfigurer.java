@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -65,16 +66,16 @@ public class JedisCacheConfigurer {
     }
 
     @Bean
-    RedisCacheManager cacheManager() {
+    CacheManager cacheManager() {
     		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("Building a redis cacha manager");
     		
     		RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate());
     		
     		Collection <String> names = Collections.emptySet();
-    		names.add("fileTransferCache");
-    		names.add("sysSettingCache");
-    		names.add("dictionaryCache");
+    		names.add(ServiceConfigurer.SYSSETTING_CACHE);
+    		names.add(ServiceConfigurer.TRANSFER_CACHE);
+    		names.add(ServiceConfigurer.DICTIONARY_CACHE);
     		
     		cacheManager.setCacheNames(names);
     		return cacheManager;
