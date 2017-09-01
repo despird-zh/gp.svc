@@ -121,7 +121,7 @@ public class IdKeys {
 	public static <T> InfoId<T> getInfoId(Identifier identifier, T sequence) {
 		
 		if(sequence == null || !identifier.getIdClass().equals(sequence.getClass()))
-			throw new UnsupportedOperationException("Sequence type is not supported");
+			throw new UnsupportedOperationException("Sequence type is not supported, require:"+ identifier.getIdClass().getName() + " type parameter!");
 		
 		return new InfoId<T>(identifier.getSchema(), identifier.getIdColumn(), sequence);
 	}
