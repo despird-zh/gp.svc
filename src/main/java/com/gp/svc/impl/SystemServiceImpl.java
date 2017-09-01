@@ -64,9 +64,7 @@ public class SystemServiceImpl implements SystemService{
 	public void setCacheManager(CacheManager cacheManager) {
 		cache = cacheManager.getCache(ServiceConfigurer.SYSSETTING_CACHE);
 	}
-	
-	//@Autowired( required = false)
-	//@Qualifier("sysSettingCache")
+
 	Cache cache = null;
 
 	/**
