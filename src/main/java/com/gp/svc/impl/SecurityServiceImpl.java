@@ -44,7 +44,6 @@ import com.gp.dao.info.CabinetInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.info.KVPair;
 import com.gp.dao.info.SysOptionInfo;
 import com.gp.dao.info.TokenInfo;
@@ -226,7 +225,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 		UserInfo uinfo = null;
 		try{
-			if(userId != null && InfoIds.isValid(userId)){
+			if(userId != null && IdKeys.isValidId(userId)){
 			
 				uinfo = userdao.query(userId);
 			}else if(StringUtils.isBlank(type)){
@@ -377,7 +376,7 @@ public class SecurityServiceImpl implements SecurityService{
 		int cnt = -1;
 		try{
 			UserInfo info = null;
-			if(null != userId && InfoIds.isValid(userId)){
+			if(null != userId && IdKeys.isValidId(userId)){
 				info = userdao.query(userId);
 			}else{
 				info = userdao.queryByAccount( account);
@@ -447,7 +446,7 @@ public class SecurityServiceImpl implements SecurityService{
 			params.put("account", StringUtils.trim(account));
 		}
 		// entity condition
-		if(null != userId && InfoIds.isValid(userId)){
+		if(null != userId && IdKeys.isValidId(userId)){
 			
 			SQL_FROM.append(" AND a.user_id = :userid ");
 			params.put("userid", userId.getId());

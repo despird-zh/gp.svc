@@ -37,7 +37,6 @@ import com.gp.exception.ServiceException;
 import com.gp.dao.info.GroupInfo;
 import com.gp.dao.info.GroupUserInfo;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.dao.info.OrgHierInfo;
 import com.gp.svc.CommonService;
 import com.gp.svc.OrgHierService;
@@ -185,13 +184,13 @@ public class OrgHierServiceImpl implements OrgHierService{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 			
 			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
-			if(!InfoIds.isValid(groupId))
+			if(!IdKeys.isValidId(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
 				InfoId<Long> gid = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
 				InfoId<Long> mbrid = groupuserdao.existByAccount(gid, account);
-				if(InfoIds.isValid(mbrid)){
+				if(IdKeys.isValidId(mbrid)){
 					continue;
 				}
 				GroupUserInfo  guinfo = new GroupUserInfo();
@@ -221,7 +220,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 
 			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
-			if(!InfoIds.isValid(groupId))
+			if(!IdKeys.isValidId(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){

@@ -89,7 +89,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			procInfo.setFlowId(fid);
 			procInfo.setWorkgroupId(wgroupId.getId());
 			procInfo.setResourceId(postId.getId());
-			procInfo.setResourceType(postId.getIdKey());
+			procInfo.setResourceType(postId.getIdKey().getSchema());
 			procInfo.setDescription(descr);
 			procInfo.setOwner(svcctx.getPrincipal().getAccount());
 			procInfo.setProcName(finfo.getFlowName());
@@ -131,7 +131,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			notifInfo.setSender(svcctx.getPrincipal().getAccount());
 			notifInfo.setSendTime(now);
 			notifInfo.setResourceId(procId.getId());
-			notifInfo.setResourceType(procId.getIdKey());
+			notifInfo.setResourceType(procId.getIdKey().getSchema());
 			notifInfo.setSubject(finfo.getFlowName());
 			notifInfo.setWorkgroupId(wgroupId.getId());
 			svcctx.setTraceInfo(notifInfo);
@@ -245,7 +245,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			notifInfo.setSender(svcctx.getPrincipal().getAccount());
 			notifInfo.setSendTime(now);
 			notifInfo.setResourceId(procId.getId());
-			notifInfo.setResourceType(procId.getIdKey());
+			notifInfo.setResourceType(procId.getIdKey().getSchema());
 			notifInfo.setWorkgroupId(procinfo.getWorkgroupId());
 			notifInfo.setSubject(procinfo.getProcName());
 			svcctx.setTraceInfo(notifInfo);

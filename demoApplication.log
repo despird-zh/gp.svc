@@ -3578,3 +3578,12 @@ Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No
 2017-08-15 12:10:56 DEBUG CommonServiceImpl:73 - idkey : CABINET / modify date : 2017-08-15 12:10:56.0 / current : 46 
 2017-08-15 12:10:56 DEBUG IdSettingDAOImpl:54 - SQL : update gp_identifier set curr_val = ? ,modifier = ?, last_modified = ? where id_key = ? / params : {47,pesudo-user,Tue Aug 15 12:10:56 CST 2017,gp_cabinets}
 2017-08-15 12:10:56 DEBUG CabinetDAOImpl:56 - SQL : insert into gp_cabinets (source_id,workgroup_id, cabinet_id,used,cabinet_name,descr,version_enable,capacity,cabinet_type,storage_id,creator,create_time,modifier, last_modified)values(?,?,?,?,?,?,?,?,?,?,?,?,?,?) / params : {0,345,46,<null>,cab1000...,descr0001010,true,456,<null>,3,cr0001,Tue Aug 15 12:10:56 CST 2017,modifer001,Tue Aug 15 12:10:56 CST 2017}
+2017-09-05 16:57:20 DEBUG IdKeyTest:25 - trace code: gp_audits:123 / RTAwMS5ncF9hdWRpdHM6MTIz
+2017-09-05 16:58:11 DEBUG IdKeyTest:25 - trace code: gp_audits:123 / RTAwMS5ncF9hdWRpdHM6MTIz
+2017-09-05 16:59:58 DEBUG IdKeyTest:25 - trace code: gp_audits:123 / RTAwMS5ncF9hdWRpdHM6MTIz
+2017-09-05 17:01:10 DEBUG IdKeyTest:25 - trace code: gp_audits:123 / RTAwMS5ncF9hdWRpdHM6MTIz
+2017-09-05 17:01:10 DEBUG IdKeyTest:29 - parse code: E001 / gp_audits:123
+2017-09-05 17:02:16 DEBUG IdKeyTest:25 - trace code: RTAwMS5ncF9hdWRpdHM6MTIz with node E001 and id gp_audits:123
+2017-09-05 17:02:16 DEBUG IdKeyTest:29 - parse code: E001 / gp_audits:123
+2017-09-05 17:02:45 DEBUG IdKeyTest:25 - trace code: RTAwMS5ncF9hdWRpdHM6MTIz with node E001 and id gp_audits:123
+2017-09-05 17:02:45 DEBUG IdKeyTest:29 - parse code: ndoe is E001 / id is gp_audits:123

@@ -22,10 +22,10 @@ public class IdKeyTest {
 		
 		String tracecode = IdKeys.getTraceCode("E001", id);
 		
-		log.debug("trace code: {} / {}", id.toString(),tracecode);
+		log.debug("trace code: {} with node {} and id {}", tracecode, "E001", id.toString());
 		
-		String node = IdKeys.parseNodeCode(tracecode);
-		InfoId<Long> nid = IdKeys.parseInfoId(tracecode, Long.class);
-		log.debug("parse code: {} / {}", node, nid);
+		String node = IdKeys.getNodeCode(tracecode);
+		InfoId<Long> nid = IdKeys.getInfoId(tracecode);
+		log.debug("parse code: ndoe is {} / id is {}", node, nid);
 	}
 }

@@ -31,7 +31,6 @@ import com.gp.dao.TagRelDAO;
 import com.gp.exception.ServiceException;
 import com.gp.info.Identifier;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.dao.info.TagInfo;
 import com.gp.dao.info.TagRelInfo;
 import com.gp.svc.CommonService;
@@ -138,7 +137,7 @@ public class TagServiceImpl implements TagService{
 		if(CollectionUtils.isEmpty(objectIds)){
 			return result;
 		}else{
-			String res_type = objectIds.get(0).getIdKey();
+			String res_type = objectIds.get(0).getIdKey().getSchema();
 			List objIds = new ArrayList();
 			for(InfoId<?> objId : objectIds){
 				objIds.add(objId.getId());
@@ -185,7 +184,7 @@ public class TagServiceImpl implements TagService{
 	@Override
 	public boolean newTag(ServiceContext svcctx, TagInfo taginfo) throws ServiceException {
 		
-		if(!InfoIds.isValid(taginfo.getInfoId())){
+		if(!IdKeys.isValidId(taginfo.getInfoId())){
 			
 			InfoId<Long> id = idservice.generateId(IdKey.TAG, Long.class);
 			taginfo.setInfoId(id);
@@ -233,7 +232,7 @@ public class TagServiceImpl implements TagService{
 				InfoId<Long> tid = idservice.generateId(IdKey.TAG, Long.class);
 				TagInfo tag = new TagInfo();
 				tag.setInfoId(tid);
-				tag.setTagType(objectId.getIdKey());
+				tag.setTagType(objectId.getIdKey().getSchema());
 				tag.setCategory(category);
 				tag.setTagName(tagName);
 				svcctx.setTraceInfo(tag);
@@ -244,7 +243,7 @@ public class TagServiceImpl implements TagService{
 			InfoId<Long> rid = idservice.generateId(IdKey.TAG_REL, Long.class);
 			rel.setInfoId(rid);
 			rel.setResourceId((Long)objectId.getId());
-			rel.setResourceType(objectId.getIdKey());
+			rel.setResourceType(objectId.getIdKey().getSchema());
 			rel.setTagName(tagName);
 			if(tags.get(0) != null)
 				rel.setCategory(tags.get(0).getCategory());

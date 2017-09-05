@@ -36,7 +36,6 @@ import com.gp.dao.info.CabVersionInfo;
 import com.gp.dao.info.CabinetInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.dao.info.StorageInfo;
 import com.gp.svc.FileService;
 import com.gp.svc.CommonService;
@@ -93,7 +92,7 @@ public class FileServiceImpl implements FileService{
 
 		InfoId<Long> fkey = file.getInfoId();
 		
-		if(!InfoIds.isValid(fkey)){
+		if(!IdKeys.isValidId(fkey)){
 			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
 			file.setInfoId(fkey);
 		}

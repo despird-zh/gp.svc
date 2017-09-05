@@ -8,7 +8,6 @@ import com.gp.exception.ServiceException;
 import com.gp.info.CombineInfo;
 import com.gp.info.FlatColumn;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.pagination.PageQuery;
 import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
@@ -472,7 +471,7 @@ public class PostServiceImpl implements PostService{
         StringBuffer SQL = new StringBuffer();
         SQL.append("select * from gp_post_comments ");
         SQL.append("where 1=1 ");
-        if(InfoIds.isValid(postid)) {
+        if(IdKeys.isValidId(postid)) {
 
             SQL.append("AND post_id = ? ");
             paramlist.add(postid.getId());
@@ -529,7 +528,7 @@ public class PostServiceImpl implements PostService{
                 vote.setOpinion(TagVotes.VoteOpinion.LIKE.name());
                 vote.setVoter(voter);
                 vote.setResourceId(postId.getId());
-                vote.setResourceType(postId.getIdKey());
+                vote.setResourceType(postId.getIdKey().getSchema());
 
                 Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
                 vote.setWorkgroupId(wid);
@@ -571,7 +570,7 @@ public class PostServiceImpl implements PostService{
 		        vote.setOpinion(TagVotes.VoteOpinion.DISLIKE.name());
 		        vote.setVoter(voter);
 		        vote.setResourceId(postId.getId());
-		        vote.setResourceType(postId.getIdKey());
+		        vote.setResourceType(postId.getIdKey().getSchema());
 		
 		        Long wid = idService.query(postId, FlatColumns.WORKGROUP_ID, Long.class);
 		        vote.setWorkgroupId(wid);

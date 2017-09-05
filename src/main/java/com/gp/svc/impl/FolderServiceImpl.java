@@ -40,7 +40,6 @@ import com.gp.dao.info.CabFolderInfo;
 import com.gp.dao.info.CabinetInfo;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
-import com.gp.info.InfoIds;
 import com.gp.svc.FolderService;
 import com.gp.util.DateTimeUtils;
 import com.gp.svc.CommonService;
@@ -76,14 +75,14 @@ public class FolderServiceImpl implements FolderService{
 	public InfoId<Long> newFolder(ServiceContext svcctx, InfoId<Long> parentkey, CabFolderInfo folder, Acl acl)
 			throws ServiceException {
 		
-		if(InfoIds.isValid(parentkey))
+		if(IdKeys.isValidId(parentkey))
 			folder.setParentId(parentkey.getId());
 		else
 			folder.setParentId(GeneralConstants.FOLDER_ROOT);
 		
 		InfoId<Long> fkey = null;
 		// info key not set yet, create a new one and set it 
-		if(!InfoIds.isValid(folder.getInfoId())){
+		if(!IdKeys.isValidId(folder.getInfoId())){
 			
 			fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
 			folder.setInfoId(fkey);
