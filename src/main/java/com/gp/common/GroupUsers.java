@@ -34,9 +34,9 @@ public class GroupUsers {
 	public static GPrincipal PSEUDO_USER = new GPrincipal("pesudo-user");
 	
 	static{
-		InfoId<Long> pkey = IdKeys.getInfoId(IdKey.USER, 0l);
+		InfoId<Long> pkey = IdKeys.getInfoId(IdKey.GP_USERS, 0l);
 		PSEUDO_USER.setUserId(pkey);
-		pkey = IdKeys.getInfoId(IdKey.USER, -99l);
+		pkey = IdKeys.getInfoId(IdKey.GP_USERS, -99l);
 		ADMIN_USER.setUserId(pkey);
 	}
 	

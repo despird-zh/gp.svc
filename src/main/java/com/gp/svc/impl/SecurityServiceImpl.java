@@ -92,7 +92,7 @@ public class SecurityServiceImpl implements SecurityService{
 		svcctx.setTraceInfo(uinfo);
 		uinfo.setCreateDate(DateTimeUtils.now());		
 		// allocate an key for public cabinet
-		InfoId<Long> pubkey = idService.generateId( IdKey.CABINET, Long.class);
+		InfoId<Long> pubkey = idService.generateId( IdKey.GP_CABINETS, Long.class);
 		uinfo.setPublishCabinet(pubkey.getId());
 
 		CabinetInfo pubinfo = new CabinetInfo();
@@ -116,7 +116,7 @@ public class SecurityServiceImpl implements SecurityService{
 		pubinfo.setCapacity(pubcapacity);
 
 		// allocate an key for private cabinet
-		InfoId<Long> prikey = idService.generateId( IdKey.CABINET, Long.class);
+		InfoId<Long> prikey = idService.generateId( IdKey.GP_CABINETS, Long.class);
 		uinfo.setNetdiskCabinet(prikey.getId());
 		
 		CabinetInfo priinfo = new CabinetInfo();
@@ -164,18 +164,18 @@ public class SecurityServiceImpl implements SecurityService{
 			if(StringUtils.isBlank(uinfo.getPassword()))
 				uinfo.setPassword(oldinfo.getPassword());
 			
-			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE, uinfo.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.GP_STORAGES, uinfo.getStorageId());
 			
 			InfoId<Long> pubcab = null;
 			if(null != pubcapacity){
-				pubcab = IdKeys.getInfoId(IdKey.CABINET, oldinfo.getPublishCabinet());
+				pubcab = IdKeys.getInfoId(IdKey.GP_CABINETS, oldinfo.getPublishCabinet());
 				cabinetdao.updateCabCapacity(pubcab, pubcapacity);
 			}
 			cabinetdao.changeStorage(pubcab, storageId);
 			
 			InfoId<Long> pricab = null;
 			if(null != pricapacity){
-				pricab = IdKeys.getInfoId(IdKey.CABINET, oldinfo.getNetdiskCabinet());
+				pricab = IdKeys.getInfoId(IdKey.GP_CABINETS, oldinfo.getNetdiskCabinet());
 				cabinetdao.updateCabCapacity(pricab, pricapacity);
 			}
 			cabinetdao.changeStorage(pricab, storageId);
@@ -388,13 +388,13 @@ public class SecurityServiceImpl implements SecurityService{
 			// get personal public cabinet id.
 			Long cid = info.getPublishCabinet();			
 			// create cabinet id
-			InfoId<Long> cabId = IdKeys.getInfoId(IdKey.CABINET,cid);			
+			InfoId<Long> cabId = IdKeys.getInfoId(IdKey.GP_CABINETS,cid);			
 			// delete cabinet 
 			cabinetdao.delete( cabId);
 			// get personal private cabinet id.
 			cid = info.getNetdiskCabinet();			
 			// create cabinet id
-			cabId = IdKeys.getInfoId(IdKey.CABINET, cid);			
+			cabId = IdKeys.getInfoId(IdKey.GP_CABINETS, cid);			
 			// delete cabinet 
 			cabinetdao.delete( cabId);
 			

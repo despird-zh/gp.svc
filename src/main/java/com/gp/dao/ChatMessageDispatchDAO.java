@@ -17,7 +17,7 @@ public interface ChatMessageDispatchDAO extends BaseDAO<ChatMessageDispatchInfo>
 		@Override
 		public ChatMessageDispatchInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.MESSAGE, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CHAT_MSGS, rs.getLong("rel_id"));
 			info.setInfoId(id);
 
 			info.setMessageId(rs.getLong("message_id"));

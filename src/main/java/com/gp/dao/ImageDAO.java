@@ -20,7 +20,7 @@ public interface ImageDAO extends BaseDAO<ImageInfo>{
 		@Override
 		public ImageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ImageInfo info = new ImageInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.IMAGE, rs.getLong("image_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_IMAGES, rs.getLong("image_id"));
 			info.setInfoId(id);
 			
 			info.setImageName(rs.getString("image_name"));

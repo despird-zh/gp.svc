@@ -26,7 +26,7 @@ public interface OperationDAO extends BaseDAO<OperationInfo>{
 		public OperationInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			OperationInfo actlog = new OperationInfo();
 			
-			InfoId<Long> logid = IdKeys.getInfoId(IdKey.OPERATION, rs.getLong("oper_id"));
+			InfoId<Long> logid = IdKeys.getInfoId(IdKey.GP_OPERATIONS, rs.getLong("oper_id"));
 			actlog.setInfoId(logid);
 			actlog.setSubject(rs.getString("subject"));
 			actlog.setOperation(rs.getString("operation"));

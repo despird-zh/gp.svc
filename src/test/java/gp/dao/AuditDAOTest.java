@@ -35,7 +35,7 @@ public class AuditDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.AUDIT, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_AUDITS, Long.class);
 	
 		AuditInfo info = new AuditInfo();
 		info.setInfoId(id);

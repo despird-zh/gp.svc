@@ -86,7 +86,7 @@ public class Cabinets {
 	/**
 	 * InfoId of certain cabinet root 
 	 **/
-	public static InfoId<Long> ROOT_FOLDER = IdKeys.getInfoId(IdKey.CAB_FOLDER, GeneralConstants.FOLDER_ROOT);
+	public static InfoId<Long> ROOT_FOLDER = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, GeneralConstants.FOLDER_ROOT);
 	
 	/**
 	 * Get the default Cabinet Entry acl setting 

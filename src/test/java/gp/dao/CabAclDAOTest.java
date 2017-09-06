@@ -35,7 +35,7 @@ public class CabAclDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.CAB_ACL, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CAB_ACL, Long.class);
 	
 		CabAclInfo info = new CabAclInfo();
 		info.setInfoId(id);

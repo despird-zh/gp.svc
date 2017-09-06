@@ -53,14 +53,14 @@ public class AclServiceImpl implements AclService{
 	public InfoId<Long> addAclInfo(ServiceContext svcctx, List<CabAceInfo> aces)  throws ServiceException{
 
 		try{
-			InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
+			InfoId<Long> aclid = idService.generateId(IdKey.GP_CAB_ACL, Long.class);
 			CabAclInfo cabaclinfo = new CabAclInfo();
 			cabaclinfo.setInfoId(aclid);
 			svcctx.setTraceInfo(cabaclinfo);
 			cabacldao.create(cabaclinfo);
 			
 			for(CabAceInfo ace : aces){
-				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				InfoId<Long> aceid = idService.generateId(IdKey.GP_CAB_ACE, Long.class);
 				ace.setInfoId(aceid);
 				ace.setAclId(aclid.getId());
 				svcctx.setTraceInfo(ace);
@@ -92,7 +92,7 @@ public class AclServiceImpl implements AclService{
 				return aceinfo.getInfoId();
 			}else{
 				
-				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				InfoId<Long> aceid = idService.generateId(IdKey.GP_CAB_ACE, Long.class);
 				ace.setInfoId(aceid);
 				ace.setAclId(aclId.getId());
 				cabacedao.create(ace);
@@ -120,7 +120,7 @@ public class AclServiceImpl implements AclService{
 					aceinfo.setPermissions(ace.getPermissions());
 					cabacedao.update( aceinfo, FilterMode.NONE);
 				}else{
-					InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+					InfoId<Long> aceid = idService.generateId(IdKey.GP_CAB_ACE, Long.class);
 					ace.setInfoId(aceid);
 					ace.setAclId(aclId.getId());
 					cabacedao.create(ace);
@@ -261,7 +261,7 @@ public class AclServiceImpl implements AclService{
 	public InfoId<Long> addAcl(ServiceContext svcctx, Acl acl) throws ServiceException {
 		try{
 			
-			InfoId<Long> aclid = idService.generateId(IdKey.CAB_ACL, Long.class);
+			InfoId<Long> aclid = idService.generateId(IdKey.GP_CAB_ACL, Long.class);
 			CabAclInfo cabaclinfo = new CabAclInfo();
 			cabaclinfo.setInfoId(aclid);
 			svcctx.setTraceInfo(cabaclinfo);
@@ -270,7 +270,7 @@ public class AclServiceImpl implements AclService{
 			CabAceInfo aceinfo = null;
 			for(Ace ace : acl.getAllAces()){
 				aceinfo = new CabAceInfo();
-				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				InfoId<Long> aceid = idService.generateId(IdKey.GP_CAB_ACE, Long.class);
 				aceinfo.setInfoId(aceid);
 				aceinfo.setAclId(aclid.getId());
 				aceinfo.setSubjectType(ace.getType().value);
@@ -315,7 +315,7 @@ public class AclServiceImpl implements AclService{
 			}else{
 				
 				aceinfo = new CabAceInfo();
-				InfoId<Long> aceid = idService.generateId(IdKey.CAB_ACE, Long.class);
+				InfoId<Long> aceid = idService.generateId(IdKey.GP_CAB_ACE, Long.class);
 				
 				aceinfo.setInfoId(aceid);
 				aceinfo.setAclId(aclId.getId());

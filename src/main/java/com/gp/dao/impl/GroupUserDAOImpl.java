@@ -170,7 +170,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		List<Long> cnt = jtemplate.queryForList(SQL, params, Long.class);
 		
-		return CollectionUtils.isEmpty(cnt) ? null : IdKeys.getInfoId(IdKey.GROUP_USER,cnt.get(0));
+		return CollectionUtils.isEmpty(cnt) ? null : IdKeys.getInfoId(IdKey.GP_GROUP_USER,cnt.get(0));
 	}
 
 	@Override

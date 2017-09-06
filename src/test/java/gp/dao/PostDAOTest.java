@@ -34,7 +34,7 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 		
 
 		svcctx = new ServiceContext(principal);
-		InfoId<Long> id = idService.generateId( IdKey.POST,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_POSTS,Long.class);
 			
 		PostInfo info = new PostInfo();
 		info.setInfoId(id);
@@ -75,7 +75,7 @@ public class PostDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.POST,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_POSTS,Long.class);
 				
 			PostInfo info = new PostInfo();
 			info.setInfoId(id);

@@ -33,7 +33,7 @@ public class WorkgroupDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.WORKGROUP,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_WORKGROUPS,Long.class);
 		
 		WorkgroupInfo info = new WorkgroupInfo();
 		info.setInfoId(id);
@@ -77,7 +77,7 @@ public class WorkgroupDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.WORKGROUP,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_WORKGROUPS,Long.class);
 		
 			WorkgroupInfo info = new WorkgroupInfo();
 			info.setInfoId(id);

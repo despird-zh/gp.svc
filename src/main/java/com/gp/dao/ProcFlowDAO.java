@@ -30,7 +30,7 @@ public interface ProcFlowDAO extends BaseDAO<ProcFlowInfo>{
         public ProcFlowInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             ProcFlowInfo info = new ProcFlowInfo();
 
-            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_FLOW, rs.getLong("proc_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_PROC_FLOWS, rs.getLong("proc_id"));
             info.setInfoId(id);
 
             info.setWorkgroupId(rs.getLong("workgroup_id"));

@@ -31,7 +31,7 @@ public interface FavoriteDAO extends BaseDAO<FavoriteInfo>{
 		@Override
 		public FavoriteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			FavoriteInfo info = new FavoriteInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.FAVORITE,rs.getLong("favorite_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_FAVORITES,rs.getLong("favorite_id"));
 			info.setInfoId(id);
 			info.setFavoriter(rs.getString("favoriter"));
 			info.setResourceId(rs.getLong("resource_id"));

@@ -18,7 +18,7 @@ public interface PostCommentDAO extends BaseDAO<PostCommentInfo>{
 		@Override
 		public PostCommentInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			PostCommentInfo info = new PostCommentInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.POST_COMMENT, rs.getLong("comment_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_POST_COMMENTS, rs.getLong("comment_id"));
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

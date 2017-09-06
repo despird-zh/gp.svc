@@ -84,7 +84,7 @@ public class FolderServiceImpl implements FolderService{
 		// info key not set yet, create a new one and set it 
 		if(!IdKeys.isValidId(folder.getInfoId())){
 			
-			fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
+			fkey = idservice.generateId(IdKey.GP_CAB_FOLDERS, Long.class);
 			folder.setInfoId(fkey);
 		}
 		try{
@@ -110,7 +110,7 @@ public class FolderServiceImpl implements FolderService{
 		try{
 			cfi = cabfolderdao.query(folderid);
 			// new folder key
-			InfoId<Long> fkey = idservice.generateId(IdKey.CAB_FOLDER, Long.class);
+			InfoId<Long> fkey = idservice.generateId(IdKey.GP_CAB_FOLDERS, Long.class);
 			cfi.setInfoId(fkey);
 			cfi.setParentId(destFolderId.getId());
 			svcctx.setTraceInfo(cfi);
@@ -127,7 +127,7 @@ public class FolderServiceImpl implements FolderService{
 			List<CabFileInfo> filelist = cabfiledao.queryByParent(fkey.getId());
 			for(CabFileInfo fileinfo : filelist){
 				// recursively copy file to target location
-				InfoId<Long> filekey = idservice.generateId(IdKey.CAB_FILE, Long.class);
+				InfoId<Long> filekey = idservice.generateId(IdKey.GP_CAB_FILES, Long.class);
 				fileinfo.setInfoId(filekey);
 				fileinfo.setParentId(fkey.getId());
 				svcctx.setTraceInfo(fileinfo);
@@ -148,7 +148,7 @@ public class FolderServiceImpl implements FolderService{
 
 		try{
 			// recreate to ensure the id column name is correct.
-			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FOLDER, folderkey.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, folderkey.getId());
 			
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
 			colmap.put(FlatColumns.FOLDER_PID, destFolderId.getId());
@@ -184,7 +184,7 @@ public class FolderServiceImpl implements FolderService{
 				}else{
 					// no ace then create new one.
 					aceinfo = new CabAceInfo();
-					InfoId<Long> infoId = idservice.generateId(IdKey.CAB_ACE, Long.class);
+					InfoId<Long> infoId = idservice.generateId(IdKey.GP_CAB_ACE, Long.class);
 					aceinfo.setAclId(aclid);
 					aceinfo.setInfoId(infoId);
 					
@@ -227,7 +227,7 @@ public class FolderServiceImpl implements FolderService{
 				}
 			}
 			// update the cabinet file entry's acl_id
-			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FOLDER, folderid.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, folderid.getId());
 			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			
@@ -293,7 +293,7 @@ public class FolderServiceImpl implements FolderService{
 			
 			LOGGER.debug("call procedure: proc_path2fid / params : cabid-{} ; path-{}",cabinetId, path);
 		}
-		return IdKeys.getInfoId(IdKey.CAB_FOLDER, id);
+		return IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, id);
 	}
 
 	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)

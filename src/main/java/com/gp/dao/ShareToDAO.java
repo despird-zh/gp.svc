@@ -19,7 +19,7 @@ public interface ShareToDAO extends BaseDAO<ShareToInfo>{
 		public ShareToInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			ShareToInfo info = new ShareToInfo();
 			
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.SHARE_TO,rs.getLong("share_to_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_SHARE_TO,rs.getLong("share_to_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

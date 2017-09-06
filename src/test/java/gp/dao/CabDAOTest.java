@@ -36,7 +36,7 @@ public class CabDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.CABINET, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CABINETS, Long.class);
 			
 		CabinetInfo info = new CabinetInfo();
 		info.setInfoId(id);
@@ -73,7 +73,7 @@ public class CabDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.CABINET,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_CABINETS,Long.class);
 				
 			CabinetInfo info = new CabinetInfo();
 			info.setInfoId(id);

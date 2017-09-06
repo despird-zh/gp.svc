@@ -23,7 +23,7 @@ public interface OrgHierDAO extends BaseDAO<OrgHierInfo>{
 		public OrgHierInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			
 			OrgHierInfo info = new OrgHierInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.ORG_HIER, rs.getLong("org_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_ORG_HIER, rs.getLong("org_id"));
 			info.setInfoId(id);
 			
 			info.setMemberGroupId(rs.getLong("mbr_group_id"));

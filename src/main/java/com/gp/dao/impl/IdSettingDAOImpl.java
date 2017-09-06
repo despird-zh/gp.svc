@@ -34,9 +34,9 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		if(LOGGER.isDebugEnabled())
-			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + idKey.getSchema());
+			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + idKey.getSchema().toLowerCase());
 		
-		IdSettingInfo info = jtemplate.queryForObject(SQL, new String[]{idKey.getSchema()}, IdSettringMapper);
+		IdSettingInfo info = jtemplate.queryForObject(SQL, new String[]{idKey.getSchema().toLowerCase()}, IdSettringMapper);
 		
 		return info;
 	}
@@ -48,7 +48,7 @@ public class IdSettingDAOImpl extends DAOSupport implements IdSettingDAO{
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
 		Object[] params = new Object[]{
-				nextValue, modifier, new Date(System.currentTimeMillis()), idKey.getSchema()
+				nextValue, modifier, new Date(System.currentTimeMillis()), idKey.getSchema().toLowerCase()
 		};
 		if(LOGGER.isDebugEnabled())
 			LOGGER.debug("SQL : " + SQL.toString() + " / params : " + ArrayUtils.toString(params));

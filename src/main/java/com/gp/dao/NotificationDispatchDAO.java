@@ -17,7 +17,7 @@ public interface NotificationDispatchDAO extends BaseDAO<NotificationDispatchInf
 		@Override
 		public NotificationDispatchInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			NotificationDispatchInfo info = new NotificationDispatchInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.NOTIF_DISPATCH, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_NOTIFICATION_DISPATCH, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setNotificationId(rs.getLong("notification_id"));

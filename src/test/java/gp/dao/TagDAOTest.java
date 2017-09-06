@@ -35,7 +35,7 @@ public class TagDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.TAG,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_TAGS,Long.class);
 			
 		TagInfo info = new TagInfo();
 		info.setInfoId(id);
@@ -66,7 +66,7 @@ public class TagDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.TAG,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_TAGS,Long.class);
 			
 			TagInfo info = new TagInfo();
 			info.setInfoId(id);

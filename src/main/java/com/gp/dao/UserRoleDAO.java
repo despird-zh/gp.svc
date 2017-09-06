@@ -22,7 +22,7 @@ public interface UserRoleDAO extends BaseDAO<UserRoleInfo>{
 		public UserRoleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserRoleInfo ur = new UserRoleInfo();
 			
-			InfoId<Long> mid = IdKeys.getInfoId(IdKey.USER_ROLE,rs.getLong("rel_id"));
+			InfoId<Long> mid = IdKeys.getInfoId(IdKey.GP_USER_ROLE,rs.getLong("rel_id"));
 			ur.setInfoId(mid);
 			
 			ur.setUserId(rs.getLong("user_id"));

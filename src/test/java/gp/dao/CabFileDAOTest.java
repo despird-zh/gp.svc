@@ -35,7 +35,7 @@ public class CabFileDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId(IdKey.CAB_FILE, Long.class);
+		InfoId<Long> id = idService.generateId(IdKey.GP_CAB_FILES, Long.class);
 	
 		CabFileInfo info = new CabFileInfo();
 		info.setInfoId(id);

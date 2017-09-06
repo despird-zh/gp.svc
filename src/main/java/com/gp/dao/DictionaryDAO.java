@@ -24,7 +24,7 @@ public interface DictionaryDAO extends BaseDAO<DictionaryInfo>{
 		@Override
 		public DictionaryInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			DictionaryInfo info = new DictionaryInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.DICTIONARY,rs.getLong("dict_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_DICTIONARY,rs.getLong("dict_id"));
 			info.setInfoId(id);
 
 			info.setGroup(rs.getString("dict_group"));

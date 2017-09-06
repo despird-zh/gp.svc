@@ -18,7 +18,7 @@ public interface PostDAO extends BaseDAO<PostInfo>{
 		@Override
 		public PostInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			PostInfo info = new PostInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.POST, rs.getLong("post_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_POSTS, rs.getLong("post_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

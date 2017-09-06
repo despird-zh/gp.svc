@@ -33,7 +33,7 @@ public class TaskDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.TASK,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_TASKS,Long.class);
 			
 		TaskInfo info = new TaskInfo();
 		info.setInfoId(id);
@@ -75,7 +75,7 @@ public class TaskDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.TASK,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_TASKS,Long.class);
 			
 			TaskInfo info = new TaskInfo();
 			info.setInfoId(id);

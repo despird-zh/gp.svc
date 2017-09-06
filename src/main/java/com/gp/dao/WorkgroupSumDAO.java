@@ -19,7 +19,7 @@ public interface WorkgroupSumDAO extends BaseDAO<WorkgroupSumInfo>{
 		@Override
 		public WorkgroupSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			WorkgroupSumInfo info = new WorkgroupSumInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP_SUM, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_WORKGROUP_SUMMARY, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

@@ -33,7 +33,7 @@ public class VoteDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.VOTE,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_VOTES,Long.class);
 	
 		VoteInfo info = new VoteInfo();
 		info.setInfoId(id);
@@ -66,7 +66,7 @@ public class VoteDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.VOTE,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_VOTES,Long.class);
 			
 			VoteInfo info = new VoteInfo();
 			info.setInfoId(id);			

@@ -20,86 +20,84 @@ import com.gp.info.Identifier;
 
 public enum IdKey implements Identifier{
 
-	WORKGROUP("gp_workgroups","workgroup_id", Long.class),
-	WORKGROUP_MIRROR("gp_workgroup_mirror","mirror_id", Long.class),
-	CABINET("gp_cabinets","cabinet_id", Long.class),
-	ORG_HIER("gp_org_hier","org_id", Long.class),
-	SOURCE("gp_sources","source_id", Integer.class),
-	USER("gp_users","user_id", Long.class),
-	GROUP("gp_groups","group_id", Long.class),
-	GROUP_USER("gp_group_user","rel_id", Long.class),
-	SYS_OPTION("gp_sys_options","sys_opt_id", Integer.class),
-	TAG("gp_tags","tag_id", Long.class),
-	TAG_REL("gp_tag_rel","rel_id", Long.class),
-	SHARE("gp_shares","share_id", Long.class),
-	SHARE_ITEM("gp_share_item","share_item_id", Long.class),
-	SHARE_TO("gp_share_to","share_to_id", Long.class),
-	ATTACHMENT("gp_attachments","attachment_id", Long.class),
-	ATTACH_REL("gp_attach_rel","rel", Long.class),
-	CAB_FILE("gp_cab_files","file_id", Long.class),
-	CAB_ACL("gp_cab_acl","acl_id", Long.class),
-	CAB_ACE("gp_cab_ace","ace_id", Long.class),
-	CAB_VERSION("gp_cab_versions","version_id", Long.class),
-	CAB_FOLDER("gp_cab_folders","folder_id", Long.class),
+	GP_WORKGROUPS("workgroup_id", Long.class),
+	GP_WORKGROUP_MIRROR("mirror_id", Long.class),
+	GP_CABINETS("cabinet_id", Long.class),
+	GP_ORG_HIER("org_id", Long.class),
+	GP_SOURCES("source_id", Integer.class),
+	GP_USERS("user_id", Long.class),
+	GP_GROUPS("group_id", Long.class),
+	GP_GROUP_USER("rel_id", Long.class),
+	GP_SYS_OPTIONS("sys_opt_id", Integer.class),
+	GP_TAGS("tag_id", Long.class),
+	GP_TAG_REL("rel_id", Long.class),
+	GP_SHARES("share_id", Long.class),
+	GP_SHARE_ITEM("share_item_id", Long.class),
+	GP_SHARE_TO("share_to_id", Long.class),
+	GP_ATTACHMENTS("attachment_id", Long.class),
+	GP_ATTACH_REL("rel", Long.class),
+	GP_CAB_FILES("file_id", Long.class),
+	GP_CAB_ACL("acl_id", Long.class),
+	GP_CAB_ACE("ace_id", Long.class),
+	GP_CAB_VERSIONS("version_id", Long.class),
+	GP_CAB_FOLDERS("folder_id", Long.class),
 	
-	CAB_COMMENT("gp_cab_comments","comment_id", Long.class),
-	STORAGE("gp_storages","storage_id", Integer.class),
-	BINARY("gp_binaries","binary_id", Long.class),
-	POST("gp_posts","post_id", Long.class),
-	POST_COMMENT("gp_post_comments","comment_id", Long.class),
-	VOTE("gp_votes","vote_id", Long.class),
-	AUDIT("gp_audits","audit_id", Long.class),
-	DICTIONARY("gp_dictionary","dict_id", Long.class),
-	PROPERTY("gp_properties","prop_id", Long.class),
-	IDENTIFIER("gp_identifier","id_key", String.class),
-	TASK("gp_tasks","task_id", Long.class),
-	TASK_ROUTE("gp_task_route","rel_id", Long.class),
-	CHAT("gp_chats","chat_id", Long.class),
-	CHAT_RESC("gp_chat_resc","rel_id", Long.class),
-	MESSAGE("gp_chat_msgs","message_id", Long.class),
-	MESSAGE_DISPATCH("gp_chat_dispatch","rel_id", Long.class),
+	GP_CAB_COMMENTS("comment_id", Long.class),
+	GP_STORAGES("storage_id", Integer.class),
+	GP_BINARIES("binary_id", Long.class),
+	GP_POSTS("post_id", Long.class),
+	GP_POST_COMMENTS("comment_id", Long.class),
+	GP_VOTES("vote_id", Long.class),
+	GP_AUDITS("audit_id", Long.class),
+	GP_DICTIONARY("dict_id", Long.class),
+	GP_PROPERTIES("prop_id", Long.class),
+	GP_IDENTIFIER("id_key", String.class),
+	GP_TASKS("task_id", Long.class),
+	GP_TASK_ROUTE("rel_id", Long.class),
+	GP_CHATS("chat_id", Long.class),
+	GP_CHAT_RESC("rel_id", Long.class),
+	GP_CHAT_MSGS("message_id", Long.class),
+	GP_CHAT_DISPATCH("rel_id", Long.class),
 	
-	NOTIF("gp_notifications","notification_id", Long.class),
-	NOTIF_DISPATCH("gp_notification_dispatch","rel_id", Long.class),
+	GP_NOTIFICATIONS("notification_id", Long.class),
+	GP_NOTIFICATION_DISPATCH("rel_id", Long.class),
 	
-	IMAGE("gp_images","image_id", Long.class),
-	MEASURE("gp_measures","measure_id", Long.class),
-	PAGE("gp_pages","page_id", Integer.class),
-	ROLE("gp_roles","role_id", Integer.class),
-	ROLE_PAGE("gp_role_page","rel_id", Integer.class),
-	USER_ROLE("gp_user_role","rel_id", Long.class),
-	FAVORITE("gp_favorites","favorite_id", Long.class),
-	MBR_SETTING("gp_mbr_setting","rel_id", Long.class),
+	GP_IMAGES("image_id", Long.class),
+	GP_MEASURES("measure_id", Long.class),
+	GP_PAGES("page_id", Integer.class),
+	GP_ROLES("role_id", Integer.class),
+	GP_ROLE_PAGE("rel_id", Integer.class),
+	GP_USER_ROLE("rel_id", Long.class),
+	GP_FAVORITES("favorite_id", Long.class),
+	GP_MBR_SETTING("rel_id", Long.class),
 	/** the summary tables */
-	CAB_SUM("gp_cab_summary","rel_id", Long.class),
-	USER_SUM("gp_user_summary","rel_id", Long.class),
-	WORKGROUP_SUM("gp_workgroup_summary","rel_id", Long.class),
-	OPERATION("gp_operations","oper_id", Long.class),
+	GP_CAB_SUMMARY("rel_id", Long.class),
+	GP_USER_SUMMARY("rel_id", Long.class),
+	GP_WORKGROUP_SUMMARY("rel_id", Long.class),
+	GP_OPERATIONS("oper_id", Long.class),
 	/** the quick flow table */
-	QUICK_FLOW("gp_quick_flows", "flow_id", Long.class),
-	QUICK_NODE("gp_quick_node", "node_id", Long.class),
-	PROC_FLOW("gp_proc_flows", "proc_id", Long.class),
-	PROC_STEP("gp_proc_step", "step_id", Long.class),
-	PROC_TRAIL("gp_proc_trail", "trail_id", Long.class),
+	GP_QUICK_FLOWS("flow_id", Long.class),
+	GP_QUICK_NODE("node_id", Long.class),
+	GP_PROC_FLOWS("proc_id", Long.class),
+	GP_PROC_STEP("step_id", Long.class),
+	GP_PROC_TRAIL("trail_id", Long.class),
 	
-	OWM("gp_owm", "id", Long.class),
+	GP_OWM( "id", Long.class),
 	
-	TOKEN("gp_tokens", "token_id", Long.class);
+	GP_TOKENS("token_id", Long.class);
 	
-	private final String schema;
 	private final Class<?> clazz;
 	private final String idColumn;
 	
-	private <T> IdKey(String schema,String idColumn, Class<T> clazz){
+	private <T> IdKey(String idColumn, Class<T> clazz){
 		this.idColumn = idColumn;
-		this.schema = schema;
 		this.clazz = clazz;
 	}
 
 	@Override
 	public String getSchema() {
 		
-		return this.schema;
+		return name();
 	}
 
 	@Override

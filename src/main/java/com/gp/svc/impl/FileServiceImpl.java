@@ -93,7 +93,7 @@ public class FileServiceImpl implements FileService{
 		InfoId<Long> fkey = file.getInfoId();
 		
 		if(!IdKeys.isValidId(fkey)){
-			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
+			fkey = idservice.generateId(IdKey.GP_CAB_FILES, Long.class);
 			file.setInfoId(fkey);
 		}
 		try{	
@@ -119,7 +119,7 @@ public class FileServiceImpl implements FileService{
 		try{
 			
 			cfileinfo = cabfiledao.query(srcfileId);
-			fkey = idservice.generateId(IdKey.CAB_FILE, Long.class);
+			fkey = idservice.generateId(IdKey.GP_CAB_FILES, Long.class);
 			cfileinfo.setInfoId(fkey);
 			cfileinfo.setParentId(destFolderId.getId());
 			svcctx.setTraceInfo(cfileinfo);
@@ -140,7 +140,7 @@ public class FileServiceImpl implements FileService{
 
 		try{
 			// recreate to ensure the id column name is correct.
-			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE,srcFileId.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.GP_CAB_FILES,srcFileId.getId());
 			Map<FlatColLocator, Object> colmap = new HashMap<FlatColLocator, Object>();
 			colmap.put(FlatColumns.FOLDER_ID, destFolderId.getId());
 			colmap.put(FlatColumns.MODIFIER, svcctx.getPrincipal().getAccount());
@@ -166,7 +166,7 @@ public class FileServiceImpl implements FileService{
 			cfileinfo = cabfiledao.query(filekey);
 			CabVersionInfo versioninfo = new CabVersionInfo();
 			
-			vkey = idservice.generateId(IdKey.CAB_VERSION, Long.class);
+			vkey = idservice.generateId(IdKey.GP_CAB_VERSIONS, Long.class);
 			
 			versioninfo.setBinaryId(cfileinfo.getBinaryId());
 			versioninfo.setCabinetId(cfileinfo.getCabinetId());
@@ -271,7 +271,7 @@ public class FileServiceImpl implements FileService{
 				}
 			}
 			// update the cabinet file entry's acl_id
-			InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE, cabfileId.getId());
+			InfoId<Long> fid = IdKeys.getInfoId(IdKey.GP_CAB_FILES, cabfileId.getId());
 			pseudodao.update(fid, FlatColumns.ACL_ID, acl.getAclId().getId());
 		}catch(DataAccessException dae){
 			

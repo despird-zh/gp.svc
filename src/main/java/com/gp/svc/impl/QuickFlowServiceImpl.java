@@ -80,11 +80,11 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					FlatColumns.MANAGER);
 			long fid = ((Integer)wmap.get(FlatColumns.PUBLIC_FLOW_ID.getColumn())).longValue();
 			// query flow definition
-			QuickFlowInfo finfo = quickflowdao.query(IdKeys.getInfoId(IdKey.QUICK_FLOW, fid));
+			QuickFlowInfo finfo = quickflowdao.query(IdKeys.getInfoId(IdKey.GP_QUICK_FLOWS, fid));
 			// create process flow information
 			ProcFlowInfo procInfo = new ProcFlowInfo();
 			// generate a new id
-			InfoId<Long> procId = idservice.generateId(IdKey.PROC_FLOW, Long.class);
+			InfoId<Long> procId = idservice.generateId(IdKey.GP_PROC_FLOWS, Long.class);
 			procInfo.setInfoId(procId);
 			procInfo.setFlowId(fid);
 			procInfo.setWorkgroupId(wgroupId.getId());
@@ -106,9 +106,9 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 
 			// query quick node information : root node
-			QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKeys.getInfoId(IdKey.QUICK_FLOW,fid));
+			QuickNodeInfo rootnode = quicknodedao.queryRootNode(IdKeys.getInfoId(IdKey.GP_QUICK_FLOWS,fid));
 			Set<String> executors = getStepExecutors(procId, rootnode.getExecutors());
-			InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+			InfoId<Long> stepId = idservice.generateId(IdKey.GP_PROC_STEP, Long.class);
 			ProcStepInfo stepInfo = new ProcStepInfo();
 			stepInfo.setInfoId(stepId);
 			stepInfo.setCreateTime(now);
@@ -123,7 +123,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 			// create notification information
 			NotificationInfo notifInfo = new NotificationInfo();
-			InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
+			InfoId<Long> notifId = idservice.generateId(IdKey.GP_NOTIFICATIONS, Long.class);
 			notifInfo.setInfoId(notifId);
 			notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 			notifInfo.setOperation(Operations.LAUNCH_FLOW.name());
@@ -141,7 +141,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			for(String executor: executors) {
 
 				ProcTrailInfo procTrailInfo = new ProcTrailInfo();
-				InfoId<Long> trailId = idservice.generateId(IdKey.PROC_TRAIL, Long.class);
+				InfoId<Long> trailId = idservice.generateId(IdKey.GP_PROC_TRAIL, Long.class);
 				procTrailInfo.setInfoId(trailId);
 				procTrailInfo.setExecutor(executor);
 				procTrailInfo.setProcId(procId.getId());
@@ -151,7 +151,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 				// create notification dispatch information
 				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				InfoId<Long> dispId = idservice.generateId(IdKey.GP_NOTIFICATION_DISPATCH, Long.class);
 				notifdisp.setInfoId(dispId);
 				notifdisp.setNotificationId(notifId.getId());
 				notifdisp.setReceiver(executor);
@@ -176,10 +176,10 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			Date now = calendar.getTime();
 			// query the proc data
-			InfoId<Long> procId = IdKeys.getInfoId(IdKey.PROC_FLOW, stepInfo.getProcId());
+			InfoId<Long> procId = IdKeys.getInfoId(IdKey.GP_PROC_FLOWS, stepInfo.getProcId());
 			ProcFlowInfo procinfo = procflowdao.query(procId);
 			// query the step data
-			InfoId<Long> currNodeId = IdKeys.getInfoId(IdKey.QUICK_NODE, stepInfo.getNodeId());
+			InfoId<Long> currNodeId = IdKeys.getInfoId(IdKey.GP_QUICK_NODE, stepInfo.getNodeId());
 			QuickNodeInfo currnode = quicknodedao.query(currNodeId);
 			// update the opinion into the trail records.
 			proctraildao.updateOpinion(currStepId,
@@ -239,7 +239,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 			// prepare the notification header information
 			NotificationInfo notifInfo = new NotificationInfo();
-			InfoId<Long> notifId = idservice.generateId(IdKey.NOTIF, Long.class);
+			InfoId<Long> notifId = idservice.generateId(IdKey.GP_NOTIFICATIONS, Long.class);
 			notifInfo.setInfoId(notifId);
 			notifInfo.setSourceId(GeneralConstants.LOCAL_SOURCE);
 			notifInfo.setSender(svcctx.getPrincipal().getAccount());
@@ -287,7 +287,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					notifdao.create(notifInfo);
 					// create notification dispatch to the flow owner
 					NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-					InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+					InfoId<Long> dispId = idservice.generateId(IdKey.GP_NOTIFICATION_DISPATCH, Long.class);
 					notifdisp.setInfoId(dispId);
 					notifdisp.setNotificationId(notifId.getId());
 					notifdisp.setReceiver(procinfo.getOwner());
@@ -298,7 +298,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 					Set<String> runners = nextNode.getExecutors();
 					// retrieve the real executors
 					runners = getStepExecutors(procId, runners);
-					InfoId<Long> stepId = idservice.generateId(IdKey.PROC_STEP, Long.class);
+					InfoId<Long> stepId = idservice.generateId(IdKey.GP_PROC_STEP, Long.class);
 					ProcStepInfo nextStepInfo = new ProcStepInfo();
 					nextStepInfo.setInfoId(stepId);
 					nextStepInfo.setCreateTime(now);
@@ -321,7 +321,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 
 						// create notification dispatch information
 						NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-						InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+						InfoId<Long> dispId = idservice.generateId(IdKey.GP_NOTIFICATION_DISPATCH, Long.class);
 						notifdisp.setInfoId(dispId);
 						notifdisp.setNotificationId(notifId.getId());
 						notifdisp.setReceiver(executor);
@@ -339,7 +339,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				notifdao.create(notifInfo);
 				// create notification dispatch to the flow owner
 				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				InfoId<Long> dispId = idservice.generateId(IdKey.GP_NOTIFICATION_DISPATCH, Long.class);
 				notifdisp.setInfoId(dispId);
 				notifdisp.setNotificationId(notifId.getId());
 				notifdisp.setReceiver(procinfo.getOwner());
@@ -372,7 +372,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 				notifdao.create(notifInfo);
 				// create notification dispatch to the flow owner
 				NotificationDispatchInfo notifdisp = new NotificationDispatchInfo();
-				InfoId<Long> dispId = idservice.generateId(IdKey.NOTIF_DISPATCH, Long.class);
+				InfoId<Long> dispId = idservice.generateId(IdKey.GP_NOTIFICATION_DISPATCH, Long.class);
 				notifdisp.setInfoId(dispId);
 				notifdisp.setNotificationId(notifId.getId());
 				notifdisp.setReceiver(procinfo.getOwner());
@@ -392,7 +392,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 			return result;
 
 		Long wId = pseudodao.query(procId, FlatColumns.WORKGROUP_ID, Long.class);
-		InfoId<Long> wgroupId = IdKeys.getInfoId(IdKey.WORKGROUP,wId);
+		InfoId<Long> wgroupId = IdKeys.getInfoId(IdKey.GP_WORKGROUPS,wId);
 		for(String executor: executorSet){
 			if(DefaultExecutor.contains(executor)){
 				DefaultExecutor runner = DefaultExecutor.valueOf(executor);
@@ -442,7 +442,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		
 		try{
 			Long flowId = pseudodao.query(wgroupId, FlatColumns.PUBLIC_FLOW_ID, Long.class);
-			return quicknodedao.queryByFlow(IdKeys.getInfoId(IdKey.QUICK_FLOW, flowId));
+			return quicknodedao.queryByFlow(IdKeys.getInfoId(IdKey.GP_QUICK_FLOWS, flowId));
 			
 		}catch(DataAccessException e){
 			throw new ServiceException("excp.query", e, "flow node");

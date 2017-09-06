@@ -34,7 +34,7 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.MESSAGE_DISPATCH,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CHAT_DISPATCH,Long.class);
 			
 		ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
 		info.setInfoId(id);
@@ -65,7 +65,7 @@ public class MessageDispatchDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.MESSAGE_DISPATCH,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_CHAT_DISPATCH,Long.class);
 			
 			ChatMessageDispatchInfo info = new ChatMessageDispatchInfo();
 			info.setInfoId(id);

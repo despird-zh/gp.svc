@@ -19,7 +19,7 @@ public interface StorageDAO extends BaseDAO<StorageInfo>{
 		public StorageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StorageInfo info = new StorageInfo();
 			
-			InfoId<Integer> id = IdKeys.getInfoId(IdKey.STORAGE, rs.getInt("storage_id"));
+			InfoId<Integer> id = IdKeys.getInfoId(IdKey.GP_STORAGES, rs.getInt("storage_id"));
 			info.setInfoId(id);
 
 			info.setStorageName(rs.getString("storage_name"));

@@ -18,7 +18,7 @@ public interface BinaryDAO extends BaseDAO<BinaryInfo>{
 		@Override
 		public BinaryInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			BinaryInfo info = new BinaryInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.BINARY, rs.getLong("binary_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_BINARIES, rs.getLong("binary_id"));
 			
 			info.setInfoId(id);
 			

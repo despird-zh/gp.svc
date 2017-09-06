@@ -28,7 +28,7 @@ public interface CabFolderDAO extends BaseDAO<CabFolderInfo>{
 		@Override
 		public CabFolderInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabFolderInfo info = new CabFolderInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_FOLDER, rs.getLong("folder_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, rs.getLong("folder_id"));
 			info.setInfoId(id);
 
 			info.setSourceId(rs.getInt("source_id"));

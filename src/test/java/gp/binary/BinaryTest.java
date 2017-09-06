@@ -22,7 +22,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 	
 	public void test() throws Exception{
 		
-		String bpath = StorageUtils.toURIStr(IdKeys.getInfoId(IdKey.STORAGE,3), 21l, "txt");
+		String bpath = StorageUtils.toURIStr(IdKeys.getInfoId(IdKey.GP_STORAGES,3), 21l, "txt");
 		
 		File tgt = new File("d:\\temp.txt");
 		
@@ -36,13 +36,13 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		File f = new File("D:\\n.repo\\80\\00\\00\\16.22.zip");
 		File f1 = new File("D:\\16.22.zip");
 		long filesize = f.length();
-		String bpath = StorageUtils.toURIStr(IdKeys.getInfoId(IdKey.STORAGE,3), 22l,"zip");
+		String bpath = StorageUtils.toURIStr(IdKeys.getInfoId(IdKey.GP_STORAGES,3), 22l,"zip");
 		System.out.println("bpath : " + bpath);
 
 		FileOutputStream fo = new FileOutputStream(f1);
 		int chunks = StorageUtils.calcAmount(filesize, 2*1024*1024);
 		
-		InfoId<Long> bid = IdKeys.getInfoId(IdKey.BINARY,22l);
+		InfoId<Long> bid = IdKeys.getInfoId(IdKey.GP_BINARIES,22l);
 		for(int i = 0 ; i < chunks; i++){
 			
 			//BinaryManager.instance().dumpBinaryChunk(bid, cbuffer);
@@ -61,7 +61,7 @@ public class BinaryTest extends AbstractJUnit4SpringContextTests{
 		FileInputStream fi = new FileInputStream(f1);
 		int chunks = StorageUtils.calcAmount(filesize, 2*1024*1024);
 		
-		InfoId<Long> bid = IdKeys.getInfoId(IdKey.BINARY,1122l);
+		InfoId<Long> bid = IdKeys.getInfoId(IdKey.GP_BINARIES,1122l);
 		for(int i = 0 ; i < chunks; i++){
 			//BinaryManager.instance().fillBinaryChunk(bid, cbuffer);
 			

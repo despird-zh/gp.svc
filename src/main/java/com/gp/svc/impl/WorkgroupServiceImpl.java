@@ -120,7 +120,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		// set trace info
 		svcctx.setTraceInfo(winfo);
 		// allocate an key for public cabinet
-		InfoId<Long> pubkey = idService.generateId( IdKey.CABINET, Long.class);
+		InfoId<Long> pubkey = idService.generateId( IdKey.GP_CABINETS, Long.class);
 		winfo.setPublishCabinet(pubkey.getId());
 		SysOptionInfo veropt= systemservice.getOption(svcctx, SystemOptions.CABINET_VERSION_ENABLE);
 		boolean versionable = Boolean.valueOf(veropt.getOptionValue());
@@ -148,7 +148,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		pubinfo.setCapacity(pubcapacity);
 		svcctx.setTraceInfo(pubinfo);
 		// allocate an key for private cabinet
-		InfoId<Long> prikey = idService.generateId( IdKey.CABINET, Long.class);
+		InfoId<Long> prikey = idService.generateId( IdKey.GP_CABINETS, Long.class);
 		winfo.setNetdiskCabinet(prikey.getId());
 		
 		CabinetInfo priinfo = new CabinetInfo();
@@ -177,7 +177,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		svcctx.setTraceInfo(priinfo);
 		
 		GroupInfo group = new GroupInfo();
-		InfoId<Long> grpid = idService.generateId( IdKey.GROUP, Long.class);
+		InfoId<Long> grpid = idService.generateId( IdKey.GP_GROUPS, Long.class);
 		group.setInfoId(grpid);
 		group.setGroupName("Workgroup's Member Group");
 		group.setGroupType(GroupUsers.GroupType.WORKGROUP_MBR.name());
@@ -186,7 +186,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		svcctx.setTraceInfo(group);
 		// create group user record
 		GroupUserInfo mbrinfo= new GroupUserInfo();
-		InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+		InfoId<Long> guid = idService.generateId(IdKey.GP_GROUP_USER, Long.class);
 		mbrinfo.setInfoId(guid);
 		mbrinfo.setAccount(winfo.getManager());
 		mbrinfo.setGroupId(grpid.getId());
@@ -199,7 +199,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE, imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.GP_IMAGES, imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
@@ -237,7 +237,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			String imgpath = svcctx.getContextData(CTX_KEY_IMAGE_PATH, String.class);
 			String filename = FilenameUtils.getName(imgpath);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE,imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.GP_IMAGES,imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 				imginfo = ImageDAOImpl.parseLocalImageInfo(imgpath);
@@ -248,7 +248,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			winfo.setAvatarId(imgid);	
 
 			// update storage id
-			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE, winfo.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.GP_STORAGES, winfo.getStorageId());
 			List<CabinetInfo> cabinets = cabinetdao.queryByWorkgroupId(wkey);
 			for(CabinetInfo cab : cabinets){
 				// public cabinet
@@ -399,7 +399,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 			InfoId<Long> grpid = null; 
 			if(null == memberinfo.getGroupId() || memberinfo.getGroupId() <= 0){
 				Long val = pseudodao.query(wkey, FlatColumns.MBR_GRP_ID,  Long.class);
-				grpid = IdKeys.getInfoId(IdKey.GROUP, val);
+				grpid = IdKeys.getInfoId(IdKey.GP_GROUPS, val);
 				memberinfo.setGroupId(grpid.getId());
 			}
 			InfoId<Long> mbrid = groupuserdao.existByAccount(grpid, memberinfo.getAccount());
@@ -416,7 +416,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 				// not exist, then create new record
 				svcctx.setTraceInfo(memberinfo);				
 				// prepare new record
-				InfoId<Long> rid = idService.generateId( IdKey.GROUP_USER, Long.class);
+				InfoId<Long> rid = idService.generateId( IdKey.GP_GROUP_USER, Long.class);
 				memberinfo.setInfoId(rid);				
 				groupuserdao.create( memberinfo);
 			}
@@ -584,7 +584,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		
 		try{		
 			ginfo.setGroupType(GroupUsers.GroupType.WORKGROUP_GRP.name());
-			InfoId<Long> wgoupId = IdKeys.getInfoId(IdKey.WORKGROUP, ginfo.getManageId());
+			InfoId<Long> wgoupId = IdKeys.getInfoId(IdKey.GP_WORKGROUPS, ginfo.getManageId());
 			GroupInfo orig = groupdao.queryByName(wgoupId,GroupUsers.GroupType.WORKGROUP_GRP.name(), ginfo.getGroupName());
 			if(null != orig){
 				
@@ -647,7 +647,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 					continue;
 				}
 				GroupUserInfo guinfo = new GroupUserInfo();
-				InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+				InfoId<Long> guid = idService.generateId(IdKey.GP_GROUP_USER, Long.class);
 				guinfo.setInfoId(guid);
 				guinfo.setGroupId(groupid.getId());
 				guinfo.setAccount(account);

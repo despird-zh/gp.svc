@@ -26,7 +26,7 @@ public interface CabAceDAO extends BaseDAO<CabAceInfo>{
 		@Override
 		public CabAceInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabAceInfo info = new CabAceInfo();
-			InfoId<Long> id = IdKeys.getInfoId( IdKey.CAB_ACE, rs.getLong("ace_id"));
+			InfoId<Long> id = IdKeys.getInfoId( IdKey.GP_CAB_ACE, rs.getLong("ace_id"));
 			
 			info.setInfoId(id);
 			info.setAclId(rs.getLong("acl_id"));

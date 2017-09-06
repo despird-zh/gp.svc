@@ -34,7 +34,7 @@ public class CabCommentDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("testuser");
-		InfoId<Long> id = idService.generateId( IdKey.CAB_COMMENT, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CAB_COMMENTS, Long.class);
 
 		CabCommentInfo info = new CabCommentInfo();
 		info.setInfoId(id);

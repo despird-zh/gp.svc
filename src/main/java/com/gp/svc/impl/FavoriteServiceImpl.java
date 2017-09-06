@@ -34,7 +34,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 	@Override
 	public Map<InfoId<Long>, Integer> getFavFileSummary(ServiceContext svcctx,  List<InfoId<Long>>infoids )throws ServiceException{
 		
-		String type = IdKey.CAB_FILE.getSchema();
+		String type = IdKey.GP_CAB_FILES.getSchema();
 		
 		List<Long> ids = new ArrayList<Long>();
 		
@@ -56,7 +56,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 	@Override
 	public Map<InfoId<Long>, Integer> getFavFolderSummary(ServiceContext svcctx, List<InfoId<Long>>infoids )throws ServiceException{
 		
-		String type = IdKey.CAB_FOLDER.getSchema();
+		String type = IdKey.GP_CAB_FOLDERS.getSchema();
 		List<Long> ids = new ArrayList<Long>();
 		for(InfoId<Long> infoid : infoids){
 			ids.add(infoid.getId());

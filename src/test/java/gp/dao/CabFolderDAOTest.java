@@ -34,7 +34,7 @@ public class CabFolderDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.CAB_FOLDER,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CAB_FOLDERS,Long.class);
 	
 		CabFolderInfo info = new CabFolderInfo();
 		info.setInfoId(id);
@@ -79,7 +79,7 @@ public class CabFolderDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.CAB_FOLDER, Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_CAB_FOLDERS, Long.class);
 		
 			CabFolderInfo info = new CabFolderInfo();
 			info.setInfoId(id);

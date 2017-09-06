@@ -23,7 +23,7 @@ public interface WorkgroupDAO extends BaseDAO<WorkgroupInfo>{
 		
 			WorkgroupInfo info = new WorkgroupInfo();
 			
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP, rs.getLong("workgroup_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_WORKGROUPS, rs.getLong("workgroup_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

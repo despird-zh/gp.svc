@@ -27,7 +27,7 @@ public interface TagRelDAO extends BaseDAO<TagRelInfo>{
 		@Override
 		public TagRelInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TagRelInfo info = new TagRelInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.TAG_REL, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_TAG_REL, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setResourceId(rs.getLong("resource_id"));

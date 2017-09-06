@@ -34,7 +34,7 @@ public class AttachRelDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.ATTACH_REL, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_ATTACH_REL, Long.class);
 		
 		AttachRelInfo info = new AttachRelInfo();
 		info.setInfoId(id);

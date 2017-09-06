@@ -19,7 +19,7 @@ public interface MemberSettingDAO extends BaseDAO<MemberSettingInfo>{
 		@Override
 		public MemberSettingInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			MemberSettingInfo info = new MemberSettingInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.MBR_SETTING, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_MBR_SETTING, rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setAccount(rs.getString("account"));

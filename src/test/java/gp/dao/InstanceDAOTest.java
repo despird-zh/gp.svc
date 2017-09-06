@@ -34,7 +34,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Integer> id = IdKeys.getInfoId(IdKey.SOURCE,-9999);
+		InfoId<Integer> id = IdKeys.getInfoId(IdKey.GP_SOURCES,-9999);
 		
 		SourceInfo info = new SourceInfo();
 		info.setInfoId(id);
@@ -69,7 +69,7 @@ public class InstanceDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		principal.setAccount("acc001");
 		for(int i = 0;i<20;i++){
-			InfoId<Integer> id = idService.generateId(IdKey.SOURCE, Integer.class);
+			InfoId<Integer> id = idService.generateId(IdKey.GP_SOURCES, Integer.class);
 			
 			SourceInfo info = new SourceInfo();
 			info.setInfoId(id);

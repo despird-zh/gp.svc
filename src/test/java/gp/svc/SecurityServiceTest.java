@@ -33,7 +33,7 @@ public class SecurityServiceTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.USER ,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_USERS ,Long.class);
 		
 		UserInfo info = new UserInfo();
 		info.setInfoId(id);

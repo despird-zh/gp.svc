@@ -20,7 +20,7 @@ public interface AuditDAO extends BaseDAO<AuditInfo>{
 		
 			AuditInfo info = new AuditInfo();
 
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.AUDIT, rs.getLong("audit_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_AUDITS, rs.getLong("audit_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

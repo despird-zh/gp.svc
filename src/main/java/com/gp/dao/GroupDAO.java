@@ -22,7 +22,7 @@ public interface GroupDAO extends BaseDAO<GroupInfo>{
 		@Override
 		public GroupInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			GroupInfo info = new GroupInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.GROUP, rs.getLong("group_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_GROUPS, rs.getLong("group_id"));
 			
 			info.setInfoId(id);
 

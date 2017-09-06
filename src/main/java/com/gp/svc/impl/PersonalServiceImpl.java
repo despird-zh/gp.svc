@@ -105,7 +105,7 @@ public class PersonalServiceImpl implements PersonalService{
 			int count = 0;
 			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
-				ids[count] = IdKeys.getInfoId( IdKey.WORKGROUP, minfo.getManageId());
+				ids[count] = IdKeys.getInfoId( IdKey.GP_WORKGROUPS, minfo.getManageId());
 				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
@@ -147,7 +147,7 @@ public class PersonalServiceImpl implements PersonalService{
 			int count = 0;
 			Map<InfoId<?>, Boolean> settings = new HashMap<InfoId<?>, Boolean>();
 			for(GroupMemberInfo minfo : members){
-				ids[count] = IdKeys.getInfoId(IdKey.ORG_HIER, minfo.getManageId());
+				ids[count] = IdKeys.getInfoId(IdKey.GP_ORG_HIER, minfo.getManageId());
 				settings.put(ids[count], minfo.getPostVisible());
 				count ++;
 			}
@@ -259,7 +259,7 @@ public class PersonalServiceImpl implements PersonalService{
 			// create image firstly.
 			String filename = FilenameUtils.getName(avatarImg);
 			Long imgid = Images.parseImageId(filename);
-			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.IMAGE, imgid));
+			ImageInfo imginfo = imagedao.query(IdKeys.getInfoId(IdKey.GP_IMAGES, imgid));
 			// check if the image exists
 			if(imginfo == null){ // save the image
 
@@ -290,13 +290,13 @@ public class PersonalServiceImpl implements PersonalService{
 				if(null == mbrinfo){
 					
 					mbrinfo = new MemberSettingInfo();
-					InfoId<Long> relid = idService.generateId(IdKey.MBR_SETTING, Long.class);
+					InfoId<Long> relid = idService.generateId(IdKey.GP_MBR_SETTING, Long.class);
 					mbrinfo.setInfoId(relid);
 					mbrinfo.setManageId(entry.getKey().getId());
 					String type = null;
-					if(IdKey.ORG_HIER.getSchema().equals(entry.getKey().getIdKey()))
+					if(IdKey.GP_ORG_HIER.getSchema().equals(entry.getKey().getIdKey()))
 						type = GroupUsers.GroupType.ORG_HIER_MBR.name();
-					else if(IdKey.WORKGROUP.getSchema().equals(entry.getKey().getIdKey()))
+					else if(IdKey.GP_WORKGROUPS.getSchema().equals(entry.getKey().getIdKey()))
 						type = GroupUsers.GroupType.WORKGROUP_MBR.name();
 					
 					mbrinfo.setAccount(account);
@@ -327,12 +327,12 @@ public class PersonalServiceImpl implements PersonalService{
 			// update the storage id
 			cnt = pseudodao.update(userid, FlatColumns.STORAGE_ID, storageId);
 			UserInfo uinfo = userdao.query(userid);
-			InfoId<Long> pubcabid = IdKeys.getInfoId(IdKey.CABINET, uinfo.getPublishCabinet());
+			InfoId<Long> pubcabid = IdKeys.getInfoId(IdKey.GP_CABINETS, uinfo.getPublishCabinet());
 			Map<FlatColLocator, Object> fields = new HashMap<FlatColLocator, Object>();
 			fields.put(FlatColumns.STORAGE_ID, storageId);
 			fields.put(FlatColumns.CAPACITY, publishcap);
 			cnt += pseudodao.update(pubcabid, fields);
-			InfoId<Long> pricabid = IdKeys.getInfoId(IdKey.CABINET, uinfo.getNetdiskCabinet());
+			InfoId<Long> pricabid = IdKeys.getInfoId(IdKey.GP_CABINETS, uinfo.getNetdiskCabinet());
 			// replace the capacity with netdisk's setting
 			fields.put(FlatColumns.CAPACITY, netdiskcap);
 			cnt += pseudodao.update(pricabid, fields);

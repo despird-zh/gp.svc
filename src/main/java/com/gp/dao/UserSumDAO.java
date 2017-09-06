@@ -20,7 +20,7 @@ public interface UserSumDAO extends BaseDAO<UserSumInfo>{
 		@Override
 		public UserSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserSumInfo info = new UserSumInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.USER_SUM,rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_USER_SUMMARY,rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setAccount(rs.getString("account"));

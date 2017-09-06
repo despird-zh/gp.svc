@@ -316,7 +316,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 			@Override
 			public MeasureInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				MeasureInfo measure = new MeasureInfo();
-				InfoId<Long> mid = IdKeys.getInfoId(IdKey.MEASURE, rs.getLong("measure_id"));
+				InfoId<Long> mid = IdKeys.getInfoId(IdKey.GP_MEASURES, rs.getLong("measure_id"));
 				measure.setInfoId(mid);
 				
 				if(!ArrayUtils.isEmpty(_columns)){

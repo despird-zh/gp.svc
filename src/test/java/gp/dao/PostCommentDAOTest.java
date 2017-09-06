@@ -34,7 +34,7 @@ public class PostCommentDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("testuser");
-		InfoId<Long> id = idService.generateId( IdKey.POST_COMMENT,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_POST_COMMENTS,Long.class);
 		
 		PostCommentInfo info = new PostCommentInfo();
 		info.setInfoId(id);

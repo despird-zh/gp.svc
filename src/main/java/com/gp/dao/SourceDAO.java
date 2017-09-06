@@ -24,7 +24,7 @@ public interface SourceDAO extends BaseDAO<SourceInfo>{
 		@Override
 		public SourceInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			SourceInfo info = new SourceInfo();
-			InfoId<Integer> id = IdKeys.getInfoId(IdKey.SOURCE, rs.getInt("source_id"));
+			InfoId<Integer> id = IdKeys.getInfoId(IdKey.GP_SOURCES, rs.getInt("source_id"));
 			info.setInfoId(id);
 
 			info.setEntityCode(rs.getString("entity_code"));

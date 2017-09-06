@@ -27,7 +27,7 @@ public interface SysOptionDAO extends BaseDAO<SysOptionInfo>{
 		@Override
 		public SysOptionInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			SysOptionInfo info = new SysOptionInfo();
-			InfoId<Integer> id = IdKeys.getInfoId(IdKey.SYS_OPTION, rs.getInt("sys_opt_id"));
+			InfoId<Integer> id = IdKeys.getInfoId(IdKey.GP_SYS_OPTIONS, rs.getInt("sys_opt_id"));
 			info.setInfoId(id);
 
 			info.setOptionGroup(rs.getString("opt_group"));

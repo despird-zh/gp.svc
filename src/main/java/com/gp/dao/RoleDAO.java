@@ -21,7 +21,7 @@ public interface RoleDAO extends BaseDAO<RoleInfo>{
 		@Override
 		public RoleInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			RoleInfo info = new RoleInfo();
-			InfoId<Integer> id = IdKeys.getInfoId(IdKey.ROLE,rs.getInt("tag_id"));
+			InfoId<Integer> id = IdKeys.getInfoId(IdKey.GP_ROLES,rs.getInt("tag_id"));
 			info.setInfoId(id);
 			info.setRoleAbbr(rs.getString("role_abbr"));
 			info.setRoleName(rs.getString("role_name"));

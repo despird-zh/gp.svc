@@ -23,7 +23,7 @@ public interface PageDAO extends BaseDAO<PageInfo>{
 		public PageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			PageInfo page = new PageInfo();
 			
-			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.PAGE, rs.getInt("page_id"));
+			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.GP_PAGES, rs.getInt("page_id"));
 			page.setInfoId(mid);
 			
 			page.setDescription(rs.getString("descr"));

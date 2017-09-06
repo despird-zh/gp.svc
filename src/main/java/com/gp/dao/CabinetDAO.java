@@ -34,7 +34,7 @@ public interface CabinetDAO extends BaseDAO<CabinetInfo>{
 		public CabinetInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 
 			CabinetInfo info = new CabinetInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.CABINET, rs.getLong("cabinet_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CABINETS, rs.getLong("cabinet_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

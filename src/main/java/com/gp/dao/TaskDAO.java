@@ -18,7 +18,7 @@ public interface TaskDAO extends BaseDAO<TaskInfo>{
 		@Override
 		public TaskInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			TaskInfo info  =  new TaskInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.TASK, rs.getLong("task_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_TASKS, rs.getLong("task_id"));
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

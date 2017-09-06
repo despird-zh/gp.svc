@@ -19,7 +19,7 @@ public interface QuickFlowDAO extends BaseDAO<QuickFlowInfo>{
         public QuickFlowInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             QuickFlowInfo info = new QuickFlowInfo();
 
-            InfoId<Long> id = IdKeys.getInfoId(IdKey.QUICK_FLOW, rs.getLong("flow_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_QUICK_FLOWS, rs.getLong("flow_id"));
             info.setInfoId(id);
 
             info.setFlowName(rs.getString("flow_name"));

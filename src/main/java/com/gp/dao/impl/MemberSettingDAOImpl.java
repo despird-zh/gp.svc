@@ -144,9 +144,9 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	public MemberSettingInfo queryByMember(InfoId<Long> manageId, String account) {
 		String SQL = "SELECT * FROM gp_mbr_setting WHERE manage_id = ? AND group_type = ? AND account = ?";
 		String type = null;
-		if(IdKey.ORG_HIER.getSchema().equals(manageId.getIdKey()))
+		if(IdKey.GP_ORG_HIER.getSchema().equals(manageId.getIdKey()))
 			type = GroupUsers.GroupType.ORG_HIER_MBR.name();
-		else if(IdKey.WORKGROUP.getSchema().equals(manageId.getIdKey()))
+		else if(IdKey.GP_WORKGROUPS.getSchema().equals(manageId.getIdKey()))
 			type = GroupUsers.GroupType.WORKGROUP_MBR.name();
 		
 		Object[] params = new Object[]{

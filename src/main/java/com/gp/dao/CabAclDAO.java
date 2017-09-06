@@ -17,7 +17,7 @@ public interface CabAclDAO extends BaseDAO<CabAclInfo>{
 		@Override
 		public CabAclInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabAclInfo info = new CabAclInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_ACL, rs.getLong("acl_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CAB_ACL, rs.getLong("acl_id"));
 			
 			info.setInfoId(id);
 			info.setAclHash(rs.getString("acl_hash"));

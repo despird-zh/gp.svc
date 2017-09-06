@@ -464,7 +464,7 @@ public class CabinetServiceImpl implements CabinetService{
 			String isfolder = rs.getString("entry_type");
 			InfoId<Long> id = null;
 			if(Cabinets.EntryType.FOLDER.name().equals(isfolder)){
-				id = IdKeys.getInfoId(IdKey.CAB_FOLDER, rs.getLong("entry_id"));
+				id = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, rs.getLong("entry_id"));
 			
 				CabFolderInfo ref = new CabFolderInfo();
 				info = ref;
@@ -476,7 +476,7 @@ public class CabinetServiceImpl implements CabinetService{
 				ref.setProperties(rs.getString("properties"));
 				
 			}else{
-				id = IdKeys.getInfoId(IdKey.CAB_FILE,rs.getLong("entry_id"));
+				id = IdKeys.getInfoId(IdKey.GP_CAB_FILES,rs.getLong("entry_id"));
 				CabFileInfo ref = new CabFileInfo();
 				info = ref;
 				ref.setSize(rs.getLong("size"));

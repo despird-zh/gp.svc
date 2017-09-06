@@ -18,7 +18,7 @@ public interface AttachRelDAO extends BaseDAO<AttachRelInfo>{
 		public AttachRelInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			
 			AttachRelInfo info = new AttachRelInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.ATTACH_REL, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_ATTACH_REL, rs.getLong("rel_id"));
 			
 			info.setInfoId(id);
 

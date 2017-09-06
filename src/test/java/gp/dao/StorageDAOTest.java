@@ -34,7 +34,7 @@ public class StorageDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Integer> id =idService.generateId( IdKey.STORAGE,Integer.class);
+		InfoId<Integer> id =idService.generateId( IdKey.GP_STORAGES,Integer.class);
 
 		StorageInfo info = new StorageInfo();
 		info.setInfoId(id);
@@ -67,7 +67,7 @@ public class StorageDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<20;i++){
-			InfoId<Integer> id =idService.generateId( IdKey.STORAGE,Integer.class);
+			InfoId<Integer> id =idService.generateId( IdKey.GP_STORAGES,Integer.class);
 
 			StorageInfo info = new StorageInfo();
 			info.setInfoId(id);

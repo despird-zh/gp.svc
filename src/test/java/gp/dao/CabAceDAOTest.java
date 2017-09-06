@@ -35,7 +35,7 @@ public class CabAceDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.CAB_ACE, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CAB_ACE, Long.class);
 	
 		CabAceInfo info = new CabAceInfo();
 		info.setInfoId(id);

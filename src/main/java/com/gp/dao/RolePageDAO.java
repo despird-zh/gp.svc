@@ -24,7 +24,7 @@ public interface RolePageDAO extends BaseDAO<RolePageInfo>{
 		public RolePageInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			RolePageInfo rpage = new RolePageInfo();
 			
-			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.PAGE,rs.getInt("rel_id"));
+			InfoId<Integer> mid = IdKeys.getInfoId(IdKey.GP_PAGES,rs.getInt("rel_id"));
 			rpage.setInfoId(mid);
 			
 			rpage.setPageId(rs.getInt("page_id"));

@@ -96,7 +96,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		svcctx.setTraceInfo(orginfo);
 		// prepare the group information
 		GroupInfo ginfo = new GroupInfo();
-		InfoId<Long> gid = idservice.generateId(IdKey.GROUP, Long.class);
+		InfoId<Long> gid = idservice.generateId(IdKey.GP_GROUPS, Long.class);
 		ginfo.setInfoId(gid);
 		
 		ginfo.setGroupName(orginfo.getOrgName() + "'s group");
@@ -106,7 +106,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		svcctx.setTraceInfo(ginfo);
 		// create group user record
 		GroupUserInfo mbrinfo= new GroupUserInfo();
-		InfoId<Long> guid = idservice.generateId(IdKey.GROUP_USER, Long.class);
+		InfoId<Long> guid = idservice.generateId(IdKey.GP_GROUP_USER, Long.class);
 		mbrinfo.setInfoId(guid);
 		mbrinfo.setAccount(orginfo.getAdmin());
 		mbrinfo.setGroupId(gid.getId());
@@ -163,7 +163,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
-			InfoId<Long> org_grpid = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
+			InfoId<Long> org_grpid = IdKeys.getInfoId(IdKey.GP_GROUPS, orginfo.getMemberGroupId());
 			groupuserdao.deleteByGroup(org_grpid);// remove group users
 			groupdao.delete(org_grpid);// remove group
 
@@ -183,18 +183,18 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 			
-			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
+			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GP_GROUPS, orginfo.getMemberGroupId());
 			if(!IdKeys.isValidId(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			
 			for(String account: accounts){
-				InfoId<Long> gid = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
+				InfoId<Long> gid = IdKeys.getInfoId(IdKey.GP_GROUPS, orginfo.getMemberGroupId());
 				InfoId<Long> mbrid = groupuserdao.existByAccount(gid, account);
 				if(IdKeys.isValidId(mbrid)){
 					continue;
 				}
 				GroupUserInfo  guinfo = new GroupUserInfo();
-				InfoId<Long> rid = idservice.generateId(IdKey.GROUP_USER, Long.class);
+				InfoId<Long> rid = idservice.generateId(IdKey.GP_GROUP_USER, Long.class);
 				guinfo.setInfoId(rid);
 				guinfo.setGroupId(orginfo.getMemberGroupId());
 				guinfo.setRole(GroupUsers.OrgHierMemberRole.MEMBER.name());
@@ -219,7 +219,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		try{
 			OrgHierInfo orginfo = orghierdao.query(orgid);
 
-			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GROUP, orginfo.getMemberGroupId());
+			InfoId<Long> groupId = IdKeys.getInfoId(IdKey.GP_GROUPS, orginfo.getMemberGroupId());
 			if(!IdKeys.isValidId(groupId))
 				throw new ServiceException("excp.invld.id", groupId);
 			

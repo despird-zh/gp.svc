@@ -51,7 +51,7 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);		
 		CabFolderInfo cfolderinfo = new CabFolderInfo();
-		InfoId<Long> folderkey = idService.generateId(IdKey.CAB_FOLDER, Long.class);
+		InfoId<Long> folderkey = idService.generateId(IdKey.GP_CAB_FOLDERS, Long.class);
 		
 		cfolderinfo.setInfoId(folderkey);
 		cfolderinfo.setEntryName("demo folder");
@@ -61,7 +61,7 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 		cfolderinfo.setState("ready");
 		InfoId<Long> aid = newAcl();
 		cfolderinfo.setAclId(aid.getId());
-		InfoId<Long> pkey = IdKeys.getInfoId(IdKey.USER,46l);
+		InfoId<Long> pkey = IdKeys.getInfoId(IdKey.GP_USERS,46l);
 		cfolderinfo.setCabinetId(3l);
 		folderService.newFolder(svcctx, pkey, cfolderinfo,null);
 		
@@ -70,8 +70,8 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	public void test_file_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,123l);
-		InfoId<Long> folderkey = IdKeys.getInfoId(IdKey.CAB_FOLDER,12l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.GP_CABINETS,123l);
+		InfoId<Long> folderkey = IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS,12l);
 		PageQuery pquery = new PageQuery(10,1);
 		
 		PageWrapper<CabFileInfo> pwrapper = cabinetService.getCabFiles(svcctx, ckey, folderkey,"f", pquery);
@@ -83,8 +83,8 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	public void test_folder_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,123l);
-		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.CAB_FOLDER,12l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.GP_CABINETS,123l);
+		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.GP_CAB_FOLDERS,12l);
 		PageQuery pquery = new PageQuery(10,1);
 		
 		PageWrapper<CabFolderInfo> pwrapper = cabinetService.getCabFolders(svcctx, ckey, folderkey,"foler1", pquery);
@@ -96,8 +96,8 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	public void test_entry_pagequery() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,123l);
-		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.CAB_FOLDER,12l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.GP_CABINETS,123l);
+		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.GP_CAB_FOLDERS,12l);
 		PageQuery pquery = new PageQuery(10,1);
 		
 		PageWrapper<CabEntryInfo> pwrapper = cabinetService.getCabEntries(svcctx, ckey, folderkey,"foler1", pquery);
@@ -110,8 +110,8 @@ public class CabFolderServiceTest extends AbstractJUnit4SpringContextTests{
 	public void test_fid2path() throws Exception{
 		
 		svcctx = new ServiceContext(principal);		
-		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,329l);
-		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.CAB_FOLDER,70l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.GP_CABINETS,329l);
+		InfoId<Long> folderkey = IdKeys.getInfoId( IdKey.GP_CAB_FOLDERS,70l);
 		PageQuery pquery = new PageQuery(10,1);
 		
 		String path = folderService.getFolderPath(svcctx, folderkey);

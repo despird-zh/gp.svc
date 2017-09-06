@@ -17,7 +17,7 @@ public interface TaskRouteDAO extends BaseDAO<TaskRouteInfo>{
 		@Override
 		public TaskRouteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			TaskRouteInfo info = new TaskRouteInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.TASK_ROUTE, rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_TASK_ROUTE, rs.getLong("rel_id"));
 			
 			info.setInfoId(id);			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

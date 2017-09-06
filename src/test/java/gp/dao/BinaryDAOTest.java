@@ -35,7 +35,7 @@ public class BinaryDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId(IdKey.BINARY, Long.class);
+		InfoId<Long> id = idService.generateId(IdKey.GP_BINARIES, Long.class);
 				
 		BinaryInfo info = new BinaryInfo();
 		info.setInfoId(id);

@@ -18,7 +18,7 @@ public interface WorkgroupMirrorDAO extends BaseDAO<WorkgroupMirrorInfo>{
 		
 			WorkgroupMirrorInfo info = new WorkgroupMirrorInfo();
 			
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.WORKGROUP_MIRROR, rs.getLong("mirror_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_WORKGROUP_MIRROR, rs.getLong("mirror_id"));
 			info.setInfoId(id);
 			
 			info.setSourceId(rs.getInt("source_id"));

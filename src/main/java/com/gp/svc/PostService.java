@@ -143,7 +143,7 @@ public interface PostService {
 		public PostExt mapRow(ResultSet rs, int num) throws SQLException {
 			PostExt info = new PostExt();
 
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.POST, rs.getLong("post_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_POSTS, rs.getLong("post_id"));
 			
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));

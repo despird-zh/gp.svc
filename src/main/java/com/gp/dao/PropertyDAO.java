@@ -18,7 +18,7 @@ public interface PropertyDAO extends BaseDAO<PropertyInfo>{
 		@Override
 		public PropertyInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			PropertyInfo info = new PropertyInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.PROPERTY, rs.getLong("prop_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_PROPERTIES, rs.getLong("prop_id"));
 			info.setInfoId(id);
 
 			info.setLabel(rs.getString("prop_label"));

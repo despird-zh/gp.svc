@@ -164,7 +164,7 @@ public class SystemServiceImpl implements SystemService{
 		try{
 			boolean m = sysoptiondao.update( opt,FilterMode.NONE) > 0;
 			if(null != cache){
-				cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + optKey, opt);
+				cache.put(IdKey.GP_SYS_OPTIONS.name() + GeneralConstants.KEYS_SEPARATOR + optKey, opt);
 			}
 			return m;
 		}catch(DataAccessException dae){
@@ -185,7 +185,7 @@ public class SystemServiceImpl implements SystemService{
 			boolean m = sysoptiondao.update(opt,FilterMode.NONE) > 0;
 			
 			if(null != cache){
-				cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + opt.getOptionKey(), opt);
+				cache.put(IdKey.GP_SYS_OPTIONS.name() + GeneralConstants.KEYS_SEPARATOR + opt.getOptionKey(), opt);
 			}	
 			return m;
 		}catch(DataAccessException dae){
@@ -198,12 +198,12 @@ public class SystemServiceImpl implements SystemService{
 	public SysOptionInfo getOption(ServiceContext svcctx, String oKey) throws ServiceException {
 		
 		if(null != cache){
-			SysOptionInfo rtv = cache.get(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, SysOptionInfo.class);
+			SysOptionInfo rtv = cache.get(IdKey.GP_SYS_OPTIONS.name() + GeneralConstants.KEYS_SEPARATOR + oKey, SysOptionInfo.class);
 			if(rtv == null){
 				rtv = sysoptiondao.queryByKey( oKey);
 				if(rtv != null){
 				
-					cache.put(IdKey.SYS_OPTION.name() + GeneralConstants.KEYS_SEPARATOR + oKey, rtv);
+					cache.put(IdKey.GP_SYS_OPTIONS.name() + GeneralConstants.KEYS_SEPARATOR + oKey, rtv);
 				}
 			}
 			

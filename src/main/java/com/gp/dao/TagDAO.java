@@ -39,7 +39,7 @@ public interface TagDAO extends BaseDAO<TagInfo>{
 		@Override
 		public TagInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TagInfo info = new TagInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.TAG, rs.getLong("tag_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_TAGS, rs.getLong("tag_id"));
 			info.setInfoId(id);
 
 			info.setTagName(rs.getString("tag_name"));

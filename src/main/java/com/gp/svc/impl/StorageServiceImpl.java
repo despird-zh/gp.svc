@@ -53,7 +53,7 @@ public class StorageServiceImpl implements StorageService{
 	public boolean newBinary(ServiceContext svcctx, BinaryInfo binary) throws ServiceException {
 
 		try{
-			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.STORAGE,binary.getStorageId());
+			InfoId<Integer> storageId = IdKeys.getInfoId(IdKey.GP_STORAGES,binary.getStorageId());
 			String storeLoc = StorageUtils.toURIStr(storageId, binary.getInfoId().getId(), binary.getFormat());
 			binary.setStoreLocation(storeLoc);
 			svcctx.setTraceInfo(binary);

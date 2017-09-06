@@ -34,7 +34,7 @@ public class SysOptionDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Integer> id = idService.generateId(principal.getAccount(), IdKey.SYS_OPTION,Integer.class);
+		InfoId<Integer> id = idService.generateId(principal.getAccount(), IdKey.GP_SYS_OPTIONS,Integer.class);
 		
 		SysOptionInfo info = new SysOptionInfo();
 		info.setInfoId(id);
@@ -66,7 +66,7 @@ public class SysOptionDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Integer> id = idService.generateId(principal.getAccount(), IdKey.SYS_OPTION,Integer.class);
+			InfoId<Integer> id = idService.generateId(principal.getAccount(), IdKey.GP_SYS_OPTIONS,Integer.class);
 			
 			SysOptionInfo info = new SysOptionInfo();
 			info.setInfoId(id);

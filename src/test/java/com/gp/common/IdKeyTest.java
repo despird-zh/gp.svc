@@ -18,7 +18,7 @@ public class IdKeyTest {
 	public static void main(String[] a){
 		
 		setup();
-		InfoId<Long> id = IdKeys.getInfoId(IdKey.AUDIT,123l);
+		InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_AUDITS,123l);
 		
 		String tracecode = IdKeys.getTraceCode("E001", id);
 		

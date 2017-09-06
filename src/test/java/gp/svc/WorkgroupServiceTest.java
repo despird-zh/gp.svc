@@ -34,7 +34,7 @@ public class WorkgroupServiceTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.WORKGROUP,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_WORKGROUPS,Long.class);
 		
 		WorkgroupInfo info = new WorkgroupInfo();
 		info.setInfoId(id);

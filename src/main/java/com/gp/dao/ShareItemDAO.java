@@ -19,7 +19,7 @@ public interface ShareItemDAO extends BaseDAO<ShareItemInfo>{
 		public ShareItemInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			ShareItemInfo info = new ShareItemInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.SHARE_ITEM,rs.getLong("share_item_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_SHARE_ITEM,rs.getLong("share_item_id"));
 			info.setInfoId(id);
 
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

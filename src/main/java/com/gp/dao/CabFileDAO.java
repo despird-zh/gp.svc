@@ -21,7 +21,7 @@ public interface CabFileDAO extends BaseDAO<CabFileInfo>{
 		@Override
 		public CabFileInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabFileInfo info = new CabFileInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_FILE, rs.getLong("file_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CAB_FILES, rs.getLong("file_id"));
 			info.setInfoId(id);
 	
 			info.setSourceId(rs.getInt("source_id"));

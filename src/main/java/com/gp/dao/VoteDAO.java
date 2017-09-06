@@ -34,7 +34,7 @@ public interface VoteDAO extends BaseDAO<VoteInfo>{
 		@Override
 		public VoteInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			VoteInfo info = new VoteInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.VOTE,rs.getLong("vote_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_VOTES,rs.getLong("vote_id"));
 			info.setInfoId(id);
 			
 			info.setWorkgroupId(rs.getLong("workgroup_id"));

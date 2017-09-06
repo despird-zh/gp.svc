@@ -113,7 +113,7 @@ public class AclTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void test2() throws Exception{
 		svcctx = new ServiceContext(principal);
-		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.CABINET,38l);
+		InfoId<Long> ckey = IdKeys.getInfoId(IdKey.GP_CABINETS,38l);
 		Acl acl = aclService.getAcl(svcctx, ckey);
 		System.out.println(acl);
 	}

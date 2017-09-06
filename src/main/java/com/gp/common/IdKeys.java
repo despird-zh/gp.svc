@@ -38,8 +38,9 @@ public class IdKeys {
 	public static Identifier valueOfIgnoreCase(String name) {
 		
 		IdKey idKey = null;
+		if(StringUtils.isBlank(name)) return null;
 		try {
-			idKey = IdKey.valueOf(name);
+			idKey = IdKey.valueOf(name.toUpperCase());
 			return idKey;
 		}catch(Exception e) {
 			// ignore

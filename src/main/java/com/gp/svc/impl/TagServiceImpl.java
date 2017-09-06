@@ -186,7 +186,7 @@ public class TagServiceImpl implements TagService{
 		
 		if(!IdKeys.isValidId(taginfo.getInfoId())){
 			
-			InfoId<Long> id = idservice.generateId(IdKey.TAG, Long.class);
+			InfoId<Long> id = idservice.generateId(IdKey.GP_TAGS, Long.class);
 			taginfo.setInfoId(id);
 		}
 		try{
@@ -229,7 +229,7 @@ public class TagServiceImpl implements TagService{
 			// check master existence
 			List<TagInfo> tags = tagdao.queryTags(null, category, tagName);
 			if(CollectionUtils.isEmpty(tags)){
-				InfoId<Long> tid = idservice.generateId(IdKey.TAG, Long.class);
+				InfoId<Long> tid = idservice.generateId(IdKey.GP_TAGS, Long.class);
 				TagInfo tag = new TagInfo();
 				tag.setInfoId(tid);
 				tag.setTagType(objectId.getIdKey().getSchema());
@@ -240,7 +240,7 @@ public class TagServiceImpl implements TagService{
 				tagdao.create(tag);
 			}
 			TagRelInfo rel = new TagRelInfo();
-			InfoId<Long> rid = idservice.generateId(IdKey.TAG_REL, Long.class);
+			InfoId<Long> rid = idservice.generateId(IdKey.GP_TAG_REL, Long.class);
 			rel.setInfoId(rid);
 			rel.setResourceId((Long)objectId.getId());
 			rel.setResourceType(objectId.getIdKey().getSchema());

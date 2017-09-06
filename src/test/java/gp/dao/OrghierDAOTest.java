@@ -34,7 +34,7 @@ public class OrghierDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.ORG_HIER,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_ORG_HIER,Long.class);
 			
 		OrgHierInfo info = new OrgHierInfo();
 		info.setInfoId(id);
@@ -68,7 +68,7 @@ public class OrghierDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<2;i++){
-			InfoId<Long> id = idService.generateId(IdKey.ORG_HIER,Long.class);
+			InfoId<Long> id = idService.generateId(IdKey.GP_ORG_HIER,Long.class);
 			OrgHierInfo info = new OrgHierInfo();
 			info.setInfoId(id);
 			

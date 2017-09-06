@@ -244,7 +244,7 @@ public class BinaryManager {
 				// wrap uri
 				URI uri = new URI(uristr);
 				int sid = uri.getPort();// id of storage
-				this.StorageId = IdKeys.getInfoId(IdKey.STORAGE, sid);
+				this.StorageId = IdKeys.getInfoId(IdKey.GP_STORAGES, sid);
 				
 				this.BinPath = uri.getPath();// path of binary
 				int spos = this.BinPath.lastIndexOf('/');
@@ -258,7 +258,7 @@ public class BinaryManager {
 				else
 					bidstr = this.BinPath.substring(spos+1, epos);
 				// id of binary
-				this.BinaryId = IdKeys.getInfoId(IdKey.BINARY, Long.valueOf(bidstr));
+				this.BinaryId = IdKeys.getInfoId(IdKey.GP_BINARIES, Long.valueOf(bidstr));
 				
 			} catch (URISyntaxException e) {
 				LOGGER.error("Error fill binary", e);

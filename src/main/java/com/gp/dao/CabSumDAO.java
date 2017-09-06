@@ -18,7 +18,7 @@ public interface CabSumDAO extends BaseDAO<CabSumInfo>{
 		@Override
 		public CabSumInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			CabSumInfo info = new CabSumInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.USER_SUM ,rs.getLong("rel_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_USER_SUMMARY ,rs.getLong("rel_id"));
 			info.setInfoId(id);
 			
 			info.setResourceId(rs.getLong("resource_id"));

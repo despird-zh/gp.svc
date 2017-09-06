@@ -34,7 +34,7 @@ public class ShareItemDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.SHARE_ITEM, Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_SHARE_ITEM, Long.class);
 			
 		ShareItemInfo info = new ShareItemInfo();
 		info.setInfoId(id);
@@ -67,7 +67,7 @@ public class ShareItemDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.SHARE_ITEM,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_SHARE_ITEM,Long.class);
 			
 			ShareItemInfo info = new ShareItemInfo();
 			info.setInfoId(id);

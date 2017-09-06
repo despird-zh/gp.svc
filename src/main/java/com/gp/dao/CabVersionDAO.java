@@ -21,7 +21,7 @@ public interface CabVersionDAO extends BaseDAO<CabVersionInfo>{
 		@Override
 		public CabVersionInfo mapRow(ResultSet rs, int arg1) throws SQLException {
 			CabVersionInfo info = new CabVersionInfo();
-			InfoId<Long> id = IdKeys.getInfoId(IdKey.CAB_VERSION, rs.getLong("version_id"));
+			InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_CAB_VERSIONS, rs.getLong("version_id"));
 			info.setInfoId(id);
 			info.setSourceId(rs.getInt("source_id"));
 			info.setCabinetId(rs.getLong("cabinet_id"));

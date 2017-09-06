@@ -32,7 +32,7 @@ public class PseudoDAOTest extends AbstractJUnit4SpringContextTests{
 	@Test
 	public void testquery(){
 		
-		InfoId<Long> fid = IdKeys.getInfoId(IdKey.CAB_FILE,120l);
+		InfoId<Long> fid = IdKeys.getInfoId(IdKey.GP_CAB_FILES,120l);
 		Long val = pseudodao.query(fid, FlatColumns.ACL_ID, Long.class);
 		System.out.println("value : " + val);
 		

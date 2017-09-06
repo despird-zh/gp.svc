@@ -34,7 +34,7 @@ public class CabVerDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.CAB_VERSION,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_CAB_VERSIONS,Long.class);
 		
 		CabVersionInfo info = new CabVersionInfo();
 		info.setInfoId(id);
@@ -80,7 +80,7 @@ public class CabVerDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("accou01");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId( IdKey.CAB_VERSION,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_CAB_VERSIONS,Long.class);
 			
 			CabVersionInfo info = new CabVersionInfo();
 			info.setInfoId(id);

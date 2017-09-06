@@ -304,7 +304,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 
 		ImageInfo imginfo = new ImageInfo(imagePath.substring(0, imagePath.lastIndexOf(File.separator) + 1));
 		imginfo.setModifyDate(createDate);
-		imginfo.setInfoId(IdKeys.getInfoId(IdKey.IMAGE, imgid));
+		imginfo.setInfoId(IdKeys.getInfoId(IdKey.GP_IMAGES, imgid));
 		imginfo.setDataFile(new File(imagePath));
 		imginfo.setLink(filename);
 		imginfo.setPersist(Images.Persist.DATABASE.name());

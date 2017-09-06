@@ -39,7 +39,7 @@ public interface ProcTrailDAO extends BaseDAO<ProcTrailInfo>{
         @Override
         public ProcTrailInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             ProcTrailInfo info = new ProcTrailInfo();
-            InfoId<Long> id = IdKeys.getInfoId(IdKey.PROC_TRAIL,rs.getLong("trail_id"));
+            InfoId<Long> id = IdKeys.getInfoId(IdKey.GP_PROC_TRAIL,rs.getLong("trail_id"));
             info.setInfoId(id);
 
             info.setProcId(rs.getLong("proc_id"));

@@ -33,7 +33,7 @@ public class UserDAOTest extends AbstractJUnit4SpringContextTests{
 
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId( IdKey.USER,Long.class);
+		InfoId<Long> id = idService.generateId( IdKey.GP_USERS,Long.class);
 
 		UserInfo info = new UserInfo();
 		info.setInfoId(id);
@@ -75,7 +75,7 @@ public class UserDAOTest extends AbstractJUnit4SpringContextTests{
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
 			
-			InfoId<Long> id = idService.generateId(IdKey.USER,Long.class);
+			InfoId<Long> id = idService.generateId(IdKey.GP_USERS,Long.class);
 	
 			UserInfo info = new UserInfo();
 			info.setInfoId(id);

@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService{
             svcctx.setTraceInfo(postinfo);
             // create a new group for post
             GroupInfo group = new GroupInfo();
-            InfoId<Long> grpid = idService.generateId( IdKey.GROUP, Long.class);
+            InfoId<Long> grpid = idService.generateId( IdKey.GP_GROUPS, Long.class);
             group.setInfoId(grpid);
             group.setGroupName("Post's Attendee Group");
             group.setGroupType(GroupUsers.GroupType.POST_MBR.name());
@@ -95,7 +95,7 @@ public class PostServiceImpl implements PostService{
 
             // create group user record
             GroupUserInfo mbrinfo= new GroupUserInfo();
-            InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+            InfoId<Long> guid = idService.generateId(IdKey.GP_GROUP_USER, Long.class);
             mbrinfo.setInfoId(guid);
             mbrinfo.setAccount(postinfo.getOwner());
             mbrinfo.setGroupId(grpid.getId());
@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService{
                 for(String attendee: attendees){
 
                     mbrinfo= new GroupUserInfo();
-                    guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+                    guid = idService.generateId(IdKey.GP_GROUP_USER, Long.class);
                     mbrinfo.setInfoId(guid);
                     mbrinfo.setAccount(attendee);
                     mbrinfo.setGroupId(grpid.getId());
@@ -135,7 +135,7 @@ public class PostServiceImpl implements PostService{
         try{
             Long mbrid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
             GroupUserInfo mbrinfo= new GroupUserInfo();
-            InfoId<Long> guid = idService.generateId(IdKey.GROUP_USER, Long.class);
+            InfoId<Long> guid = idService.generateId(IdKey.GP_GROUP_USER, Long.class);
             mbrinfo.setInfoId(guid);
             mbrinfo.setAccount(attendee);
             mbrinfo.setGroupId(mbrid);
@@ -153,7 +153,7 @@ public class PostServiceImpl implements PostService{
     public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
         try{
             Long mbrid = pseudodao.query(postId, FlatColumns.MBR_GRP_ID, Long.class);
-            InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GROUP, mbrid);
+            InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GP_GROUPS, mbrid);
             groupuserdao.deleteByAccount(grpid, attendee);
 
         }catch(DataAccessException dae){
@@ -523,7 +523,7 @@ public class PostServiceImpl implements PostService{
         	vote = votedao.queryByAccount(postId, voter);
         	if(null == vote){
         		vote = new VoteInfo();
-                InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+                InfoId<Long> vid = idService.generateId(IdKey.GP_VOTES, Long.class);
                 vote.setInfoId(vid);
                 vote.setOpinion(TagVotes.VoteOpinion.LIKE.name());
                 vote.setVoter(voter);
@@ -565,7 +565,7 @@ public class PostServiceImpl implements PostService{
         	vote = votedao.queryByAccount(postId, voter);
         	if( null == vote){
         		vote = new VoteInfo();
-        		InfoId<Long> vid = idService.generateId(IdKey.VOTE, Long.class);
+        		InfoId<Long> vid = idService.generateId(IdKey.GP_VOTES, Long.class);
 		        vote.setInfoId(vid);
 		        vote.setOpinion(TagVotes.VoteOpinion.DISLIKE.name());
 		        vote.setVoter(voter);
@@ -613,7 +613,7 @@ public class PostServiceImpl implements PostService{
 		
     	try{
     	Long mbrgrpid = pseudodao.query(postid, FlatColumns.MBR_GRP_ID, Long.class);
-    	InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GROUP, mbrgrpid);
+    	InfoId<Long> grpid = IdKeys.getInfoId(IdKey.GP_GROUPS, mbrgrpid);
     	
     	groupuserdao.deleteByGroup(grpid);
     	groupdao.delete(grpid);

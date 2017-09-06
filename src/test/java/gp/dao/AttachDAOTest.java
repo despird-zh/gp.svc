@@ -35,7 +35,7 @@ public class AttachDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId(IdKey.ATTACHMENT, Long.class);
+		InfoId<Long> id = idService.generateId(IdKey.GP_ATTACHMENTS, Long.class);
 		
 		AttachInfo info = new AttachInfo();
 		info.setInfoId(id);

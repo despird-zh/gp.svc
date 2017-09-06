@@ -27,10 +27,10 @@ public class IdServiceTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-	    InfoId<Long> id= (InfoId<Long>)idService.generateId(IdKey.USER,Long.class);
+	    InfoId<Long> id= (InfoId<Long>)idService.generateId(IdKey.GP_USERS,Long.class);
 	    System.out.println("----test result :" + id);
 	    
-	    InfoId<String> aid= (InfoId<String>)idService.generateId( IdKey.AUDIT,String.class);
+	    InfoId<String> aid= (InfoId<String>)idService.generateId( IdKey.GP_AUDITS,String.class);
 	    System.out.println("----test result :" + aid);
 	}
 
