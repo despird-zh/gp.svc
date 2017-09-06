@@ -169,7 +169,7 @@ public class OperationServiceImpl implements OperationService {
 
 	@Transactional(ServiceConfigurer.TRNS_MGR)
 	@Override
-	public void addOperation(ServiceContext svcctx, OperationInfo operlog) throws ServiceException {
+	public void addOperation(OperationInfo operlog) throws ServiceException {
 
 		try{
 			UserInfo uinfo = userdao.queryByAccount(operlog.getSubject());

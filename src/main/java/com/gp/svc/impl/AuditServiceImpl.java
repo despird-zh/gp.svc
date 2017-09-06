@@ -95,7 +95,7 @@ public class AuditServiceImpl implements AuditService{
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
 	@Override
-	public boolean addAudit(ServiceContext svcctx, AuditInfo ainfo) throws ServiceException {
+	public boolean addAudit(AuditInfo ainfo) throws ServiceException {
 		try{
 			return auditdao.create( ainfo) > 0;
 			

@@ -36,5 +36,5 @@ public interface OperationService {
 	/**
 	 * Add the activity log into database
 	 **/
-	public void addOperation(ServiceContext svcctx, OperationInfo activitylog) throws ServiceException;
+	public void addOperation(OperationInfo activitylog) throws ServiceException;
 }

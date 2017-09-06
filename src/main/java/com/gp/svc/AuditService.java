@@ -14,7 +14,7 @@ public interface AuditService {
 	
 	public boolean deleteAudit(ServiceContext svcctx, InfoId<Long> id ) throws ServiceException;
 	
-	public boolean addAudit(ServiceContext svcctx, AuditInfo ainfo ) throws ServiceException;
+	public boolean addAudit(AuditInfo ainfo ) throws ServiceException;
 	
 	public boolean purgeAudits(ServiceContext svcctx, String subject, String objectType, Date reservedate) throws ServiceException;
 }
