@@ -36,7 +36,7 @@ public class ImageDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = (InfoId<Long>)idService.generateId(principal.getAccount(), IdKey.GP_IMAGES,Long.class);
+		InfoId<Long> id = (InfoId<Long>)idService.generateId(IdKey.GP_IMAGES,Long.class);
 
 		ImageInfo info = new ImageInfo(GeneralConfig.getString(SystemOptions.IMAGE_CACHE_PATH));
 		info.setInfoId(id);

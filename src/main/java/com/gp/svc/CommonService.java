@@ -21,7 +21,7 @@ public interface CommonService {
 	 * 
 	 * @return the expected id
 	 **/
-	public <T> InfoId<T> generateId( Identifier idkey,Class<T> keytype) throws ServiceException;
+	public <T> InfoId<T> generateId( Identifier idkey, Class<T> type) throws ServiceException;
 
 	/**
 	 * Generate new Id for record
@@ -32,7 +32,7 @@ public interface CommonService {
 	 * 
 	 * @return the expected id
 	 **/
-	public <T> InfoId<T> generateId(String modifier, Identifier idkey, Class<T> type) throws ServiceException;
+	public <T> InfoId<T> generateId(String idkey, Class<T> type) throws ServiceException;
 
 	/**
 	 * Update the table in flat column mode

@@ -33,7 +33,7 @@ public class PropertyDAOTest extends AbstractJUnit4SpringContextTests{
 		
 		svcctx = new ServiceContext(principal);
 		
-		InfoId<Long> id = idService.generateId(principal.getAccount(), IdKey.GP_PROPERTIES,Long.class);
+		InfoId<Long> id = idService.generateId(IdKey.GP_PROPERTIES,Long.class);
 		
 		PropertyInfo info = new PropertyInfo();
 		info.setInfoId(id);
@@ -67,7 +67,7 @@ public class PropertyDAOTest extends AbstractJUnit4SpringContextTests{
 		svcctx = new ServiceContext(principal);
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = idService.generateId(principal.getAccount(), IdKey.GP_PROPERTIES,Long.class);
+			InfoId<Long> id = idService.generateId( IdKey.GP_PROPERTIES,Long.class);
 			
 			PropertyInfo info = new PropertyInfo();
 			info.setInfoId(id);

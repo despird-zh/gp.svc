@@ -36,7 +36,7 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 	public void test() throws Exception{
 		
 
-		InfoId<Long> id = (InfoId<Long>)idService.generateId(principal.getAccount(), IdKey.GP_DICTIONARY,Long.class);
+		InfoId<Long> id = (InfoId<Long>)idService.generateId( IdKey.GP_DICTIONARY,Long.class);
 		
 		DictionaryInfo info = new DictionaryInfo();
 		info.setInfoId(id);
@@ -74,7 +74,7 @@ public class DictDAOTest extends AbstractJUnit4SpringContextTests{
 
 		principal.setAccount("acc001");
 		for(int i = 0;i<5;i++){
-			InfoId<Long> id = (InfoId<Long>)idService.generateId(principal.getAccount(), IdKey.GP_DICTIONARY,Long.class);
+			InfoId<Long> id = (InfoId<Long>)idService.generateId(IdKey.GP_DICTIONARY,Long.class);
 			
 			DictionaryInfo info = new DictionaryInfo();
 			info.setInfoId(id);

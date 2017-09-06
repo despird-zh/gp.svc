@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.GroupUsers;
+import com.gp.common.IdKeys;
 import com.gp.config.ServiceConfigurer;
 import com.gp.dao.IdSettingDAO;
 import com.gp.dao.PseudoDAO;
@@ -39,7 +40,7 @@ public class CommonServiceImpl implements CommonService{
 	@SuppressWarnings("unchecked")
 	@Transactional(value=ServiceConfigurer.TRNS_MGR,propagation = Propagation.REQUIRES_NEW )
 	@Override
-	public <T> InfoId<T> generateId(String modifier, Identifier idkey, Class<T> type) throws ServiceException{
+	public <T> InfoId<T> generateId(Identifier idkey, Class<T> type) throws ServiceException{
 		
 		InfoId<?> newId = null;
 		
@@ -73,7 +74,7 @@ public class CommonServiceImpl implements CommonService{
 				LOGGER.debug("idkey : {} / modify date : {} / current : {} ", new Object[]{idkey, idinfo.getModifyDate(),idinfo.getCurrValue()});
 			
 			Long nextValue = idinfo.getCurrValue() + idinfo.getStepIncrement();			
-			idsettingdao.updateByIdKey(modifier, idkey, nextValue);
+			idsettingdao.updateByIdKey(GroupUsers.PSEUDO_USER.getAccount(), idkey, nextValue);
 			
 		}catch(Exception e){
 			
@@ -87,9 +88,11 @@ public class CommonServiceImpl implements CommonService{
 	}
 	
 	@Override
-	public <T> InfoId<T> generateId( Identifier idkey,Class<T> type) throws ServiceException {
+	public <T> InfoId<T> generateId( String idkey,Class<T> type) throws ServiceException {
 		
-		return generateId(GroupUsers.PSEUDO_USER.getAccount(),idkey, type);
+		Identifier idf = IdKeys.valueOfIgnoreCase(idkey);
+		
+		return generateId(idf, type);
 	}
 
 	@Transactional(value = ServiceConfigurer.TRNS_MGR)
