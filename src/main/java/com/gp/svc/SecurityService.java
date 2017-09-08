@@ -167,14 +167,19 @@ public interface SecurityService {
 		@Override
 		public UserLiteInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 			UserLiteInfo info = new UserLiteInfo();
+			
 			info.setAccount(rs.getString("account"));
 			info.setUserId(rs.getLong("user_id"));
 			info.setAvatarLink(rs.getString("image_link"));
 			info.setEmail(rs.getString("email"));
+			info.setMobile(rs.getString("mobile"));
 			info.setSourceName(rs.getString("source_name"));
-			info.setSourceId(rs.getLong("source_id"));
+			info.setSourceId(rs.getInt("source_id"));
 			info.setUserName(rs.getString("full_name"));
 			info.setSourceAbbr(rs.getString("abbr"));
+			info.setType(rs.getString("type"));
+			info.setCreateTime(rs.getTimestamp("create_time"));
+			info.setState(rs.getString("state"));
 			
 			return info;
 		}

@@ -1,5 +1,6 @@
 package com.gp.svc.info;
 
+import java.util.Date;
 
 public class UserLiteInfo {
 
@@ -13,12 +14,20 @@ public class UserLiteInfo {
 
     private String email;
 
-    private Long sourceId;
+    private Integer sourceId;
 
     private String sourceAbbr;
     
     private String sourceName;
 
+    private String mobile;
+    
+    private String type;
+    
+    private Date createTime;
+    
+    private String state;
+    
     public Long getUserId() {
         return userId;
     }
@@ -59,11 +68,11 @@ public class UserLiteInfo {
         this.email = email;
     }
 
-    public Long getSourceId() {
+    public Integer getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(Long sourceId) {
+    public void setSourceId(Integer sourceId) {
         this.sourceId = sourceId;
     }
 
@@ -81,6 +90,38 @@ public class UserLiteInfo {
 
 	public void setSourceAbbr(String sourceAbbr) {
 		this.sourceAbbr = sourceAbbr;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 }

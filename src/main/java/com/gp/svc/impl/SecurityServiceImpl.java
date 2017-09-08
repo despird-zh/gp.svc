@@ -285,6 +285,7 @@ public class SecurityServiceImpl implements SecurityService{
 		SQL.append("usr.account, ");
 		SQL.append("usr.full_name,");
 		SQL.append("usr.email,");
+		SQL.append("usr.mobile, usr.type, usr.create_time, usr.state, ");
 		SQL.append("src.source_id,");
 		SQL.append("src.source_name, ");
 		SQL.append("src.abbr, ");
