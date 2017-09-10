@@ -55,7 +55,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 
 		InfoId<Long> key = info.getInfoId();
 		Object[] params = new Object[]{
-				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getHashCode(),info.getStorageId(),info.getManager(),
+				info.getSourceId(),key.getId(),info.getWorkgroupName(),info.getTraceCode(),info.getStorageId(),info.getManager(),
 				info.getDescription(),info.getState(),info.getAdmin(),info.getCreator(),info.getOrgId(),info.getMemberGroupId(),
 				info.getPublishCabinet(),info.getNetdiskCabinet(),info.getOwm(),info.getPublishEnable(),info.getTaskEnable(),info.getParentId(),
 				info.getShareEnable(),info.getLinkEnable(),info.getPostEnable(),info.getNetdiskEnable(),info.getAvatarId(),info.getPostAcceptable(),
@@ -159,7 +159,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 		}
 		if(columnCheck(mode, colset, "hash_code")){
 			SQL.append("hash_code = ?, ");
-			params.add(info.getHashCode());
+			params.add(info.getTraceCode());
 		}
 		if(columnCheck(mode, colset, "manager")){
 			SQL.append("manager=?, ");

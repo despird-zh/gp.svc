@@ -89,7 +89,7 @@ public class WorkgroupDAOTest extends AbstractJUnit4SpringContextTests{
 			info.setState("s111");
 			info.setAdmin("s34");
 			
-			info.setHashCode("5iqwyerkxdfhsakdjhf");
+			info.setTraceCode("5iqwyerkxdfhsakdjhf");
 			info.setOwm(123l);
 			info.setShareEnable(true);
 			info.setLinkEnable(false);

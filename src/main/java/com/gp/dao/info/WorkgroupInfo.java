@@ -22,7 +22,7 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 	
 	private String description;
 	
-	private String hashCode;
+	private String traceCode;
 	
 	@NotEmpty
 	private String state;
@@ -195,12 +195,12 @@ public class WorkgroupInfo extends TraceableInfo<Long> {
 		this.netdiskCabinet = netdiskCabinet;
 	}
 
-	public String getHashCode() {
-		return hashCode;
+	public String getTraceCode() {
+		return traceCode;
 	}
 
-	public void setHashCode(String hashCode) {
-		this.hashCode = hashCode;
+	public void setTraceCode(String hashCode) {
+		this.traceCode = hashCode;
 	}
 
 	public Long getOwm() {

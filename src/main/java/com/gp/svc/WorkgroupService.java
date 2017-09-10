@@ -115,7 +115,7 @@ public interface WorkgroupService {
 			info.setPublishCabinet(rs.getLong("publish_cab_id"));
 			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
 			info.setOrgId(rs.getLong("org_id"));
-			info.setHashCode(rs.getString("hash_code"));
+			info.setTraceCode(rs.getString("hash_code"));
 			info.setOwm(rs.getLong("owm"));
 			info.setShareEnable(rs.getBoolean("share_enable"));
 			info.setLinkEnable(rs.getBoolean("link_enable"));
@@ -161,7 +161,7 @@ public interface WorkgroupService {
 			info.setPublishCabinet(rs.getLong("publish_cab_id"));
 			info.setNetdiskCabinet(rs.getLong("netdisk_cab_id"));
 			info.setOrgId(rs.getLong("org_id"));
-			info.setHashCode(rs.getString("hash_code"));
+			info.setTraceCode(rs.getString("trace_code"));
 			info.setOwm(rs.getLong("owm"));
 			info.setShareEnable(rs.getBoolean("share_enable"));
 			info.setLinkEnable(rs.getBoolean("link_enable"));
