@@ -58,7 +58,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 
         InfoId<Long> key = info.getInfoId();
         String prevSteps = CommonUtils.toJson(info.getPrevNodes());
-        String nextSteps = CommonUtils.toJson(info.getNextNodeMap(), Long.class);
+        String nextSteps = CommonUtils.toJson(info.getNextNodeMap());
         String executors = CommonUtils.toJson(info.getExecutors());
         Object[] params = new Object[]{
                 key.getId(),info.getFlowId(), info.getNodeName(), executors,
@@ -114,7 +114,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
         }
         if(columnCheck(mode, colset, "next_node_map")){
             SQL.append("next_node_map = ? ,");
-            String nextNodes = CommonUtils.toJson(info.getNextNodeMap(), Long.class);
+            String nextNodes = CommonUtils.toJson(info.getNextNodeMap());
             params.add(nextNodes);
         }
         if(columnCheck(mode, colset, "executors")){
