@@ -67,13 +67,6 @@ public class SystemServiceImpl implements SystemService{
 
 	Cache cache = null;
 
-	/**
-	 * default constructor 
-	 **/
-	public SystemServiceImpl(){
-		
-		ConfigSettingUtils.setSystemService(this);
-	}
 	
 	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
 	@Override
