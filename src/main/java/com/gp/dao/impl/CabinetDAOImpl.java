@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import com.gp.common.DataSourceHolder;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.info.CabinetInfo;
 import com.gp.info.FlatColLocator;
