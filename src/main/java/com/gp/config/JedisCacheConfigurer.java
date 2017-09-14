@@ -22,6 +22,8 @@ import org.springframework.data.redis.connection.RedisSentinelConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import com.gp.common.DataSourceHolder;
+
 /**
  * Conditional Configuration, when gp.cache is jedis following config works. 
  **/
@@ -73,9 +75,9 @@ public class JedisCacheConfigurer {
     		RedisCacheManager cacheManager = new RedisCacheManager(redisTemplate());
     		
     		Collection <String> names = Collections.emptySet();
-    		names.add(ServiceConfigurer.SYSSETTING_CACHE);
-    		names.add(ServiceConfigurer.TRANSFER_CACHE);
-    		names.add(ServiceConfigurer.DICTIONARY_CACHE);
+    		names.add(DataSourceHolder.SYSSETTING_CACHE);
+    		names.add(DataSourceHolder.TRANSFER_CACHE);
+    		names.add(DataSourceHolder.DICTIONARY_CACHE);
     		
     		cacheManager.setCacheNames(names);
     		return cacheManager;

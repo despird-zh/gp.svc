@@ -28,7 +28,7 @@ import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.GroupDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.OrgHierDAO;
@@ -63,7 +63,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 	@Autowired
 	private CommonService idservice;
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<Long> parentNodeId)
 			throws ServiceException {
@@ -89,7 +89,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		return orglist;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newOrgHierNode(ServiceContext svcctx, OrgHierInfo orginfo) throws ServiceException {
 		
@@ -130,7 +130,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean saveOrgHierNode(ServiceContext svcctx, OrgHierInfo orginfo) throws ServiceException {
 		try{
@@ -144,7 +144,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public OrgHierInfo getOrgHierNode(ServiceContext svcctx, InfoId<Long> orgid) throws ServiceException {
 		try{
@@ -157,7 +157,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeOrgHierNode(ServiceContext svcctx, InfoId<Long> orgid) throws ServiceException {
 
@@ -175,7 +175,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addOrgHierMember(ServiceContext svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -211,7 +211,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void removeOrgHierMember(ServiceContext svcctx, InfoId<Long> orgid, String... accounts)
 			throws ServiceException {
@@ -234,7 +234,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<UserLiteInfo> getOrgHierMembers(ServiceContext svcctx, InfoId<Long> orgid)
 			throws ServiceException {
@@ -271,7 +271,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public Map<Long, Integer> getOrgHierGrandNodeCount(ServiceContext svcctx, InfoId<Long> orgid)
 			throws ServiceException {
@@ -326,7 +326,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 		return routes;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierNodes(ServiceContext svcctx, InfoId<?>... orgids) throws ServiceException {
 		
@@ -341,7 +341,7 @@ public class OrgHierServiceImpl implements OrgHierService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<OrgHierInfo> getOrgHierAllNodes(ServiceContext svcctx, InfoId<Long> orgNodeId) throws ServiceException {
 		

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.WorkgroupDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -32,7 +32,7 @@ public class WorkgroupDAOImpl extends DAOSupport implements WorkgroupDAO{
 	Logger LOGGER = LoggerFactory.getLogger(WorkgroupDAOImpl.class);
 	
 	@Autowired
-	public WorkgroupDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public WorkgroupDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

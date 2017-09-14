@@ -24,9 +24,8 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.FavoriteDAO;
 import com.gp.dao.info.FavoriteInfo;
 import com.gp.info.FlatColLocator;
@@ -38,7 +37,7 @@ public class FavoriteDAOImpl extends DAOSupport implements FavoriteDAO{
 	Logger LOGGER = LoggerFactory.getLogger(FavoriteDAOImpl.class);
 	
 	@Autowired
-	public FavoriteDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public FavoriteDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

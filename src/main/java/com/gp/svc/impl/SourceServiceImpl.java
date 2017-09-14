@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.Sources.State;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.dao.SourceDAO;
@@ -43,7 +43,7 @@ public class SourceServiceImpl implements SourceService{
 	@Autowired
 	private PseudoDAO pseudodao;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public SourceInfo getSource(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
 		
@@ -56,7 +56,7 @@ public class SourceServiceImpl implements SourceService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public SourceInfo getSource(ServiceContext svcctx, String entity, String node) throws ServiceException {
 		
@@ -69,7 +69,7 @@ public class SourceServiceImpl implements SourceService{
 		}
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean saveSource(ServiceContext svcctx, SourceInfo instance) throws ServiceException {
 
@@ -82,7 +82,7 @@ public class SourceServiceImpl implements SourceService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<SourceInfo> getSources(ServiceContext svcctx, String instancename)
 			throws ServiceException {
@@ -117,7 +117,7 @@ public class SourceServiceImpl implements SourceService{
 		return rtv;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<SourceInfo> getSources(ServiceContext svcctx, String instancename, PageQuery pagequery)
 			throws ServiceException {
@@ -167,7 +167,7 @@ public class SourceServiceImpl implements SourceService{
 		return pwrapper;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean changeSourceState(ServiceContext svcctx, InfoId<Integer> instanceId, State state) throws ServiceException {
 
@@ -181,7 +181,7 @@ public class SourceServiceImpl implements SourceService{
 
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addExtSource(ServiceContext svcctx, SourceInfo instance) throws ServiceException {
 		try{
@@ -193,7 +193,7 @@ public class SourceServiceImpl implements SourceService{
 		}
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public Map<String, SourceInfo> getAccountSources(ServiceContext svcctx, List<String> accounts) throws ServiceException {
 		

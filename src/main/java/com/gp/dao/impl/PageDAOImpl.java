@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.PageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -30,7 +30,7 @@ public class PageDAOImpl extends DAOSupport implements PageDAO {
 	Logger LOGGER = LoggerFactory.getLogger(PageDAOImpl.class);
 	
 	@Autowired
-	public PageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public PageDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

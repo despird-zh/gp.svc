@@ -25,7 +25,7 @@ import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
@@ -70,7 +70,7 @@ public class FolderServiceImpl implements FolderService{
 	@Autowired
 	private CommonService idservice;
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFolder(ServiceContext svcctx, InfoId<Long> parentkey, CabFolderInfo folder, Acl acl)
 			throws ServiceException {
@@ -100,7 +100,7 @@ public class FolderServiceImpl implements FolderService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFolder(ServiceContext svcctx, InfoId<Long> folderid, InfoId<Long> destFolderId)
 			throws ServiceException {
@@ -141,7 +141,7 @@ public class FolderServiceImpl implements FolderService{
 		return folderid;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean moveFolder(ServiceContext svcctx, InfoId<Long> folderkey, InfoId<Long> destFolderId)
 			throws ServiceException {
@@ -162,7 +162,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext svcctx, InfoId<Long> folderkey, Ace ... aces)
 			throws ServiceException {
@@ -201,7 +201,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext svcctx, InfoId<Long> folderid, Acl acl)
 			throws ServiceException {
@@ -235,7 +235,7 @@ public class FolderServiceImpl implements FolderService{
 		}
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public CabinetInfo getCabinetInfo(ServiceContext svcctx, InfoId<Long> folderid)throws ServiceException{
 	
@@ -260,7 +260,7 @@ public class FolderServiceImpl implements FolderService{
 		return rtv;
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public CabFolderInfo getFolder(ServiceContext svcctx, InfoId<Long> folderid) throws ServiceException {
 		
@@ -272,7 +272,7 @@ public class FolderServiceImpl implements FolderService{
 
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public InfoId<Long> getFolderId(ServiceContext svcctx, InfoId<Long> cabinetId, String path)
 			throws ServiceException {
@@ -296,7 +296,7 @@ public class FolderServiceImpl implements FolderService{
 		return IdKeys.getInfoId(IdKey.GP_CAB_FOLDERS, id);
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public String getFolderPath(ServiceContext svcctx, InfoId<Long> folderId) throws ServiceException {
 		

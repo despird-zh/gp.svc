@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.OperationDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.UserDAO;
@@ -39,7 +39,7 @@ public class OperationServiceImpl implements OperationService {
 	@Autowired
 	UserDAO userdao;
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<OperationInfo> getWorkgroupOperations(ServiceContext svcctx, InfoId<Long> wid,
 														 PageQuery pagequery) throws ServiceException {
@@ -82,7 +82,7 @@ public class OperationServiceImpl implements OperationService {
 		return pwrapper;
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<OperationInfo> getAccountOperations(ServiceContext svcctx, String account, PageQuery pagequery)
 			throws ServiceException {
@@ -124,7 +124,7 @@ public class OperationServiceImpl implements OperationService {
 		return pwrapper;
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<OperationInfo> getObjectOperations(ServiceContext svcctx, InfoId<?> objectId,
 													  PageQuery pagequery) throws ServiceException {
@@ -167,7 +167,7 @@ public class OperationServiceImpl implements OperationService {
 		return pwrapper;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addOperation(OperationInfo operlog) throws ServiceException {
 

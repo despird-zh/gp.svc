@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.UserSumDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -29,7 +29,7 @@ public class UserSumDAOImpl extends DAOSupport implements UserSumDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(UserSumDAOImpl.class);
 	
 	@Autowired
-	public UserSumDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public UserSumDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

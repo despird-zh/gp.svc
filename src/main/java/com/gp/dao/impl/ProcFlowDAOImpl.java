@@ -1,7 +1,7 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ProcFlowDAO;
 import com.gp.dao.info.ProcFlowInfo;
 import com.gp.info.FlatColLocator;
@@ -29,7 +29,7 @@ public class ProcFlowDAOImpl extends DAOSupport implements ProcFlowDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(ProcFlowDAOImpl.class);
 	
 	@Autowired
-    public ProcFlowDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
+    public ProcFlowDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }
 

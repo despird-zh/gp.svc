@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.DataSourceHolder;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.config.ServiceConfigurer;
@@ -28,7 +29,7 @@ public class ChatDAOImpl extends DAOSupport implements ChatDAO{
 	Logger LOGGER = LoggerFactory.getLogger(ChatDAOImpl.class);
 	
 	@Autowired
-	public ChatDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ChatDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

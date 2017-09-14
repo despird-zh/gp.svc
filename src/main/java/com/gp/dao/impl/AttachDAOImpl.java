@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import com.gp.common.DataSourceHolder;
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
 import com.gp.dao.AttachDAO;
 import com.gp.dao.info.AttachInfo;
 import com.gp.info.FlatColLocator;
@@ -28,7 +28,7 @@ public class AttachDAOImpl extends DAOSupport implements AttachDAO{
 	Logger LOGGER = LoggerFactory.getLogger(AttachDAOImpl.class);
 	
 	@Autowired
-	public AttachDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public AttachDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

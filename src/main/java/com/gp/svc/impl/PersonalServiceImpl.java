@@ -27,7 +27,7 @@ import com.gp.common.IdKeys;
 import com.gp.common.Images;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.ImageDAO;
 import com.gp.dao.MemberSettingDAO;
@@ -81,7 +81,7 @@ public class PersonalServiceImpl implements PersonalService{
 	@Autowired
 	CommonService idService;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<CombineInfo<WorkgroupInfo, Boolean>> getWorkgroups(ServiceContext svcctx, String account) throws ServiceException {
 		
@@ -124,7 +124,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<CombineInfo<OrgHierInfo, Boolean>> getOrgHierNodes(ServiceContext svcctx, String account) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_orghier_mbrs ");
@@ -165,7 +165,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, String account)
 			throws ServiceException {
@@ -191,7 +191,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<GroupMemberInfo> getOrgHierMembers(ServiceContext svcctx, String account)
 			throws ServiceException {
@@ -217,7 +217,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public UserSumInfo getUserSummary(ServiceContext svcctx, String account) throws ServiceException {
 		
@@ -230,7 +230,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<ChatMessageInfo> getChatMessages(ServiceContext svcctx, String account, PageQuery pquery)
 			throws ServiceException {
@@ -238,7 +238,7 @@ public class PersonalServiceImpl implements PersonalService{
 		return null;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateBasicSetting(ServiceContext svcctx, UserInfo uinfo, String avatarImg) throws ServiceException {
 		
@@ -278,7 +278,7 @@ public class PersonalServiceImpl implements PersonalService{
 		
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateBelongSetting(ServiceContext svcctx, String account,Map<InfoId<Long>, Boolean> settings) throws ServiceException {
 		
@@ -317,7 +317,7 @@ public class PersonalServiceImpl implements PersonalService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateStorageSetting(ServiceContext svcctx,InfoId<Long> userid, Long storageId, Long publishcap, Long netdiskcap)
 			throws ServiceException {
@@ -344,7 +344,7 @@ public class PersonalServiceImpl implements PersonalService{
 		
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateRegionSetting(ServiceContext svcctx, InfoId<Long> userid, String timezone, String language)
 			throws ServiceException {

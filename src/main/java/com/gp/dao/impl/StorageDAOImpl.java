@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.StorageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -28,7 +28,7 @@ public class StorageDAOImpl extends DAOSupport implements StorageDAO{
 	public static Logger LOGGER = LoggerFactory.getLogger(StorageDAOImpl.class);
 	
 	@Autowired
-	public StorageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public StorageDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.AuditDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -35,7 +35,7 @@ public class AuditServiceImpl implements AuditService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<AuditInfo> getAudits(ServiceContext svcctx, String subject, String object, String operation) throws ServiceException {
 		
@@ -81,7 +81,7 @@ public class AuditServiceImpl implements AuditService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean deleteAudit(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 
@@ -93,7 +93,7 @@ public class AuditServiceImpl implements AuditService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addAudit(AuditInfo ainfo) throws ServiceException {
 		try{
@@ -104,7 +104,7 @@ public class AuditServiceImpl implements AuditService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean purgeAudits(ServiceContext svcctx, String subject, String objectType, Date reservedate)
 			throws ServiceException {

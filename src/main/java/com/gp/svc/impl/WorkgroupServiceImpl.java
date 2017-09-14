@@ -27,7 +27,7 @@ import com.gp.common.IdKeys;
 import com.gp.common.Images;
 import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.common.ServiceContext;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupDAO;
@@ -112,7 +112,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	 * @return the info id object
 	 * 
 	 **/
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 		
@@ -223,7 +223,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	/**
 	 * Change the workgroup and related cabinet storage quota information.
 	 **/
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateWorkgroup(ServiceContext svcctx, WorkgroupInfo winfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 		
@@ -280,7 +280,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return cnt > 0;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public WorkgroupInfo getWorkgroup(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
@@ -292,7 +292,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId) throws ServiceException {
@@ -334,7 +334,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<GroupMemberInfo> getWorkgroupMembers(ServiceContext svcctx, InfoId<Long> wkey, 
 			String uname , InfoId<Integer> sourceId, PageQuery pagequery) throws ServiceException {
@@ -391,7 +391,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return pwrapper;
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addWorkgroupMember(ServiceContext svcctx,InfoId<Long> wkey, GroupUserInfo memberinfo)
 			throws ServiceException {
@@ -426,7 +426,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return true;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeWorkgroupMember(ServiceContext svcctx, InfoId<Long> wkey, String account)
 			throws ServiceException {
@@ -448,7 +448,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname) throws ServiceException {
 		
@@ -488,7 +488,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<UserExtInfo> getAvailableUsers(ServiceContext svcctx, InfoId<Long> wkey, String uname, PageQuery pagequery) throws ServiceException {
 		
@@ -542,7 +542,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return pwrapper;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<GroupInfo> getWorkgroupGroups(ServiceContext svcctx, InfoId<Long> wkey, String gname) throws ServiceException {
 		
@@ -575,7 +575,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addWorkgroupGroup(ServiceContext svcctx, GroupInfo ginfo)
 			throws ServiceException {
@@ -605,7 +605,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return cnt > 0;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> wkey, String gname)
 			throws ServiceException {
@@ -620,7 +620,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeWorkgroupGroup(ServiceContext svcctx, InfoId<Long> groupid)
 			throws ServiceException {
@@ -632,7 +632,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String... accounts)
 			throws ServiceException {
@@ -661,7 +661,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return true;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserInfo> getWorkgroupGroupMembers(ServiceContext svcctx, InfoId<Long> groupid) throws ServiceException {
 
@@ -689,7 +689,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeWorkgroupGroupMember(ServiceContext svcctx, InfoId<Long> groupid, String... accounts)
 			throws ServiceException {
@@ -704,7 +704,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return true;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<WorkgroupExtInfo> getLocalWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
@@ -742,7 +742,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<WorkgroupExtInfo> getMirrorWorkgroups(ServiceContext svcctx, String gname) throws ServiceException {
 		
@@ -778,7 +778,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public WorkgroupExtInfo getWorkgroupExt(ServiceContext svcctx, InfoId<Long> wkey) throws ServiceException {
 		
@@ -812,7 +812,7 @@ public class WorkgroupServiceImpl implements WorkgroupService{
 	}
 
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<WorkgroupLite> getLocalWorkgroups(ServiceContext svcctx, String gname,List<String> tags, PageQuery pagequery)
 			throws ServiceException {

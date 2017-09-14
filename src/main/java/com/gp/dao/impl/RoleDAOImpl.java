@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.RoleDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -29,7 +29,7 @@ public class RoleDAOImpl extends DAOSupport implements RoleDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(TagDAOImpl.class);
 	
 	@Autowired
-	public RoleDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public RoleDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

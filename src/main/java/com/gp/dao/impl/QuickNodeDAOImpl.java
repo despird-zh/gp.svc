@@ -2,7 +2,7 @@ package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.QuickFlows;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.QuickNodeDAO;
 import com.gp.dao.info.QuickNodeInfo;
@@ -38,7 +38,7 @@ public class QuickNodeDAOImpl extends DAOSupport implements QuickNodeDAO{
 	PseudoDAO pseudodao;
 	
 	@Autowired
-    public QuickNodeDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
+    public QuickNodeDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }
 

@@ -25,7 +25,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.MeasureDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -37,7 +37,7 @@ public class MeasureDAOImpl extends DAOSupport implements MeasureDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(MeasureDAOImpl.class);
 
 	@Autowired
-	public MeasureDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public MeasureDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

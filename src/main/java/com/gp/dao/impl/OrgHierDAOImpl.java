@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.OrgHierDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -32,7 +32,7 @@ public class OrgHierDAOImpl extends DAOSupport implements OrgHierDAO{
 	Logger LOGGER = LoggerFactory.getLogger(OrgHierDAOImpl.class);
 		
 	@Autowired
-	public OrgHierDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public OrgHierDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

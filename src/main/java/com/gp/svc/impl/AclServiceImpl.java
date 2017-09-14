@@ -19,7 +19,7 @@ import com.gp.acl.Acl;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.PseudoDAO;
@@ -48,7 +48,7 @@ public class AclServiceImpl implements AclService{
 	@Autowired
 	CommonService idService;
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> addAclInfo(ServiceContext svcctx, List<CabAceInfo> aces)  throws ServiceException{
 
@@ -74,7 +74,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> addAceInfo(ServiceContext svcctx, InfoId<Long> aclId, CabAceInfo ace) throws ServiceException{
 		
@@ -105,7 +105,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addAceInfos(ServiceContext svcctx, InfoId<Long> aclId, CabAceInfo ... aces)  throws ServiceException{
 		try{
@@ -133,7 +133,7 @@ public class AclServiceImpl implements AclService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public CabAceInfo getAceInfo(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
@@ -149,7 +149,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public Acl getAcl(ServiceContext svcctx, InfoId<Long> aclId)  throws ServiceException{
 		
@@ -193,7 +193,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public Ace getAce(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		
@@ -231,7 +231,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeAcl(ServiceContext svcctx, InfoId<Long> aclId)  throws ServiceException{
 
@@ -245,7 +245,7 @@ public class AclServiceImpl implements AclService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeAce(ServiceContext svcctx, InfoId<Long> aclId, String aceType, String subject)  throws ServiceException{
 		

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.DictionaryDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -40,7 +40,7 @@ public class DictionaryServiceImpl implements DictionaryService{
 	@Autowired
 	PseudoDAO pseudodao;
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<DictionaryInfo> getDictEntries(ServiceContext svcctx, String dictGroup, String keyFilter) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
@@ -74,8 +74,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
-	@CachePut(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictinfo.infoId")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@CachePut(value=DataSourceHolder.DICTIONARY_CACHE, key="#dictinfo.infoId")
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateDictEntry(ServiceContext svcctx, DictionaryInfo dictinfo) throws ServiceException {
 
@@ -87,8 +87,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
-	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictId")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Cacheable(value=DataSourceHolder.DICTIONARY_CACHE, key="#dictId")
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext svcctx, InfoId<Long> dictId)throws ServiceException 
 	{
@@ -99,8 +99,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 	
-	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictkey")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Cacheable(value=DataSourceHolder.DICTIONARY_CACHE, key="#dictkey")
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(ServiceContext svcctx, String dictKey) throws ServiceException {
 		
@@ -126,8 +126,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
-	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictKey")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Cacheable(value=DataSourceHolder.DICTIONARY_CACHE, key="#dictKey")
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public DictionaryInfo getDictEntry(String dictKey, boolean property) {
 		StringBuffer SQL = new StringBuffer();
@@ -153,8 +153,8 @@ public class DictionaryServiceImpl implements DictionaryService{
 		}
 	}
 
-	@Cacheable(value=ServiceConfigurer.DICTIONARY_CACHE, key="#dictGroup")
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Cacheable(value=DataSourceHolder.DICTIONARY_CACHE, key="#dictGroup")
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<DictionaryInfo> getDictGroupEntries(String dictGroup) {
 		StringBuffer SQL = new StringBuffer();

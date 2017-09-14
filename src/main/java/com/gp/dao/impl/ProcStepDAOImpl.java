@@ -1,7 +1,7 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ProcStepDAO;
 import com.gp.dao.info.ProcStepInfo;
 import com.gp.info.FlatColLocator;
@@ -30,7 +30,7 @@ public class ProcStepDAOImpl extends DAOSupport implements ProcStepDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(ProcStepDAOImpl.class);
 	
 	@Autowired
-    public ProcStepDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
+    public ProcStepDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }
 

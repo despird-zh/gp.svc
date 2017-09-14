@@ -14,6 +14,7 @@ import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.google.common.cache.CacheBuilder;
+import com.gp.common.DataSourceHolder;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -54,7 +55,7 @@ public class GuavaCacheConfigurer {
 	@Bean
 	public Cache fileTransferCache(){
 		
-		GuavaCache cache2 = new GuavaCache(ServiceConfigurer.TRANSFER_CACHE, CacheBuilder.newBuilder()
+		GuavaCache cache2 = new GuavaCache(DataSourceHolder.TRANSFER_CACHE, CacheBuilder.newBuilder()
 	             .expireAfterAccess(30, TimeUnit.MINUTES)
 	             .build());
 		
@@ -67,7 +68,7 @@ public class GuavaCacheConfigurer {
 	@Bean
 	public Cache sysSettingCache(){
 
-		GuavaCache cache2 = new GuavaCache(ServiceConfigurer.SYSSETTING_CACHE, CacheBuilder.newBuilder()
+		GuavaCache cache2 = new GuavaCache(DataSourceHolder.SYSSETTING_CACHE, CacheBuilder.newBuilder()
 	             .expireAfterAccess(30, TimeUnit.MINUTES)
 	             .build());
 		
@@ -80,7 +81,7 @@ public class GuavaCacheConfigurer {
 	@Bean
 	public Cache dictionaryCache(){
 
-		GuavaCache cache2 = new GuavaCache(ServiceConfigurer.DICTIONARY_CACHE, CacheBuilder.newBuilder()
+		GuavaCache cache2 = new GuavaCache(DataSourceHolder.DICTIONARY_CACHE, CacheBuilder.newBuilder()
 	             .expireAfterAccess(30, TimeUnit.MINUTES)
 	             .build());
 		

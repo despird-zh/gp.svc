@@ -22,7 +22,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.exception.BaseException;
 import com.gp.exception.ServiceException;
 import com.gp.info.InfoId;
@@ -69,7 +69,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 	@Autowired
 	CommonService idservice;
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void launchPostPublic(ServiceContext svcctx, String descr,InfoId<Long> wgroupId,  InfoId<Long> postId) throws ServiceException {
 
@@ -164,7 +164,7 @@ public class QuickFlowServiceImpl implements QuickFlowService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void submitPostPublic(ServiceContext svcctx,InfoId<Long> currStepId, String opinion, String comment) throws ServiceException {
 		// find the next node

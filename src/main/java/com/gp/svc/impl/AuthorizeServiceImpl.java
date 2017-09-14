@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.PageDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.RoleDAO;
@@ -44,14 +44,14 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<RoleInfo> getAllRoles() throws ServiceException {
 		
 		return roledao.queryAll();
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<RolePageInfo> getRolePages(InfoId<Integer> roleId) throws ServiceException {
 		
@@ -71,7 +71,7 @@ public class AuthorizeServiceImpl implements AuthorizeService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean setPagePerms(InfoId<Integer> roleId, InfoId<Integer> pageId, Map<FlatColLocator, Boolean> perms)
 			throws ServiceException {

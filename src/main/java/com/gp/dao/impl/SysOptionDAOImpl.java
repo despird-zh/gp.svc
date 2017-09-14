@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.SysOptionDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -28,7 +28,7 @@ public class SysOptionDAOImpl extends DAOSupport implements SysOptionDAO{
 	Logger LOGGER = LoggerFactory.getLogger(SysOptionDAOImpl.class);
 	
 	@Autowired
-	public SysOptionDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public SysOptionDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

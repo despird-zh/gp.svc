@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.NotificationDispatchDAO;
 import com.gp.dao.info.NotificationDispatchInfo;
 import com.gp.info.FlatColLocator;
@@ -29,7 +29,7 @@ public class NotificationDispatchDAOImpl extends DAOSupport implements Notificat
 	static Logger LOGGER = LoggerFactory.getLogger(NotificationDispatchDAOImpl.class);
 	
 	@Autowired
-	public NotificationDispatchDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public NotificationDispatchDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

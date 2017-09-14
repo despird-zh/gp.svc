@@ -1,7 +1,7 @@
 package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.QuickFlowDAO;
 import com.gp.dao.info.QuickFlowInfo;
 import com.gp.info.FlatColLocator;
@@ -28,7 +28,7 @@ public class QuickFlowDAOImpl extends DAOSupport implements QuickFlowDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(QuickFlowDAOImpl.class);
 	
 	@Autowired
-    public QuickFlowDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
+    public QuickFlowDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource){
         this.setDataSource(dataSource);
     }
 

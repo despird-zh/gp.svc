@@ -33,7 +33,7 @@ import com.gp.common.SystemOptions;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.ServiceContext;
 import com.gp.common.GroupUsers.UserState;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.CabinetDAO;
 import com.gp.dao.GroupUserDAO;
 import com.gp.dao.PseudoDAO;
@@ -85,7 +85,7 @@ public class SecurityServiceImpl implements SecurityService{
 	@Autowired 
 	SystemService systemservice;
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newAccount(ServiceContext svcctx, UserInfo uinfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 			
@@ -151,7 +151,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public int updateAccount(ServiceContext svcctx, UserInfo uinfo, Long pubcapacity, Long pricapacity) throws ServiceException {
 
@@ -201,7 +201,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newAccountExt(ServiceContext svcctx, UserInfo uinfo) throws ServiceException {
 
@@ -219,7 +219,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public UserInfo getAccountLite(ServiceContext svcctx, InfoId<Long> userId, String account, String type) throws ServiceException {
 		
@@ -246,7 +246,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public String getAccountRole(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
@@ -275,7 +275,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return role;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserLiteInfo> getAccounts(ServiceContext svcctx, List<Long> userids, List<String> accounts) throws ServiceException {
 
@@ -330,7 +330,7 @@ public class SecurityServiceImpl implements SecurityService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public Set<KVPair<Long, String>> getAccountGroups(ServiceContext svcctx, InfoId<Long> wgroupId, String account)
 			throws ServiceException {
@@ -370,7 +370,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return grpset;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeAccount(ServiceContext svcctx, InfoId<Long> userId, String account) throws ServiceException {
 		
@@ -405,7 +405,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;		
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean changePassword(ServiceContext svcctx, String account, String password) throws ServiceException {
 		int cnt = -1;
@@ -418,7 +418,7 @@ public class SecurityServiceImpl implements SecurityService{
 		
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public boolean existAccount(ServiceContext svcctx, String account) throws ServiceException {
 		try{
@@ -428,7 +428,7 @@ public class SecurityServiceImpl implements SecurityService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public UserExtInfo getAccountFull(ServiceContext svcctx, InfoId<Long> userId, String account, String type)
 			throws ServiceException {
@@ -476,7 +476,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return CollectionUtils.isEmpty(users)? null : users.get(0);
 	}	
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] types,String[] states)
 			throws ServiceException {
@@ -538,7 +538,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return rtv;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<UserExtInfo> getAccounts(ServiceContext svcctx, String accountname, Integer instanceId, String[] type, PageQuery pagequery)
 			throws ServiceException {
@@ -599,7 +599,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return pwrapper;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateLogonTrace(ServiceContext svcctx ,InfoId<Long> userkey, boolean resetRetry) throws ServiceException {
 		
@@ -631,7 +631,7 @@ public class SecurityServiceImpl implements SecurityService{
 		return cnt > 0;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean changeAccountState(ServiceContext svcctx, InfoId<Long> userkey, UserState state) throws ServiceException {
 		StringBuffer SQL = new StringBuffer();
@@ -689,7 +689,7 @@ public class SecurityServiceImpl implements SecurityService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newToken(ServiceContext svcctx, TokenInfo token) throws ServiceException {
 		token.setModifier(svcctx.getPrincipal().getAccount());

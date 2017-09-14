@@ -36,7 +36,7 @@ import org.springframework.util.FileCopyUtils;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ImageDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.ImageInfo;
@@ -48,7 +48,7 @@ public class ImageDAOImpl extends DAOSupport implements ImageDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(ImageDAOImpl.class);
 	
 	@Autowired
-	public ImageDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ImageDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

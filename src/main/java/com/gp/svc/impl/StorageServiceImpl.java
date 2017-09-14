@@ -19,7 +19,7 @@ import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.BinaryDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.StorageDAO;
@@ -48,7 +48,7 @@ public class StorageServiceImpl implements StorageService{
 	@Autowired
 	private PseudoDAO pseudodao;
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newBinary(ServiceContext svcctx, BinaryInfo binary) throws ServiceException {
 
@@ -64,14 +64,14 @@ public class StorageServiceImpl implements StorageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public BinaryInfo getBinaryByHash(ServiceContext svcctx, String hashstr) throws ServiceException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public BinaryInfo getBinary(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{			
@@ -82,7 +82,7 @@ public class StorageServiceImpl implements StorageService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeBinary(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		
@@ -95,7 +95,7 @@ public class StorageServiceImpl implements StorageService{
 
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newStorage(ServiceContext svcctx, StorageInfo storage) throws ServiceException {
 		try{
@@ -106,7 +106,7 @@ public class StorageServiceImpl implements StorageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public StorageInfo getStorage(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
 		try{
@@ -116,7 +116,7 @@ public class StorageServiceImpl implements StorageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public boolean existStorage(ServiceContext svcctx, String storagename) throws ServiceException {
 		String CNT_SQL = "SELECT Count(storage_id) from gp_storages where storage_name = '" + storagename + "'";
@@ -127,14 +127,14 @@ public class StorageServiceImpl implements StorageService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void updateStorage(ServiceContext svcctx, InfoId<Integer> id, int used) throws ServiceException {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeStorage(ServiceContext svcctx, InfoId<Integer> id) throws ServiceException {
 		try{
@@ -146,7 +146,7 @@ public class StorageServiceImpl implements StorageService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<StorageInfo> getStorages(ServiceContext svcctx, String storagename, String[] types, String[] states) throws ServiceException {
 
@@ -183,7 +183,7 @@ public class StorageServiceImpl implements StorageService{
 		return rtv;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public PageWrapper<StorageInfo> getStorages(ServiceContext svcctx, String storagename, PageQuery pagequery) throws ServiceException {
 
@@ -223,7 +223,7 @@ public class StorageServiceImpl implements StorageService{
 		return pwrapper;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void updateStorage(ServiceContext svcctx, StorageInfo storage) throws ServiceException {
 		

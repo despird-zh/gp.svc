@@ -25,7 +25,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.CabFileDAO;
 import com.gp.dao.CabFolderDAO;
 import com.gp.dao.CabinetDAO;
@@ -59,7 +59,7 @@ public class CabinetServiceImpl implements CabinetService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public CabinetInfo getCabinet(ServiceContext svcctx, InfoId<Long> ckey) throws ServiceException {
 
@@ -72,7 +72,7 @@ public class CabinetServiceImpl implements CabinetService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<CabFolderInfo> getCabFolders(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername) throws ServiceException {
@@ -131,7 +131,7 @@ public class CabinetServiceImpl implements CabinetService{
 
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<CabFolderInfo> getCabFolders(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String foldername, PageQuery pagequery) throws ServiceException {
@@ -208,7 +208,7 @@ public class CabinetServiceImpl implements CabinetService{
 
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<CabFileInfo> getCabFiles(ServiceContext svcctx, InfoId<Long> ckey, InfoId<Long> folderkey,
 			String filename) throws ServiceException {
@@ -268,7 +268,7 @@ public class CabinetServiceImpl implements CabinetService{
 
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<CabFileInfo> getCabFiles(ServiceContext svcctx, 
 			InfoId<Long> ckey,
@@ -347,7 +347,7 @@ public class CabinetServiceImpl implements CabinetService{
 		return pwrapper;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<CabEntryInfo> getCabEntries(ServiceContext svcctx, 
 			InfoId<Long> ckey,
@@ -428,7 +428,7 @@ public class CabinetServiceImpl implements CabinetService{
 		return pwrapper;
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<CabinetInfo> getCabinets(ServiceContext svcctx, String account) throws ServiceException {
 

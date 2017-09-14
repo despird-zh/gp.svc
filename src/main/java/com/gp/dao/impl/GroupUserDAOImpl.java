@@ -19,7 +19,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.GroupUserDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.dao.info.GroupUserInfo;
@@ -31,7 +31,7 @@ public class GroupUserDAOImpl extends DAOSupport implements GroupUserDAO{
 	Logger LOGGER = LoggerFactory.getLogger(GroupUserDAOImpl.class);
 	
 	@Autowired
-	public GroupUserDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public GroupUserDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

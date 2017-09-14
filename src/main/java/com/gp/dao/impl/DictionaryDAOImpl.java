@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.DictionaryDAO;
 import com.gp.dao.info.DictionaryInfo;
 import com.gp.info.FlatColLocator;
@@ -30,7 +30,7 @@ public class DictionaryDAOImpl extends DAOSupport implements DictionaryDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(DictionaryDAOImpl.class);
 	
 	@Autowired
-	public DictionaryDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public DictionaryDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

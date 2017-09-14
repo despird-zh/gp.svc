@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ShareToDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -24,7 +24,7 @@ import com.gp.dao.info.ShareToInfo;
 public class ShareToDAOImpl extends DAOSupport implements ShareToDAO{
 
 	@Autowired
-	public ShareToDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public ShareToDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.TagDAO;
 import com.gp.dao.TagRelDAO;
@@ -53,7 +53,7 @@ public class TagServiceImpl implements TagService{
 	@Autowired
 	CommonService idservice;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext svcctx, String tagType) throws ServiceException {
 		
@@ -66,7 +66,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext svcctx, String tagType, String category) throws ServiceException {
 		List<TagInfo> result;
@@ -78,7 +78,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<TagInfo> getTags(ServiceContext svcctx, String category, InfoId<Long> objectId) throws ServiceException {
 		
@@ -115,7 +115,7 @@ public class TagServiceImpl implements TagService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public Map<InfoId<Long>, Set<TagInfo>> getTags(ServiceContext svcctx, List<InfoId<Long>> objectIds) throws ServiceException {
 		
@@ -180,7 +180,7 @@ public class TagServiceImpl implements TagService{
 		
 	}
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newTag(ServiceContext svcctx, TagInfo taginfo) throws ServiceException {
 		
@@ -196,7 +196,7 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeTag(ServiceContext svcctx, String tagType, String tagName) throws ServiceException {
 		
@@ -207,7 +207,7 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeTag(ServiceContext svcctx, InfoId<Long> tagKey) throws ServiceException {
 		
@@ -218,7 +218,7 @@ public class TagServiceImpl implements TagService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean attachTag(ServiceContext svcctx, InfoId<?> objectId, String category, String tagName)
 			throws ServiceException {

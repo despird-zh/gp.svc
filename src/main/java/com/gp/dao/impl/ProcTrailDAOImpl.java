@@ -2,7 +2,7 @@ package com.gp.dao.impl;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.QuickFlows;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ProcTrailDAO;
 import com.gp.dao.info.ProcTrailInfo;
 import com.gp.info.FlatColLocator;
@@ -31,7 +31,7 @@ import java.util.Set;
 public class ProcTrailDAOImpl extends DAOSupport implements ProcTrailDAO{
 
     @Autowired
-    public ProcTrailDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource){
+    public ProcTrailDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource){
 
         this.setDataSource(dataSource);
     }

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.FavoriteDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -30,7 +30,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 	@Autowired
 	PseudoDAO pseudodao;
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public Map<InfoId<Long>, Integer> getFavFileSummary(ServiceContext svcctx,  List<InfoId<Long>>infoids )throws ServiceException{
 		
@@ -52,7 +52,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 
 	}
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public Map<InfoId<Long>, Integer> getFavFolderSummary(ServiceContext svcctx, List<InfoId<Long>>infoids )throws ServiceException{
 		
@@ -71,7 +71,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 		return rtv;
 	}
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<FavoriteInfo> getFavorites(ServiceContext svcctx,String type, String favoriter)throws ServiceException{
 		
@@ -87,7 +87,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 		return rtv;
 	}
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR)
+	@Transactional(value=DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean addFavorite(ServiceContext svcctx, FavoriteInfo fav)throws ServiceException{
 		
@@ -109,7 +109,7 @@ public class FavoriteServiceImpl implements FavoriteService{
 		
 	}
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR)
+	@Transactional(value=DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeFavorite(ServiceContext svcctx, String favoriter, InfoId<Long> resourceId)throws ServiceException{
 		

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gp.common.FlatColumns;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.ImageDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -33,7 +33,7 @@ public class ImageServiceImpl implements ImageService{
 	@Autowired
 	ImageDAO imagedao;
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public ImageInfo getImage(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 
@@ -45,7 +45,7 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<ImageInfo> getImages(ServiceContext svcctx, String format, String category) throws ServiceException {
 		
@@ -71,7 +71,7 @@ public class ImageServiceImpl implements ImageService{
 		return result;
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public ImageInfo getImage(ServiceContext svcctx, InfoId<Long> id, String parentPath)
 			throws ServiceException {
@@ -85,7 +85,7 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean newImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
@@ -98,7 +98,7 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateImage(ServiceContext svcctx, ImageInfo info) throws ServiceException {
 		try{
@@ -112,7 +112,7 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean removeImage(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{
@@ -124,7 +124,7 @@ public class ImageServiceImpl implements ImageService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public String getImageName(ServiceContext svcctx, InfoId<Long> id) throws ServiceException {
 		try{

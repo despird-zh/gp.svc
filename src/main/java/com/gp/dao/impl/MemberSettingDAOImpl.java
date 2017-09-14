@@ -20,7 +20,7 @@ import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKey;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.MemberSettingDAO;
 import com.gp.info.FlatColLocator;
 import com.gp.info.InfoId;
@@ -32,7 +32,7 @@ public class MemberSettingDAOImpl extends DAOSupport implements MemberSettingDAO
 	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
-	public MemberSettingDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public MemberSettingDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

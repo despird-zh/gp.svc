@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.gp.common.FlatColumns;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.SourceDAO;
 import com.gp.dao.info.SourceInfo;
 import com.gp.info.FlatColLocator;
@@ -29,7 +29,7 @@ public class SourceDAOImpl extends DAOSupport implements SourceDAO{
 	static Logger LOGGER = LoggerFactory.getLogger(SourceDAOImpl.class);
 	
 	@Autowired
-	public SourceDAOImpl(@Qualifier(ServiceConfigurer.DATA_SRC)DataSource dataSource) {
+	public SourceDAOImpl(@Qualifier(DataSourceHolder.DATA_SRC)DataSource dataSource) {
 		setDataSource(dataSource);
 	}
 	

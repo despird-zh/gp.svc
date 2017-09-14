@@ -22,7 +22,7 @@ import com.gp.common.GeneralConstants;
 import com.gp.common.IdKey;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.PseudoDAO;
 import com.gp.dao.SysOptionDAO;
 import com.gp.dao.UserDAO;
@@ -34,7 +34,6 @@ import com.gp.pagination.PageWrapper;
 import com.gp.pagination.PaginationHelper;
 import com.gp.pagination.PaginationInfo;
 import com.gp.svc.SystemService;
-import com.gp.util.ConfigSettingUtils;
 import com.gp.util.DateTimeUtils;
 
 /**
@@ -62,13 +61,13 @@ public class SystemServiceImpl implements SystemService{
 	
 	@Autowired
 	public void setCacheManager(CacheManager cacheManager) {
-		cache = cacheManager.getCache(ServiceConfigurer.SYSSETTING_CACHE);
+		cache = cacheManager.getCache(DataSourceHolder.SYSSETTING_CACHE);
 	}
 
 	Cache cache = null;
 
 	
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<SysOptionInfo> getOptions(ServiceContext svcctx) throws ServiceException {
 		try{
@@ -78,7 +77,7 @@ public class SystemServiceImpl implements SystemService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public List<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey) throws ServiceException {
 		StringBuffer SQL = new StringBuffer("SELECT * FROM gp_sys_options ");
@@ -101,7 +100,7 @@ public class SystemServiceImpl implements SystemService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
 	@Override
 	public PageWrapper<SysOptionInfo> getOptions(ServiceContext svcctx, String groupKey, PageQuery pagequery) throws ServiceException {
 		
@@ -146,7 +145,7 @@ public class SystemServiceImpl implements SystemService{
 		return pwrapper;
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean updateOption(ServiceContext svcctx, String optKey, String value) throws ServiceException {
 		
@@ -166,8 +165,8 @@ public class SystemServiceImpl implements SystemService{
 
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
-	@CacheEvict(value=ServiceConfigurer.SYSSETTING_CACHE, key="#oKey")
+	@Transactional(DataSourceHolder.TRNS_MGR)
+	@CacheEvict(value=DataSourceHolder.SYSSETTING_CACHE, key="#oKey")
 	@Override
 	public boolean updateOption(ServiceContext svcctx, InfoId<Long> oKey, String value) throws ServiceException {
 		

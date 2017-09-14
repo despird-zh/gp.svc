@@ -20,7 +20,7 @@ import com.gp.common.IdKey;
 import com.gp.common.IdKeys;
 import com.gp.common.ServiceContext;
 import com.gp.common.FlatColumns.FilterMode;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.CabAceDAO;
 import com.gp.dao.CabAclDAO;
 import com.gp.dao.CabFileDAO;
@@ -70,7 +70,7 @@ public class FileServiceImpl implements FileService{
 	@Autowired
 	private CommonService idservice;
 	
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public List<CabVersionInfo> getVersions(ServiceContext svcctx, InfoId<Long> filekey) throws ServiceException {
 		
@@ -86,7 +86,7 @@ public class FileServiceImpl implements FileService{
 		return versions;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> newFile(ServiceContext svcctx, CabFileInfo file, Acl acl) throws ServiceException {
 
@@ -109,7 +109,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> copyFile(ServiceContext svcctx, InfoId<Long> srcfileId, InfoId<Long> destFolderId)
 			throws ServiceException {
@@ -133,7 +133,7 @@ public class FileServiceImpl implements FileService{
 		return fkey;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean moveFile(ServiceContext svcctx, InfoId<Long> srcFileId, InfoId<Long> destFolderId)
 			throws ServiceException {
@@ -155,7 +155,7 @@ public class FileServiceImpl implements FileService{
 
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public InfoId<Long> newVersion(ServiceContext svcctx, InfoId<Long> filekey) throws ServiceException {
 
@@ -198,7 +198,7 @@ public class FileServiceImpl implements FileService{
 		return vkey;
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addAce(ServiceContext svcctx, InfoId<Long> cabfileId, Ace ace) throws ServiceException {
 		
@@ -233,7 +233,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void removeAce(ServiceContext svcctx, InfoId<Long> cabfileId, String type,String subject) throws ServiceException {
 		
@@ -247,7 +247,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 	
-	@Transactional(ServiceConfigurer.TRNS_MGR)
+	@Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public void addAcl(ServiceContext svcctx, InfoId<Long> cabfileId, Acl acl) throws ServiceException {
 		
@@ -279,7 +279,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public StorageInfo getStorage(InfoId<Long> fileid) throws ServiceException {
 		
@@ -309,7 +309,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public CabinetInfo getCabinetInfo(ServiceContext svcctx, InfoId<Long> fileid) throws ServiceException {
 		CabinetInfo rtv = null;
@@ -333,7 +333,7 @@ public class FileServiceImpl implements FileService{
 		return rtv;
 	}
 
-	@Transactional(value=ServiceConfigurer.TRNS_MGR, readOnly=true)
+	@Transactional(value=DataSourceHolder.TRNS_MGR, readOnly=true)
 	@Override
 	public CabFileInfo getFile(ServiceContext svcctx, InfoId<Long> fileid) throws ServiceException {
 		try{

@@ -1,7 +1,7 @@
 package com.gp.svc.impl;
 
 import com.gp.common.*;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.*;
 import com.gp.dao.info.*;
 import com.gp.exception.ServiceException;
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService{
     /**
      * Create a new post
      **/
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public boolean newPost(ServiceContext svcctx, PostInfo postinfo, String[] attendees) throws ServiceException {
 
@@ -124,7 +124,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public void addPostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
 
@@ -144,7 +144,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public void removePostAttendee(ServiceContext svcctx, InfoId<Long> postId, String attendee) throws ServiceException {
         try{
@@ -157,7 +157,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public List<UserLiteInfo> getPostAttendees(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 
@@ -207,7 +207,7 @@ public class PostServiceImpl implements PostService{
         return result;
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public PageWrapper<PostExt> getPersonalPosts(ServiceContext svcctx, String account,
                                                                         String state,
@@ -275,7 +275,7 @@ public class PostServiceImpl implements PostService{
         return pwrapper;
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public List<PostExt> getPersonalJoinedPosts(ServiceContext svcctx, String account, String state, String type, String scope) throws ServiceException {
 
@@ -328,7 +328,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public PageWrapper<PostExt> getWorkgroupPosts(ServiceContext svcctx, InfoId<Long> wid,String mode, String state, String type, PageQuery pagequery) throws ServiceException {
 
@@ -396,7 +396,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public PageWrapper<PostExt> getSquarePosts(ServiceContext svcctx, String state, String type, String scope, PageQuery pagequery) throws ServiceException {
 
@@ -459,7 +459,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
-    @Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly = true)
+    @Transactional(value = DataSourceHolder.TRNS_MGR, readOnly = true)
     @Override
     public List<PostCommentInfo> getPostComments(ServiceContext svcctx, InfoId<Long> postid, String owner, String state) throws ServiceException {
 
@@ -497,7 +497,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public boolean newComment(ServiceContext svcctx, PostCommentInfo commentinfo) throws ServiceException {
 
@@ -510,7 +510,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public int addPostLike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
@@ -551,7 +551,7 @@ public class PostServiceImpl implements PostService{
 
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
     @Override
     public int addPostDislike(ServiceContext svcctx, InfoId<Long> postId, String voter) throws ServiceException {
 
@@ -592,7 +592,7 @@ public class PostServiceImpl implements PostService{
         }
     }
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public boolean publicPost(ServiceContext svcctx, InfoId<Long> postId) throws ServiceException {
 		
@@ -604,7 +604,7 @@ public class PostServiceImpl implements PostService{
 		}
 	}
 
-    @Transactional(ServiceConfigurer.TRNS_MGR)
+    @Transactional(DataSourceHolder.TRNS_MGR)
 	@Override
 	public int removePost(ServiceContext svcctx, InfoId<Long> postid) throws ServiceException {
 		

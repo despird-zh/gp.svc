@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gp.common.GroupUsers;
 import com.gp.common.IdKeys;
-import com.gp.config.ServiceConfigurer;
+import com.gp.common.DataSourceHolder;
 import com.gp.dao.IdSettingDAO;
 import com.gp.dao.PseudoDAO;
 import com.gp.exception.ServiceException;
@@ -38,7 +38,7 @@ public class CommonServiceImpl implements CommonService{
 	private PseudoDAO pseudodao;
 	
 	@SuppressWarnings("unchecked")
-	@Transactional(value=ServiceConfigurer.TRNS_MGR,propagation = Propagation.REQUIRES_NEW )
+	@Transactional(value=DataSourceHolder.TRNS_MGR,propagation = Propagation.REQUIRES_NEW )
 	@Override
 	public <T> InfoId<T> generateId(Identifier idkey, Class<T> type) throws ServiceException{
 		
@@ -95,7 +95,7 @@ public class CommonServiceImpl implements CommonService{
 		return generateId(idf, type);
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, Map<FlatColLocator, Object> fields) throws ServiceException{
 		
@@ -107,7 +107,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, FlatColLocator col, Object val) throws ServiceException{
 		try{
@@ -118,7 +118,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR)
+	@Transactional(value = DataSourceHolder.TRNS_MGR)
 	@Override
 	public Integer update(InfoId<?> id, FlatColLocator[] col, Object[] val) throws ServiceException{
 		try{
@@ -129,7 +129,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly =true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly =true)
 	@Override
 	public <T> T query(InfoId<?> id, FlatColLocator col, Class<T> clazz) throws ServiceException{
 		
@@ -141,7 +141,7 @@ public class CommonServiceImpl implements CommonService{
 		}
 	}
 
-	@Transactional(value = ServiceConfigurer.TRNS_MGR, readOnly =true)
+	@Transactional(value = DataSourceHolder.TRNS_MGR, readOnly =true)
 	@Override
 	public Map<String, Object> query(InfoId<?> id, FlatColLocator[] cols) throws ServiceException{
 		
