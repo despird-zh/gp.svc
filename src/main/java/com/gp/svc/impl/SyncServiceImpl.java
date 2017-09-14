@@ -21,9 +21,10 @@ public class SyncServiceImpl implements SyncService{
 	SyncMsgOutDAO msgOutDao;
 	
 	@Override
-	public Boolean newSyncMsgOut(ServiceContext svcctx, SyncMsgOutInfo syncMsgOut) throws ServiceException {
+	public boolean newSyncMsgOut(ServiceContext svcctx, SyncMsgOutInfo syncMsgOut) throws ServiceException {
 		
 		try {
+			svcctx.setTraceInfo(syncMsgOut);
 			return msgOutDao.create(syncMsgOut) > 0;
 			
 		}catch(DataAccessException dae){

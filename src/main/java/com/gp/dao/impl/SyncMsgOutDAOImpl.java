@@ -36,21 +36,21 @@ public class SyncMsgOutDAOImpl extends DAOSupport implements SyncMsgOutDAO{
 	@Override
 	public int create(SyncMsgOutInfo info) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("insert into gp_node_msg_out (")
+		SQL.append("insert into gp_sync_msg_out (")
 			.append("msg_id, push_id, entity_code, node_code, ")
 			.append("trace_code, owm, sync_cmd, msg_data, ")
-			.append("modifier, last_modified")
+			.append("state, modifier, last_modified")
 			.append(")values(")
-			.append("?,?,?,")
 			.append("?,?,?,?,")
-			.append("?,?)");
+			.append("?,?,?,?,")
+			.append("?,?,?)");
 		
 		InfoId<Long> key = info.getInfoId();
 		
 		Object[] params = new Object[]{
 				key.getId(),info.getPushId(), info.getEntityCode(), info.getNodeCode(),
 				info.getTraceCode(), info.getOwm(), info.getSyncCommand(), info.getMsgData(),
-				info.getModifier(),info.getModifyDate(),
+				info.getState(),info.getModifier(),info.getModifyDate(),
 		};
 		if(LOGGER.isDebugEnabled()){
 			
@@ -64,7 +64,7 @@ public class SyncMsgOutDAOImpl extends DAOSupport implements SyncMsgOutDAO{
 	@Override
 	public int delete(InfoId<?> id) {
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("delete from gp_node_msg_out ")
+		SQL.append("delete from gp_sync_msg_out ")
 			.append("where msg_id = ? ");
 		
 		JdbcTemplate jtemplate = this.getJdbcTemplate(JdbcTemplate.class);
@@ -84,7 +84,7 @@ public class SyncMsgOutDAOImpl extends DAOSupport implements SyncMsgOutDAO{
 		List<Object> params = new ArrayList<Object>();
 	
 		StringBuffer SQL = new StringBuffer();
-		SQL.append("update gp_node_msg_out set ");
+		SQL.append("update gp_sync_msg_out set ");
 		
 		if(columnCheck(mode, colset, "node_code")){
 			SQL.append("node_code = ?,");
@@ -114,7 +114,10 @@ public class SyncMsgOutDAOImpl extends DAOSupport implements SyncMsgOutDAO{
 			SQL.append("msg_data = ?, ");
 			params.add(info.getMsgData());
 		}
-		
+		if(columnCheck(mode, colset, "state")){
+			SQL.append("state = ?, ");
+			params.add(info.getState());
+		}
 		SQL.append("modifier = ?, last_modified = ? ")
 			.append("where msg_id = ? ");
 		params.add(info.getModifier());
@@ -131,7 +134,7 @@ public class SyncMsgOutDAOImpl extends DAOSupport implements SyncMsgOutDAO{
 
 	@Override
 	public SyncMsgOutInfo query(InfoId<?> id) {
-		String SQL = "select * from gp_node_msg_out "
+		String SQL = "select * from gp_sync_msg_out "
 				+ "where msg_id = ? ";
 		
 		Object[] params = new Object[]{				

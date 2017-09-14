@@ -20,6 +20,8 @@ public class SyncMsgOutInfo extends TraceableInfo<Long>{
 	
 	private String msgData;
 
+	private String state;
+	
 	public Long getPushId() {
 		return pushId;
 	}
@@ -74,6 +76,14 @@ public class SyncMsgOutInfo extends TraceableInfo<Long>{
 
 	public void setMsgData(String msgData) {
 		this.msgData = msgData;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 	
 	

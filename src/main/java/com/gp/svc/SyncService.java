@@ -7,5 +7,7 @@ import com.gp.info.InfoId;
 
 public interface SyncService {
 
-	Boolean newSyncMsgOut(ServiceContext svcctx, SyncMsgOutInfo syncMsgOut) throws ServiceException;
+	boolean newSyncMsgOut(ServiceContext svcctx, SyncMsgOutInfo syncMsgOut) throws ServiceException;
+	
+	
 }
